@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    {% block content_head %}
+    {% endblock %}
+{% endblock %}
+
+{% block body %}
+
+{% include 'partials/navbar.html' %}
+
+<div>
+    <section class="hero is-small is-light">
+        <div class="hero-body">
+            <p class="title">
+                {% block page_title %}
+                {% endblock page_title %}
+            </p>
+            <p class="subtitle">
+                {% block page_subtitle %}
+                {% endblock page_subtitle %}
+            </p>
+        </div>
+    </section>
+
+    <div class="container" style="padding: 20px 0px">
+        
+        {% block content %}
+        {% endblock content %}
+
+    </div>
+    
+    {% include 'partials/footer.html' %}
+
+</div>
+
+{% endblock %}
