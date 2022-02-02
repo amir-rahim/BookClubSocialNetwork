@@ -20,5 +20,6 @@ from BookClub import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home, name='home')
+    path('', views.home, name='home'),
+    path('my_club_memberships/', views.my_club_memberships, name='my_club_memberships'),
 ]
