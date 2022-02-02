@@ -1,0 +1,47 @@
+<nav class="navbar is-link" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+
+        <a class="navbar-item" href="./home.html">
+            <b>Novella: The Book Club Social Network</b>
+        </a>
+
+        <a class="navbar-burger" id="burger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </a>
+
+    </div>
+
+    <div id="nav-right" class="navbar-menu">
+        <div class="navbar-end">
+
+            <div class="navbar-item has-dropdown is-hoverable">
+
+                <a class="navbar-link" href="#">
+                    Clubs
+                </a>
+
+                <div class="navbar-dropdown is-boxed is-right">
+                    <a class="navbar-item" href="#">Create Club</a>
+
+                    <a class="navbar-item" href="#">View Clubs</a>
+                </div>
+
+            </div>
+
+            <a class="navbar-item" href="#">Calendar</a>
+
+            <a class="navbar-item" href="#">Library</a>
+
+            <a class="navbar-item" href="#">Forum</a>
+
+            {% if user.is_authenticated %}
+                {% include 'partials/dropdown_authenticated.html' %}
+            {% else %}
+                {% include 'partials/dropdown.html' %}
+            {% endif %}
+
+        </div>
+    </div>
+</nav>
