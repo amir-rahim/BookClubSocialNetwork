@@ -25,7 +25,7 @@ class SignUpViewTestCase(TestCase, LogInTester):
         self.user = User.objects.get(username='johndoe')
 
     def test_sign_up_url(self):
-        self.assertEqual(self.url,'/sign_up')
+        self.assertEqual(self.url,'/sign_up/')
 
     def test_get_sign_up(self):
         response = self.client.get(self.url)

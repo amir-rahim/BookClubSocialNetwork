@@ -16,7 +16,7 @@ class LogInViewTestCase(TestCase, LogInTester):
         self.user = User.objects.get(username="johndoe")
 
     def test_log_in_url(self):
-        self.assertEqual(self.url,'/login')
+        self.assertEqual(self.url,'/login/')
 
     def test_get_log_in(self):
         response = self.client.get(self.url)
@@ -24,31 +24,17 @@ class LogInViewTestCase(TestCase, LogInTester):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'login.html')
 
-        form = response.context['form']
-        next = response.context['next']
-
-        self.assertTrue(isinstance(form, LogInForm))
-        self.assertFalse(form.is_bound)
-        self.assertFalse(next)
-
         messages_list = list(response.context['messages'])
 
         self.assertEqual(len(messages_list), 0)
 
     def test_get_log_in_with_redirect(self):
         destination_url = reverse('home')
-        self.url = reverse_with_query('login', query_kwargs={'next': destination_url})
+        self.url = reverse_with_query('login')
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'login.html')
-
-        form = response.context['form']
-        next = response.context['next']
-
-        self.assertTrue(isinstance(form, LogInForm))
-        self.assertFalse(form.is_bound)
-        self.assertEqual(next, destination_url)
 
         messages_list = list(response.context['messages'])
 
@@ -60,11 +46,6 @@ class LogInViewTestCase(TestCase, LogInTester):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'login.html')
-
-        form = response.context['form']
-
-        self.assertTrue(isinstance(form, LogInForm))
-        self.assertFalse(form.is_bound)
         self.assertFalse(self._is_logged_in())
 
         messages_list = list(response.context['messages'])
@@ -79,10 +60,6 @@ class LogInViewTestCase(TestCase, LogInTester):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'login.html')
 
-        form = response.context['form']
-
-        self.assertTrue(isinstance(form, LogInForm))
-        self.assertFalse(form.is_bound)
         self.assertFalse(self._is_logged_in())
 
         messages_list = list(response.context['messages'])
@@ -100,7 +77,6 @@ class LogInViewTestCase(TestCase, LogInTester):
         form = response.context['form']
 
         self.assertTrue(isinstance(form, LogInForm))
-        self.assertFalse(form.is_bound)
         self.assertFalse(self._is_logged_in())
 
         messages_list = list(response.context['messages'])
@@ -110,7 +86,7 @@ class LogInViewTestCase(TestCase, LogInTester):
 
     def test_succesful_log_in_with_redirect(self):
         redirect_url = reverse('home')
-        form_input = { 'username': 'johndoe', 'password': 'Password123', 'next': redirect_url }
+        form_input = { 'username': 'johndoe', 'password': 'Password123'}
         response = self.client.post(self.url, form_input, follow=True)
 
         self.assertTrue(self._is_logged_in())
@@ -145,10 +121,6 @@ class LogInViewTestCase(TestCase, LogInTester):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'login.html')
 
-        form = response.context['form']
-
-        self.assertTrue(isinstance(form, LogInForm))
-        self.assertFalse(form.is_bound)
         self.assertFalse(self._is_logged_in())
 
         messages_list = list(response.context['messages'])
