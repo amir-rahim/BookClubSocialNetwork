@@ -3,7 +3,7 @@
 from django.contrib import messages
 from django.test import TestCase
 from django.urls import reverse
-from BookClub.forms import UserForm
+from BookClub.forms import ProfileForm
 from BookClub.models import User
 from BookClub.tests.helpers import reverse_with_next
 
@@ -32,7 +32,7 @@ class ProfileViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'templates/user_dashboard.html')
         form = response.context['form']
-        self.assertTrue(isinstance(form, UserForm))
+        self.assertTrue(isinstance(form, ProfileForm))
         self.assertEqual(form.instance, self.user)
 
     def test_get_profile_redirects_when_not_logged_in(self):
@@ -53,7 +53,7 @@ class ProfileViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'templates/user_dashboard.html')
         form = response.context['form']
-        self.assertTrue(isinstance(form, UserForm))
+        self.assertTrue(isinstance(form, ProfileForm))
         self.assertTrue(form.is_bound)
         self.user.refresh_from_db()
         self.assertEqual(self.user.username, 'johndoe')
@@ -70,7 +70,7 @@ class ProfileViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'templates/user_dashboard.html')
         form = response.context['form']
-        self.assertTrue(isinstance(form, UserForm))
+        self.assertTrue(isinstance(form, ProfileForm))
         self.assertTrue(form.is_bound)
         self.user.refresh_from_db()
         self.assertEqual(self.user.username, 'johndoe')
