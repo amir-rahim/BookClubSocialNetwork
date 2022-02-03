@@ -2,7 +2,6 @@
 
 from django.test import TestCase
 from django.urls import reverse
-from BookClub.forms.user_forms import ProfileForm
 from BookClub.models import User
 from BookClub.tests.helpers import reverse_with_query
 

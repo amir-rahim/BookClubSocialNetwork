@@ -3,7 +3,7 @@
 from django.contrib.auth.hashers import check_password
 from django.test import TestCase
 from django.urls import reverse
-from BookClub.forms.user_forms import PasswordForm
+from BookClub.forms.user_forms import ChangePasswordForm
 from BookClub.models import User
 from BookClub.tests.helpers import reverse_with_query
 
@@ -31,7 +31,7 @@ class PasswordViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'templates/password_change.html')
         form = response.context['form']
-        self.assertTrue(isinstance(form, PasswordForm))
+        self.assertTrue(isinstance(form, ChangePasswordForm))
 
     def test_get_password_redirects_when_not_logged_in(self):
         redirect_url = reverse_with_query('login')
@@ -62,7 +62,7 @@ class PasswordViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'templates/password_change.html')
         form = response.context['form']
-        self.assertTrue(isinstance(form, PasswordForm))
+        self.assertTrue(isinstance(form, ChangePasswordForm))
         self.user.refresh_from_db()
         is_password_correct = check_password('Password123', self.user.password)
         self.assertTrue(is_password_correct)
@@ -74,7 +74,7 @@ class PasswordViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'templates/password_change.html')
         form = response.context['form']
-        self.assertTrue(isinstance(form, PasswordForm))
+        self.assertTrue(isinstance(form, ChangePasswordForm))
         self.user.refresh_from_db()
         is_password_correct = check_password('Password123', self.user.password)
         self.assertTrue(is_password_correct)
@@ -88,13 +88,13 @@ class PasswordViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'templates/password_change.html')
         form = response.context['form']
-        self.assertTrue(isinstance(form, PasswordForm))
+        self.assertTrue(isinstance(form, ChangePasswordForm))
         self.user.refresh_from_db()
         is_password_correct = check_password('Password123', self.user.password)
         self.assertTrue(is_password_correct)
 
     def test_post_profile_redirects_when_not_logged_in(self):
-        redirect_url = reverse_with_query('login', self.url)
+        redirect_url = reverse_with_query('login')
         response = self.client.post(self.url, self.form_input)
         self.assertRedirects(response,
                              redirect_url,
