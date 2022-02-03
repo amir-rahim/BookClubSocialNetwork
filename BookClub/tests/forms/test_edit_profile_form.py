@@ -12,8 +12,6 @@ class ProfileFormTestCase(TestCase):
     fixtures = ['BookClub/tests/fixtures/default_users.json']
 
     def setUp(self):
-        self.user = User.objects.get(username='johndoe')
-        self.url = reverse('edit_profile')
         self.form_input = {
             'username': 'janedoe',
             'email': 'janedoe@example.org',
