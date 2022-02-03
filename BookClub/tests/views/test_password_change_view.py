@@ -3,9 +3,9 @@
 from django.contrib.auth.hashers import check_password
 from django.test import TestCase
 from django.urls import reverse
-from BookClub.forms import PasswordForm
+from BookClub.forms.user_forms import PasswordForm
 from BookClub.models import User
-from BookClub.tests.helpers import reverse_with_next
+from BookClub.tests.helpers import reverse_with_query
 
 
 class PasswordViewTest(TestCase):
@@ -15,7 +15,7 @@ class PasswordViewTest(TestCase):
 
     def setUp(self):
         self.user = User.objects.get(username='johndoe')
-        self.url = reverse('password')
+        self.url = reverse('password_change')
         self.form_input = {
             'password': 'Password123',
             'new_password': 'NewPassword123',
@@ -23,18 +23,18 @@ class PasswordViewTest(TestCase):
         }
 
     def test_password_url(self):
-        self.assertEqual(self.url, '/password/')
+        self.assertEqual(self.url, '/password_change/')
 
     def test_get_password(self):
         self.client.login(email=self.user.email, password='Password123')
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'templates/password.html')
+        self.assertTemplateUsed(response, 'templates/password_change.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, PasswordForm))
 
     def test_get_password_redirects_when_not_logged_in(self):
-        redirect_url = reverse_with_next('log_in', self.url)
+        redirect_url = reverse_with_query('login')
         response = self.client.get(self.url)
         self.assertRedirects(response,
                              redirect_url,
@@ -60,7 +60,7 @@ class PasswordViewTest(TestCase):
         self.form_input['password'] = 'WrongPassword123'
         response = self.client.post(self.url, self.form_input, follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'templates/password.html')
+        self.assertTemplateUsed(response, 'templates/password_change.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, PasswordForm))
         self.user.refresh_from_db()
@@ -72,7 +72,7 @@ class PasswordViewTest(TestCase):
         self.form_input['password_confirmation'] = 'WrongPassword123'
         response = self.client.post(self.url, self.form_input, follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'templates/password.html')
+        self.assertTemplateUsed(response, 'templates/password_change.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, PasswordForm))
         self.user.refresh_from_db()
@@ -86,7 +86,7 @@ class PasswordViewTest(TestCase):
         self.form_input['password_confirmation'] = 'WrongPassword123'
         response = self.client.post(self.url, self.form_input, follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'templates/password.html')
+        self.assertTemplateUsed(response, 'templates/password_change.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, PasswordForm))
         self.user.refresh_from_db()
@@ -94,7 +94,7 @@ class PasswordViewTest(TestCase):
         self.assertTrue(is_password_correct)
 
     def test_post_profile_redirects_when_not_logged_in(self):
-        redirect_url = reverse_with_next('login', self.url)
+        redirect_url = reverse_with_query('login', self.url)
         response = self.client.post(self.url, self.form_input)
         self.assertRedirects(response,
                              redirect_url,
