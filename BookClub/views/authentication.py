@@ -2,60 +2,68 @@
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import redirect, render
-
-from BookClub.helpers import login_prohibited
+from django.views.generic import FormView, View
+from django.shortcuts import redirect, render, reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
+from BookClub.helpers import LoginProhibitedMixin
 from BookClub.forms import LogInForm, SignUpForm
 
-@login_prohibited
-def sign_up(request):
-    """Manage sign up attempt."""
-    if request.method == 'POST':
-        form = SignUpForm(request.POST)
+class SignUpView(LoginProhibitedMixin, FormView):
+    """
 
-        if form.is_valid():
-            # The sign-up form is valid, we add the user to our database
-            user = form.save()
-            login(request, user)
-            messages.success(request, "Successfully created account!")
-            return redirect(settings.REDIRECT_URL_WHEN_LOGGED_IN)
-        
-        messages.add_message(request, messages.ERROR, 'Unable to make account!')
+        View class for handling user sign ups
 
-    else:
-        form = SignUpForm()
-
-    return render(request, 'sign_up.html', {'form': form})
-
-@login_prohibited
-def log_in(request):
-    """Manage log in attempt."""
-    if request.method == 'POST':
-        form = LogInForm(request.POST)
-
-        if form.is_valid():
-            # Extract the input username and password and attempt to authenticate
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(username=username, password=password)
-
-            if user is not None:
-                # The user is authenticated, we then log-in the user and redirects it
-                login(request, user)
-                messages.success(request, ('Successfully Logged in!'))
-                redirect_url = request.POST.get('next') or settings.REDIRECT_URL_WHEN_LOGGED_IN
-                return redirect(redirect_url)
-
-        messages.add_message(request, messages.ERROR, "The credentials provided were invalid!")
-
-    form = LogInForm()
-    next = request.GET.get('next') or ''
-    return render(request, 'login.html', {'form': form, 'next': next})
+    """
+    form_class = SignUpForm
+    template_name = 'sign_up.html'
+    redirect_when_logged_in_url = 'home'
     
 
+    def form_valid(self, form):
+        self.object = form.save()
+        login(self.request, self.object)
+        return super().form_valid(form)
 
-def log_out(request):
-    """Redirect user to home page when they log out."""
-    logout(request)
-    messages.success(request, ('Successfully Logged Out!'))
-    return redirect('home')
+    def form_invalid(self, form):
+        messages.add_message(self.request, messages.ERROR, "The credentials provided were invalid!")
+        return super().form_invalid(form)
+    
+    def get_success_url(self):
+        return reverse(self.redirect_when_logged_in_url)
+  
+class LogInView(LoginProhibitedMixin, FormView):
+    """
+        View class for handling logging the user in and setting the club_id session key
+    """
+    form_class = LogInForm
+    template_name = 'login.html'
+
+    def form_valid(self, form):
+        username = form.cleaned_data.get('username')
+        password = form.cleaned_data.get('password')
+        user = authenticate(username=username, password=password)
+        # if the user exists, log them in and set the clubId value for the session
+        if user is not None:
+            # The user is authenticated, we then log-in the user and redirects it
+            login(self.request, user)
+            messages.success(self.request, ('Successfully Logged in!'))
+            redirect_url = settings.REDIRECT_URL_WHEN_LOGGED_IN
+            return redirect(redirect_url)
+        else:
+            messages.add_message(self.request, messages.ERROR, "The credentials provided were invalid!")
+            return render(self.request, 'login.html')
+        
+    def form_invalid(self, form):
+        messages.add_message(self.request, messages.ERROR, "The credentials provided were incomplete!")
+        return super().form_invalid(form);
+
+
+class LogOutView(LoginRequiredMixin, View):
+    """
+
+        Class that handles logging a user out.
+
+    """
+    def get(self, request):
+        logout(request)
+        return redirect('home')
