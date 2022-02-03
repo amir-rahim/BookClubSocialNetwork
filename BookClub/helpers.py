@@ -1,10 +1,10 @@
 from django.conf import settings
 from django.shortcuts import redirect
-
-def login_prohibited(view_function):
-    def modified_view_function(request):
-        if request.user.is_authenticated:
-            return redirect(settings.REDIRECT_URL_WHEN_LOGGED_IN)
-        else:
-            return view_function(request)
-    return modified_view_function
+class LoginProhibitedMixin:
+    """
+        If user trying to access this view is authenticated, they are redirected to the 'home' page
+    """
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            return redirect('home')
+        return super().dispatch(request, *args, **kwargs)
