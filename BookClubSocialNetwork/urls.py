@@ -28,6 +28,11 @@ urlpatterns = [
     path('sign_up/', views.SignUpView.as_view(), name='sign_up'),
     path('log_out/', views.LogOutView.as_view(), name='log_out'),
     
+    # '''User URLs'''
+    path('user_dashboard/', views.user_dashboard, name='user_dashboard'),
+    
     # '''Club URLs'''
-    path('club_dashboard/', views.club_dashboard, name='club_dashboard')
+    path('club_dashboard/', views.club_dashboard, name='club_dashboard'),
+    
+    
 ]
