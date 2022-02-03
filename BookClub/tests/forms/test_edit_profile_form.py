@@ -13,8 +13,8 @@ class ProfileFormTestCase(TestCase):
 
     def setUp(self):
         self.form_input = {
-            'username': 'janedoe',
-            'email': 'janedoe@example.org',
+            'username': 'johndoe2',
+            'email': 'johndoe2@example.org',
             'public_bio': 'My bio',
         }
 
@@ -42,6 +42,6 @@ class ProfileFormTestCase(TestCase):
         form.save()
         after_count = User.objects.count()
         self.assertEqual(after_count, before_count)
-        self.assertEqual(user.username, 'janedoe')
-        self.assertEqual(user.email, 'janedoe@example.org')
+        self.assertEqual(user.username, 'johndoe2')
+        self.assertEqual(user.email, 'johndoe2@example.org')
         self.assertEqual(user.public_bio, 'My bio')
