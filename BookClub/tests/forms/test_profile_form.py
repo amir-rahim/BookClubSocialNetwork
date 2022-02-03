@@ -2,11 +2,10 @@
 
 from django import forms
 from django.test import TestCase
-from BookClub.forms import UserForm
+from BookClub.forms import ProfileForm
 from BookClub.models import User
 
-
-class UserFormTestCase(TestCase):
+class ProfileFormTestCase(TestCase):
     """Unit tests of the update user details form."""
 
     fixtures = ['BookClub/tests/fixtures/default_users.json']
@@ -19,7 +18,7 @@ class UserFormTestCase(TestCase):
         }
 
     def test_form_has_necessary_fields(self):
-        form = UserForm()
+        form = ProfileForm()
         self.assertIn('username', form.fields)
         self.assertIn('email', form.fields)
         email_field = form.fields['email']
@@ -27,17 +26,17 @@ class UserFormTestCase(TestCase):
         self.assertIn('public_bio', form.fields)
 
     def test_valid_user_form(self):
-        form = UserForm(data=self.form_input)
+        form = ProfileForm(data=self.form_input)
         self.assertTrue(form.is_valid())
 
     def test_form_uses_model_validation(self):
         self.form_input['username'] = 'badusername!'
-        form = UserForm(data=self.form_input)
+        form = ProfileForm(data=self.form_input)
         self.assertFalse(form.is_valid())
 
     def test_form_must_save_correctly(self):
         user = User.objects.get(username='johndoe')
-        form = UserForm(instance=user, data=self.form_input)
+        form = ProfileForm(instance=user, data=self.form_input)
         before_count = User.objects.count()
         form.save()
         after_count = User.objects.count()
