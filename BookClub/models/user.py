@@ -7,7 +7,7 @@ from libgravatar import Gravatar
 
 class User(AbstractUser):
     """User model used for authentication."""
-    
+
     username = models.CharField(
         max_length=30,
         unique=True,
@@ -21,10 +21,10 @@ class User(AbstractUser):
             )
         ]
     )
-    
+
     email = models.EmailField(unique=True, blank=False)
     public_bio = models.CharField(max_length=250, blank=False)
-    
+
     def gravatar(self, size=120):
         """Return a URL to the user's gravatar."""
         gravatar_object = Gravatar(self.email)
