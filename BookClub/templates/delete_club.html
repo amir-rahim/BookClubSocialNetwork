@@ -1,0 +1,37 @@
+{% extends 'base_content.html' %}
+
+{% block page_title %}
+    Delete Club Confirmation
+{% endblock page_title %}
+
+{% block content %}
+
+
+<div class="column is-4">
+    <div class="card large card-equal-height">
+
+        <div class="card-content">
+            <div class="field">
+                <label class="label"> Delete Club Confirmation</label>
+                <div class="control">
+                    <label class="radio">
+                        <input type="radio" name="question">
+                        Yes
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="question">
+                        No
+                    </label>
+                </div>
+            </div>
+            <div class="field is-grouped">
+                <div class="control">
+                    <button class="button is-link">Submit</button>
+                </div>
+            </div>
+
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
