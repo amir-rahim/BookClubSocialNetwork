@@ -1,0 +1,37 @@
+[
+    {
+        "model": "BookClub.club",
+        "pk": 1,
+        "fields": {
+            "name": "Johnathan's Club",
+            "description": "This is a very cool club that is owned by a certain Johnathan.",
+            "rules": "Don't be annoying",
+            "is_private": false,
+            "created_on": "2022-02-04"
+        }
+    },
+
+    {
+        "model": "BookClub.club",
+        "pk": 2,
+        "fields": {
+          "name": "Jeannette's Club",
+          "description": "This is a club owned by a certain Jeannette",
+          "rules": "",
+          "is_private": false,
+          "created_on": "2022-02-03"
+        }
+    },
+
+    {
+        "model": "BookClub.club",
+        "pk": 3,
+        "fields": {
+          "name": "Jack's Club",
+          "description": "a club created by some Jack",
+          "rules": "Know the inside jokes",
+          "is_private": true,
+          "created_on": "2022-02-02"
+        }
+    }
+]
