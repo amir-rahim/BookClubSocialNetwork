@@ -16,3 +16,9 @@ def available_clubs(request):
         Q(Exists(subquery.filter(membership=ClubMembership.UserRoles.APPLICANT)))
     )
     return render(request, 'available_clubs.html', {'clubs': clubs})
+
+@login_required
+def my_club_memberships(request):
+    """Show a list of all clubs that the user is a member of (or moderator/creator)."""
+    # Select clubs the user is a member of
+    return render(request, 'home.html')
