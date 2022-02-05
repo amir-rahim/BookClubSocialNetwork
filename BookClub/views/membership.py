@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from BookClub.models.club_membership import ClubMembership
 from BookClub.models.club import Club
+from django.db.models import Exists, Q, OuterRef
 
 @login_required
 def available_clubs(request):
