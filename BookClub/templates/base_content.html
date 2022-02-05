@@ -22,6 +22,29 @@
             </p>
         </div>
     </section>
+    
+    {% if messages %}
+    <section class="container" style="padding-top: 10px;">
+        
+
+            {% for message in messages %}
+
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                    <div class="notification is-success is-light">
+                        <button class="delete"></button>
+                        {{ message }}
+                    </div>
+                {% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                    <div class="notification is-danger">
+                        <button class="delete"></button>
+                        {{ message }}
+                    </div>
+                {% endif %}
+
+            {% endfor %}
+     
+    </section>
+    {% endif %}
 
     <div class="container" style="padding: 20px 0px">
         

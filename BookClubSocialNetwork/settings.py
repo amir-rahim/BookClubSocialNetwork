@@ -125,4 +125,9 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Login URL for redirecting users from login protected views
+LOGIN_URL = 'login'
+
 REDIRECT_URL_WHEN_LOGGED_IN = 'home'
+
+AUTH_USER_MODEL = 'BookClub.User'
