@@ -46,7 +46,7 @@ class ClubMembershipModelTestCase(TestCase):
             self.fail('Test club membership should be valid')
 
     def _assert_membership_is_invalid(self, membership_index):
-        with self.assertRaises(ValidationError):
+        with self.assertRaises(Exception):
             self.club_memberships[membership_index].full_clean()
 
 
