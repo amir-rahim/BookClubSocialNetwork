@@ -36,7 +36,7 @@ Find the Book Clubs you have memberships for here!
         </div>
       {% else %} <!-- If there is no club available to the logged-in user -->
         <hr class="solid">
-        <p>There are no available clubs at the moment.</p>
+        <p>No clubs memberships, you can find clubs <a href="{% url 'available_clubs' %}">here</a>.</p>
       {% endif %}
     </div>
 </section>
