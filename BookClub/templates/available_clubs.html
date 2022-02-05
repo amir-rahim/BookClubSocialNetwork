@@ -18,7 +18,8 @@ Find the Book Club you are looking for here!
               <thead>
                   <tr>
                       <th scope="col" width="25%">Club Name</th>
-                      <th scope="col">Description</th>
+                      <th scope="col" width="60%">Description</th>
+                      <th scope="col" width="15%">Action</th>
                   </tr>
               </thead>
               <tbody>
@@ -27,6 +28,7 @@ Find the Book Club you are looking for here!
                       <tr onclick="window.location='{% url 'home' %}';">
                           <td>{{club.name}}</td>
                           <td>{{club.description}}</td>
+                          <td href="#" class="button is-success">Join</td>
                       </tr>
                   {% endfor %}
               </tbody>
