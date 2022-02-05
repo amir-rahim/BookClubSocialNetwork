@@ -22,5 +22,8 @@ def my_club_memberships(request):
     """Show a list of all clubs that the user is a member of (or moderator/creator)."""
     # Select clubs the user is a member of
     subquery = ClubMembership.objects.filter(user=request.user.pk, club=OuterRef('pk'))
-    clubs = Club.objects.filter(Q(Exists(subquery)))
+    clubs = Club.objects.filter(
+        Q(Exists(subquery)) &
+        ~Q(Exists(subquery.filter(membership=ClubMembership.UserRoles.APPLICANT)))
+    )
     return render(request, 'my_club_memberships.html', {'clubs': clubs})
