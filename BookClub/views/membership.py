@@ -23,4 +23,4 @@ def my_club_memberships(request):
     # Select clubs the user is a member of
     subquery = ClubMembership.objects.filter(user=request.user.pk, club=OuterRef('pk'))
     clubs = Club.objects.filter(Q(Exists(subquery)))
-    return render(request, 'available_clubs.html', {'clubs': clubs})
+    return render(request, 'my_club_memberships.html', {'clubs': clubs})
