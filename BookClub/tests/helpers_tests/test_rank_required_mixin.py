@@ -1,9 +1,7 @@
-from distutils.log import Log
-from django.core.exceptions import ValidationError
-from django.shortcuts import redirect, resolve_url
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.test import TestCase, override_settings
-from django.views.generic import View, RedirectView
+from django.views.generic import View
 from BookClub.models.club_membership import ClubMembership
 from BookClub.models.club import Club
 from BookClub.models.user import User
