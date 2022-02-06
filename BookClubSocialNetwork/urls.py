@@ -30,6 +30,8 @@ urlpatterns = [
     
     # '''User URLs'''
     path('user_dashboard/', views.user_dashboard, name='user_dashboard'),
+    path('edit_profile/', views.edit_profile, name='edit_profile'),
+    path('password_change/', views.change_password, name='password_change'),
     
     # '''Club URLs'''
     path('club_dashboard/', views.club_dashboard, name='club_dashboard'),
