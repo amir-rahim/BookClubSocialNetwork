@@ -52,12 +52,12 @@ class ClubModelTestCase(TestCase):
         self.club1.description = ''
         self._assert_club_is_invalid()
 
-    def test_description_can_be_200_characters_long(self):
-        self.club1.description = 'x' * 200
+    def test_description_can_be_250_characters_long(self):
+        self.club1.description = 'x' * 250
         self._assert_club_is_valid()
 
-    def test_description_cannot_be_over_200_characters_long(self):
-        self.club1.description = 'x' * 201
+    def test_description_cannot_be_over_250_characters_long(self):
+        self.club1.description = 'x' * 251
         self._assert_club_is_invalid()
 
 # Rules testing
@@ -70,7 +70,7 @@ class ClubModelTestCase(TestCase):
         self._assert_club_is_valid()
 
     def test_rules_cannot_be_over_200_characters_long(self):
-        self.club1.description = 'x' * 201
+        self.club1.rules = 'x' * 201
         self._assert_club_is_invalid()
 
 # Privacy testing

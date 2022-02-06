@@ -6,7 +6,8 @@ from BookClub.models.club_membership import ClubMembership
 
 class Club(models.Model):
     name = models.CharField(unique = True, max_length = 100, blank = False)
-    description = models.CharField(max_length = 200, blank = False)
+    description = models.CharField(max_length = 250, blank = False)
+    tagline = models.CharField(max_length = 120, blank = True)
     rules = models.CharField(max_length = 200, blank = True)
     is_private = models.BooleanField(default = False, blank = False, null = False)
     created_on = models.DateField(auto_now_add = True)

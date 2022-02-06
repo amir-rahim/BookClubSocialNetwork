@@ -16,7 +16,7 @@ class ClubAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for clubs."""
 
     list_display = [
-        'name','description', 'is_private', 'rules', 'created_on'
+        'name','description', 'tagline', 'is_private', 'rules', 'created_on'
     ]
 
 @admin.register(ClubMembership)

@@ -2,7 +2,6 @@ from django.db import models
 from django.core.exceptions import ValidationError
 
 from BookClub.models.user import User
-# from BookClub.models.club import Club
 
 class ClubMembership(models.Model):
     class Meta:
