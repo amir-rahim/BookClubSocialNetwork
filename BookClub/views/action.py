@@ -19,6 +19,6 @@ def apply_to_club(request, club_id):
         messages.add_message(request, messages.SUCCESS, "Application to club successful!")
         return redirect('available_clubs')
 
-    messages.add_message(request, messages.SUCCESS, "You have already applied to this club!")
+    messages.add_message(request, messages.INFO, "You have already applied to this club!")
 
     return redirect('available_clubs')
