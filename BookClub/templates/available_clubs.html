@@ -28,7 +28,12 @@ Find the Book Club you are looking for here!
                       <tr onclick="window.location='{% url 'home' %}';">
                           <td>{{club.name}}</td>
                           <td>{{club.description}}</td>
-                          <td href="#" class="button is-success">Join</td>
+                          <td>
+                            <form method="post" action="{% url 'apply_to_club' club_id=club.id %}">
+                              {% csrf_token %}
+                              <button type="submit" class="button is-success">Join</button>
+                            </form>
+                          </td>
                       </tr>
                   {% endfor %}
               </tbody>
