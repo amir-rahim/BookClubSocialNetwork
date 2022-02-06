@@ -21,8 +21,8 @@ class ClubMembership(models.Model):
     membership = models.IntegerField(choices = UserRoles.choices, blank = False, default = UserRoles.APPLICANT)
     joined_on = models.DateField(auto_now_add = True)
 
-    def clean(self):
-        super().clean()
+    def full_clean(self):
+        super().full_clean()
         if self.membership == ClubMembership.UserRoles.OWNER:
             if len(ClubMembership.objects.filter(
                 club = self.club,
