@@ -22,7 +22,7 @@ class ApplyToClubViewTestCase(TestCase):
 
     def test_user_applies_to_valid_club(self):
         self.client.login(username=self.user.username, password='Password123')
-        response = self.client.get(reverse('apply_to_club', kwargs={'club_id': self.club.id}))
+        response = self.client.get(self.url)
         self.assertTrue(ClubMembership.objects.filter(user=self.user, club=self.club).exists())
 
     def test_user_applies_to_invalid_club(self):
@@ -37,7 +37,7 @@ class ApplyToClubViewTestCase(TestCase):
         self.client.login(username=self.user.username, password='Password123')
         membership = ClubMembership.objects.create(user=self.user, club=self.club, membership=ClubMembership.UserRoles.APPLICANT)
         membership.save()
-        response = self.client.get(reverse('apply_to_club', kwargs={'club_id': self.club.id}))
+        response = self.client.get(self.url)
 
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
