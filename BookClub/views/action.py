@@ -9,8 +9,14 @@ from BookClub.models.user import User
 @login_required
 def apply_to_club(request, club_id):
     """"User can apply to join a club which they are not a member of"""
-    club_instance = Club.objects.get(id=club_id)
+    try:
+        club_instance = Club.objects.get(id=club_id)
+    except Club.DoesNotExist:
+        messages.add_message(request, messages.ERROR, "Club does not exist!")
+        return redirect('available_clubs')
+
     user_instance = User.objects.get(id=request.user.id)
+
     try:
         ClubMembership.objects.get(user=user_instance, club=club_instance)
     except ClubMembership.DoesNotExist:
