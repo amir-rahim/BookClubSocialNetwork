@@ -1,11 +1,16 @@
 from django.test import TestCase
 
-from BookClub.models.club import Club
+from BookClub.models.club import Club, ClubMembership
+# from BookClub.models.club_membership import ClubMembership
 from django.core.exceptions import ValidationError
 
 class ClubModelTestCase(TestCase):
 
-    fixtures = ['BookClub/tests/fixtures/default_clubs.json']
+    fixtures = [
+        'BookClub/tests/fixtures/default_users.json',
+        'BookClub/tests/fixtures/default_clubs.json',
+        'BookClub/tests/fixtures/default_club_owners.json',
+        ]
 
     def setUp(self):
         self.club1 = Club.objects.get(pk = 1)
@@ -30,9 +35,9 @@ class ClubModelTestCase(TestCase):
         self.club1.name = ''
         self._assert_club_is_invalid()
 
-    def test_name_may_already_exist(self):
+    def test_name_must_be_unique(self):
         self.club1.name = self.club2.name
-        self._assert_club_is_valid()
+        self._assert_club_is_invalid()
 
     def test_name_can_be_100_characters_long(self):
         self.club1.name = 'x' * 100
@@ -80,3 +85,12 @@ class ClubModelTestCase(TestCase):
     def test_club_can_be_private(self):
         self.club1.is_private = False
         self._assert_club_is_valid()
+
+# Getters testing
+    def test_get_number_of_members(self):
+        owner1 = ClubMembership.objects.get(club = self.club1, membership = ClubMembership.UserRoles.OWNER)
+        self.assertEqual(self.club1.get_club_owner(), owner1, 'Club object returned a wrong owner')
+
+    def test_get_number_of_members(self):
+        number_of_members = ClubMembership.objects.filter(club = self.club1, membership__gte = ClubMembership.UserRoles.MEMBER).count()
+        self.assertEqual(self.club1.get_number_of_members(), number_of_members, 'Club object returned a wrong number of members')
