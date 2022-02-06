@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.shortcuts import redirect
+from BookClub.models.club import Club
 from BookClub.models.club_membership import ClubMembership
 from django.db.models import Q
 class LoginProhibitedMixin:
@@ -21,6 +22,7 @@ class RankRequiredMixin:
         try:
             club_membership = ClubMembership.objects.get(Q(club=self.requiredClub)&Q(user=request.user))
         except ClubMembership.DoesNotExist:
+            
             return redirect('home')
         if club_membership is not None:
             if club_membership.membership == self.requiredRanking:
@@ -28,3 +30,11 @@ class RankRequiredMixin:
         else:
             return redirect('home')
         
+        
+def get_club_id(request):
+    try:
+        id = request.session['club']
+        club = Club.objects.get(pk=id)
+        return id
+    except:
+        return -1
