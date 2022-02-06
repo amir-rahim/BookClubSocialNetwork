@@ -60,6 +60,19 @@ class ClubModelTestCase(TestCase):
         self.club1.description = 'x' * 251
         self._assert_club_is_invalid()
 
+# Tagline testing
+    def test_tagline_can_be_blank(self):
+        self.club1.tagline = ''
+        self._assert_club_is_valid()
+
+    def test_tagline_can_be_120_characters_long(self):
+        self.club1.tagline = 'x' * 120
+        self._assert_club_is_valid()
+
+    def test_tagline_cannot_be_over_120_characters_long(self):
+        self.club1.tagline = 'x' * 121
+        self._assert_club_is_invalid()
+
 # Rules testing
     def test_rules_can_be_blank(self):
         self.club1.rules = ''
