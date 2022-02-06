@@ -1,0 +1,32 @@
+[
+    {
+        "model": "BookClub.club",
+        "pk": 1,
+        "fields": {
+            "name": "Lit Masterpiece",
+            "description": "This is the first club",
+            "date_of_creation": "2022-02-06",
+            "rules": "Keep reading"
+        }
+    },
+    {
+        "model": "BookClub.club",
+        "pk": 2,
+        "fields": {
+            "name": "Another reading club",
+            "description": "Welcome to the second club",
+            "date_of_creation": "2022-01-28",
+            "rules": "Be happy"
+        }
+    }, 
+    {
+        "model": "BookClub.club",
+        "pk": 3,
+        "fields": {
+            "name": "Mangaa",
+            "description": "Manga has words too",
+            "date_of_creation": "2021-12-15",
+            "rules": "No non-fiction"
+        }
+    }
+]
