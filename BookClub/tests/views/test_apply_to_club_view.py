@@ -20,10 +20,18 @@ class ApplyToClubViewTestCase(TestCase):
     def test_url(self):
         self.assertEqual(self.url,f'/apply_to_club/{self.club.id}')
 
-    def test_user_applies_to_club(self):
+    def test_user_applies_to_valid_club(self):
         self.client.login(username=self.user.username, password='Password123')
         response = self.client.get(reverse('apply_to_club', kwargs={'club_id': self.club.id}))
         self.assertTrue(ClubMembership.objects.filter(user=self.user, club=self.club).exists())
+
+    def test_user_applies_to_invalid_club(self):
+        self.client.login(username=self.user.username, password='Password123')
+        response = self.client.get(reverse('apply_to_club', kwargs={'club_id': self.club.id+9999}))
+
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), 'Club does not exist!')
 
     def test_user_already_applied(self):
         self.client.login(username=self.user.username, password='Password123')
