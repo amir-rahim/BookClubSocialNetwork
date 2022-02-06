@@ -24,4 +24,5 @@ urlpatterns = [
     path('login/', views.LogInView.as_view(), name='login'),
     path('sign_up/', views.SignUpView.as_view(), name='sign_up'),
     path('log_out/', views.LogOutView.as_view(), name='log_out'),
+    path('available_clubs/', views.available_clubs, name='available_clubs'),
 ]
