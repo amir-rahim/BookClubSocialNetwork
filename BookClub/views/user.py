@@ -23,7 +23,7 @@ def edit_profile(request):
             return redirect('user_dashboard')
     else:
         form = EditProfileForm(instance=current_user)
-    return render(request, 'templates/edit_profile.html', {'form': form})
+    return render(request, 'edit_profile.html', {'form': form})
 
 """View of the change password page."""
 @login_required
@@ -39,7 +39,7 @@ def change_password(request):
                 current_user.save()
                 login(request, current_user)
                 messages.add_message(request, messages.SUCCESS, "Password updated!")
-                return redirect('edit_profile')
+                return redirect('dashboard')
     else:
         form = ChangePasswordForm()
-    return render(request, 'templates/password_change.html', {'form': form})
+    return render(request, 'password_change.html', {'form': form})

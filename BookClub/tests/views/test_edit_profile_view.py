@@ -74,13 +74,13 @@ class EditProfileTestCase(TestCase):
         self.assertEqual(self.user.email, 'johndoe@example.org')
         self.assertEqual(self.user.public_bio, "Hello, I'm John Doe.")
 
-    def test_succesful_profile_update(self):
+    def test_successful_profile_update(self):
         self.client.login(email=self.user.email, password='Password123')
         before_count = User.objects.count()
         response = self.client.post(self.url, self.form_input, follow=True)
         after_count = User.objects.count()
         self.assertEqual(after_count, before_count)
-        response_url = reverse('edit_profile')
+        response_url = reverse('user_dashboard')
         self.assertRedirects(response,
                              response_url,
                              status_code=302,
