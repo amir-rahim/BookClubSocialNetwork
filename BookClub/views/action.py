@@ -6,25 +6,35 @@ from BookClub.models.club_membership import ClubMembership
 from BookClub.models.club import Club
 from BookClub.models.user import User
 
+
 @login_required
-def apply_to_club(request, club_id):
-    """"User can apply to join a club which they are not a member of"""
+def join_club(request, club_id):
+    """Users can join or apply to clubs depending on the privacy settings"""
+
+    user_instance = User.objects.get(id=request.user.id)
+
     try:
         club_instance = Club.objects.get(id=club_id)
     except Club.DoesNotExist:
         messages.add_message(request, messages.ERROR, "Club does not exist!")
         return redirect('available_clubs')
 
-    user_instance = User.objects.get(id=request.user.id)
-
     try:
         ClubMembership.objects.get(user=user_instance, club=club_instance)
     except ClubMembership.DoesNotExist:
-        new_membership = ClubMembership(user=user_instance, club=club_instance)
-        new_membership.save()
-        messages.add_message(request, messages.SUCCESS, "Application to club successful!")
+        if (club_instance.is_private == True):
+            new_membership = ClubMembership(user=user_instance, club=club_instance)
+            new_membership.save()
+            messages.add_message(request, messages.SUCCESS, "Application to club successful!")
+            return redirect('available_clubs')
+        else:
+            new_membership = ClubMembership(user=user_instance, club=club_instance, membership=ClubMembership.UserRoles.MEMBER)
+            new_membership.save()
+            messages.add_message(request, messages.SUCCESS, "You have joined the club!")
+            return redirect('available_clubs')
+    else:
+        if (club_instance.is_private == True):
+            messages.add_message(request, messages.INFO, "You have already applied to this club!")
+        else:
+            messages.add_message(request, messages.INFO, "You are already a member of this club!")
         return redirect('available_clubs')
-
-    messages.add_message(request, messages.INFO, "You have already applied to this club!")
-
-    return redirect('available_clubs')
