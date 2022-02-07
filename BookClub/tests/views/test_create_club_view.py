@@ -96,3 +96,6 @@ class CreateClubViewTestcase(TestCase):
         self.assertEqual(club.is_private, self.data['is_private'])
         self.assertEqual(club.rules, self.data['rules'])
         self.assertEqual(club.created_on, saving_date)
+
+        club_owner = ClubMembership.objects.get(club = club, membership = ClubMembership.UserRoles.OWNER).user
+        self.assertEqual(club_owner, self.user)
