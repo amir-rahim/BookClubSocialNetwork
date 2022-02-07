@@ -39,7 +39,7 @@ def change_password(request):
                 current_user.save()
                 login(request, current_user)
                 messages.add_message(request, messages.SUCCESS, "Password updated!")
-                return redirect('dashboard')
+                return redirect('user_dashboard')
     else:
         form = ChangePasswordForm()
     return render(request, 'password_change.html', {'form': form})
