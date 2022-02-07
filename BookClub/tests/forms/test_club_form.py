@@ -6,7 +6,7 @@ from BookClub.forms.club import ClubForm
 from datetime import date
 
 class ClubFormTestCase(TestCase):
-"""Unit tests for Club Form"""
+    """Unit tests for Club Form"""
     def setUp(self):
         self.form_input = {
             'name': 'Johnathan\'s Club',
