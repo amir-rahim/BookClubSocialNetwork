@@ -1,6 +1,6 @@
 """Unit tests of the club dashboard view."""
 from django.test import TestCase
-from BookClub.models import Club, Membership
+from BookClub.models import Club, ClubMembership, User
 from django.urls import reverse
 from BookClub.tests.helpers import reverse_with_next
 
