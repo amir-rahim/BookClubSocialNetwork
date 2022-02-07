@@ -1,29 +1,45 @@
 '''Memberships Related Views'''
 from django.shortcuts import redirect, render
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.views.generic import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from BookClub.models.club_membership import ClubMembership
 from BookClub.models.club import Club
 from django.db.models import Exists, Q, OuterRef
 
-@login_required
-def available_clubs(request):
-    """Show a list of all clubs the user can apply to (all clubs the user is not member of)."""
-    # Select clubs the user is not a member of
-    subquery = ClubMembership.objects.filter(user=request.user.pk, club=OuterRef('pk'))
-    clubs = Club.objects.filter(
-        ~Q(Exists(subquery)) |
-        Q(Exists(subquery.filter(membership=ClubMembership.UserRoles.APPLICANT)))
-    )
-    return render(request, 'available_clubs.html', {'clubs': clubs})
-
-@login_required
-def my_club_memberships(request):
-    """Show a list of all clubs that the user is a member of (or moderator/creator)."""
-    # Select clubs the user is a member of
-    subquery = ClubMembership.objects.filter(user=request.user.pk, club=OuterRef('pk'))
-    clubs = Club.objects.filter(
-        Q(Exists(subquery)) &
-        ~Q(Exists(subquery.filter(membership=ClubMembership.UserRoles.APPLICANT)))
-    )
-    return render(request, 'my_club_memberships.html', {'clubs': clubs})
+class AvailableClubsView(LoginRequiredMixin, ListView):
+    model = Club
+    template_name = 'available_clubs.html'
+    context_object_name = 'posts'
+    
+    def get_queryset(self):
+        subquery = ClubMembership.objects.filter(user=self.request.user.pk, club=OuterRef('pk'))
+        clubs = Club.objects.filter(
+            ~Q(Exists(subquery)) |
+            Q(Exists(subquery.filter(membership=ClubMembership.UserRoles.APPLICANT)))
+        )
+        return clubs
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['clubs'] = self.get_queryset()
+        return context
+        
+class MyClubMembershipsView(LoginRequiredMixin, ListView):
+    model = Club
+    template_name = 'my_club_memberships.html'
+    context_object_name = 'posts'
+    
+    def get_queryset(self):
+        subquery = ClubMembership.objects.filter(user=self.request.user.pk, club=OuterRef('pk'))
+        clubs = Club.objects.filter(
+            Q(Exists(subquery)) &
+            ~Q(Exists(subquery.filter(membership=ClubMembership.UserRoles.APPLICANT)))
+        )
+        return clubs
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['clubs'] = self.get_queryset()
+        return context
+        
