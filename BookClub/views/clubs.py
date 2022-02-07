@@ -1,4 +1,5 @@
 '''Club Related Views'''
+from django.contrib import messages
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -24,4 +25,9 @@ class CreateClubView(LoginRequiredMixin, CreateView):
         created_club = self.object
         owner_membership = ClubMembership(user = self.request.user, club = created_club, membership = ClubMembership.UserRoles.OWNER)
         owner_membership.save()
+        messages.success(self.request, ('Successfully created a new club!'))
         return response
+
+    def form_invalid(self, form):
+        messages.add_message(self.request, messages.ERROR, "The data provided was invalid!")
+        return super().form_invalid(form);
