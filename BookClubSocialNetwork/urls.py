@@ -29,5 +29,6 @@ urlpatterns = [
     path('log_out/', views.LogOutView.as_view(), name='log_out'),
     
     # '''Club URLs'''
-    path('club_dashboard/', views.club_dashboard, name='club_dashboard')
+    path('club_dashboard/', views.club_dashboard, name='club_dashboard'),
+    path('delete_club/', views.DeleteClubView.as_view(), name='delete_club')
 ]
