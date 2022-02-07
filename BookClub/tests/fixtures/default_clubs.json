@@ -4,7 +4,8 @@
         "pk": 1,
         "fields": {
             "name": "Johnathan's Club",
-            "description": "This is a very cool club that is owned by a certain Johnathan.",
+            "description": "This is a very cool club that is owned by a certain Johnathan. Reading certain books...",
+            "tagline": "Welcome to Johnathan's club! We read the best books!!!",
             "rules": "Don't be annoying",
             "is_private": false,
             "created_on": "2022-02-04"
@@ -17,6 +18,7 @@
         "fields": {
           "name": "Jeannette's Club",
           "description": "This is a club owned by a certain Jeannette",
+          "tagline": "",
           "rules": "",
           "is_private": false,
           "created_on": "2022-02-03"
@@ -29,6 +31,7 @@
         "fields": {
           "name": "Jack's Club",
           "description": "a club created by some Jack",
+          "tagline": "Just Read It",
           "rules": "Know the inside jokes",
           "is_private": true,
           "created_on": "2022-02-02"

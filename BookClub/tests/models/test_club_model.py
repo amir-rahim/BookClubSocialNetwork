@@ -1,11 +1,16 @@
 from django.test import TestCase
 
-from BookClub.models.club import Club
+from BookClub.models.club import Club, ClubMembership
+# from BookClub.models.club_membership import ClubMembership
 from django.core.exceptions import ValidationError
 
 class ClubModelTestCase(TestCase):
 
-    fixtures = ['BookClub/tests/fixtures/default_clubs.json']
+    fixtures = [
+        'BookClub/tests/fixtures/default_users.json',
+        'BookClub/tests/fixtures/default_clubs.json',
+        'BookClub/tests/fixtures/default_club_owners.json',
+        ]
 
     def setUp(self):
         self.club1 = Club.objects.get(pk = 1)
@@ -30,9 +35,9 @@ class ClubModelTestCase(TestCase):
         self.club1.name = ''
         self._assert_club_is_invalid()
 
-    def test_name_may_already_exist(self):
+    def test_name_must_be_unique(self):
         self.club1.name = self.club2.name
-        self._assert_club_is_valid()
+        self._assert_club_is_invalid()
 
     def test_name_can_be_100_characters_long(self):
         self.club1.name = 'x' * 100
@@ -47,12 +52,25 @@ class ClubModelTestCase(TestCase):
         self.club1.description = ''
         self._assert_club_is_invalid()
 
-    def test_description_can_be_200_characters_long(self):
-        self.club1.description = 'x' * 200
+    def test_description_can_be_250_characters_long(self):
+        self.club1.description = 'x' * 250
         self._assert_club_is_valid()
 
-    def test_description_cannot_be_over_200_characters_long(self):
-        self.club1.description = 'x' * 201
+    def test_description_cannot_be_over_250_characters_long(self):
+        self.club1.description = 'x' * 251
+        self._assert_club_is_invalid()
+
+# Tagline testing
+    def test_tagline_can_be_blank(self):
+        self.club1.tagline = ''
+        self._assert_club_is_valid()
+
+    def test_tagline_can_be_120_characters_long(self):
+        self.club1.tagline = 'x' * 120
+        self._assert_club_is_valid()
+
+    def test_tagline_cannot_be_over_120_characters_long(self):
+        self.club1.tagline = 'x' * 121
         self._assert_club_is_invalid()
 
 # Rules testing
@@ -65,7 +83,7 @@ class ClubModelTestCase(TestCase):
         self._assert_club_is_valid()
 
     def test_rules_cannot_be_over_200_characters_long(self):
-        self.club1.description = 'x' * 201
+        self.club1.rules = 'x' * 201
         self._assert_club_is_invalid()
 
 # Privacy testing
@@ -80,3 +98,12 @@ class ClubModelTestCase(TestCase):
     def test_club_can_be_private(self):
         self.club1.is_private = False
         self._assert_club_is_valid()
+
+# Getters testing
+    def test_get_number_of_members(self):
+        owner1 = ClubMembership.objects.get(club = self.club1, membership = ClubMembership.UserRoles.OWNER)
+        self.assertEqual(self.club1.get_club_owner(), owner1, 'Club object returned a wrong owner')
+
+    def test_get_number_of_members(self):
+        number_of_members = ClubMembership.objects.filter(club = self.club1, membership__gte = ClubMembership.UserRoles.MEMBER).count()
+        self.assertEqual(self.club1.get_number_of_members(), number_of_members, 'Club object returned a wrong number of members')

@@ -2,7 +2,6 @@ from django.db import models
 from django.core.exceptions import ValidationError
 
 from BookClub.models.user import User
-from BookClub.models.club import Club
 
 class ClubMembership(models.Model):
     class Meta:
@@ -17,12 +16,12 @@ class ClubMembership(models.Model):
         OWNER = 2
 
     user = models.ForeignKey(User, blank = False, null = False, on_delete = models.CASCADE)
-    club = models.ForeignKey(Club, blank = False, null = False, on_delete = models.CASCADE)
+    club = models.ForeignKey('Club', blank = False, null = False, on_delete = models.CASCADE)
     membership = models.IntegerField(choices = UserRoles.choices, blank = False, default = UserRoles.APPLICANT)
     joined_on = models.DateField(auto_now_add = True)
 
-    def full_clean(self):
-        super().full_clean()
+    def clean(self):
+        super().clean()
         if self.membership == ClubMembership.UserRoles.OWNER:
             if len(ClubMembership.objects.filter(
                 club = self.club,
