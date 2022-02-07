@@ -19,9 +19,16 @@ from django.urls import path
 from BookClub import views
 
 urlpatterns = [
+    # '''Core URLs'''
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
+
+    # '''Authentication URLs'''
     path('login/', views.LogInView.as_view(), name='login'),
     path('sign_up/', views.SignUpView.as_view(), name='sign_up'),
     path('log_out/', views.LogOutView.as_view(), name='log_out'),
+
+    # '''Club URLs'''
+    path('club_dashboard/', views.club_dashboard, name='club_dashboard'),
+    path('create_club/', views.clubs.CreateClubView.as_view(), name = 'create_club')
 ]
