@@ -35,6 +35,7 @@ def join_club(request, club_id):
     else:
         if (club_instance.is_private == True):
             messages.add_message(request, messages.INFO, "You have already applied to this club!")
-        else:
-            messages.add_message(request, messages.INFO, "You are already a member of this club!")
-        return redirect('available_clubs')
+            return redirect('available_clubs')
+
+    messages.add_message(request, messages.INFO, "You are already a member of this club!")
+    return redirect('available_clubs')
