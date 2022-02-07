@@ -20,7 +20,7 @@ This is the User Dashboard, the main home page for your user profile!
 
             <ul class="menu-list">
                 <li><a class="is-active"><b>Profile Dashboard</b></a></li>
-                <li><a>Edit Profile</a></li>
+                <li><a href="{% url 'edit_profile' %}"> Edit Profile</a></li>
                 <li><a>Profile Settings</a></li>
             </ul>
 
@@ -77,10 +77,10 @@ This is the User Dashboard, the main home page for your user profile!
                             </div>
                             <div class="media-content">
                                 <div class="content">
-                                    <p class="subtitle is-5"><b>Full Name: </b> *Full Name*</p>
-                                    <p class="subtitle is-5"><b>Username: </b> *Username*</p>
-                                    <p class="subtitle is-5"><b>Email: </b> *Email Address*</p>
-                                    <p class="subtitle is-5"><b>Phone: </b> *Phone Number*</p>
+                                    <!-- <p class="subtitle is-5"><b>Full Name: </b> *Full Name*</p> -->
+                                    <p class="subtitle is-5"><b>Username: </b> {{ user.username }}</p>
+                                    <p class="subtitle is-5"><b>Email: </b> {{ user.email }}</p>
+                                    <!-- <p class="subtitle is-5"><b>Phone: </b> *Phone Number*</p> -->
                                 </div>
                             </div>
                         </div>
