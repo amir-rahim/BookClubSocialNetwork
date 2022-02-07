@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.core.exceptions import ValidationError
 
 from BookClub.models.user import User
@@ -12,6 +13,9 @@ class Club(models.Model):
     is_private = models.BooleanField(default = False, blank = False, null = False)
     created_on = models.DateField(auto_now_add = True)
 
+    # uncomment this method and substitute the path name for view to show club details
+    # def get_absolute_url(self):
+    #     return reverse('club', kwargs = {'pk': self.pk})
 
     def __str__(self):
         return self.name
