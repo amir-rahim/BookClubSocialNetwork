@@ -20,14 +20,14 @@ class ProfileViewTest(TestCase):
         self.assertEqual(self.url, '/user_dashboard/')
 
     def test_get_profile(self):
-        self.client.login(email=self.user.email, password='Password123')
+        self.client.login(username=self.user.username, password='Password123')
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'templates/user_dashboard.html')
+        self.assertTemplateUsed(response, 'user_dashboard.html')
 
 
     def test_get_profile_redirects_when_not_logged_in(self):
-        redirect_url = reverse_with_query('login')
+        redirect_url = reverse_with_query('login',query_kwargs={'next':reverse('user_dashboard')})
         response = self.client.get(self.url)
         self.assertRedirects(response,
                              redirect_url,
