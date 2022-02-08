@@ -16,3 +16,7 @@ class HomeViewTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'home.html')
+
+    def test_available_clubs_link_redirect(self):
+        response = self.client.get(self.url)
+        self.assertContains(response, '<span><a href="/available_clubs/">Join</a></span>')

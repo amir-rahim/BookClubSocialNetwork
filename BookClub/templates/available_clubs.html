@@ -1,0 +1,52 @@
+{% extends 'base_content.html' %}
+
+{% block page_title %}
+Available Clubs
+{% endblock page_title %}
+
+{% block page_subtitle %}
+Find the Book Club you are looking for here!
+{% endblock page_subtitle %}
+
+{% block content %}
+
+<section class="hero is-fullheight">
+    <div class="column is-4 is-offset-4">
+      {% if clubs %} <!-- If there are clubs available to the logged-in user -->
+        <div class="table-container">
+           <table class="table is-hoverable" id="table-clubs" data-toggle="table" data-pagination="true">
+              <thead>
+                  <tr>
+                      <th scope="col" width="25%">Club Name</th>
+                      <th scope="col" width="60%">Description</th>
+                      <th scope="col" width="15%">Action</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for club in clubs %}
+                    <!-- For each available club, add a row linked to the corresponding club dashboard page -->
+                      <tr onclick="window.location='{% url 'home' %}';">
+                          <td>{{club.name}}</td>
+                          <td>{{club.description}}</td>
+                          <td href="#" class="button is-success">Join</td>
+                      </tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+        </div>
+      {% else %} <!-- If there is no club available to the logged-in user -->
+        <hr class="solid">
+        <p>There are no available clubs at the moment.</p>
+      {% endif %}
+    </div>
+</section>
+<script>
+const dataTable = new simpleDatatables.DataTable("#table-clubs", {
+    fixedHeight: true,
+    columns: [
+      {select: [1], sortable:false}
+    ]
+})
+</script>
+
+{% endblock %}

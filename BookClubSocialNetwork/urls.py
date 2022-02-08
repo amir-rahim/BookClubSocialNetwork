@@ -22,7 +22,7 @@ urlpatterns = [
     # '''Core URLs'''
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
-    
+
     # '''Authentication URLs'''
     path('login/', views.LogInView.as_view(), name='login'),
     path('sign_up/', views.SignUpView.as_view(), name='sign_up'),
@@ -37,7 +37,8 @@ urlpatterns = [
     path('password_change/', views.ChangePasswordView.as_view(), name='password_change'),
     
     # '''Club URLs'''
-    path('club_dashboard/', views.club_dashboard, name='club_dashboard'),
-    
-    
+    path('club_dashboard/', views.club_dashboard, name='club_dashboard'), 
+    path('available_clubs/', views.AvailableClubsView.as_view(), name='available_clubs'),
+    path('my_club_memberships/', views.MyClubMembershipsView.as_view(), name='my_club_memberships'),
+    path('create_club/', views.clubs.CreateClubView.as_view(), name = 'create_club')
 ]
