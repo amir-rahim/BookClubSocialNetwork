@@ -1,11 +1,11 @@
-"""Tests of the apply_to_club view."""
+"""Tests of the Join Club view."""
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.messages import get_messages
 from BookClub.models import User, Club, ClubMembership
 
-class ApplyToClubViewTestCase(TestCase):
-    """Tests of the apply_to_club view."""
+class JoinClubViewTestCase(TestCase):
+    """Tests of the Join Club view."""
 
     fixtures = [
         'BookClub/tests/fixtures/default_users.json',
@@ -24,13 +24,13 @@ class ApplyToClubViewTestCase(TestCase):
     # Tests if the user action is on valid/invalid club
     def test_user_joins_or_applies_to_valid_club(self):
         self.client.login(username=self.user.username, password='Password123')
-        response = self.client.get(self.url)
+        response = self.client.post(self.url)
         self.assertTrue(Club.objects.filter(pk = self.club.id).exists())
         self.assertTrue(ClubMembership.objects.filter(user=self.user, club=self.club).exists())
 
     def test_user_joins_or_applies_to_invalid_club(self):
         self.client.login(username=self.user.username, password='Password123')
-        response = self.client.get(reverse('join_club', kwargs={'club_id': self.club.id+9999}))
+        response = self.client.post(reverse('join_club', kwargs={'club_id': self.club.id+9999}))
         self.assertFalse(Club.objects.filter(pk = self.club.id+9999).exists())
 
         messages = list(get_messages(response.wsgi_request))
@@ -45,7 +45,8 @@ class ApplyToClubViewTestCase(TestCase):
         membership = ClubMembership.objects.create(user=self.user, club=private_club, membership=ClubMembership.UserRoles.APPLICANT)
         membership.save()
         self.assertTrue(ClubMembership.objects.filter(user=self.user, club=private_club, membership=ClubMembership.UserRoles.APPLICANT).exists())
-        response = self.client.get(reverse('join_club', kwargs={'club_id': private_club.id}))
+        response = self.client.post(reverse('join_club', kwargs={'club_id': private_club.id}))
+        self.assertEqual(response.status_code, 302)
 
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
@@ -56,7 +57,8 @@ class ApplyToClubViewTestCase(TestCase):
         membership = ClubMembership.objects.create(user=self.user, club=self.club, membership=ClubMembership.UserRoles.MEMBER)
         membership.save()
         self.assertTrue(ClubMembership.objects.filter(user=self.user, club=self.club, membership=ClubMembership.UserRoles.MEMBER).exists())
-        response = self.client.get(reverse('join_club', kwargs={'club_id': self.club.id}))
+        response = self.client.post(reverse('join_club', kwargs={'club_id': self.club.id}))
+        self.assertEqual(response.status_code, 302)
 
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
@@ -66,8 +68,9 @@ class ApplyToClubViewTestCase(TestCase):
     # Tests for users ability to join public clubs and apply to private ones
     def test_user_can_join_public_club(self):
         self.client.login(username=self.user.username, password='Password123')
-        response = self.client.get(self.url)
+        response = self.client.post(self.url)
         self.assertTrue(ClubMembership.objects.filter(user=self.user, club=self.club, membership=ClubMembership.UserRoles.MEMBER).exists())
+        self.assertEqual(response.status_code, 302)
 
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
@@ -76,8 +79,9 @@ class ApplyToClubViewTestCase(TestCase):
     def test_user_can_apply_to_private_club(self):
         private_club = Club.objects.get(pk = "3")
         self.client.login(username=self.user.username, password='Password123')
-        response = self.client.get(reverse('join_club', kwargs={'club_id': private_club.id}))
+        response = self.client.post(reverse('join_club', kwargs={'club_id': private_club.id}))
         self.assertTrue(ClubMembership.objects.filter(user=self.user, club=private_club, membership=ClubMembership.UserRoles.APPLICANT).exists())
+        self.assertEqual(response.status_code, 302)
 
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
