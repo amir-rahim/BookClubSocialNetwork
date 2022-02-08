@@ -6,6 +6,7 @@ from BookClub.models import User
 from BookClub.tests.helpers import reverse_with_query
 
 class EditProfileTestCase(TestCase):
+    """ Unit tests for the edit profile view """
 
     fixtures = [
         'BookClub/tests/fixtures/default_users.json',

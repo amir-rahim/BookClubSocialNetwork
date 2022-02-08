@@ -1,4 +1,4 @@
-'''User Related Views'''
+"""User Related Views"""
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password
@@ -13,7 +13,7 @@ from BookClub.models import User
 class UserDashboardView(LoginRequiredMixin, TemplateView):
     """
     
-    View class for user dashboard
+    Class based view for user dashboard
 
     """
     model = User
@@ -28,6 +28,11 @@ class UserDashboardView(LoginRequiredMixin, TemplateView):
         return context
 
 class EditProfileView(LoginRequiredMixin, UpdateView):
+    """
+    
+    Class based view for editing user profile
+    
+    """
     model = User
     form_class = EditProfileForm
     template_name = 'edit_profile.html'
@@ -43,6 +48,11 @@ class EditProfileView(LoginRequiredMixin, UpdateView):
         return reverse('user_dashboard')
 
 class ChangePasswordView(LoginRequiredMixin, FormView):
+    """
+    
+    Class based view for changing user password
+    
+    """
     model = User
     form_class = ChangePasswordForm
     template_name = 'password_change.html'
