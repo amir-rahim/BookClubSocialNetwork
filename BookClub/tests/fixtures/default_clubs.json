@@ -3,30 +3,44 @@
         "model": "BookClub.club",
         "pk": 1,
         "fields": {
-            "name": "Lit Masterpiece",
-            "description": "This is the first club",
-            "date_of_creation": "2022-02-06",
-            "rules": "Keep reading"
+
+
+            "name": "Johnathan's Club",
+            "description": "This is a very cool club that is owned by a certain Johnathan. Reading certain books...",
+            "tagline": "Welcome to Johnathan's club! We read the best books!!!",
+            "rules": "Don't be annoying",
+            "is_private": false,
+            "created_on": "2022-02-04"
         }
     },
+
+    
     {
         "model": "BookClub.club",
         "pk": 2,
         "fields": {
-            "name": "Another reading club",
-            "description": "Welcome to the second club",
-            "date_of_creation": "2022-01-28",
-            "rules": "Be happy"
+
+
+          "name": "Jeannette's Club",
+          "description": "This is a club owned by a certain Jeannette",
+          "tagline": "",
+          "rules": "",
+          "is_private": false,
+          "created_on": "2022-02-03"
         }
-    }, 
+    },
+
     {
         "model": "BookClub.club",
         "pk": 3,
         "fields": {
-            "name": "Mangaa",
-            "description": "Manga has words too",
-            "date_of_creation": "2021-12-15",
-            "rules": "No non-fiction"
+
+          "name": "Jack's Club",
+          "description": "a club created by some Jack",
+          "tagline": "Just Read It",
+          "rules": "Know the inside jokes",
+          "is_private": true,
+          "created_on": "2022-02-02"
         }
     }
 ]

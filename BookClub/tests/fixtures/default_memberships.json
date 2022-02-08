@@ -1,32 +1,39 @@
 [
     {
-        "model": "BookClub.club_membership",
+
+        "model": "BookClub.ClubMembership",
+
         "pk": 1,
         "fields": {
             "club": 1,
             "user": 2,
-            "role": "Owner",
-            "date_joined": "2022-02-06"
+
+            "membership": 2,
+            "joined_on": "2022-02-06"
         }
     },
     {
-        "model": "BookClub.club_membership",
+        "model": "BookClub.ClubMembership",
+
         "pk": 2,
         "fields": {
             "club": 1,
             "user": 1,
-            "role": "Moderator",
-            "date_joined": "2022-02-08"
+
+            "membership": 1,
+            "joined_on": "2022-02-08"
         }
     },
     {
-        "model": "BookClub.club_membership",
+        "model": "BookClub.ClubMembership",
+
         "pk": 3,
         "fields": {
             "club": 1,
             "user": 3,
-            "role": "Member",
-            "date_joined": "2022-02-10"
+
+            "membership": 0,
+            "joined_on": "2022-02-10"
         }
     }
 ]
