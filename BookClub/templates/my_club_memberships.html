@@ -28,7 +28,12 @@ Find the Book Clubs you have memberships for here!
                       <tr onclick="window.location='{% url 'home' %}';">
                           <td>{{club.name}}</td>
                           <td>{{club.description}}</td>
-                          <td href="#" class="button is-danger">Leave</td>
+                          <td>
+                            <form method="post" action="{% url 'leave_club' club_id=club.id %}">
+                              {% csrf_token %}
+                              <button type="submit" class="button is-danger" onclick="return confirm('Confirm you want to leave {{club.name}}?');">Leave</button>
+                            </form>
+                          </td>
                       </tr>
                   {% endfor %}
               </tbody>

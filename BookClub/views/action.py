@@ -3,7 +3,8 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import View
+from django.views.generic import View, DeleteView
+from django.shortcuts import get_object_or_404
 from BookClub.models.club_membership import ClubMembership
 from BookClub.models.club import Club
 from BookClub.models.user import User
@@ -42,3 +43,19 @@ class JoinClubView(LoginRequiredMixin, View):
 
         messages.add_message(request, messages.INFO, "You are already a member of this club!")
         return redirect('available_clubs')
+
+
+class LeaveClubView(LoginRequiredMixin, DeleteView):
+    """Users can leave their club"""
+
+    model = ClubMembership
+    success_url = '/my_club_memberships/'
+
+    def get_object(self):
+        try:
+            club_instance = Club.objects.get(id=self.kwargs.get('club_id'))
+        except Club.DoesNotExist:
+            messages.add_message(request, messages.ERROR, "Club does not exist!")
+            return redirect('my_club_memberships')
+        user_instance = User.objects.get(id=self.request.user.id)
+        return get_object_or_404(ClubMembership, club=club_instance, user=user_instance)

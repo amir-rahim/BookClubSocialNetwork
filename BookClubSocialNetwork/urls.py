@@ -32,6 +32,7 @@ urlpatterns = [
     path('available_clubs/', views.AvailableClubsView.as_view(), name='available_clubs'),
     path('my_club_memberships/', views.MyClubMembershipsView.as_view(), name='my_club_memberships'),
     path('join_club/<int:club_id>', views.JoinClubView.as_view(), name='join_club'),
+    path('leave_club/<int:club_id>', views.LeaveClubView.as_view(), name='leave_club'),
 
 
     # '''Club URLs'''
