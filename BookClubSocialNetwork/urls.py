@@ -28,9 +28,10 @@ urlpatterns = [
     path('sign_up/', views.SignUpView.as_view(), name='sign_up'),
     path('log_out/', views.LogOutView.as_view(), name='log_out'),
 
-  
+
     path('available_clubs/', views.AvailableClubsView.as_view(), name='available_clubs'),
     path('my_club_memberships/', views.MyClubMembershipsView.as_view(), name='my_club_memberships'),
+    path('join_club/<int:club_id>', views.JoinClubView.as_view(), name='join_club'),
 
 
     # '''Club URLs'''

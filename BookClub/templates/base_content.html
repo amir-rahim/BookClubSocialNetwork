@@ -22,10 +22,10 @@
             </p>
         </div>
     </section>
-    
+
     {% if messages %}
     <section class="container" style="padding-top: 10px;">
-        
+
 
             {% for message in messages %}
 
@@ -39,20 +39,25 @@
                         <button class="delete"></button>
                         {{ message }}
                     </div>
+                {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+                    <div class="notification is-info">
+                        <button class="delete"></button>
+                        {{ message }}
+                    </div>
                 {% endif %}
 
             {% endfor %}
-     
+
     </section>
     {% endif %}
 
     <div class="container" style="padding: 20px 0px">
-        
+
         {% block content %}
         {% endblock content %}
 
     </div>
-    
+
     {% include 'partials/footer.html' %}
 
 </div>
