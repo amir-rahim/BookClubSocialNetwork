@@ -29,9 +29,6 @@ urlpatterns = [
     path('log_out/', views.LogOutView.as_view(), name='log_out'),
     
     # '''User URLs'''
-    # path('user_dashboard/', views.user_dashboard, name='user_dashboard'),
-    # path('edit_profile/', views.edit_profile, name='edit_profile'),
-    # path('password_change/', views.change_password, name='password_change'),
     path('user_dashboard/', views.UserDashboardView.as_view(), name='user_dashboard'),
     path('edit_profile/', views.EditProfileView.as_view(), name='edit_profile'),
     path('password_change/', views.ChangePasswordView.as_view(), name='password_change'),

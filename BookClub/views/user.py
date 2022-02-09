@@ -53,57 +53,26 @@ class ChangePasswordView(LoginRequiredMixin, FormView):
     Class based view for changing user password
     
     """
-    model = User
+
     form_class = ChangePasswordForm
     template_name = 'password_change.html'
 
+    def get_form_kwargs(self, **kwargs):
+        """Pass the current user to the password change form."""
+
+        kwargs = super().get_form_kwargs(**kwargs)
+        kwargs.update({'user': self.request.user})
+        return kwargs
+
     def form_valid(self, form):
-        new_password = form.cleaned_data.get('new_password')
-        self.request.user.set_password(new_password)
+        """Handle valid form by saving the new password."""
+
+        form.save()
         login(self.request, self.request.user)
         return super().form_valid(form)
-        
-    def form_invalid(self, form):
-        messages.add_message(self.request, messages.ERROR, "One of these fields are invalid")
-        return super().form_invalid(form)
-    
+
     def get_success_url(self):
+        """Redirect the user after successful password change."""
+
+        messages.add_message(self.request, messages.SUCCESS, "Password updated!")
         return reverse('user_dashboard')
-
-# @login_required
-# def user_dashboard(request):
-#     """This is the user dashboard view."""
-#     return render(request, 'user_dashboard.html')
-
-# """View of the change profile details page."""
-# @login_required
-# def edit_profile(request):
-#     current_user = request.user
-#     if request.method == 'POST':
-#         form = EditProfileForm(instance=current_user, data=request.POST)
-#         if form.is_valid():
-#             messages.add_message(request, messages.SUCCESS, "Profile updated!")
-#             form.save()
-#             return redirect('user_dashboard')
-#     else:
-#         form = EditProfileForm(instance=current_user)
-#     return render(request, 'edit_profile.html', {'form': form})
-
-# """View of the change password page."""
-# @login_required
-# def change_password(request):
-#     current_user = request.user
-#     if request.method == 'POST':
-#         form = ChangePasswordForm(data=request.POST)
-#         if form.is_valid():
-#             password = form.cleaned_data.get('password')
-#             if check_password(password, current_user.password):
-#                 new_password = form.cleaned_data.get('new_password')
-#                 current_user.set_password(new_password)
-#                 current_user.save()
-#                 login(request, current_user)
-#                 messages.add_message(request, messages.SUCCESS, "Password updated!")
-#                 return redirect('user_dashboard')
-#     else:
-#         form = ChangePasswordForm()
-#     return render(request, 'password_change.html', {'form': form})
