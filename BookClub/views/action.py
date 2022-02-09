@@ -13,7 +13,6 @@ from BookClub.models.user import User
 class JoinClubView(LoginRequiredMixin, View):
     """Users can join or apply to clubs depending on the privacy settings of the club"""
 
-
     def post(self, request, club_id):
         user_instance = User.objects.get(id=request.user.id)
 
