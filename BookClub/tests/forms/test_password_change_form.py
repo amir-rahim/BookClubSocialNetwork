@@ -19,13 +19,13 @@ class PasswordFormTestCase(TestCase):
         }
 
     def test_form_has_necessary_fields(self):
-        form = ChangePasswordForm()
+        form = ChangePasswordForm(user=self.user)
         self.assertIn('password', form.fields)
         self.assertIn('new_password', form.fields)
         self.assertIn('password_confirmation', form.fields)
 
     def test_valid_form(self):
-        form = ChangePasswordForm(data=self.form_input)
+        form = ChangePasswordForm(user=self.user, data=self.form_input)
         self.assertTrue(form.is_valid())
 
     def test_password_must_contain_uppercase_character(self):
