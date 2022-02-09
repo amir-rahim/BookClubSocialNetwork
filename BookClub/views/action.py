@@ -52,10 +52,6 @@ class LeaveClubView(LoginRequiredMixin, DeleteView):
     success_url = '/my_club_memberships/'
 
     def get_object(self):
-        try:
-            club_instance = Club.objects.get(id=self.kwargs.get('club_id'))
-        except Club.DoesNotExist:
-            messages.add_message(request, messages.ERROR, "Club does not exist!")
-            return redirect('my_club_memberships')
+        club_instance = Club.objects.get(id=self.kwargs.get('club_id'))
         user_instance = User.objects.get(id=self.request.user.id)
         return get_object_or_404(ClubMembership, club=club_instance, user=user_instance)
