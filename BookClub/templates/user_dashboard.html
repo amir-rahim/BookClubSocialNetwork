@@ -21,15 +21,16 @@ This is the User Dashboard, the main home page for your user profile!
             <ul class="menu-list">
                 <li><a class="is-active"><b>Profile Dashboard</b></a></li>
                 <li><a href="{% url 'edit_profile' %}"> Edit Profile</a></li>
+                <li><a href="{% url 'password_change' %}">Change Password</a></li>
                 <li><a>Profile Settings</a></li>
             </ul>
 
             <p class="menu-label">Clubs</p>
 
             <ul class="menu-list">
-                <li><a>Create Club</a></li>
-                <li><a>Join club</a></li>
-                <li><a>View List of Clubs</a></li>
+                <li><a href="{% url 'create_club' %}">Create Club</a></li>
+                <li><a href="{% url 'available_clubs' %}">Join club</a></li>
+                <li><a href="{% url 'my_club_memberships' %}">Memberships</a></li>
             </ul>
 
             <p class="menu-label">Calendar</p>
@@ -46,16 +47,16 @@ This is the User Dashboard, the main home page for your user profile!
 
         <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
             <ul>
-                <li><a href="./home.html">Home</a></li>
+                <li><a href=" url 'home' ">Home</a></li>
                 <li><a>Profile</a></li>
-                <li><a href="#">Dashboard</a></li>
+                <li><a>Dashboard</a></li>
             </ul>
         </nav>
 
         <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
             <div class="hero-body">
                 <div class="container">
-                    <h1 class="title">*Profile Name*</h1>
+                    <h1 class="title">{{ user.username }}</h1>
                     <h2 class="subtitle">Welcome to your profile page!</h2>
                 </div>
             </div>

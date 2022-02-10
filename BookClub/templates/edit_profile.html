@@ -5,7 +5,7 @@ User Dashboard
 {% endblock page_title %}
 
 {% block page_subtitle %}
-This is the User Dashboard, the main home page for your user profile!
+This is the Edit Profile page, you can change your profile details!
 {% endblock page_subtitle %}
 
 {% block content %}
@@ -21,15 +21,16 @@ This is the User Dashboard, the main home page for your user profile!
             <ul class="menu-list">
                 <li><a href="{% url 'user_dashboard' %}">Profile Dashboard</a></li>
                 <li><a class="is-active"><b>Edit Profile</b></a></li>
+                <li><a href="{% url 'password_change' %}">Change Password</a></li>
                 <li><a>Profile Settings</a></li>
             </ul>
 
             <p class="menu-label">Clubs</p>
 
             <ul class="menu-list">
-                <li><a>Create Club</a></li>
-                <li><a>Join club</a></li>
-                <li><a>View List of Clubs</a></li>
+                <li><a href="{% url 'create_club' %}">Create Club</a></li>
+                <li><a href="{% url 'available_clubs' %}">Join club</a></li>
+                <li><a href="{% url 'my_club_memberships' %}">Memberships</a></li>
             </ul>
 
             <p class="menu-label">Calendar</p>
@@ -46,9 +47,9 @@ This is the User Dashboard, the main home page for your user profile!
 
         <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
             <ul>
-                <li><a href="./home.html">Home</a></li>
+                <li><a href="{% url 'home' %}">Home</a></li>
                 <li><a>Profile</a></li>
-                <li><a href="#">Dashboard</a></li>
+                <li><a>Edit Profile</a></li>
             </ul>
         </nav>
 
@@ -56,7 +57,6 @@ This is the User Dashboard, the main home page for your user profile!
             <div class="hero-body">
                 <div class="container">
                     <h1 class="title">Edit Profile</h1>
-                    <h2 class="subtitle">Welcome to your profile page!</h2>
                 </div>
             </div>
         </section>
@@ -98,11 +98,6 @@ This is the User Dashboard, the main home page for your user profile!
                                         </div>
                                     </form>
                                     <br>
-                                    <p class="control">
-                                        <button class="button is-link"> 
-                                            <a href="{% url 'password_change' %}"> Change password </a>
-                                        </button>
-                                    </p> 
                                 </div>
                             </div>
                         </div>
