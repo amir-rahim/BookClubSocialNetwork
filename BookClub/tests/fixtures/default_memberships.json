@@ -1,5 +1,4 @@
-[
-    {
+[{
         "model": "BookClub.ClubMembership",
         "pk": 1,
         "fields": {

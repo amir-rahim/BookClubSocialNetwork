@@ -1,0 +1,33 @@
+[{
+        "model": "BookClub.ClubMembership",
+        "pk": 4,
+        "fields": {
+            "club": 1,
+            "user": 5,
+            "membership": 0,
+            "joined_on": "2022-02-10"
+        }
+    },
+    {
+        "model": "BookClub.user",
+        "pk": 4,
+        "fields": {
+            "username": "joedoe",
+            "email": "joedoe@example.com",
+            "public_bio": "Hello Universe!",
+            "password": "pbkdf2_sha256$260000$4BNvFuAWoTT1XVU8D6hCay$KqDCG+bHl8TwYcvA60SGhOMluAheVOnF1PMz0wClilc=",
+            "is_active": true
+        }
+    },
+    {
+        "model": "BookClub.user",
+        "pk": 5,
+        "fields": {
+            "username": "jeffbezdoe",
+            "email": "jeffbezdoe@example.com",
+            "public_bio": "Hello Universe!",
+            "password": "pbkdf2_sha256$260000$4BNvFuAWoTT1XVU8D6hCay$KqDCG+bHl8TwYcvA60SGhOMluAheVOnF1PMz0wClilc=",
+            "is_active": true
+        }
+    }
+]
