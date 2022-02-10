@@ -81,15 +81,15 @@ This is the User Dashboard, the main home page for your user profile!
                                         {% csrf_token %}
                                         <div class="field">
                                             <div class="control" style="padding-bottom: 20px;">
-                                                <input name="username" class="input is-large" type="username" placeholder= {{ user.username }} autofocus="">
+                                                <input name="username" class="input is-large" type="username" value={{ user.username }} autofocus="">
                                             </div>
                 
                                             <div class="control" style="padding-bottom: 20px;">
-                                                <input name="email" class="input is-large" type="email" placeholder= {{ user.email }} autofocus="">
+                                                <input name="email" class="input is-large" type="email" value= {{ user.email }} autofocus="">
                                             </div>
 
                                             <div class="control" style="padding-bottom: 20px;">
-                                                <textarea name="public_bio" class="textarea" placeholder= {{ user.public_bio }}></textarea>
+                                                <textarea name="public_bio" class="textarea">{{ user.public_bio }}</textarea>
                                             </div>
                 
                                             <div class="control">
@@ -99,9 +99,8 @@ This is the User Dashboard, the main home page for your user profile!
                                     </form>
                                     <br>
                                     <p class="control">
-                                        <button class="button is-link">
-                                          Change password
-                                          <i></i>
+                                        <button class="button is-link"> 
+                                            <a href="{% url 'password_change' %}"> Change password </a>
                                         </button>
                                     </p> 
                                 </div>
@@ -116,137 +115,6 @@ This is the User Dashboard, the main home page for your user profile!
             </div>
 
         </div>
-
-        <div class="columns">
-
-            <div class="column is-6">
-
-                <div class="card">
-                    <div class="card-content">
-                        <p class="title">Friends</p>
-                        
-                    </div>
-                    <div class="card-footer">
-                        <p class="card-footer-item">
-                            <span><a href="#">View All</a></span>
-                        </p>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="column is-6">
-
-                <div class="card">
-                    <div class="card-content">
-                        <p class="title">Clubs</p>
-                        
-                    </div>
-                    <div class="card-footer">
-                        <p class="card-footer-item">
-                            <span><a href="#">View All</a></span>
-                        </p>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="tile is-ancestor has-text-centered">
-            <div class="tile is-parent">
-                <article class="tile is-child box">
-                    <p class="title">20</p>
-                    <p class="subtitle">Book Lists</p>
-                </article>
-            </div>
-            <div class="tile is-parent">
-                <article class="tile is-child box">
-                    <p class="title">69k</p>
-                    <p class="subtitle">Books Read</p>
-                </article>
-            </div>
-            <div class="tile is-parent">
-                <article class="tile is-child box">
-                    <p class="title">5</p>
-                    <p class="subtitle">Clubs Joined</p>
-                </article>
-            </div>
-            <div class="tile is-parent">
-                <article class="tile is-child box">
-                    <p class="title">+19</p>
-                    <p class="subtitle">Review Score</p>
-                </article>
-            </div>
-        </div>
-
-        <div class="columns">
-
-            <div class="column is-6">
-
-                <div class="card">
-                    <div class="card-content">
-                        <p class="title">Book Lists</p>
-                        
-                    </div>
-                    <div class="card-footer">
-                        <p class="card-footer-item">
-                            <span><a href="#">Read List</a></span>
-                        </p>
-                        <p class="card-footer-item">
-                            <span><a href="#">View All</a></span>
-                        </p>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="column is-6">
-
-                <div class="card">
-                    <div class="card-content">
-                        <p class="title">Reviews</p>
-                        
-                    </div>
-                    <div class="card-footer">
-                        <p class="card-footer-item">
-                            <span><a href="#">View All</a></span>
-                        </p>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-
-        <section class="info-tiles">
-            <div class="tile is-ancestor has-text-centered">
-                <div class="tile is-parent">
-                    <article class="tile is-child box">
-                        <p class="title">20</p>
-                        <p class="subtitle">Currently Reading</p>
-                    </article>
-                </div>
-                <div class="tile is-parent">
-                    <article class="tile is-child box">
-                        <p class="title">69k</p>
-                        <p class="subtitle">Completed Books</p>
-                    </article>
-                </div>
-                <div class="tile is-parent">
-                    <article class="tile is-child box">
-                        <p class="title">5</p>
-                        <p class="subtitle">On-hold</p>
-                    </article>
-                </div>
-                <div class="tile is-parent">
-                    <article class="tile is-child box">
-                        <p class="title">+19</p>
-                        <p class="subtitle">Plan to Read</p>
-                    </article>
-                </div>
-            </div>
-        </section>
 
     </div>
 
