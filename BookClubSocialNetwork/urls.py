@@ -28,14 +28,13 @@ urlpatterns = [
     path('sign_up/', views.SignUpView.as_view(), name='sign_up'),
     path('log_out/', views.LogOutView.as_view(), name='log_out'),
 
-
-    path('available_clubs/', views.AvailableClubsView.as_view(), name='available_clubs'),
-    path('my_club_memberships/', views.MyClubMembershipsView.as_view(), name='my_club_memberships'),
+    # '''Action URLs'''
     path('join_club/<int:club_id>', views.JoinClubView.as_view(), name='join_club'),
     path('leave_club/<int:club_id>', views.LeaveClubView.as_view(), name='leave_club'),
 
-
     # '''Club URLs'''
     path('club_dashboard/', views.club_dashboard, name='club_dashboard'),
+    path('available_clubs/', views.AvailableClubsView.as_view(), name='available_clubs'),
+    path('my_club_memberships/', views.MyClubMembershipsView.as_view(), name='my_club_memberships'),
     path('create_club/', views.clubs.CreateClubView.as_view(), name = 'create_club')
 ]

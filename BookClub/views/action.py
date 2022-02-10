@@ -13,12 +13,12 @@ from BookClub.models.user import User
 class JoinClubView(LoginRequiredMixin, View):
     """Users can join or apply to clubs depending on the privacy settings of the club"""
 
-    def post(self, request, club_id):
+    def post(self, request, *args, **kwargs):
         user_instance = User.objects.get(id=request.user.id)
 
         try:
-            club_instance = Club.objects.get(id=club_id)
-        except Club.DoesNotExist:
+            club_instance = Club.objects.get(pk=self.kwargs.get('club_id'))
+        except:
             messages.add_message(request, messages.ERROR, "Club does not exist!")
             return redirect('available_clubs')
 
@@ -51,6 +51,15 @@ class LeaveClubView(LoginRequiredMixin, DeleteView):
     success_url = '/my_club_memberships/'
 
     def get_object(self):
-        club_instance = Club.objects.get(id=self.kwargs.get('club_id'))
-        user_instance = User.objects.get(id=self.request.user.id)
-        return get_object_or_404(ClubMembership, club=club_instance, user=user_instance)
+        club = Club.objects.get(id=self.kwargs.get('club_id'))
+        user = User.objects.get(id=self.request.user.id)
+        return get_object_or_404(ClubMembership, club=club, user=user)
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        if(self.object.membership != ClubMembership.UserRoles.OWNER):
+            self.object.delete()
+        else:
+            messages.add_message(request, messages.ERROR, "You cannot leave the club as the owner!")
+        return redirect(success_url)
