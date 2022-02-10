@@ -19,7 +19,7 @@ class JoinClubView(LoginRequiredMixin, View):
         try:
             club_instance = Club.objects.get(pk=self.kwargs.get('club_id'))
         except:
-            messages.add_message(request, messages.ERROR, "Club does not exist!")
+            messages.error(self.request, "Club does not exist!")
             return redirect('available_clubs')
 
         try:
@@ -28,19 +28,19 @@ class JoinClubView(LoginRequiredMixin, View):
             if (club_instance.is_private == True):
                 new_membership = ClubMembership(user=user_instance, club=club_instance)
                 new_membership.save()
-                messages.add_message(request, messages.SUCCESS, "Application to club successful!")
+                messages.success(self.request, "Application to club successful!")
                 return redirect('available_clubs')
             else:
                 new_membership = ClubMembership(user=user_instance, club=club_instance, membership=ClubMembership.UserRoles.MEMBER)
                 new_membership.save()
-                messages.add_message(request, messages.SUCCESS, "You have joined the club!")
+                messages.success(self.request, "You have joined the club!")
                 return redirect('available_clubs')
         else:
             if (club_instance.is_private == True):
-                messages.add_message(request, messages.INFO, "You have already applied to this club!")
+                messages.info(self.request, "You have already applied to this club!")
                 return redirect('available_clubs')
 
-        messages.add_message(request, messages.INFO, "You are already a member of this club!")
+        messages.info(self.request, "You are already a member of this club!")
         return redirect('available_clubs')
 
 

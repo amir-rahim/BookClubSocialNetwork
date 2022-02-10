@@ -1,7 +1,8 @@
 """Tests of the Join Club view."""
 from django.test import TestCase
 from django.urls import reverse
-from django.contrib.messages import get_messages
+from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
 from BookClub.models import User, Club, ClubMembership
 
 class JoinClubViewTestCase(TestCase):
@@ -14,75 +15,239 @@ class JoinClubViewTestCase(TestCase):
 
     def setUp(self):
         self.user = User.objects.get(username="johndoe")
-        self.club = Club.objects.get(pk = "1")
-        self.url = reverse('join_club', kwargs={'club_id': self.club.id})
+        self.public_club = Club.objects.get(pk = "1")
+        self.private_club = Club.objects.get(pk = "3")
+        self.url = reverse('join_club', kwargs={'club_id': self.public_club.id})
 
     def test_url(self):
-        self.assertEqual(self.url,f'/join_club/{self.club.id}')
+        self.assertEqual(self.url,f'/join_club/{self.public_club.id}')
 
 
-    # Tests if the user action is on valid/invalid club
-    def test_user_joins_or_applies_to_valid_club(self):
+    # Tests for user joining and applying to private and public clubs
+    def test_user_applies_to_private_club(self):
         self.client.login(username=self.user.username, password='Password123')
+        before_count = ClubMembership.objects.count()
+        response = self.client.post(reverse('join_club', kwargs={'club_id': self.private_club.id}))
+        after_count = ClubMembership.objects.count()
+        self.assertEqual(before_count, after_count - 1)
+        self.assertTrue(ClubMembership.objects.filter(user=self.user, club=self.private_club, membership=ClubMembership.UserRoles.APPLICANT).exists())
+        # test appropriate message
+        response_message = self.client.get(reverse('available_clubs'))
+        messages_list = list(response_message.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.SUCCESS)
+
+    def test_user_joins_public_club(self):
+        self.client.login(username=self.user.username, password='Password123')
+        before_count = ClubMembership.objects.count()
         response = self.client.post(self.url)
-        self.assertTrue(Club.objects.filter(pk = self.club.id).exists())
-        self.assertTrue(ClubMembership.objects.filter(user=self.user, club=self.club).exists())
+        after_count = ClubMembership.objects.count()
+        self.assertEqual(before_count, after_count - 1)
+        self.assertTrue(ClubMembership.objects.filter(user=self.user, club=self.public_club, membership=ClubMembership.UserRoles.MEMBER).exists())
+        # test appropriate message
+        response_message = self.client.get(reverse('available_clubs'))
+        messages_list = list(response_message.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.SUCCESS)
 
-    def test_user_joins_or_applies_to_invalid_club(self):
+    def test_user_action_invalid_club(self):
         self.client.login(username=self.user.username, password='Password123')
-        response = self.client.post(reverse('join_club', kwargs={'club_id': self.club.id+9999}))
-        self.assertFalse(Club.objects.filter(pk = self.club.id+9999).exists())
+        response = self.client.post(reverse('join_club', kwargs={'club_id': self.public_club.id+9999}))
+        with self.assertRaises(ObjectDoesNotExist):
+            Club.objects.get(pk = self.public_club.id+9999).exists()
+        response_message = self.client.get(reverse('available_clubs'))
+        messages_list = list(response_message.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.ERROR)
 
-        messages = list(get_messages(response.wsgi_request))
-        self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), 'Club does not exist!')
+
+    def test_applicant_applies_to_private_club(self):
+        self.client.login(username=self.user.username, password='Password123')
+        membership = ClubMembership.objects.create(user=self.user, club=self.private_club, membership=ClubMembership.UserRoles.APPLICANT)
+        membership.save()
+        before_count = ClubMembership.objects.count()
+        response = self.client.post(reverse('join_club', kwargs={'club_id': self.private_club.id}))
+        after_count = ClubMembership.objects.count()
+        self.assertEqual(before_count, after_count)
+        self.assertTrue(ClubMembership.objects.filter(user=self.user, club=self.private_club, membership=ClubMembership.UserRoles.APPLICANT).exists())
+        # test appropriate message
+        response_message = self.client.get(reverse('available_clubs'))
+        messages_list = list(response_message.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.INFO)
+
+    def test_applicant_joins_public_club(self):
+        self.client.login(username=self.user.username, password='Password123')
+        membership = ClubMembership.objects.create(user=self.user, club=self.public_club, membership=ClubMembership.UserRoles.APPLICANT)
+        membership.save()
+        before_count = ClubMembership.objects.count()
+        response = self.client.post(self.url)
+        after_count = ClubMembership.objects.count()
+        self.assertEqual(before_count, after_count)
+        self.assertTrue(ClubMembership.objects.filter(user=self.user, club=self.public_club, membership=ClubMembership.UserRoles.APPLICANT).exists())
+        # test appropriate message
+        response_message = self.client.get(reverse('available_clubs'))
+        messages_list = list(response_message.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.INFO)
+
+    def test_applicant_action_invalid_club(self):
+        self.client.login(username=self.user.username, password='Password123')
+        response = self.client.post(reverse('join_club', kwargs={'club_id': self.public_club.id+9999}))
+        with self.assertRaises(ObjectDoesNotExist):
+            Club.objects.get(pk = self.public_club.id+9999).exists()
+        response_message = self.client.get(reverse('available_clubs'))
+        messages_list = list(response_message.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.ERROR)
+
+
+    def test_member_applies_to_private_club(self):
+        self.client.login(username=self.user.username, password='Password123')
+        membership = ClubMembership.objects.create(user=self.user, club=self.private_club, membership=ClubMembership.UserRoles.APPLICANT)
+        membership.save()
+        before_count = ClubMembership.objects.count()
+        response = self.client.post(reverse('join_club', kwargs={'club_id': self.private_club.id}))
+        after_count = ClubMembership.objects.count()
+        self.assertEqual(before_count, after_count)
+        self.assertTrue(ClubMembership.objects.filter(user=self.user, club=self.private_club, membership=ClubMembership.UserRoles.APPLICANT).exists())
+        # test appropriate message
+        response_message = self.client.get(reverse('available_clubs'))
+        messages_list = list(response_message.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.INFO)
+
+    def test_member_joins_public_club(self):
+        self.client.login(username=self.user.username, password='Password123')
+        membership = ClubMembership.objects.create(user=self.user, club=self.public_club, membership=ClubMembership.UserRoles.MEMBER)
+        membership.save()
+        before_count = ClubMembership.objects.count()
+        response = self.client.post(self.url)
+        after_count = ClubMembership.objects.count()
+        self.assertEqual(before_count, after_count)
+        self.assertTrue(ClubMembership.objects.filter(user=self.user, club=self.public_club, membership=ClubMembership.UserRoles.MEMBER).exists())
+        # test appropriate message
+        response_message = self.client.get(reverse('available_clubs'))
+        messages_list = list(response_message.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.INFO)
+
+    def test_member_action_invalid_club(self):
+        self.client.login(username=self.user.username, password='Password123')
+        response = self.client.post(reverse('join_club', kwargs={'club_id': self.public_club.id+9999}))
+        with self.assertRaises(ObjectDoesNotExist):
+            Club.objects.get(pk = self.public_club.id+9999).exists()
+        response_message = self.client.get(reverse('available_clubs'))
+        messages_list = list(response_message.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.ERROR)
+
+
+    def test_moderator_applies_to_private_club(self):
+        self.client.login(username=self.user.username, password='Password123')
+        membership = ClubMembership.objects.create(user=self.user, club=self.private_club, membership=ClubMembership.UserRoles.MODERATOR)
+        membership.save()
+        before_count = ClubMembership.objects.count()
+        response = self.client.post(reverse('join_club', kwargs={'club_id': self.private_club.id}))
+        after_count = ClubMembership.objects.count()
+        self.assertEqual(before_count, after_count)
+        self.assertTrue(ClubMembership.objects.filter(user=self.user, club=self.private_club, membership=ClubMembership.UserRoles.MODERATOR).exists())
+        # test appropriate message
+        response_message = self.client.get(reverse('available_clubs'))
+        messages_list = list(response_message.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.INFO)
+
+    def test_moderator_joins_public_club(self):
+        self.client.login(username=self.user.username, password='Password123')
+        membership = ClubMembership.objects.create(user=self.user, club=self.public_club, membership=ClubMembership.UserRoles.MODERATOR)
+        membership.save()
+        before_count = ClubMembership.objects.count()
+        response = self.client.post(self.url)
+        after_count = ClubMembership.objects.count()
+        self.assertEqual(before_count, after_count)
+        self.assertTrue(ClubMembership.objects.filter(user=self.user, club=self.public_club, membership=ClubMembership.UserRoles.MODERATOR).exists())
+        # test appropriate message
+        response_message = self.client.get(reverse('available_clubs'))
+        messages_list = list(response_message.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.INFO)
+
+    def test_moderator_action_invalid_club(self):
+        self.client.login(username=self.user.username, password='Password123')
+        response = self.client.post(reverse('join_club', kwargs={'club_id': self.public_club.id+9999}))
+        with self.assertRaises(ObjectDoesNotExist):
+            Club.objects.get(pk = self.public_club.id+9999).exists()
+        response_message = self.client.get(reverse('available_clubs'))
+        messages_list = list(response_message.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.ERROR)
+
+
+    def test_owner_applies_to_private_club(self):
+        self.client.login(username=self.user.username, password='Password123')
+        membership = ClubMembership.objects.create(user=self.user, club=self.private_club, membership=ClubMembership.UserRoles.OWNER)
+        membership.save()
+        before_count = ClubMembership.objects.count()
+        response = self.client.post(reverse('join_club', kwargs={'club_id': self.private_club.id}))
+        after_count = ClubMembership.objects.count()
+        self.assertEqual(before_count, after_count)
+        self.assertTrue(ClubMembership.objects.filter(user=self.user, club=self.private_club, membership=ClubMembership.UserRoles.OWNER).exists())
+        # test appropriate message
+        response_message = self.client.get(reverse('available_clubs'))
+        messages_list = list(response_message.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.INFO)
+
+    def test_owner_joins_public_club(self):
+        self.client.login(username=self.user.username, password='Password123')
+        membership = ClubMembership.objects.create(user=self.user, club=self.public_club, membership=ClubMembership.UserRoles.OWNER)
+        membership.save()
+        before_count = ClubMembership.objects.count()
+        response = self.client.post(self.url)
+        after_count = ClubMembership.objects.count()
+        self.assertEqual(before_count, after_count)
+        self.assertTrue(ClubMembership.objects.filter(user=self.user, club=self.public_club, membership=ClubMembership.UserRoles.OWNER).exists())
+        # test appropriate message
+        response_message = self.client.get(reverse('available_clubs'))
+        messages_list = list(response_message.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.INFO)
+
+    def test_owner_action_invalid_club(self):
+        self.client.login(username=self.user.username, password='Password123')
+        response = self.client.post(reverse('join_club', kwargs={'club_id': self.public_club.id+9999}))
+        with self.assertRaises(ObjectDoesNotExist):
+            Club.objects.get(pk = self.public_club.id+9999).exists()
+        response_message = self.client.get(reverse('available_clubs'))
+        messages_list = list(response_message.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.ERROR)
 
 
     # Tests if the user has already joined/applied to the club
     def test_user_already_applied_to_private_club(self):
-        private_club = Club.objects.get(pk = "3")
         self.client.login(username=self.user.username, password='Password123')
-        membership = ClubMembership.objects.create(user=self.user, club=private_club, membership=ClubMembership.UserRoles.APPLICANT)
+        membership = ClubMembership.objects.create(user=self.user, club=self.private_club, membership=ClubMembership.UserRoles.APPLICANT)
         membership.save()
-        self.assertTrue(ClubMembership.objects.filter(user=self.user, club=private_club, membership=ClubMembership.UserRoles.APPLICANT).exists())
-        response = self.client.post(reverse('join_club', kwargs={'club_id': private_club.id}))
+        self.assertTrue(ClubMembership.objects.filter(user=self.user, club=self.private_club, membership=ClubMembership.UserRoles.APPLICANT).exists())
+        response = self.client.post(reverse('join_club', kwargs={'club_id': self.private_club.id}))
         self.assertEqual(response.status_code, 302)
-
-        messages = list(get_messages(response.wsgi_request))
-        self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), 'You have already applied to this club!')
+        # test appropriate message
+        response_message = self.client.get(reverse('available_clubs'))
+        messages_list = list(response_message.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.INFO)
 
     def test_user_already_club_member(self):
         self.client.login(username=self.user.username, password='Password123')
-        membership = ClubMembership.objects.create(user=self.user, club=self.club, membership=ClubMembership.UserRoles.MEMBER)
+        membership = ClubMembership.objects.create(user=self.user, club=self.public_club, membership=ClubMembership.UserRoles.MEMBER)
         membership.save()
-        self.assertTrue(ClubMembership.objects.filter(user=self.user, club=self.club, membership=ClubMembership.UserRoles.MEMBER).exists())
-        response = self.client.post(reverse('join_club', kwargs={'club_id': self.club.id}))
-        self.assertEqual(response.status_code, 302)
-
-        messages = list(get_messages(response.wsgi_request))
-        self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), 'You are already a member of this club!')
-
-
-    # Tests for users ability to join public clubs and apply to private ones
-    def test_user_can_join_public_club(self):
-        self.client.login(username=self.user.username, password='Password123')
+        self.assertTrue(ClubMembership.objects.filter(user=self.user, club=self.public_club, membership=ClubMembership.UserRoles.MEMBER).exists())
         response = self.client.post(self.url)
-        self.assertTrue(ClubMembership.objects.filter(user=self.user, club=self.club, membership=ClubMembership.UserRoles.MEMBER).exists())
         self.assertEqual(response.status_code, 302)
-
-        messages = list(get_messages(response.wsgi_request))
-        self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), 'You have joined the club!')
-
-    def test_user_can_apply_to_private_club(self):
-        private_club = Club.objects.get(pk = "3")
-        self.client.login(username=self.user.username, password='Password123')
-        response = self.client.post(reverse('join_club', kwargs={'club_id': private_club.id}))
-        self.assertTrue(ClubMembership.objects.filter(user=self.user, club=private_club, membership=ClubMembership.UserRoles.APPLICANT).exists())
-        self.assertEqual(response.status_code, 302)
-
-        messages = list(get_messages(response.wsgi_request))
-        self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), 'Application to club successful!')
+        # test appropriate message
+        response_message = self.client.get(reverse('available_clubs'))
+        messages_list = list(response_message.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.INFO)
