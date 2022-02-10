@@ -45,15 +45,4 @@ def get_club_id(request):
         return -1
 
 
-def get_users(search_club, search_authorization):
-    """Get all the users from the given club with the given authorization."""
 
-    authorizationFilter = (Club_Member.objects
-                           .filter(club=search_club)
-                           .values_list('user__id', flat=True))
-    return User.objects.filter(id__in=authorizationFilter)
-
-def get_members(club):
-    """Get all the members from the given club."""
-
-    return get_users(club, 'ME')
