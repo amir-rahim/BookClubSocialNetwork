@@ -1,8 +1,4 @@
-from django.db import models
-from django.urls import reverse
-from django.core.exceptions import ValidationError
-
-from BookClub.models.user import User
+from django.db import IntegrityError, models
 from BookClub.models.club_membership import ClubMembership
 
 class Club(models.Model):
@@ -37,3 +33,34 @@ class Club(models.Model):
     # Has unimplemented dependencies
     def get_review_score(self):
         pass
+    
+    def add_user(self, user, rank):
+        try:
+            ClubMembership.objects.create(
+                user = user,
+                club = self,
+                membership = rank,
+            )
+        except IntegrityError:
+            print("Error, user data incorrect. User not added to club")
+
+    def add_member(self, user):
+        self.add_user(user, ClubMembership.UserRoles.MEMBER)
+        
+    def add_moderator(self, user):
+        self.add_user(user, ClubMembership.UserRoles.MODERATOR)
+        
+    def add_owner(self, user):
+        if not (ClubMembership.objects.filter(club=self, membership=ClubMembership.UserRoles.OWNER).exists()):
+            self.add_user(user, ClubMembership.UserRoles.OWNER)
+        else:
+            #print("Owner already set")
+            pass
+    def add_applicant(self, user):
+        self.add_user(user, ClubMembership.UserRoles.APPLICANT)
+    
+    def remove_from_club(self, user):
+        try:
+            ClubMembership.objects.filter(user=user, club=self).delete()
+        except:
+            pass
