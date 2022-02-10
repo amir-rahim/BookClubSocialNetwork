@@ -7,7 +7,7 @@ from django.contrib import messages
 
 
 class ActionView(TemplateView):
-    redirect_location = reverse('home')
+    redirect_location = 'home'
 
     def get(self, club, user, request, *args, **kwargs):
         """
@@ -37,11 +37,11 @@ class ActionView(TemplateView):
 
 """Class view for promoting members."""
 
-class PromoteView(ActionView,RankRequiredMixin):
+class PromoteMemberView(ActionView,RankRequiredMixin):
     
     """Promoting a member to a moderator"""
 
-    redirect_location = 'members_list'
+    redirect_location =  'members_list'
 
     def is_actionable(currentUser, targetUser, club):
         """Check if member can be promoted."""
@@ -59,7 +59,7 @@ class PromoteView(ActionView,RankRequiredMixin):
 class DemoteMemberView(RankRequiredMixin, ActionView):
     """Demoting a moderator to a member"""
 
-    redirect_location = 'members_list'
+    redirect_location =  'members_list'
 
     def is_actionable(currentUser, targetUser, club):
         """Check if moderator can be demoted."""
@@ -79,7 +79,7 @@ class DemoteMemberView(RankRequiredMixin, ActionView):
 class KickMemberView(RankRequiredMixin, ActionView):
     """Promoting member to a moderator"""
 
-    redirect_location = 'members_list'
+    redirect_location =  'members_list'
 
     def is_actionable(current_user, targetUser, club):
         """Check if member can be kicked"""
