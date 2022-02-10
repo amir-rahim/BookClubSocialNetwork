@@ -98,3 +98,7 @@ def has_applicant_rank(user,club):
 def remove_from_club(user,club):
     membership = ClubMembership.objects.get(user = user, club=club)
     membership.delete()
+
+"""Helper for checking whether a club is public or private"""
+def is_club_private(club):
+    return club.is_private
