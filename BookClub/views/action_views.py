@@ -29,6 +29,7 @@ class ActionView(TemplateView):
         return redirect(self.redirect_location)
 
     def is_actionable(currentUser, targetUser, club):
+        """Check if the action is legal"""
         raise NotImplementedError("This method isn't implented yet.")
     
     def action(currentUser, targetUser, club):
@@ -41,12 +42,15 @@ class PromoteView(ActionView,RankRequiredMixin):
     
     """Promoting a member to a moderator"""
 
-    """Check if the action is legal"""
-    
+    redirect_location = 'members_list'
+
     def is_actionable(currentUser, targetUser, club):
+        """Check if member can be promoted."""
+
         return (has_owner_rank(currentUser,club) and has_member_rank(targetUser,club))
 
-    def action(targetUser,club):
+    def action(currentUser, targetUser,club):
+        messages.success(self.request, f"You have promoted the member successfully")
         set_rank(targetUser,club,ClubMembership.UserRoles.MODERATOR)
     
     def get(self, club, user, request, *args, **kwargs):
@@ -58,12 +62,12 @@ class DemoteMemberView(RankRequiredMixin, ActionView):
 
     redirect_location = 'members_list'
 
-    def is_actionable(current_user, targetUser, club):
+    def is_actionable(currentUser, targetUser, club):
         """Check if moderator can be demoted."""
 
-        return has_owner_rank(current_user, club) and has_moderator_rank(targetUser, club)
+        return has_owner_rank(currentUser, club) and has_moderator_rank(targetUser, club)
 
-    def action(current_user, targetUser, club):
+    def action(currentUser, targetUser, club):
         """Demote moderator to a member."""
         messages.success(self.request, f"You have demoted the moderator successfully")
         set_rank(targetUser, club, ClubMembership.UserRoles.MEMBER)
