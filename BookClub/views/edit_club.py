@@ -12,7 +12,7 @@ from BookClub.helpers import get_club_id
 from django.conf import settings
 
 
-class EditClubView(LoginRequiredMixin, DetailView, UpdateView):
+class EditClubView(LoginRequiredMixin, RankRequiredMixin, DetailView, UpdateView):
     model = Club
     fields = ['name','description','rules','is_private']
     requiredRanking = ClubMembership.UserRoles.OWNER
