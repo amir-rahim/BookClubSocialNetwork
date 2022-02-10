@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from BookClub import views
+from BookClub.views.action_views import DemoteMemberView, PromoteView
 
 urlpatterns = [
     # '''Core URLs'''
@@ -36,4 +37,9 @@ urlpatterns = [
     # '''Club URLs'''
     path('club_dashboard/', views.club_dashboard, name='club_dashboard'),
     path('create_club/', views.clubs.CreateClubView.as_view(), name = 'create_club')
+
+    #'''Action URLS (temp)'''
+    path('promote_member/<int:clubid>/<int:user_id>',views.PromoteView.as_view(),name='promote'),
+    path('demote_member/<int:clubid>/<int:user_id>',views.DemoteMemberView.as_view(),name='demote')
 ]
+

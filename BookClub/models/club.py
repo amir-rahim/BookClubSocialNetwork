@@ -1,8 +1,9 @@
 from django.db import models
 from django.urls import reverse
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 
 from BookClub.models.user import User
+from BookClub.models import *
 from BookClub.models.club_membership import ClubMembership
 
 
@@ -56,6 +57,8 @@ class Club(models.Model):
                     .values_list('user__id', flat=True))
         return User.objects.filter(id__in=filterBy)
 
+    
+
     def get_members(club):
 
         return get_users(club, ClubMembership.UserRoles.MEMBER)
@@ -69,3 +72,4 @@ class Club(models.Model):
         """Get all the owner from the given club."""
 
         return get_users(club, ClubMembership.UserRoles.OWNER)
+
