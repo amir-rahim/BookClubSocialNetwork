@@ -110,23 +110,24 @@ class JoinClubView(LoginRequiredMixin, View):
         return not has_membership(club, currentUser)
 
     def is_not_actionable(self, currentUser, club):
+        """If user has a membership with the club already"""
+
         if is_club_private(club):
             messages.info(self.request, "You have already applied to this club!")
-            return redirect(self.redirect_location)
         else:
             messages.info(self.request, "You are already a member of this club!")
-            return redirect(self.redirect_location)
+        return redirect(self.redirect_location)
 
     def action(self, currentUser, club):
-        """Check to see if user can join/apply to club"""
+        """Create membership for user with the club depending on privacy"""
+
         if is_club_private(club):
             create_membership(club, currentUser, ClubMembership.UserRoles.APPLICANT)
             messages.success(self.request, "Application to club successful!")
-            return redirect(self.redirect_location)
         else:
             create_membership(club, currentUser, ClubMembership.UserRoles.MEMBER)
             messages.success(self.request, "You have joined the club!")
-            return redirect(self.redirect_location)
+        return redirect(self.redirect_location)
 
     def post(self, request, *args, **kwargs):
         try:
@@ -144,3 +145,43 @@ class JoinClubView(LoginRequiredMixin, View):
         return redirect(self.redirect_location)
 
 
+class LeaveClubView(LoginRequiredMixin, View):
+    """User can leave their club"""
+
+    redirect_location = 'my_club_memberships'
+
+    def is_actionable(self, currentUser, club):
+        """Check if current_user is in the club"""
+
+        return has_membership(club, currentUser) and not (has_applicant_rank(currentUser, club) or has_owner_rank(currentUser, club))
+
+    def is_not_actionable(self, currentUser, club):
+        """If the user is unable to leave the club"""
+
+        if has_owner_rank(currentUser, club):
+            messages.error(self.request, "The owner of the club cannot leave!")
+        if has_applicant_rank(currentUser, club):
+            messages.error(self.request, "You can't leave as an applicant!")
+        return redirect(self.redirect_location)
+
+    def action(self, currentUser, club):
+        """User leaves the club, membership with the club is deleted"""
+
+        messages.success(self.request, "You have left the club!")
+        remove_from_club(currentUser, club)
+        return redirect(self.redirect_location)
+
+    def post(self, request, *args, **kwargs):
+        try:
+            club = Club.objects.get(pk=self.kwargs.get('club_id'));
+            currentUser = request.user
+        except:
+            messages.error(request, "Error, user or club not found")
+            return redirect(self.redirect_location)
+
+        if self.is_actionable(currentUser, club):
+            self.action(currentUser, club)
+        else:
+            self.is_not_actionable(currentUser, club)
+
+        return redirect(self.redirect_location)
