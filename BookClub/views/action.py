@@ -58,8 +58,11 @@ class LeaveClubView(LoginRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         success_url = self.get_success_url()
-        if(self.object.membership != ClubMembership.UserRoles.OWNER):
-            self.object.delete()
+        if(self.object.membership == ClubMembership.UserRoles.OWNER):
+            messages.error(self.request, "The owner of the club cannot leave!")
+        elif(self.object.membership == ClubMembership.UserRoles.APPLICANT):
+            messages.error(self.request, "You can't leave as an applicant!")
         else:
-            messages.add_message(request, messages.ERROR, "You cannot leave the club as the owner!")
+            self.object.delete()
+            messages.success(self.request, "You have left the club!")
         return redirect(success_url)
