@@ -18,9 +18,7 @@ class EditClubView(LoginRequiredMixin, RankRequiredMixin, DetailView, UpdateView
     requiredRanking = ClubMembership.UserRoles.OWNER
     template_name = 'edit_club.html'
     
-    def setup(self, request, *args, **kwargs):
-        self.requiredClub = get_club_id(request)
-        return super().setup(request, *args, **kwargs)
+    
     
     def get_object(self):
         try:
