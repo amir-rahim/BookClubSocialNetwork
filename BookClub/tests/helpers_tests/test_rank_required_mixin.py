@@ -50,6 +50,9 @@ class RankRequiredTextCase(TestCase, LogInTester):
     def test_user_does_not_have_required_rank_but_is_in_club(self):
         self.client.login(username='joedoe',password='Password123')
         self.assertEqual(self._is_logged_in(), True)
+        session = self.client.session
+        session['club_id'] = 1
+        session.save()
         response = self.client.get(self.url)
         self.assertEqual(response.url, reverse('home'))
         
