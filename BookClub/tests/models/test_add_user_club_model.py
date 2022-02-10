@@ -42,6 +42,8 @@ class AddUserTestCase(TestCase):
         self.club1.add_user(self.testUser, ClubMembership.UserRoles.MEMBER)
         membershipAfter = ClubMembership.objects.filter(club=self.club1).count()
         self.assertLess(membershipBefore, membershipAfter)
+        userMembership = ClubMembership.objects.get(user=self.testUser, club=self.club1)
+        self.assertEqual(userMembership.membership, ClubMembership.UserRoles.MEMBER)
         
     def testAddUserInvalidInfo(self):
         membershipBefore = ClubMembership.objects.filter(club=self.club1).count()
@@ -69,18 +71,32 @@ class AddUserTestCase(TestCase):
         testClub.add_owner(self.testUser)
         membershipAfter = ClubMembership.objects.filter(club=testClub).count()
         self.assertLess(membershipBefore, membershipAfter)
+        userMembership = ClubMembership.objects.get(user=self.testUser, club=testClub)
+        self.assertEqual(userMembership.membership, ClubMembership.UserRoles.OWNER)
         
     def testAddMember(self):
         membershipBefore = ClubMembership.objects.filter(club=self.club1).count()
         self.club1.add_member(self.testUser)
         membershipAfter = ClubMembership.objects.filter(club=self.club1).count()
         self.assertLess(membershipBefore, membershipAfter)
+        userMembership = ClubMembership.objects.get(user=self.testUser, club=self.club1)
+        self.assertEqual(userMembership.membership, ClubMembership.UserRoles.MEMBER)
         
     def testAddModerator(self):
         membershipBefore = ClubMembership.objects.filter(club=self.club1).count()
         self.club1.add_moderator(self.testUser)
         membershipAfter = ClubMembership.objects.filter(club=self.club1).count()
         self.assertLess(membershipBefore, membershipAfter)
+        userMembership = ClubMembership.objects.get(user=self.testUser, club=self.club1)
+        self.assertEqual(userMembership.membership, ClubMembership.UserRoles.MODERATOR)
+        
+    def testAddApplicant(self):
+        membershipBefore = ClubMembership.objects.filter(club=self.club1).count()
+        self.club1.add_applicant(self.testUser)
+        membershipAfter = ClubMembership.objects.filter(club=self.club1).count()
+        self.assertLess(membershipBefore, membershipAfter)
+        userMembership = ClubMembership.objects.get(user=self.testUser, club=self.club1)
+        self.assertEqual(userMembership.membership, ClubMembership.UserRoles.APPLICANT)
         
     def testRemoveMember(self):
         membershipBefore = ClubMembership.objects.filter(club=self.club1).count()
@@ -94,7 +110,7 @@ class AddUserTestCase(TestCase):
     def testRemoveMemberNotInClub(self):
         membershipBefore = ClubMembership.objects.filter(club=self.club1).count()
         self.club1.remove_from_club(self.testUser)
-        membershipAfterRemoval = ClubMembership.objects.filter(club=self.club2).count()
+        membershipAfterRemoval = ClubMembership.objects.filter(club=self.club1).count()
         self.assertEqual(membershipAfterRemoval, membershipBefore)
         
         

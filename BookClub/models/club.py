@@ -60,7 +60,4 @@ class Club(models.Model):
         self.add_user(user, ClubMembership.UserRoles.APPLICANT)
     
     def remove_from_club(self, user):
-        try:
-            ClubMembership.objects.filter(user=user, club=self).delete()
-        except:
-            pass
+        ClubMembership.objects.filter(user=user, club=self).delete()
