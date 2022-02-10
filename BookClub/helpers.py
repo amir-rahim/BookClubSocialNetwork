@@ -17,9 +17,16 @@ class LoginProhibitedMixin:
 class RankRequiredMixin:
     """
     If user is trying to access this view has required rank and is in required club, they continue, otherwise they are redirected to home page
+    Set requiredRanking to be a ClubMembership userrole. requiredClub is set automatically.
+    
     """
     requiredRanking = ClubMembership.UserRoles.OWNER
     requiredClub = -1
+    
+    def setup(self, request, *args, **kwargs):
+        self.requiredClub = get_club_id(request)
+        return super().setup(request, *args, **kwargs)
+    
     def dispatch(self, request, *args, **kwargs):
         try:
             club_membership = ClubMembership.objects.get(Q(club=self.requiredClub)&Q(user=request.user))
@@ -34,10 +41,17 @@ class RankRequiredMixin:
         
         
 def get_club_id(request):
+    """ Helper to access session['club_id'] in a safe way
+
+    Args:
+        request (request)): The http request object we're accessing
+
+    Returns:
+        Int: primary key of the club the user is currently viewing. Returns -1 if club doesn't exist or club_id isn't set
+    """
     try:
         id = request.session['club_id']
         club = Club.objects.get(pk=id)
         return id
     except:
-        messages.error(request, "That club doesn't exist!")
         return -1
