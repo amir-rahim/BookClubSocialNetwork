@@ -42,7 +42,7 @@ class Club(models.Model):
                 membership = rank,
             )
         except IntegrityError:
-            print("Error, user data incorrect. User not added to club")
+            pass
 
     def add_member(self, user):
         self.add_user(user, ClubMembership.UserRoles.MEMBER)

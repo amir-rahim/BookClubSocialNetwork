@@ -1,10 +1,10 @@
 
 
-from ssl import MemoryBIO
+
 from django.forms import ValidationError
 from django.test import TestCase
 from BookClub.models import Club, User, ClubMembership
-
+from django.db import IntegrityError, transaction
 class AddUserTestCase(TestCase):
     
     fixtures = [
@@ -42,6 +42,20 @@ class AddUserTestCase(TestCase):
         self.club1.add_user(self.testUser, ClubMembership.UserRoles.MEMBER)
         membershipAfter = ClubMembership.objects.filter(club=self.club1).count()
         self.assertLess(membershipBefore, membershipAfter)
+        
+    def testAddUserInvalidInfo(self):
+        membershipBefore = ClubMembership.objects.filter(club=self.club1).count()
+        self.club1.add_user(self.testUser, ClubMembership.UserRoles.MEMBER)
+        membershipAfter = ClubMembership.objects.filter(club=self.club1).count()
+        self.assertLess(membershipBefore, membershipAfter)
+        membershipBefore = ClubMembership.objects.filter(club=self.club1).count()
+        try:
+            with transaction.atomic():
+                self.club1.add_user(self.testUser, ClubMembership.UserRoles.MEMBER)
+        except IntegrityError:
+            pass
+        membershipAfterDuplicateAdd = ClubMembership.objects.filter(club=self.club1).count()
+        self.assertEqual(membershipAfter, membershipAfterDuplicateAdd)
         
     def testAddOwnerAlreadyExists(self):
         membershipBefore = ClubMembership.objects.filter(club=self.club1).count()
