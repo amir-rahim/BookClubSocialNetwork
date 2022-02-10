@@ -223,31 +223,3 @@ class JoinClubViewTestCase(TestCase):
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.ERROR)
-
-
-    # Tests if the user has already joined/applied to the club
-    def test_user_already_applied_to_private_club(self):
-        self.client.login(username=self.user.username, password='Password123')
-        membership = ClubMembership.objects.create(user=self.user, club=self.private_club, membership=ClubMembership.UserRoles.APPLICANT)
-        membership.save()
-        self.assertTrue(ClubMembership.objects.filter(user=self.user, club=self.private_club, membership=ClubMembership.UserRoles.APPLICANT).exists())
-        response = self.client.post(reverse('join_club', kwargs={'club_id': self.private_club.id}))
-        self.assertEqual(response.status_code, 302)
-        # test appropriate message
-        response_message = self.client.get(reverse('available_clubs'))
-        messages_list = list(response_message.context['messages'])
-        self.assertEqual(len(messages_list), 1)
-        self.assertEqual(messages_list[0].level, messages.INFO)
-
-    def test_user_already_club_member(self):
-        self.client.login(username=self.user.username, password='Password123')
-        membership = ClubMembership.objects.create(user=self.user, club=self.public_club, membership=ClubMembership.UserRoles.MEMBER)
-        membership.save()
-        self.assertTrue(ClubMembership.objects.filter(user=self.user, club=self.public_club, membership=ClubMembership.UserRoles.MEMBER).exists())
-        response = self.client.post(self.url)
-        self.assertEqual(response.status_code, 302)
-        # test appropriate message
-        response_message = self.client.get(reverse('available_clubs'))
-        messages_list = list(response_message.context['messages'])
-        self.assertEqual(len(messages_list), 1)
-        self.assertEqual(messages_list[0].level, messages.INFO)
