@@ -49,7 +49,7 @@ def get_club_id(request):
 
 
 """
-Helpers for checking the authentication level of the user. 
+Helpers for checking the authentication level of the user.
 """   
 #Used to get the actual rank of the user (if they have a membership in that club)
 def get_rank(user,club):

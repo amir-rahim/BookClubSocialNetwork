@@ -47,22 +47,22 @@ class PromoteView(ActionView,RankRequiredMixin):
         #first check if they are part of the same club.
         return (has_owner_rank(currentUser,club) and has_member_rank(targetUser,club))
 
-    class DemoteMemberView(RankRequiredMixin, ActionView):
-        """Demoting member to a moderator"""
+class DemoteMemberView(RankRequiredMixin, ActionView):
+    """Demoting member to a moderator"""
 
-        redirect_location = 'members_list'
+    redirect_location = 'members_list'
 
-        def is_actionable(current_user, targetUser, club):
-            """Check if moderator can be demoted."""
+    def is_actionable(current_user, targetUser, club):
+        """Check if moderator can be demoted."""
 
-            return has_owner_rank(current_user, club) and has_moderator_rank(targetUser, club)
+        return has_owner_rank(current_user, club) and has_moderator_rank(targetUser, club)
 
-        def action(current_user, targetUser, club):
-            """Demote moderator to a member."""
-            messages.success(self.request, f"You have demoted the moderator successfully")
-            set_rank(targetUser, club, "MEMBER")
+    def action(current_user, targetUser, club):
+        """Demote moderator to a member."""
+        messages.success(self.request, f"You have demoted the moderator successfully")
+        set_rank(targetUser, club, "MEMBER")
 
-        def get(self, request, *args, **kwargs):
-            """Handle get request."""
+    def get(self, request, *args, **kwargs):
+        """Handle get request."""
 
-            return super().get(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)
