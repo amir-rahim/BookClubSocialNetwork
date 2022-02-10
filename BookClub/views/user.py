@@ -88,6 +88,10 @@ class ChangePasswordView(LoginRequiredMixin, FormView):
         login(self.request, self.request.user)
         return super().form_valid(form)
 
+    def form_invalid(self, form):
+        messages.add_message(self.request, messages.ERROR, "The data provided was invalid!")
+        return super().form_invalid(form)
+
     def get_success_url(self):
         """Redirect the user after successful password change."""
 
