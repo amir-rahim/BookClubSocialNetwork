@@ -12,6 +12,7 @@ class GetClubIdTestCase(TestCase, LogInTester):
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_clubs.json',
         'BookClub/tests/fixtures/default_club_owners.json',
+        "BookClub/tests/fixtures/edit_club_rank_required_helper_fixtures.json"
     ]
     
     def setUp(self):
@@ -28,11 +29,11 @@ class GetClubIdTestCase(TestCase, LogInTester):
     def test_user_has_club(self):
         request = self.rf.get('/')
         request.session = self.client.session
-        request.session['club'] = 1
+        request.session['club_id'] = 1
         self.assertEqual(get_club_id(request),1)
         
     def test_user_has_id_but_club_does_not_exist(self):
         request = self.rf.get('/')
         request.session = self.client.session
-        request.session['club'] = 10000
+        request.session['club_id'] = 10000
         self.assertEqual(get_club_id(request),-1)
