@@ -23,6 +23,7 @@ class RankRequiredTextCase(TestCase, LogInTester):
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_clubs.json',
         'BookClub/tests/fixtures/default_club_owners.json',
+        'BookClub/tests/fixtures/edit_club_rank_required_helper_fixtures.json'
     ]
         
     def setUp(self):
