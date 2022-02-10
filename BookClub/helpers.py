@@ -3,6 +3,9 @@ from django.shortcuts import redirect
 from BookClub.models.club import Club
 from BookClub.models.club_membership import ClubMembership
 from django.db.models import Q
+from django.core.exceptions import ObjectDoesNotExist
+
+from BookClub.models.user import User
 
 
 class LoginProhibitedMixin:
@@ -45,4 +48,63 @@ def get_club_id(request):
         return -1
 
 
+def get_users(search_club, search_authorization):
+    """Get all the users from the given club with the given authorization."""
 
+    authorizationFilter = (ClubMembership.objects
+                           .filter(club=search_club)
+                           .values_list('user__id', flat=True))
+    return User.objects.filter(id__in=authorizationFilter)
+
+
+
+"""
+Helpers for checking the authentication level of the user. 
+"""   
+#Used to get the actual rank of the user (if they have a membership in that club)
+def get_rank(user,club):
+    try:
+        rank = ClubMembership.objects.get(user = user, club = club).membership
+        return rank
+    except ObjectDoesNotExist:
+        return None
+
+def set_rank(user,club,rank):
+    membership = ClubMembership.objects.filter(user = user, club=club).update(membership = rank)
+
+
+def has_owner_rank(user,club):
+    rank = get_rank(user,club)
+    if rank is not None:
+        return rank == ClubMembership.UserRoles.OWNER
+    else:
+        return False
+    
+
+def has_member_rank(user,club):
+    rank = get_rank(user,club)
+    if rank is not None:
+        return rank == ClubMembership.UserRoles.MEMBER
+    else:
+        return False
+    
+
+def has_moderator_rank(user,club):
+    rank = get_rank(user,club)
+    if rank is not None:
+        return rank == ClubMembership.UserRoles.MODERATOR
+    else:
+        return False
+
+def has_applicant_rank(user,club):
+    rank = get_rank(user,club)
+    if rank is not None:
+        return rank == ClubMembership.UserRoles.APPLICANT
+    else:
+        return False
+
+    
+
+def remove_from_club(user,club):
+    membership = ClubMembership.objects.get(user = user, club=club)
+    membership.delete()

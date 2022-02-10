@@ -1,6 +1,6 @@
 from django.db import models
 from django.urls import reverse
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 
 from BookClub.models.user import User
 from BookClub.models import *
