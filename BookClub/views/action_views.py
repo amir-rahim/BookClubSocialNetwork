@@ -99,6 +99,29 @@ class KickMemberView(RankRequiredMixin, ActionView):
         return super().get(club, user, request, *args, **kwargs)
 
 
+class TransferOwnershipView(RankRequiredMixin, ActionView):
+    """View to transfer ownership to another moderator"""
+
+    redirect_location = 'members_list'
+    requiredRanking = ClubMembership.UserRoles.OWNER
+
+    def is_actionable(currentUser, targetUser, club):
+        """Check if the ownership can be transferred to a valid officer."""
+
+        return has_owner_rank(currentUser, club) and has_moderator_rank(targetUser, club)
+
+    def action(currentUser, targetUser, club):
+        """Transfer ownership to moderator and demote owner to moderator"""
+        messages.success(self.request, f"You have transferred the ownership successfully")
+        set_rank(targetUser, club, ClubMembership.UserRoles.OWNER)
+        set_rank(currentUser, club, ClubMembership.UserRoles.MODERATOR)
+
+    def get(self, request, *args, **kwargs):
+        """Handle get request."""
+
+        return super().get(request, *args, **kwargs)
+
+
 class JoinClubView(LoginRequiredMixin, View):
     """Users can join or apply to clubs depending on the privacy settings of the club"""
 
@@ -153,7 +176,8 @@ class LeaveClubView(LoginRequiredMixin, View):
     def is_actionable(self, currentUser, club):
         """Check if current_user is in the club"""
 
-        return has_membership(club, currentUser) and not (has_applicant_rank(currentUser, club) or has_owner_rank(currentUser, club))
+        return has_membership(club, currentUser) and not (
+                    has_applicant_rank(currentUser, club) or has_owner_rank(currentUser, club))
 
     def is_not_actionable(self, currentUser, club):
         """If the user is unable to leave the club"""
