@@ -39,4 +39,5 @@ def get_club_id(request):
         club = Club.objects.get(pk=id)
         return id
     except:
+        messages.error(request, "That club doesn't exist!")
         return -1
