@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from BookClub import views
-from BookClub.views.action_views import *
+# from BookClub.views.action_views import DemoteMemberView, PromoteView
 
 urlpatterns = [
     # '''Core URLs'''
@@ -29,14 +29,15 @@ urlpatterns = [
     path('sign_up/', views.SignUpView.as_view(), name='sign_up'),
     path('log_out/', views.LogOutView.as_view(), name='log_out'),
 
-    path('available_clubs/', views.AvailableClubsView.as_view(), name='available_clubs'),
-    path('my_club_memberships/', views.MyClubMembershipsView.as_view(), name='my_club_memberships'),
+# '''Action URLs'''
+    path('join_club/<int:club_id>', views.JoinClubView.as_view(), name='join_club'),
+    path('leave_club/<int:club_id>', views.LeaveClubView.as_view(), name='leave_club'),
+    path('promote_member/<int:clubid>/<int:user_id>',views.PromoteMemberView.as_view(), name='promote'),
+    path('demote_member/<int:clubid>/<int:user_id>',views.DemoteMemberView.as_view(), name='demote'),
 
     # '''Club URLs'''
     path('club_dashboard/', views.club_dashboard, name='club_dashboard'),
-    path('create_club/', views.clubs.CreateClubView.as_view(), name='create_club'),
-
-    # '''Action URLS (temp)'''
-    path('promote_member/<int:clubid>/<int:user_id>', views.PromoteMemberView.as_view(), name='promote_member'),
-    path('demote_member/<int:clubid>/<int:user_id>', views.DemoteMemberView.as_view(), name='demote_member')
+    path('available_clubs/', views.AvailableClubsView.as_view(), name='available_clubs'),
+    path('my_club_memberships/', views.MyClubMembershipsView.as_view(), name='my_club_memberships'),
+    path('create_club/', views.clubs.CreateClubView.as_view(), name = 'create_club')
 ]
