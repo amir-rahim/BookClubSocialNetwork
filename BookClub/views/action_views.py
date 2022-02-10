@@ -1,5 +1,5 @@
 from django.views.generic import TemplateView
-from BookClub.helpers import RankRequiredMixin, has_applicant_rank, has_member_rank ,has_moderator_rank ,has_owner_rank
+from BookClub.helpers import *
 from BookClub.models.club import Club, User
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -46,5 +46,23 @@ class PromoteView(ActionView,RankRequiredMixin):
         #check if user is an owner, and the target user is of type member and nothing else. 
         #first check if they are part of the same club.
         return (has_owner_rank(currentUser,club) and has_member_rank(targetUser,club))
-        
-    
+
+    class DemoteMemberView(RankRequiredMixin, ActionView):
+        """Demoting member to a moderator"""
+
+        redirect_location = 'members_list'
+
+        def is_actionable(current_user, targetUser, club):
+            """Check if moderator can be demoted."""
+
+            return has_owner_rank(current_user, club) and has_moderator_rank(targetUser, club)
+
+        def action(current_user, targetUser, club):
+            """Demote moderator to a member."""
+            messages.success(self.request, f"You have demoted the moderator successfully")
+            set_rank(targetUser, club, "MEMBER")
+
+        def get(self, request, *args, **kwargs):
+            """Handle get request."""
+
+            return super().get(request, *args, **kwargs)
