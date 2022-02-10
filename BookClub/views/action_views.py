@@ -1,9 +1,10 @@
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, View
 from BookClub.helpers import *
 from BookClub.models.club import Club, User
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class ActionView(TemplateView):
@@ -35,31 +36,34 @@ class ActionView(TemplateView):
     def action(currentUser, targetUser, club):
         raise NotImplementedError("This method isn't implemented yet.")
 
+
 """Class view for promoting members."""
 
-class PromoteMemberView(ActionView,RankRequiredMixin):
-    
+
+class PromoteMemberView(RankRequiredMixin, ActionView):
     """Promoting a member to a moderator"""
 
-    redirect_location =  'members_list'
+    redirect_location = 'members_list'
+    requiredRanking = ClubMembership.UserRoles.OWNER
 
     def is_actionable(currentUser, targetUser, club):
         """Check if member can be promoted."""
 
-        return (has_owner_rank(currentUser,club) and has_member_rank(targetUser,club))
+        return (has_owner_rank(currentUser, club) and has_member_rank(targetUser, club))
 
-    def action(currentUser, targetUser,club):
+    def action(currentUser, targetUser, club):
         messages.success(self.request, f"You have promoted the member successfully")
-        set_rank(targetUser,club,ClubMembership.UserRoles.MODERATOR)
+        set_rank(targetUser, club, ClubMembership.UserRoles.MODERATOR)
 
     def get(self, club, user, request, *args, **kwargs):
-
         return super().get(club, user, request, *args, **kwargs)
+
 
 class DemoteMemberView(RankRequiredMixin, ActionView):
     """Demoting a moderator to a member"""
 
-    redirect_location =  'members_list'
+    redirect_location = 'members_list'
+    requiredRanking = ClubMembership.UserRoles.OWNER
 
     def is_actionable(currentUser, targetUser, club):
         """Check if moderator can be demoted."""
@@ -72,26 +76,71 @@ class DemoteMemberView(RankRequiredMixin, ActionView):
         set_rank(targetUser, club, ClubMembership.UserRoles.MEMBER)
 
     def get(self, club, user, request, *args, **kwargs):
-
         return super().get(club, user, request, *args, **kwargs)
 
 
 class KickMemberView(RankRequiredMixin, ActionView):
     """Promoting member to a moderator"""
 
-    redirect_location =  'members_list'
+    redirect_location = 'members_list'
+    requiredRanking = ClubMembership.UserRoles.OWNER or ClubMembership.UserRoles.MODERATOR
 
-    def is_actionable(current_user, targetUser, club):
-        """Check if member can be kicked"""
+    def is_actionable(currentUser, targetUser, club):
+        """Check if current_user can kick targetUser"""
 
-        return has_owner_rank(current_user, club) or has_moderator_rank(current_user, club) and has_member_rank(
-            targetUser, club)
+        return can_kick(club, currentUser, targetUser)
 
-    def action(current_user, targetUser, club):
+    def action(currentUser, targetUser, club):
         """Kick member"""
         messages.success(self.request, f"You have kicked the member")
         remove_from_club(targetUser, club)
 
     def get(self, club, user, request, *args, **kwargs):
-
         return super().get(club, user, request, *args, **kwargs)
+
+
+class JoinClubView(LoginRequiredMixin, View):
+    """Users can join or apply to clubs depending on the privacy settings of the club"""
+
+    redirect_location = 'available_clubs'
+
+    def is_actionable(self, currentUser, club):
+        """Check if user can join/apply to a club"""
+
+        return not has_membership(club, currentUser)
+
+    def is_not_actionable(self, currentUser, club):
+        if is_club_private(club):
+            messages.info(self.request, "You have already applied to this club!")
+            return redirect(self.redirect_location)
+        else:
+            messages.info(self.request, "You are already a member of this club!")
+            return redirect(self.redirect_location)
+
+    def action(self, currentUser, club):
+        """Check to see if user can join/apply to club"""
+        if is_club_private(club):
+            create_membership(club, currentUser, ClubMembership.UserRoles.APPLICANT)
+            messages.success(self.request, "Application to club successful!")
+            return redirect(self.redirect_location)
+        else:
+            create_membership(club, currentUser, ClubMembership.UserRoles.MEMBER)
+            messages.success(self.request, "You have joined the club!")
+            return redirect(self.redirect_location)
+
+    def post(self, request, *args, **kwargs):
+        try:
+            club = Club.objects.get(pk=self.kwargs.get('club_id'));
+            currentUser = request.user
+        except:
+            messages.error(request, "Error, user or club not found")
+            return redirect(self.redirect_location)
+
+        if self.is_actionable(currentUser, club):
+            self.action(currentUser, club)
+        else:
+            self.is_not_actionable(currentUser, club)
+
+        return redirect(self.redirect_location)
+
+
