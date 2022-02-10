@@ -20,11 +20,6 @@ class DeleteClubView(LoginRequiredMixin, RankRequiredMixin, DeleteView):
 
 
     requiredRanking = ClubMembership.UserRoles.OWNER
-    #verify login
-    #if not verified as owner then send back to some page.
-    #do the update
-    #return to some page.
-
 
     def setup(self, request, *args, **kwargs):
         self.requiredClub = get_club_id(request)
