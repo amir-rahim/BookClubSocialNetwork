@@ -28,3 +28,5 @@ class ClubMembership(models.Model):
                 membership = ClubMembership.UserRoles.OWNER
             ).exclude(user = self.user)) > 0:
                 raise ValidationError(message = 'A club can only have 1 owner')
+
+    
