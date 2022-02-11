@@ -104,3 +104,17 @@ class PasswordViewTest(TestCase, LogInTester):
                              target_status_code=200)
         is_password_correct = check_password('Password123', self.user.password)
         self.assertTrue(is_password_correct)
+
+    def test_password_change_with_incorrect_password(self):
+        self.client.login(username=self.user.username, password='Password123')
+        self.form_input['password'] = '!Password123'
+        self.form_input['new_password'] = 'NewPassword123'
+        self.form_input['password_confirmation'] = 'NewPassword123'
+        response = self.client.post(self.url, self.form_input, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'password_change.html')
+        form = response.context['form']
+        self.assertTrue(isinstance(form, ChangePasswordForm))
+        self.user.refresh_from_db()
+        is_password_correct = check_password('!Password123', self.user.password)
+        self.assertFalse(is_password_correct)
