@@ -4,8 +4,7 @@
         "pk": 1,
         "fields": {
 
-
-            "name": "Johnathan's Club",
+            "name": "Johnathan Club",
             "description": "This is a very cool club that is owned by a certain Johnathan. Reading certain books...",
             "tagline": "Welcome to Johnathan's club! We read the best books!!!",
             "rules": "Don't be annoying",
@@ -20,8 +19,7 @@
         "pk": 2,
         "fields": {
 
-
-          "name": "Jeannette's Club",
+          "name": "Jeannette Club",
           "description": "This is a club owned by a certain Jeannette",
           "tagline": "",
           "rules": "",
@@ -35,7 +33,7 @@
         "pk": 3,
         "fields": {
 
-          "name": "Jack's Club",
+          "name": "Jack Club",
           "description": "a club created by some Jack",
           "tagline": "Just Read It",
           "rules": "Know the inside jokes",

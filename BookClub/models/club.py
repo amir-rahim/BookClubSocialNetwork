@@ -26,6 +26,9 @@ class Club(models.Model):
     def get_number_of_members(self):
         return ClubMembership.objects.filter(club = self, membership__gte = ClubMembership.UserRoles.MEMBER).count()
 
+    def is_member(self, user):
+        return ClubMembership.objects.filter(club=self, user=user).exists()
+
     # Has unimplemented dependencies
     def get_number_of_meetings(self):
         pass
