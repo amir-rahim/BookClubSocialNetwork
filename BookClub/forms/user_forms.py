@@ -89,3 +89,4 @@ class ChangePasswordForm(NewPasswordMixin):
             self.user.set_password(new_password)
             self.user.save()
         return self.user
+
