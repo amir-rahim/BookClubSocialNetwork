@@ -144,6 +144,9 @@ class JoinClubView(LoginRequiredMixin, View):
 
         return redirect(self.redirect_location)
 
+    def get(self, request, *args, **kwargs):
+        return redirect(self.redirect_location)
+
 
 class LeaveClubView(LoginRequiredMixin, View):
     """User can leave their club"""
@@ -184,4 +187,7 @@ class LeaveClubView(LoginRequiredMixin, View):
         else:
             self.is_not_actionable(currentUser, club)
 
+        return redirect(self.redirect_location)
+
+    def get(self, request, *args, **kwargs):
         return redirect(self.redirect_location)
