@@ -43,3 +43,11 @@ class MyClubMembershipsView(LoginRequiredMixin, ListView):
         context['clubs'] = self.get_queryset()
         return context
         
+    # When club is clicked, set session and redirect to club's dashboard
+    def create_session(self, request):
+        # change 0 to what club was clicked
+        request.session['club_id'] = 0
+        request.session.save()
+        return redirect('club_dashboard')
+
+        
