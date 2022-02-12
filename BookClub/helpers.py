@@ -38,16 +38,6 @@ class RankRequiredMixin:
         else:
             return redirect('home')
 
-
-def get_club_id(request):
-    try:
-        id = request.session['club']
-        club = Club.objects.get(pk=id)
-        return id
-    except:
-        return -1
-
-
 """
 Helpers for checking the authentication level of the user.
 """
@@ -126,7 +116,6 @@ def can_kick(club, user, targetUser):
 
 def has_membership(club, user):
     return ClubMembership.objects.filter(user=user, club=club)
-
 
 def create_membership(club, user, membership):
     new_membership = ClubMembership(user=user, club=club, membership=membership)
