@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.core.validators import RegexValidator
 
 from BookClub.models.user import User
 from BookClub.models import *
@@ -9,15 +10,25 @@ from BookClub.models.club_membership import ClubMembership
 
 class Club(models.Model):
     name = models.CharField(unique=True, max_length=100, blank=False)
+    url_name = models.CharField(
+            unique=True, 
+            max_length=100, 
+            blank=False,
+            validators=[
+            RegexValidator(
+                regex='^[a-zA-Z0-9_]+$',
+                message='Can contain A-Z, a-z and 0-9 and underscores characters only.',
+                code='invalid_url_name'
+            )
+        ])
     description = models.CharField(max_length=250, blank=False)
     tagline = models.CharField(max_length=120, blank=True)
     rules = models.CharField(max_length=200, blank=True)
     is_private = models.BooleanField(default=False, blank=False, null=False)
     created_on = models.DateField(auto_now_add=True)
 
-    # uncomment this method and substitute the path name for view to show club details
-    # def get_absolute_url(self):
-    #     return reverse('club', kwargs = {'pk': self.pk})
+    def get_absolute_url(self):
+        return reverse('club_dashboard', kwargs = {'url_name': self.url_name})
 
     def __str__(self):
         return self.name
@@ -48,28 +59,27 @@ class Club(models.Model):
             return None
         return clubs
 
-    def get_users(search_club, search_role):
+    def get_users(self, search_role):
         """Get all the users from the given club with the given authorization."""
 
         filterBy = (ClubMembership.objects
-                    .filter(club=search_club)
+                    .filter(club=self)
                     .filter(membership=search_role)
                     .values_list('user__id', flat=True))
         return User.objects.filter(id__in=filterBy)
 
-    
+    def get_members(self):
+        """Get all the members from the given club."""
+        
+        return self.get_users(ClubMembership.UserRoles.MEMBER)
 
-    def get_members(club):
-
-        return get_users(club, ClubMembership.UserRoles.MEMBER)
-
-    def get_moderators(club):
+    def get_moderators(self):
         """Get all the officers from the given club."""
 
-        return get_users(club, ClubMembership.UserRoles.MODERATOR)
+        return self.get_users(ClubMembership.UserRoles.MODERATOR)
 
-    def get_owner(club):
+    def get_owner(self):
         """Get all the owner from the given club."""
 
-        return get_users(club, ClubMembership.UserRoles.OWNER)
+        return self.get_users(ClubMembership.UserRoles.OWNER)
 

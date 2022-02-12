@@ -6,7 +6,7 @@ from BookClub.models.user import User
 class ClubForm(ModelForm):
     class Meta:
         model = Club
-        fields = ['name', 'description', 'tagline', 'rules', 'is_private']
+        fields = ['name', 'url_name', 'description', 'tagline', 'rules', 'is_private']
 
         widgets = {
             'description': Textarea,
