@@ -29,18 +29,22 @@ urlpatterns = [
     path('login/', views.LogInView.as_view(), name='login'),
     path('sign_up/', views.SignUpView.as_view(), name='sign_up'),
     path('log_out/', views.LogOutView.as_view(), name='log_out'),
-
+    
     # '''Action URLs'''
-    path('join_club/<int:club_id>', views.JoinClubView.as_view(), name='join_club'),
-    path('leave_club/<int:club_id>', views.LeaveClubView.as_view(), name='leave_club'),
-    path('promote_member/<int:clubid>/<int:user_id>', views.PromoteMemberView.as_view(), name='promote_member'),
+    path('join_club/<int:club_id>/', views.JoinClubView.as_view(), name='join_club'),
+    path('leave_club/<int:club_id>/', views.LeaveClubView.as_view(), name='leave_club'),
+    path('promote_member/<int:clubid>/<int:user_id>/', views.PromoteMemberView.as_view(), name='promote_member'),
     path('demote_member/<int:clubid>/<int:user_id>', views.DemoteMemberView.as_view(), name='demote_member'),
-    path('transfer_ownership/<int:clubid>/<int:user_id>', views.TransferOwnershipView.as_view(), name='transfer_ownership'),
-    path('kick_member/<int:clubid>/<int:user_id>', views.KickMemberView.as_view(), name='kick_member'),
+    path('transfer_ownership/<int:clubid>/<int:user_id>/', views.TransferOwnershipView.as_view(), name='transfer_ownership'),
+    path('kick_member/<int:clubid>/<int:user_id>/', views.KickMemberView.as_view(), name='kick_member'),
+    
+    # '''Membership URLs'''
+    path('club/available_clubs/', views.AvailableClubsView.as_view(), name='available_clubs'),
+    path('club/my_club_memberships/', views.MyClubMembershipsView.as_view(), name='my_club_memberships'),
+    path('club/create_club/', views.clubs.CreateClubView.as_view(), name = 'create_club'),
 
     # '''Club URLs'''
-    path('club_dashboard/', views.club_dashboard, name='club_dashboard'),
-    path('available_clubs/', views.AvailableClubsView.as_view(), name='available_clubs'),
-    path('my_club_memberships/', views.MyClubMembershipsView.as_view(), name='my_club_memberships'),
-    path('create_club/', views.clubs.CreateClubView.as_view(), name='create_club')
+    path('club/<str:url_name>/', views.club_dashboard, name='club_dashboard'),
+    path('club/<str:url_name>/member_list/', views.MembersListView.as_view(), name='member_list')
+
 ]
