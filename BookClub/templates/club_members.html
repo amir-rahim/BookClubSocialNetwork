@@ -1,0 +1,193 @@
+{% extends 'base_content.html' %}
+
+{% block page_title %}
+Club Member List
+{% endblock page_title %}
+
+{% block page_subtitle %}
+This is the list of members for this club.
+{% endblock page_subtitle %}
+
+{% block content %}
+
+<div class="columns">
+
+    <div class="column is-3">
+
+        <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+
+            <p class="menu-label">Club Administration</p>
+
+            <ul class="menu-list">
+                <li><a>Dashboard</a></li>
+                <li><a class="is-active"><b>Member List</b></a></li>
+                <li><a>Manage Club</a></li>
+                <li><a>Club Settings</a></li>
+            </ul>
+
+            <p class="menu-label">Forum & Reviews</p>
+
+            <ul class="menu-list">
+                <li><a>Forum</a></li>
+                <li><a>Members Reviews</a></li>
+            </ul>
+
+            <p class="menu-label">Meetings</p>
+
+            <ul class="menu-list">
+                <li><a>All Meetings</a></li>
+                <li><a>Joined Upcoming Meetings</a></li>
+                <li><a>Prior Meetings</a></li>
+            </ul>
+
+        </aside>
+
+    </div>
+
+    <div class="column is-9">
+
+        <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a>Club</a></li>
+                <li><a>{{ club.name }}</a></li>
+                <li><a href="#">Member List</a></li>
+            </ul>
+        </nav>
+
+        <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">{{ club.name }}</h1>
+                    <h2 class="subtitle">{{ club.tagline }}</h2>
+                </div>
+            </div>
+        </section>
+
+        <hr class="solid">
+
+        <p class="subtitle">Owner</p>
+
+        <hr class="solid">
+
+        <div class="columns">
+
+            <div class="column is-6">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-left">
+                                <figure class="image is-64x64">
+                                    <img class="is-rounded" src="{{ owner.gravatar }}" alt="Placeholder image">
+                                </figure>
+                            </div>
+                            <div class="media-content">
+                                <div class="content">
+                                    <p class="text"><b>Name: </b> {{ owner.username }}</p>
+                                    <p class="text"><b>Public Bio: </b> {{ owner.public_bio }}</p>
+                                </div>
+
+                                <hr class="solid">
+                                
+                                <div class="buttons">
+                                    <button class="button is-info is-small">Info</button>
+                                    <button class="button is-success is-small">Success</button>
+                                    <button class="button is-warning is-small">Warning</button>
+                                    <button class="button is-danger is-small">Danger</button>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <hr class="solid">
+
+        <p class="subtitle">Moderators</p>
+
+        <hr class="solid">
+
+        {% for moderator in moderators %}
+        <div class="columns">
+
+            <div class="column is-12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-left">
+                                <figure class="image is-64x64">
+                                    <img class="is-rounded" src="{{ moderator.gravatar }}" alt="Placeholder image">
+                                </figure>
+                            </div>
+                            <div class="media-content">
+                                <div class="content">
+                                    <p class="text"><b>Name: </b> {{ moderator.username }}</p>
+                                    <p class="text"><b>Public Bio: </b> {{ moderator.public_bio }}</p>
+                                </div>
+
+                                <hr class="solid">
+                                
+                                <div class="buttons">
+                                    <button class="button is-info is-small">Info</button>
+                                    <button class="button is-success is-small">Success</button>
+                                    <button class="button is-warning is-small">Warning</button>
+                                    <button class="button is-danger is-small">Danger</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        {% endfor %}
+
+        <hr class="solid">
+
+        <p class="subtitle">Members</p>
+
+        <hr class="solid">
+
+        {% for member in members %}
+        <div class="columns">
+
+            <div class="column is-12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-left">
+                                <figure class="image is-64x64">
+                                    <img class="is-rounded" src="{{ member.gravatar }}" alt="Placeholder image">
+                                </figure>
+                            </div>
+                            <div class="media-content">
+                                <div class="content">
+                                    <p class="text"><b>Name: </b> {{ member.username }}</p>
+                                    <p class="text"><b>Public Bio: </b> {{ member.public_bio }}</p>
+                                </div>
+
+                                <hr class="solid">
+                                
+                                <div class="buttons">
+                                    <button class="button is-info is-small">Promote</button>
+                                    <button class="button is-success is-small">Demote</button>
+                                    <button class="button is-warning is-small">View</button>
+                                    <button class="button is-danger is-small">Kick</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}
