@@ -51,7 +51,7 @@ class PromoteMemberView(RankRequiredMixin, ActionView):
 
         return (has_owner_rank(currentUser, club) and has_member_rank(targetUser, club))
 
-    def action(currentUser, targetUser, club):
+    def action(self, currentUser, targetUser, club):
         messages.success(self.request, f"You have promoted the member successfully")
         set_rank(targetUser, club, ClubMembership.UserRoles.MODERATOR)
 
@@ -70,7 +70,7 @@ class DemoteMemberView(RankRequiredMixin, ActionView):
 
         return has_owner_rank(currentUser, club) and has_moderator_rank(targetUser, club)
 
-    def action(currentUser, targetUser, club):
+    def action(self, currentUser, targetUser, club):
         """Demote moderator to a member."""
         messages.success(self.request, f"You have demoted the moderator successfully")
         set_rank(targetUser, club, ClubMembership.UserRoles.MEMBER)
@@ -85,12 +85,12 @@ class KickMemberView(RankRequiredMixin, ActionView):
     redirect_location = 'members_list'
     requiredRanking = ClubMembership.UserRoles.OWNER or ClubMembership.UserRoles.MODERATOR
 
-    def is_actionable(currentUser, targetUser, club):
+    def is_actionable(self, currentUser, targetUser, club):
         """Check if current_user can kick targetUser"""
 
         return can_kick(club, currentUser, targetUser)
 
-    def action(currentUser, targetUser, club):
+    def action(self, currentUser, targetUser, club):
         """Kick member"""
         messages.success(self.request, f"You have kicked the member")
         remove_from_club(targetUser, club)
@@ -105,12 +105,12 @@ class TransferOwnershipView(RankRequiredMixin, ActionView):
     redirect_location = 'members_list'
     requiredRanking = ClubMembership.UserRoles.OWNER
 
-    def is_actionable(currentUser, targetUser, club):
+    def is_actionable(self, currentUser, targetUser, club):
         """Check if the ownership can be transferred to a valid officer."""
 
         return has_owner_rank(currentUser, club) and has_moderator_rank(targetUser, club)
 
-    def action(currentUser, targetUser, club):
+    def action(self, currentUser, targetUser, club):
         """Transfer ownership to moderator and demote owner to moderator"""
         messages.success(self.request, f"You have transferred the ownership successfully")
         set_rank(targetUser, club, ClubMembership.UserRoles.OWNER)
