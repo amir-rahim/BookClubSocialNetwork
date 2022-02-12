@@ -17,7 +17,7 @@ class AvailableClubsViewTestCase(TestCase):
         self.user = User.objects.get(username="johndoe")
 
     def test_url(self):
-        self.assertEqual(self.url,'/available_clubs/')
+        self.assertEqual(self.url,'/club/available_clubs/')
 
     def test_get_template_logged_in(self):
         self.client.login(username=self.user.username, password="Password123")

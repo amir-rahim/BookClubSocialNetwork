@@ -20,7 +20,7 @@ class JoinClubViewTestCase(TestCase):
         self.url = reverse('join_club', kwargs={'club_id': self.public_club.id})
 
     def test_url(self):
-        self.assertEqual(self.url,f'/join_club/{self.public_club.id}')
+        self.assertEqual(self.url,f'/join_club/{self.public_club.id}/')
 
 
     # Tests for user joining and applying to private and public clubs

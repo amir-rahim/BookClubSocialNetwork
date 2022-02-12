@@ -30,7 +30,7 @@ class LeaveClubViewTestCase(TestCase):
         self.url = reverse('leave_club', kwargs={'club_id': self.club.id})
 
     def test_url(self):
-        self.assertEqual(self.url,f'/leave_club/{self.club.id}')
+        self.assertEqual(self.url,f'/leave_club/{self.club.id}/')
 
     def test_redirect_when_not_logged_in(self):
         response = self.client.get(self.url)
