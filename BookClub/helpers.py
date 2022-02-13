@@ -99,20 +99,15 @@ def remove_from_club(user, club):
 def is_club_private(club):
     return club.is_private
 
-
 def can_kick(club, user, targetUser):
     userRank = get_rank(user, club)
     targetUserRank = get_rank(targetUser, club)
 
     if userRank == ClubMembership.UserRoles.OWNER:
         return True
-    if userRank == ClubMembership.UserRoles.MODERATOR and (
-            (targetUser == ClubMembership.UserRoles.OWNER) or (targetUser == ClubMembership.UserRoles.MODERATOR)):
-        return False
-    if userRank == ClubMembership.UserRoles.MODERATOR and targetUser == ClubMembership.UserRoles.MEMBER:
+    if userRank == ClubMembership.UserRoles.MODERATOR and targetUserRank == ClubMembership.UserRoles.MEMBER:
         return True
     return False
-
 
 def has_membership(club, user):
     return ClubMembership.objects.filter(user=user, club=club)

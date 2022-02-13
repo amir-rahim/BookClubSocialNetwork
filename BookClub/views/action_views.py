@@ -19,20 +19,20 @@ class ActionView(TemplateView):
         Handle post request
 
         Args:
-            request (Django Request): The request we have recieved
+            request (Django Request): The request we have received
         """
 
         try:
             club = Club.objects.get(url_name=self.kwargs['url_name'])
             currentUser = self.request.user
-            targetUser = User.objects.get(pk = self.request.POST.get('user_id'))
+            targetUser = User.objects.get(username=self.request.POST.get('user'))
         except:
             messages.error(self.request, "Error, user or club not found.")
 
         if (self.is_actionable(currentUser, targetUser, club)):
             self.action(currentUser, targetUser, club)
         else:
-             self.is_not_actionable(currentUser, targetUser, club)
+            self.is_not_actionable(currentUser, targetUser, club)
 
         return redirect(self.redirect_location, kwargs['url_name'])
 
@@ -77,7 +77,7 @@ class DemoteMemberView(LoginRequiredMixin, ActionView):
     """Demoting a moderator to a member"""
 
     redirect_location = 'member_list'
-    requiredRanking = ClubMembership.UserRoles.OWNER #check with Jack
+    requiredRanking = ClubMembership.UserRoles.OWNER  # check with Jack
 
     def is_actionable(self, currentUser, targetUser, club):
         """Check if moderator can be demoted"""
@@ -176,10 +176,9 @@ class JoinClubView(LoginRequiredMixin, View):
         if (self.is_actionable(currentUser, club)):
             self.action(currentUser, club)
         else:
-             self.is_not_actionable(currentUser, club)
+            self.is_not_actionable(currentUser, club)
 
         return redirect(self.redirect_location)
-
 
 
 class LeaveClubView(LoginRequiredMixin, View):
@@ -191,7 +190,7 @@ class LeaveClubView(LoginRequiredMixin, View):
         """Check if currentUser is in the club"""
 
         return has_membership(club, currentUser) and not (
-                    has_applicant_rank(currentUser, club) or has_owner_rank(currentUser, club))
+                has_applicant_rank(currentUser, club) or has_owner_rank(currentUser, club))
 
     def is_not_actionable(self, currentUser, club):
         """If the user is unable to leave the club"""
@@ -218,6 +217,6 @@ class LeaveClubView(LoginRequiredMixin, View):
         if (self.is_actionable(currentUser, club)):
             self.action(currentUser, club)
         else:
-             self.is_not_actionable(currentUser, club)
+            self.is_not_actionable(currentUser, club)
 
         return redirect(self.redirect_location)
