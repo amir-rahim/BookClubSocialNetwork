@@ -27,7 +27,7 @@ Find the Book Clubs you have memberships for here!
                     <!-- For each available club, add a row linked to the corresponding club dashboard page -->
                     {% comment %} add sessions to lead to correct club dashboard {% endcomment %}
                     {% comment %} call view and pass in club? {% endcomment %}
-                      <tr onclick="location.href='{% url 'club_dashboard' club.name  %}'">
+                      <tr onclick="location.href='{% url 'club_dashboard' club.url_name  %}'">
                           <td>{{club.name}}</td>
                           <td>{{club.description}}</td>
                           <td>

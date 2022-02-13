@@ -36,7 +36,7 @@ class ClubDashboardView(TemplateView):
 
     # Redirect if club is private and user is not a member
     def get(self, request, *args, **kwargs):
-        current_club = Club.objects.get(name=self.kwargs['club_name'])
+        current_club = Club.objects.get(url_name=self.kwargs['club_url_name'])
         if current_club.is_private:
             if not current_club.is_member(request.user):
                 messages.add_message(request, messages.ERROR, 'This club is private and you are not a member.')
@@ -46,7 +46,7 @@ class ClubDashboardView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        current_club = Club.objects.get(name=self.kwargs['club_name'])
+        current_club = Club.objects.get(url_name=self.kwargs['club_url_name'])
         context['current_club'] = current_club
         context['owner'] = current_club.get_club_owner()
         context['user'] = self.request.user
