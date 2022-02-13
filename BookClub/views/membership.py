@@ -42,3 +42,5 @@ class MyClubMembershipsView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['clubs'] = self.get_queryset()
         return context
+        
+
