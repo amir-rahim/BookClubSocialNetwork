@@ -6,6 +6,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from BookClub.helpers import *
+from BookClub.models.user import User
 from BookClub.models.club import *
 from BookClub.models.club_membership import ClubMembership
 from django.conf import settings
@@ -13,7 +14,7 @@ from django.conf import settings
 
 class MembersListView(LoginRequiredMixin, TemplateView):
     """View to display member list"""
-    
+
     template_name = 'club_members.html'
 
     # Redirect if club is private and user is not a member
@@ -23,16 +24,18 @@ class MembersListView(LoginRequiredMixin, TemplateView):
             if not current_club.is_member(request.user):
                 messages.add_message(request, messages.ERROR, 'This club is private and you are not a member.')
                 return redirect('available_clubs')
-        return render(request, 'club_members.html', context=self.get_context_data(**kwargs))
-    
-    def get_context_data(self, **kwargs):
+        return render(request, 'club_members.html', context=self.get_context_data(request, **kwargs))
+
+    def get_context_data(self, request, **kwargs):
         """Generate context data to be shown in the template."""
-    
+
         context = super().get_context_data(**kwargs)
         club = Club.objects.get(url_name=self.kwargs['url_name'])
+        user = User.objects.get(id = request.user.id)
         context['club'] = club
         context['members'] = club.get_members()
         context['moderators'] = club.get_moderators()
         context['owner'] = club.get_club_owner()
+        context['request_user'] = ClubMembership.objects.get(user=user, club=club)
 
         return context
