@@ -88,15 +88,9 @@ This is the list of members for this club.
                                 </div>
 
                                 <hr class="solid">
-                                
-                                <div class="buttons">
-                                    <button class="button is-info is-small">Info</button>
-                                    <button class="button is-success is-small">Success</button>
-                                    <button class="button is-warning is-small">Warning</button>
-                                    <button class="button is-danger is-small">Danger</button>
-                                </div>
+
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -129,12 +123,24 @@ This is the list of members for this club.
                                 </div>
 
                                 <hr class="solid">
-                                
+
                                 <div class="buttons">
-                                    <button class="button is-info is-small">Info</button>
-                                    <button class="button is-success is-small">Success</button>
-                                    <button class="button is-warning is-small">Warning</button>
-                                    <button class="button is-danger is-small">Danger</button>
+                                  <button class="button is-warning is-small">View</button>
+                                  <form method="post" action="{% url 'transfer_ownership' url_name=club.url_name %}">
+                                    <input type="hidden" name="user_id" value="{{ moderator.id }}" />
+                                    {% csrf_token %}
+                                    <button type="submit" class="button is-success is-small" onclick="return confirm('Confirm you want to transfer ownership to {{moderator.username}}?');">Transfer Ownership</button>
+                                  </form>
+                                    <form method="post" action="{% url 'demote_member' url_name=club.url_name %}">
+                                      <input type="hidden" name="user_id" value="{{ moderator.id }}" />
+                                      {% csrf_token %}
+                                      <button type="submit" class="button is-danger is-small" onclick="return confirm('Confirm you want to demote {{moderator.username}}?');">Demote</button>
+                                    </form>
+                                    <form method="post" action="{% url 'kick_member' url_name=club.url_name %}">
+                                      <input type="hidden" name="user_id" value="{{ moderator.id }}" />
+                                      {% csrf_token %}
+                                      <button type="submit" class="button is-danger is-small" onclick="return confirm('Confirm you want to kick {{moderator.username}}?');">Kick</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -170,12 +176,19 @@ This is the list of members for this club.
                                 </div>
 
                                 <hr class="solid">
-                                
+
                                 <div class="buttons">
-                                    <button class="button is-info is-small">Promote</button>
-                                    <button class="button is-success is-small">Demote</button>
                                     <button class="button is-warning is-small">View</button>
-                                    <button class="button is-danger is-small">Kick</button>
+                                    <form method="post" action="{% url 'promote_member' url_name=club.url_name %}">
+                                      <input type="hidden" name="user_id" value="{{ member.id }}" />
+                                      {% csrf_token %}
+                                      <button type="submit" class="button is-success is-small" onclick="return confirm('Confirm you want to promote {{member.username}}?');">Promote</button>
+                                    </form>
+                                    <form method="post" action="{% url 'kick_member' url_name=club.url_name %}">
+                                      <input type="hidden" name="user_id" value="{{ member.id }}" />
+                                      {% csrf_token %}
+                                      <button type="submit" class="button is-danger is-small" onclick="return confirm('Confirm you want to kick {{member.username}}?');">Kick</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
