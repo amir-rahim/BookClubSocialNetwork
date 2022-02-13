@@ -25,6 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
 
+
     # '''Authentication URLs'''
     path('login/', views.LogInView.as_view(), name='login'),
     path('sign_up/', views.SignUpView.as_view(), name='sign_up'),
@@ -44,7 +45,8 @@ urlpatterns = [
     path('club/create_club/', views.clubs.CreateClubView.as_view(), name = 'create_club'),
 
     # '''Club URLs'''
-    path('club/<str:url_name>/', views.club_dashboard, name='club_dashboard'),
+    path('club/<str:club_url_name>/', views.ClubDashboardView.as_view(), name='club_dashboard'),
     path('club/<str:url_name>/member_list/', views.MembersListView.as_view(), name='member_list')
+
 
 ]

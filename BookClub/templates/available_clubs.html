@@ -25,7 +25,7 @@ Find the Book Club you are looking for here!
               <tbody>
                   {% for club in clubs %}
                     <!-- For each available club, add a row linked to the corresponding club dashboard page -->
-                      <tr onclick="window.location='{% url 'home' %}';">
+                      <tr onclick="window.location='{% url 'club_dashboard' club.url_name %}';">
                           <td>{{club.name}}</td>
                           <td>{{club.description}}</td>
                           <td>

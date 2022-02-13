@@ -25,7 +25,8 @@ class ClubMembership(models.Model):
         super().clean()
         if self.membership == ClubMembership.UserRoles.OWNER:
             if len(ClubMembership.objects.filter(
-                    club=self.club,
-                    membership=ClubMembership.UserRoles.OWNER
-            ).exclude(user=self.user)) > 0:
-                raise ValidationError(message='A club can only have 1 owner')
+
+                club = self.club,
+                membership = ClubMembership.UserRoles.OWNER
+            ).exclude(user = self.user)) > 0:
+                raise ValidationError(message = 'A club can only have 1 owner')
