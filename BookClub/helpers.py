@@ -115,3 +115,11 @@ def has_membership(club, user):
 def create_membership(club, user, membership):
     new_membership = ClubMembership(user=user, club=club, membership=membership)
     new_membership.save()
+
+def delete_club(club):
+    club.delete()
+    # try:
+    #     club = Club.objects.get(pk=club.id)
+    #     club.delete()
+    # except ObjectDoesNotExist:
+    #     pass

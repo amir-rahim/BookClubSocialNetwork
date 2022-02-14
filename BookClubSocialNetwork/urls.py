@@ -37,6 +37,7 @@ urlpatterns = [
     path('demote_member/<str:url_name>/', views.DemoteMemberView.as_view(), name='demote_member'),
     path('transfer_ownership/<str:url_name>/', views.TransferOwnershipView.as_view(), name='transfer_ownership'),
     path('kick_member/<str:url_name>/', views.KickMemberView.as_view(), name='kick_member'),
+    path('delete_club/<str:url_name>/',views.DeleteClubView.as_view(),name='delete_club'),
 
     # '''Membership URLs'''
     path('club/available_clubs/', views.AvailableClubsView.as_view(), name='available_clubs'),

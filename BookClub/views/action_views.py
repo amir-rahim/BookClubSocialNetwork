@@ -1,9 +1,13 @@
 '''Action Related Views'''
-from django.views.generic import TemplateView, View
+from email import message
+from multiprocessing import context
+from django.views.generic import TemplateView, View, DeleteView
 from BookClub.helpers import *
 from BookClub.models.club import Club, User
+from BookClub.models.user import User
+from BookClub.models.club_membership import ClubMembership
 from django.shortcuts import redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -219,4 +223,47 @@ class LeaveClubView(LoginRequiredMixin, View):
         else:
             self.is_not_actionable(currentUser, club)
 
+        return redirect(self.redirect_location)
+
+    
+class DeleteClubView(LoginRequiredMixin,View):
+    #RankRequiredMixin, DeleteView
+
+    # model = Club
+    # requiredRanking = ClubMembership.UserRoles.OWNER
+    # success_url = reverse_lazy('member_list')
+
+    redirect_location = 'available_clubs'
+    #the way of the deleteview
+    # def get_object(self):
+    #     return Club.objects.get(url_name = self.kwargs['url_name'])
+
+    # def get_queryset(self):
+    #     return Club.objects.filter(url_name = self.kwargs['url_name'])
+
+
+
+    #the way of the action
+    def is_actionable(self,currentUser,club):
+        return has_owner_rank(currentUser,club)
+
+    def is_not_actionable(self):
+
+        messages.error(self.request, f"You are not allowed to delete the club!")
+
+    def action(self,currentUser,club):
+        delete_club(club)
+        messages.success(self.request, "You have deleted the club.")
+
+
+    def post(self, request, *args, **kwargs):
+        try:
+            club = Club.objects.get(url_name=self.kwargs['url_name'])
+            currentUser = self.request.user
+        except:
+            messages.error(self.request, "Error, user or club not found.")
+        if self.is_actionable(currentUser,club):
+            self.action(currentUser,club)
+        else:
+            self.is_not_actionable()
         return redirect(self.redirect_location)
