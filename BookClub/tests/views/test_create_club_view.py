@@ -23,6 +23,7 @@ class CreateClubViewTestcase(TestCase):
         self.url = reverse('create_club')
         self.data = {
             'name': 'A test Club',
+            'url_name': 'testclub',
             'description': 'This is a very cool club that is owned by a certain Johnathan. Reading certain books...',
             'tagline': 'Welcome to Johnathan\'s club! We read the best books!!!',
             'rules': 'Don\'t be annoying',
@@ -31,7 +32,7 @@ class CreateClubViewTestcase(TestCase):
         }
 
     def test_create_club_url(self):
-        self.assertEqual(self.url, '/create_club/')
+        self.assertEqual(self.url, '/club/create_club/')
 
 
     def test_post_create_club_redirects_when_not_logged_in(self):
@@ -90,6 +91,7 @@ class CreateClubViewTestcase(TestCase):
         self.assertTemplateUsed(response, 'home.html')
         club = Club.objects.get(name = self.data['name'])
         self.assertEqual(club.name, self.data['name'])
+        self.assertEqual(club.url_name, self.data['url_name'])
         self.assertEqual(club.description, self.data['description'])
         self.assertEqual(club.tagline, self.data['tagline'])
         self.assertEqual(club.rules, self.data['rules'])
