@@ -17,7 +17,7 @@ class ActionView(TemplateView):
 
     def get(self, request, *args, **kwargs):
 
-        return redirect(self.redirect_location, kwargs['url_name'])
+        return redirect('home')
 
 
 
