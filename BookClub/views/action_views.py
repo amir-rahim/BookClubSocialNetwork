@@ -16,7 +16,7 @@ class ActionView(TemplateView):
     """Class for views that make an action"""
 
     def get(self, request, *args, **kwargs):
-        return redirect(self.redirect_location)
+        return redirect(self.redirect_location, kwargs['url_name'])
 
     def post(self, request, *args, **kwargs):
         """
@@ -225,25 +225,12 @@ class LeaveClubView(LoginRequiredMixin, View):
 
         return redirect(self.redirect_location)
 
-    
+#Still unsure about where to redirect in successful/unsuccessful action
 class DeleteClubView(LoginRequiredMixin,View):
-    #RankRequiredMixin, DeleteView
-
-    # model = Club
-    # requiredRanking = ClubMembership.UserRoles.OWNER
-    # success_url = reverse_lazy('member_list')
 
     redirect_location = 'available_clubs'
-    #the way of the deleteview
-    # def get_object(self):
-    #     return Club.objects.get(url_name = self.kwargs['url_name'])
-
-    # def get_queryset(self):
-    #     return Club.objects.filter(url_name = self.kwargs['url_name'])
-
-
-
-    #the way of the action
+    
+    
     def is_actionable(self,currentUser,club):
         return has_owner_rank(currentUser,club)
 
@@ -264,6 +251,8 @@ class DeleteClubView(LoginRequiredMixin,View):
             messages.error(self.request, "Error, user or club not found.")
         if self.is_actionable(currentUser,club):
             self.action(currentUser,club)
+            return redirect(self.redirect_location)
         else:
             self.is_not_actionable()
-        return redirect(self.redirect_location)
+        #Redirects to home if user cannot delete club
+        return redirect('home')
