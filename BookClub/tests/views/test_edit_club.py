@@ -62,21 +62,19 @@ class EditClubViewTestCase(TestCase):
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'edit_club.html')
-        
-        print(messages[0])
         self.assertEqual(len(messages), 0)
         
     def test_edit_club_logged_in_not_in_club(self):
         self.client.login(username='janedoe', password='Password123')
         response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 403)
         self.assertTemplateNotUsed(response, 'edit_club.html')
 
     def test_edit_club_logged_in_member_rank(self):
         user = User.objects.get(pk=3)
         self.client.login(username=user.username, password='Password123')
         response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 403)
         self.assertTemplateNotUsed(response, 'edit_club.html')
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
@@ -85,16 +83,13 @@ class EditClubViewTestCase(TestCase):
         user = User.objects.get(pk=5)
         self.client.login(username=user.username, password='Password123')
         response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 403)
         self.assertTemplateNotUsed(response, 'edit_club.html')
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
         
     def test_edit_club_post_valid_data(self):
         self.client.login(username=self.user.username, password='Password123')
-        session = self.client.session
-        session['club_id'] = 1
-        session.save()
         self.created_on_pre_test = self.club.created_on
         response = self.client.post(self.url, self.data)
         self.assertEqual(response.status_code, 302)
@@ -108,9 +103,6 @@ class EditClubViewTestCase(TestCase):
     def test_edit_club_post_invalid_data(self):
         self.data['name'] = ""
         self.client.login(username=self.user.username, password='Password123')
-        session = self.client.session
-        session['club_id'] = 1
-        session.save()
         self.created_on_pre_test = self.club.created_on
         response = self.client.post(self.url, self.data)
         self.assertEqual(response.status_code, 200)

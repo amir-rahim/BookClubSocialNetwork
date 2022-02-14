@@ -37,34 +37,8 @@
 
                     <form method="post">
                         {% csrf_token %}
-                        <div class="field">
-                            <div class="control" style="padding-bottom: 20px;">
-                                <input name="name" class="input is-large" type="text" placeholder="{{ club.name }}" autofocus="">
-                            </div>
-
-                            <div class="control" style="padding-bottom: 20px;">
-                                <input name="description" class="input is-large" type="text" placeholder="{{ club.description }}" autofocus="">
-                            </div>
-                        
-                            <div class="control" style="padding-bottom: 20px;">
-                                <input name="rules" class="input is-large" type="text" placeholder="{{ club.rules }}">
-                            </div>
-                        <div class="field>">
-                            <label>Privacy</label>
-                            <div class="control">
-                                <label class="radio"> 
-                                  <input type="radio" name="is_private">
-                                  Private
-                                </label>
-                                <label class="radio">
-                                  <input type="radio" name="is_private">
-                                  Public
-                              </div>
-                            <div class="control">
-                                <button class="button is-block is-info is-large is-fullwidth">Confirm Changes <i class="fa fa-sign-up" aria-hidden="true"></i></button>
-                            </div>
-                        </div>
-                        </div>
+                        {% include 'partials/bulma_form.html' with form=form %}
+                        <input type="submit" value="Create Club" class="button is-link">
                     </form>
 
                 </div>

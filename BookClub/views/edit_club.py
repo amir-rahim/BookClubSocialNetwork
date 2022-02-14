@@ -17,6 +17,7 @@ class EditClubView(LoginRequiredMixin, UserPassesTestMixin, DetailView, UpdateVi
     fields = ['name','description','rules','is_private']
     template_name = 'edit_club.html'
     permission_denied_message = "Access denied"
+    raise_exception = False
     
     def test_func(self):
         try:
