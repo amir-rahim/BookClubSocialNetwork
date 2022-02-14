@@ -1,7 +1,7 @@
 from datetime import date
 from django.forms import PasswordInput
 
-from django.test import TestCase
+from django.test import TestCase, tag
 from django.urls import reverse
 
 from BookClub.models.user import User
@@ -11,6 +11,7 @@ from django.contrib.messages import get_messages
 
 from BookClub.tests.helpers import reverse_with_next
 
+@tag('current')
 class EditClubViewTestCase(TestCase):
     fixtures = [
         "BookClub/tests/fixtures/default_users.json",
@@ -23,7 +24,7 @@ class EditClubViewTestCase(TestCase):
         super(TestCase, self).setUp()
         self.user = User.objects.get(username='johndoe')
         self.club = Club.objects.get(pk=1)
-        self.url = reverse('edit_club')
+        self.url = reverse('edit_club', kwargs = {'url_name': self.club.url_name})
         self.data = {
             'name': 'A test Club',
             'description': 'This is a very cool club that is owned by a certain Johnathan. Reading certain books...',
@@ -33,7 +34,7 @@ class EditClubViewTestCase(TestCase):
             'created_on': self.club.created_on,
         }
     def test_edit_club_url(self):
-        self.assertEqual(self.url, '/edit_club/')
+        self.assertEqual(self.url, '/edit_club/'+self.club.url_name+'/')
 
 
     def test_post_edit_club_redirects_when_not_logged_in(self):
@@ -58,16 +59,15 @@ class EditClubViewTestCase(TestCase):
         session['club_id'] = self.club.id
         session.save()
         response = self.client.get(self.url)
+        messages = list(get_messages(response.wsgi_request))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'edit_club.html')
-        messages = list(get_messages(response.wsgi_request))
+        
+        print(messages[0])
         self.assertEqual(len(messages), 0)
         
     def test_edit_club_logged_in_not_in_club(self):
         self.client.login(username='janedoe', password='Password123')
-        session = self.client.session
-        session['club_id'] = 1
-        session.save()
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 302)
         self.assertTemplateNotUsed(response, 'edit_club.html')
@@ -75,9 +75,6 @@ class EditClubViewTestCase(TestCase):
     def test_edit_club_logged_in_member_rank(self):
         user = User.objects.get(pk=3)
         self.client.login(username=user.username, password='Password123')
-        session = self.client.session
-        session['club_id'] = 1
-        session.save()
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 302)
         self.assertTemplateNotUsed(response, 'edit_club.html')
@@ -87,9 +84,6 @@ class EditClubViewTestCase(TestCase):
     def test_edit_club_logged_in_moderator_rank(self):
         user = User.objects.get(pk=5)
         self.client.login(username=user.username, password='Password123')
-        session = self.client.session
-        session['club_id'] = 1
-        session.save()
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 302)
         self.assertTemplateNotUsed(response, 'edit_club.html')

@@ -1,28 +1,41 @@
 '''View for editing clubs'''
 from django.conf import settings
 from django.contrib import messages
+from django.shortcuts import redirect
 from django.views.generic.edit import UpdateView
 from django.views.generic import DetailView
 from django.urls import reverse
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from BookClub.helpers import RankRequiredMixin
 from BookClub.models.club import Club
 from BookClub.models.club_membership import ClubMembership
-from BookClub.helpers import get_club_id
 from django.conf import settings
 
 
-class EditClubView(LoginRequiredMixin, RankRequiredMixin, DetailView, UpdateView):
+class EditClubView(LoginRequiredMixin, UserPassesTestMixin, DetailView, UpdateView):
     model = Club
     fields = ['name','description','rules','is_private']
-    requiredRanking = ClubMembership.UserRoles.OWNER
     template_name = 'edit_club.html'
+    permission_denied_message = "Access denied"
     
-    
+    def test_func(self):
+        try:
+            club = Club.objects.get(url_name=self.kwargs['url_name'])
+            rank = ClubMembership.objects.get(club=club, user=self.request.user)
+            if(rank.membership != ClubMembership.UserRoles.OWNER):
+                messages.add_message(self.request, messages.ERROR,'Access denied')
+                return False
+            else:
+                return True
+        except:
+            messages.add_message(self.request, messages.ERROR,'Club not found or you are not a member of this club')
+            return False
+         
+        
     
     def get_object(self):
         try:
-            return Club.objects.get(pk=self.requiredClub)
+            return Club.objects.get(url_name=self.kwargs['url_name'])
         except:
             messages.add_message(self.request,messages.ERROR,'Club not found!')
             return None
@@ -30,7 +43,7 @@ class EditClubView(LoginRequiredMixin, RankRequiredMixin, DetailView, UpdateView
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         try:
-            club = Club.objects.get(pk=self.requiredClub)
+            club = Club.objects.get(url_name=self.kwargs['url_name'])
             context['club'] = club
         except:
             return context

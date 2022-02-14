@@ -48,6 +48,6 @@ urlpatterns = [
     # '''Club URLs'''
     path('club/<str:club_url_name>/', views.ClubDashboardView.as_view(), name='club_dashboard'),
     path('club/<str:url_name>/member_list/', views.MembersListView.as_view(), name='member_list'),
-    path('edit_club/', views.EditClubView.as_view(), name='edit_club'),
+    path('edit_club/<str:url_name>/', views.EditClubView.as_view(), name='edit_club'),
 
 ]
