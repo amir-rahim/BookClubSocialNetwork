@@ -16,7 +16,10 @@ class ActionView(TemplateView):
     """Class for views that make an action"""
 
     def get(self, request, *args, **kwargs):
+
         return redirect(self.redirect_location, kwargs['url_name'])
+
+
 
     def post(self, request, *args, **kwargs):
         """
@@ -146,6 +149,9 @@ class JoinClubView(LoginRequiredMixin, View):
 
     redirect_location = 'available_clubs'
 
+    def get(self, request, *args, **kwargs):
+        return redirect(self.redirect_location)
+
     def is_actionable(self, currentUser, club):
         """Check if user can join/apply to a club"""
 
@@ -176,6 +182,7 @@ class JoinClubView(LoginRequiredMixin, View):
             currentUser = self.request.user
         except:
             messages.error(self.request, "Error, user or club not found.")
+            return redirect(self.redirect_location)
 
         if (self.is_actionable(currentUser, club)):
             self.action(currentUser, club)
@@ -189,6 +196,9 @@ class LeaveClubView(LoginRequiredMixin, View):
     """User can leave their club"""
 
     redirect_location = 'my_club_memberships'
+
+    def get(self, request, *args, **kwargs):
+        return redirect(self.redirect_location)
 
     def is_actionable(self, currentUser, club):
         """Check if currentUser is in the club"""
@@ -217,6 +227,7 @@ class LeaveClubView(LoginRequiredMixin, View):
             currentUser = self.request.user
         except:
             messages.error(self.request, "Error, user or club not found.")
+            return redirect(self.redirect_location)
 
         if (self.is_actionable(currentUser, club)):
             self.action(currentUser, club)
