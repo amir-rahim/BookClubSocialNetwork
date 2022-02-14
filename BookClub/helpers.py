@@ -38,6 +38,7 @@ class RankRequiredMixin:
         else:
             return redirect('home')
 
+
 """
 Helpers for checking the authentication level of the user.
 """
@@ -99,18 +100,21 @@ def remove_from_club(user, club):
 def is_club_private(club):
     return club.is_private
 
+
 def can_kick(club, user, targetUser):
     userRank = get_rank(user, club)
     targetUserRank = get_rank(targetUser, club)
 
-    if userRank == ClubMembership.UserRoles.OWNER:
+    if userRank == ClubMembership.UserRoles.OWNER and (targetUserRank == ClubMembership.UserRoles.MODERATOR or targetUserRank == ClubMembership.UserRoles.MEMBER):
         return True
     if userRank == ClubMembership.UserRoles.MODERATOR and targetUserRank == ClubMembership.UserRoles.MEMBER:
         return True
     return False
 
+
 def has_membership(club, user):
     return ClubMembership.objects.filter(user=user, club=club)
+
 
 def create_membership(club, user, membership):
     new_membership = ClubMembership(user=user, club=club, membership=membership)

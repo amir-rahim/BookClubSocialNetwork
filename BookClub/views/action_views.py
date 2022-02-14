@@ -12,7 +12,7 @@ class ActionView(TemplateView):
     """Class for views that make an action"""
 
     def get(self, request, *args, **kwargs):
-        return redirect(self.redirect_location)
+        return redirect('home')
 
     def post(self, request, *args, **kwargs):
         """
