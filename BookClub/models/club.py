@@ -62,11 +62,11 @@ class Club(models.Model):
             return None
         return clubs
 
-    def get_users(self, search_role):
+    def get_users(search_club, search_role):
         """Get all the users from the given club with the given authorization."""
 
         filterBy = (ClubMembership.objects
-                    .filter(club=self)
+                    .filter(club=search_club)
                     .filter(membership=search_role)
                     .values_list('user__id', flat=True))
         return User.objects.filter(id__in=filterBy)
