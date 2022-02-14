@@ -67,6 +67,13 @@ This is the list of members for this club.
         <hr class="solid">
 
         <p class="subtitle">Owner</p>
+        <div class="delete">
+            <form method="post" action="{% url 'delete_club' url_name=club.url_name %}">
+                {% csrf_token %}
+                <button type="submit" class="button is-danger is-small" onclick="return confirm('Confirm you want to delete club {{club.name}}?');">Delete Club</button>
+        </form>
+
+        </div>
 
         <hr class="solid">
 
@@ -125,6 +132,7 @@ This is the list of members for this club.
 
                                 <hr class="solid">
                                 <div class="buttons">
+
                                   <button class="button is-warning is-small" style="margin-right: 5px">View</button>
                                   {% if request_user.membership == 2 %}
                                     <form method="post" action="{% url 'transfer_ownership' url_name=club.url_name %}">
@@ -143,6 +151,7 @@ This is the list of members for this club.
                                         <button type="submit" class="button is-danger is-small" style="margin-right: 5px" onclick="return confirm('Confirm you want to kick {{moderator.username}}?');">Kick</button>
                                     </form>
                                   {% endif %}
+
                                 </div>
                             </div>
                         </div>
