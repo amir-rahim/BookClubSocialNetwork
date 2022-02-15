@@ -13,3 +13,4 @@ class BookList(models.Model):
     
     def addBooks(self):
         #TODO constraint not allowing duplicate books
+        pass
