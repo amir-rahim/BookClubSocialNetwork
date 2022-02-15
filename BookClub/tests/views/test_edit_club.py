@@ -62,7 +62,7 @@ class EditClubViewTestCase(TestCase):
         response = self.client.get(self.url)
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'edit_club2.html')
+        self.assertTemplateUsed(response, 'edit_club.html')
         self.assertEqual(len(messages), 0)
 
     def test_edit_club_logged_in_not_in_club(self):
