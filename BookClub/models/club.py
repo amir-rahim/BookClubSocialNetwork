@@ -29,7 +29,7 @@ class Club(models.Model):
     created_on = models.DateField(auto_now_add=True)
 
     def get_absolute_url(self):
-        return reverse('club_dashboard', kwargs = {'url_name': self.url_name})
+        return reverse('club_dashboard', kwargs = {'club_url_name': self.url_name})
 
     def __str__(self):
         return self.name
