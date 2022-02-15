@@ -1,5 +1,4 @@
-[
-    {
+[{
         "model": "BookClub.user",
         "pk": 1,
         "fields": {

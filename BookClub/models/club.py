@@ -9,6 +9,7 @@ from BookClub.models import *
 from django.db import IntegrityError, models
 from BookClub.models.club_membership import ClubMembership
 
+
 class Club(models.Model):
     name = models.CharField(unique=True, max_length=100, blank=False)
     url_name = models.CharField(
