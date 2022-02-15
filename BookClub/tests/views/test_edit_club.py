@@ -31,6 +31,7 @@ class EditClubViewTestCase(TestCase):
         self.data = {
             'name': "Johnathan Club",
             'description': 'This is a very cool club that is owned by a certain Johnathan. Reading certain books...',
+            'url_name':"JohnathansClub",
             'tagline': 'Welcome to Johnathan\'s club! We read the best books!!!',
             'rules': 'Don\'t be annoying',
             'is_private': False,
@@ -131,6 +132,7 @@ class EditClubViewTestCase(TestCase):
         response = self.client.post(self.url, self.data)
         responseUrl = reverse('club_dashboard', kwargs = {'club_url_name' : self.club.url_name})
         self.club = Club.objects.get(pk=1)
+        self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, expected_url=responseUrl, status_code=302, target_status_code=200)
         self.assertEqual(self.club.name, self.data['name'])
         self.assertEqual(self.club.description, self.data['description'])
@@ -138,7 +140,7 @@ class EditClubViewTestCase(TestCase):
         self.assertEqual(self.club.rules, self.data['rules'])
         self.assertEqual(self.club.is_private, self.data['is_private'])
         self.assertEqual(self.club.created_on, self.created_on_pre_test)
-        self.assertEqual(response.status_code, 302)
+
 
             
     def test_edit_club_post_valid_data_tagline_change(self):
