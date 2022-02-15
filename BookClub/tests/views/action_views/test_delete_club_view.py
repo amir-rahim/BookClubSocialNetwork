@@ -1,11 +1,11 @@
 from urllib import request, response
 from django.contrib import messages
 from django.test import TestCase
-from BookClub.tests.helpers import reverse_with_next
+from BookClub.tests.helpers import LogInTester, reverse_with_next
 from django.urls import reverse
 from BookClub.models import Club,ClubMembership,User
 
-class DeleteClubTest(TestCase):
+class DeleteClubTest(TestCase,LogInTester):
 
     fixtures = [
         'BookClub/tests/fixtures/default_clubs.json',
@@ -46,6 +46,7 @@ class DeleteClubTest(TestCase):
     
     def test_delete_club_not_logged_in_redirect(self):
         """Test for a guest unsuccessfully trying to delete a club"""
+        self.assertFalse(self._is_logged_in())
         response = self.client.post(self.url)
         self.assertEqual(response.status_code,302)
         self.client.post(self.url)
@@ -57,6 +58,7 @@ class DeleteClubTest(TestCase):
 
     def test_owner_can_delete_club(self):
         self.client.login(username=self.owner.user.username, password = "Password123")
+        self.assertTrue(self._is_logged_in())
         clubid=self.club.id
         club_exists_before = Club.objects.filter(pk=clubid).exists()
         self.assertEqual(club_exists_before,True)
@@ -68,6 +70,7 @@ class DeleteClubTest(TestCase):
         
     def test_moderator_cannot_delete_club(self):
         self.client.login(username=self.moderator.user.username, password = "Password123")
+        self.assertTrue(self._is_logged_in())
         club_exists_before = Club.objects.filter(pk=self.club.id).exists()
         self.assertEqual(club_exists_before,True)
         response = self.client.post(self.url)
@@ -78,6 +81,7 @@ class DeleteClubTest(TestCase):
         
     def test_member_cannot_delete_club(self):
         self.client.login(username=self.member.user.username, password = "Password123")
+        self.assertTrue(self._is_logged_in())
         club_exists_before = Club.objects.filter(pk=self.club.id).exists()
         self.assertEqual(club_exists_before,True)
         response = self.client.post(self.url)
@@ -88,6 +92,7 @@ class DeleteClubTest(TestCase):
 
     def test_applicant_cannot_delete_club(self):
         self.client.login(username=self.applicant.user.username, password = "Password123")
+        self.assertTrue(self._is_logged_in())
         club_exists_before = Club.objects.filter(pk=self.club.id).exists()
         self.assertEqual(club_exists_before,True)
         response = self.client.post(self.url)
