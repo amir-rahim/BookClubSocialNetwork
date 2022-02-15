@@ -10,7 +10,10 @@ from BookClub.models.club_membership import ClubMembership
 from django.contrib.messages import get_messages
 
 from BookClub.tests.helpers import reverse_with_next
-
+"""
+    Testing for edit_club
+    Carried out by Jack and Rav
+"""
 @tag('editclub')
 class EditClubViewTestCase(TestCase):
     fixtures = [
