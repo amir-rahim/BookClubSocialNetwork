@@ -32,10 +32,14 @@ class MembersListView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         club = Club.objects.get(url_name=self.kwargs['url_name'])
         user = User.objects.get(id = request.user.id)
+        try:
+            rank = ClubMembership.objects.get(user=user, club=club)
+        except:
+            rank = None
         context['club'] = club
         context['members'] = club.get_members()
         context['moderators'] = club.get_moderators()
         context['owner'] = club.get_club_owner()
-        context['request_user'] = ClubMembership.objects.get(user=user, club=club)
+        context['request_user'] = rank
 
         return context
