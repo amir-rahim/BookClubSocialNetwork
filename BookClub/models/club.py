@@ -5,14 +5,15 @@ from django.core.validators import RegexValidator
 
 from BookClub.models.user import User
 from BookClub.models import *
-from BookClub.models.club_membership import ClubMembership
 
+from django.db import IntegrityError, models
+from BookClub.models.club_membership import ClubMembership
 
 class Club(models.Model):
     name = models.CharField(unique=True, max_length=100, blank=False)
     url_name = models.CharField(
-            unique=True, 
-            max_length=100, 
+            unique=True,
+            max_length=100,
             blank=False,
             validators=[
             RegexValidator(
@@ -73,7 +74,7 @@ class Club(models.Model):
 
     def get_members(self):
         """Get all the members from the given club."""
-        
+
         return self.get_users(ClubMembership.UserRoles.MEMBER)
 
     def get_moderators(self):
@@ -86,3 +87,30 @@ class Club(models.Model):
 
         return self.get_users(ClubMembership.UserRoles.OWNER)
 
+    def add_user(self, user, rank):
+        try:
+            ClubMembership.objects.create(
+                user = user,
+                club = self,
+                membership = rank,
+            )
+        except IntegrityError:
+            pass
+
+    def add_member(self, user):
+        self.add_user(user, ClubMembership.UserRoles.MEMBER)
+
+    def add_moderator(self, user):
+        self.add_user(user, ClubMembership.UserRoles.MODERATOR)
+
+    def add_owner(self, user):
+        if not (ClubMembership.objects.filter(club=self, membership=ClubMembership.UserRoles.OWNER).exists()):
+            self.add_user(user, ClubMembership.UserRoles.OWNER)
+        else:
+            #print("Owner already set")
+            pass
+    def add_applicant(self, user):
+        self.add_user(user, ClubMembership.UserRoles.APPLICANT)
+
+    def remove_from_club(self, user):
+        ClubMembership.objects.filter(user=user, club=self).delete()

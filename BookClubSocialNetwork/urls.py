@@ -31,6 +31,11 @@ urlpatterns = [
     path('sign_up/', views.SignUpView.as_view(), name='sign_up'),
     path('log_out/', views.LogOutView.as_view(), name='log_out'),
 
+    # '''User URLs'''
+    path('user_dashboard/', views.UserDashboardView.as_view(), name='user_dashboard'),
+    path('edit_profile/', views.EditProfileView.as_view(), name='edit_profile'),
+    path('password_change/', views.ChangePasswordView.as_view(), name='password_change'),
+    
     # '''Action URLs'''
     path('join_club/<str:url_name>/', views.JoinClubView.as_view(), name='join_club'),
     path('leave_club/<str:url_name>/', views.LeaveClubView.as_view(), name='leave_club'),
@@ -48,6 +53,5 @@ urlpatterns = [
     # '''Club URLs'''
     path('club/<str:club_url_name>/', views.ClubDashboardView.as_view(), name='club_dashboard'),
     path('club/<str:url_name>/member_list/', views.MembersListView.as_view(), name='member_list')
-
 
 ]
