@@ -15,7 +15,7 @@ class CreateClubView(LoginRequiredMixin, CreateView):
     template_name = 'create_club.html'
     model = Club
     form_class = ClubForm
-    success_url = reverse_lazy('home') # need to remove this attribute and amend 'get_absolute_url' method in Club model
+    # success_url = reverse_lazy('home') # need to remove this attribute and amend 'get_absolute_url' method in Club model
 
     def form_valid(self, form):
         response = super().form_valid(form)
