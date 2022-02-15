@@ -11,7 +11,7 @@ from django.contrib.messages import get_messages
 
 from BookClub.tests.helpers import reverse_with_next
 
-@tag('current')
+@tag('editclub')
 class EditClubViewTestCase(TestCase):
     fixtures = [
         "BookClub/tests/fixtures/default_users.json",
