@@ -1,4 +1,5 @@
 '''Action Related Views'''
+
 from email import message
 from multiprocessing import context
 from django.views.generic import TemplateView, View, DeleteView

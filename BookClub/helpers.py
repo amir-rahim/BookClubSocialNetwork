@@ -5,7 +5,6 @@ from BookClub.models.club import Club
 from BookClub.models.club_membership import ClubMembership
 from django.contrib import messages
 from django.db.models import Q
-from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 
 from BookClub.models.user import User
