@@ -4,6 +4,7 @@ from django.test import TestCase
 from BookClub.tests.helpers import LogInTester, reverse_with_next
 from django.urls import reverse
 from BookClub.models import Club,ClubMembership,User
+from django.core.exceptions import ObjectDoesNotExist
 
 class DeleteClubTest(TestCase,LogInTester):
 
@@ -101,8 +102,19 @@ class DeleteClubTest(TestCase,LogInTester):
         club_exists_after = Club.objects.filter(pk=self.club.id).exists()
         self.assertEqual(club_exists_before,club_exists_after)
         
-    
-        
+    def test_owner_delete_invalid_club(self):
+        self.client.login(username=self.owner.user.username, password='Password123')
+        response = self.client.post(reverse('delete_club', kwargs={'url_name': "wrong"}))
+        redirect_url = '/'
+        with self.assertRaises(ObjectDoesNotExist):
+            Club.objects.get(url_name = "wrong").exists()
+
+        response_message = self.client.get(redirect_url)
+        messages_list = list(response_message.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.ERROR)
+
+        self.assertRedirects(response,redirect_url,status_code=302,target_status_code=200)
 
     #Possible test: delete another club's club
     

@@ -255,12 +255,13 @@ class DeleteClubView(LoginRequiredMixin,View):
         try:
             club = Club.objects.get(url_name=self.kwargs['url_name'])
             currentUser = self.request.user
+            if self.is_actionable(currentUser,club):
+                self.action(currentUser,club)
+                return redirect(self.redirect_location)
+            else:
+                self.is_not_actionable()
         except:
             messages.error(self.request, "Error, user or club not found.")
-        if self.is_actionable(currentUser,club):
-            self.action(currentUser,club)
-            return redirect(self.redirect_location)
-        else:
-            self.is_not_actionable()
+        
         #Redirects to home if user cannot delete club
         return redirect('home')
