@@ -23,12 +23,16 @@ This is the list of members for this club.
                 <li><a class="is-active" href="{% url 'member_list' club.url_name %}"><b>Member List</b></a></li>
             </ul>
 
-            <p class="menu-label">Club Administration</p>
+            {% if user == club.get_club_owner %}
 
-            <ul class="menu-list">
-                <li><a>Manage Club</a></li>
-                <li><a>Club Settings</a></li>
-            </ul>
+                <p class="menu-label">Club Administration</p>
+
+                <ul class="menu-list">
+                    <li><a>Manage Club</a></li>
+                    <li><a>Club Settings</a></li>
+                </ul>
+
+            {% endif %}
 
             <p class="menu-label">Forum & Reviews</p>
 
