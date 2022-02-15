@@ -16,14 +16,23 @@ This is the list of members for this club.
 
         <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
 
-            <p class="menu-label">Club Administration</p>
+            <p class="menu-label">Club Views</p>
 
             <ul class="menu-list">
-                <li><a>Dashboard</a></li>
-                <li><a class="is-active"><b>Member List</b></a></li>
-                <li><a>Manage Club</a></li>
-                <li><a>Club Settings</a></li>
+                <li><a href="{% url 'club_dashboard' club.url_name %}">Dashboard</a></li>
+                <li><a class="is-active" href="{% url 'member_list' club.url_name %}"><b>Member List</b></a></li>
             </ul>
+
+            {% if user == club.get_club_owner %}
+
+                <p class="menu-label">Club Administration</p>
+
+                <ul class="menu-list">
+                    <li><a>Manage Club</a></li>
+                    <li><a>Club Settings</a></li>
+                </ul>
+
+            {% endif %}
 
             <p class="menu-label">Forum & Reviews</p>
 

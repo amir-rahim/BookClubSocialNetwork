@@ -5,6 +5,8 @@ from django.core.validators import RegexValidator
 
 from BookClub.models.user import User
 from BookClub.models import *
+
+from django.db import IntegrityError, models
 from BookClub.models.club_membership import ClubMembership
 
 
@@ -40,7 +42,7 @@ class Club(models.Model):
         return ClubMembership.objects.filter(club=self, membership__gte=ClubMembership.UserRoles.MEMBER).count()
 
     def is_member(self, user):
-        return ClubMembership.objects.filter(club=self, user=user).exists()
+        return ClubMembership.objects.filter(club=self, user=user, membership__gte=ClubMembership.UserRoles.MEMBER)
 
     # Has unimplemented dependencies
     def get_number_of_meetings(self):
@@ -62,11 +64,11 @@ class Club(models.Model):
             return None
         return clubs
 
-    def get_users(search_club, search_role):
+    def get_users(self, search_role):
         """Get all the users from the given club with the given authorization."""
 
         filterBy = (ClubMembership.objects
-                    .filter(club=search_club)
+                    .filter(club=self)
                     .filter(membership=search_role)
                     .values_list('user__id', flat=True))
         return User.objects.filter(id__in=filterBy)
@@ -85,3 +87,31 @@ class Club(models.Model):
         """Get all the owner from the given club."""
 
         return self.get_users(ClubMembership.UserRoles.OWNER)
+
+    def add_user(self, user, rank):
+        try:
+            ClubMembership.objects.create(
+                user = user,
+                club = self,
+                membership = rank,
+            )
+        except IntegrityError:
+            pass
+
+    def add_member(self, user):
+        self.add_user(user, ClubMembership.UserRoles.MEMBER)
+
+    def add_moderator(self, user):
+        self.add_user(user, ClubMembership.UserRoles.MODERATOR)
+
+    def add_owner(self, user):
+        if not (ClubMembership.objects.filter(club=self, membership=ClubMembership.UserRoles.OWNER).exists()):
+            self.add_user(user, ClubMembership.UserRoles.OWNER)
+        else:
+            #print("Owner already set")
+            pass
+    def add_applicant(self, user):
+        self.add_user(user, ClubMembership.UserRoles.APPLICANT)
+
+    def remove_from_club(self, user):
+        ClubMembership.objects.filter(user=user, club=self).delete()

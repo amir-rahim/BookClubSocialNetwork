@@ -31,6 +31,11 @@ urlpatterns = [
     path('sign_up/', views.SignUpView.as_view(), name='sign_up'),
     path('log_out/', views.LogOutView.as_view(), name='log_out'),
 
+    # '''User URLs'''
+    path('user_dashboard/', views.UserDashboardView.as_view(), name='user_dashboard'),
+    path('edit_profile/', views.EditProfileView.as_view(), name='edit_profile'),
+    path('password_change/', views.ChangePasswordView.as_view(), name='password_change'),
+    
     # '''Action URLs'''
     path('join_club/<str:url_name>/', views.JoinClubView.as_view(), name='join_club'),
     path('leave_club/<str:url_name>/', views.LeaveClubView.as_view(), name='leave_club'),
@@ -39,7 +44,6 @@ urlpatterns = [
     path('transfer_ownership/<str:url_name>/', views.TransferOwnershipView.as_view(), name='transfer_ownership'),
     path('kick_member/<str:url_name>/', views.KickMemberView.as_view(), name='kick_member'),
     path('delete_club/<str:url_name>/',views.DeleteClubView.as_view(),name='delete_club'),
-    
     # '''Membership URLs'''
     path('club/available_clubs/', views.AvailableClubsView.as_view(), name='available_clubs'),
     path('club/my_club_memberships/', views.MyClubMembershipsView.as_view(), name='my_club_memberships'),
