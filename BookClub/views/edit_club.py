@@ -16,8 +16,7 @@ from django.conf import settings
 class EditClubView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Club
     fields = ['name','description','tagline','rules','is_private']
-    # template_name = 'edit_club.html'
-    template_name = 'edit_club2.html'
+    template_name = 'edit_club.html'
     permission_denied_message = "Access denied"
     raise_exception = False
     
