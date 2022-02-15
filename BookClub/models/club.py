@@ -11,8 +11,8 @@ from BookClub.models.club_membership import ClubMembership
 class Club(models.Model):
     name = models.CharField(unique=True, max_length=100, blank=False)
     url_name = models.CharField(
-            unique=True, 
-            max_length=100, 
+            unique=True,
+            max_length=100,
             blank=False,
             validators=[
             RegexValidator(
@@ -28,7 +28,7 @@ class Club(models.Model):
     created_on = models.DateField(auto_now_add=True)
 
     def get_absolute_url(self):
-        return reverse('club_dashboard', kwargs = {'url_name': self.url_name})
+        return reverse('club_dashboard', kwargs = {'club_url_name': self.url_name})
 
     def __str__(self):
         return self.name
@@ -73,7 +73,7 @@ class Club(models.Model):
 
     def get_members(self):
         """Get all the members from the given club."""
-        
+
         return self.get_users(ClubMembership.UserRoles.MEMBER)
 
     def get_moderators(self):
@@ -85,4 +85,3 @@ class Club(models.Model):
         """Get all the owner from the given club."""
 
         return self.get_users(ClubMembership.UserRoles.OWNER)
-
