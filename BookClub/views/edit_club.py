@@ -15,16 +15,15 @@ from django.conf import settings
 
 class EditClubView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Club
-    form_class = ClubForm
-    # fields = ['name','description','rules','is_private']
+    fields = ['name','description','tagline','rules','is_private']
     # template_name = 'edit_club.html'
     template_name = 'edit_club2.html'
     permission_denied_message = "Access denied"
     raise_exception = False
-
+    
     def test_func(self):
         try:
-            club = Club.objects.get(url_name=self.kwargs['url_name'])
+            club = Club.objects.get(url_name=self.kwargs['club_url_name'])
             rank = ClubMembership.objects.get(club=club, user=self.request.user)
             if(rank.membership != ClubMembership.UserRoles.OWNER):
                 messages.add_message(self.request, messages.ERROR,'Access denied')
@@ -35,11 +34,9 @@ class EditClubView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             messages.add_message(self.request, messages.ERROR,'Club not found or you are not a member of this club')
             return False
 
-
-
     def get_object(self):
         try:
-            return Club.objects.get(url_name=self.kwargs['url_name'])
+            return Club.objects.get(url_name=self.kwargs['club_url_name'])
         except:
             messages.add_message(self.request,messages.ERROR,'Club not found!')
             return None
@@ -47,7 +44,7 @@ class EditClubView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         try:
-            club = Club.objects.get(url_name=self.kwargs['url_name'])
+            club = Club.objects.get(url_name=self.kwargs['club_url_name'])
             context['club'] = club
         except:
             return context

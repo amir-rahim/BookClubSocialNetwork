@@ -1,54 +1,50 @@
-{% extends 'base.html' %}
+{% extends 'base_content.html' %}
 
-{% block body %}
+{% block page_title %}
+Create Club
+{% endblock page_title %}
 
-<section class="hero is-fullheight">
-    <div class="hero-body is-link">
-        <div class="container has-text-centered">
-            <div class="column is-4 is-offset-4">
-                <h3 class="title has-text-black">Edit Club</h3>
-                <hr class="login-hr">
-                <div class="box">
-                    <figure class="avatar" style="padding-bottom: 20px;">
-                        <img class="is-rounded" src="https://via.placeholder.com/128x128">
-                    </figure>
-                    
-                    {% if messages %}
+{% block page_subtitle %}
+This is a page to create your own club.
+{% endblock page_subtitle %}
 
-                        {% for message in messages %}
+{% block content %}
 
-                            {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
-                                <article class="message is-success" style="padding-bottom: 0px;">
-                                    <div class="message-header">
-                                        {{ message }}
-                                    </div>
-                                </article>
-                            {% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                                <article class="message is-danger" style="padding-bottom: 0px;">
-                                    <div class="message-header">
-                                        {{ message }}
-                                    </div>
-                                </article>
-                            {% endif %}
+<div class="columns">
+    <div class="column is-9">
 
-                        {% endfor %}
+        <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a>My Club Memberships</a></li>
+                <li><a>{{form.name.data}}</a></li>
+                <li><a>Edit Club</a></li>
+            </ul>
+        </nav>
 
-                    {% endif %}
-
-                    <form method="post">
-                        {% csrf_token %}
-                        {% include 'partials/bulma_form.html' with form=form %}
-                        <input type="submit" value="Create Club" class="button is-link">
-                    </form>
-
+        <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">Edit club</h1>
+                    <h2 class="subtitle">Edit the details of your club here</h2>
                 </div>
-                <p class="has-text-grey">
-                    <a href="{% url 'login' %}">Login</a> &nbsp;·&nbsp;
-                    <a href="#">Need Help?</a>
-                </p>
             </div>
+        </section>
+
+        <div class="columns">
+
+            <div class="column is-12">
+                <form method="post">
+                  {% csrf_token %}
+                  {% include 'partials/bulma_form.html' with form=form %}
+                  <input type="submit" value="Update Club" class="button is-link">
+                </form>
+            </div>
+
         </div>
+
     </div>
-</section>
+
+</div>
 
 {% endblock %}
