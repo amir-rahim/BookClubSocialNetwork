@@ -76,6 +76,13 @@ This is the list of members for this club.
         <hr class="solid">
 
         <p class="subtitle">Owner</p>
+        <div class="delete">
+            <form method="post" action="{% url 'delete_club' url_name=club.url_name %}">
+                {% csrf_token %}
+                <button type="submit" class="button is-danger is-small" onclick="return confirm('Confirm you want to delete club {{club.name}}?');">Delete Club</button>
+        </form>
+
+        </div>
 
         <hr class="solid">
 
@@ -134,22 +141,26 @@ This is the list of members for this club.
 
                                 <hr class="solid">
                                 <div class="buttons">
+
                                   <button class="button is-warning is-small" style="margin-right: 5px">View</button>
-                                  <form method="post" action="{% url 'transfer_ownership' url_name=club.url_name %}">
-                                    <input type="hidden" name="user" value="{{ moderator.username }}" />
-                                    {% csrf_token %}
-                                    <button type="submit" class="button is-success is-small" style="margin-right: 5px" onclick="return confirm('Confirm you want to transfer ownership to {{moderator.username}}?');">Transfer Ownership</button>
-                                  </form>
-                                  <form method="post" action="{% url 'demote_member' url_name=club.url_name %}">
+                                  {% if request_user.membership == 2 %}
+                                    <form method="post" action="{% url 'transfer_ownership' url_name=club.url_name %}">
                                       <input type="hidden" name="user" value="{{ moderator.username }}" />
                                       {% csrf_token %}
-                                      <button type="submit" class="button is-danger is-small" style="margin-right: 5px" onclick="return confirm('Confirm you want to demote {{moderator.username}}?');">Demote</button>
-                                  </form>
-                                  <form method="post" action="{% url 'kick_member' url_name=club.url_name %}">
-                                      <input type="hidden" name="user" value="{{ moderator.username }}" />
-                                      {% csrf_token %}
-                                      <button type="submit" class="button is-danger is-small" style="margin-right: 5px" onclick="return confirm('Confirm you want to kick {{moderator.username}}?');">Kick</button>
-                                  </form>
+                                      <button type="submit" class="button is-success is-small" style="margin-right: 5px" onclick="return confirm('Confirm you want to transfer ownership to {{moderator.username}}?');">Transfer Ownership</button>
+                                    </form>
+                                    <form method="post" action="{% url 'demote_member' url_name=club.url_name %}">
+                                        <input type="hidden" name="user" value="{{ moderator.username }}" />
+                                        {% csrf_token %}
+                                        <button type="submit" class="button is-danger is-small" style="margin-right: 5px" onclick="return confirm('Confirm you want to demote {{moderator.username}}?');">Demote</button>
+                                    </form>
+                                    <form method="post" action="{% url 'kick_member' url_name=club.url_name %}">
+                                        <input type="hidden" name="user" value="{{ moderator.username }}" />
+                                        {% csrf_token %}
+                                        <button type="submit" class="button is-danger is-small" style="margin-right: 5px" onclick="return confirm('Confirm you want to kick {{moderator.username}}?');">Kick</button>
+                                    </form>
+                                  {% endif %}
+
                                 </div>
                             </div>
                         </div>
@@ -188,16 +199,20 @@ This is the list of members for this club.
 
                                 <div class="buttons">
                                     <button class="button is-warning is-small">View</button>
-                                    <form method="post" action="{% url 'promote_member' url_name=club.url_name %}">
-                                      <input type="hidden" name="user" value="{{ member.username }}" />
-                                      {% csrf_token %}
-                                      <button type="submit" class="button is-success is-small" style="margin-right: 5px" onclick="return confirm('Confirm you want to promote {{member.username}}?');">Promote</button>
-                                    </form>
-                                    <form method="post" action="{% url 'kick_member' url_name=club.url_name %}">
-                                      <input type="hidden" name="user" value="{{ member.username }}" />
-                                      {% csrf_token %}
-                                      <button type="submit" class="button is-danger is-small" style="margin-right: 5px" onclick="return confirm('Confirm you want to kick {{member.username}}?');">Kick</button>
-                                    </form>
+                                    {% if request_user.membership == 2 %}
+                                      <form method="post" action="{% url 'promote_member' url_name=club.url_name %}">
+                                        <input type="hidden" name="user" value="{{ member.username }}" />
+                                        {% csrf_token %}
+                                        <button type="submit" class="button is-success is-small" style="margin-right: 5px" onclick="return confirm('Confirm you want to promote {{member.username}}?');">Promote</button>
+                                      </form>
+                                    {% endif %}
+                                    {% if request_user.membership == 2 or request_user.membership == 1 %}
+                                      <form method="post" action="{% url 'kick_member' url_name=club.url_name %}">
+                                        <input type="hidden" name="user" value="{{ member.username }}" />
+                                        {% csrf_token %}
+                                        <button type="submit" class="button is-danger is-small" style="margin-right: 5px" onclick="return confirm('Confirm you want to kick {{member.username}}?');">Kick</button>
+                                      </form>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>

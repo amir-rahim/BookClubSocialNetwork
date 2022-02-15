@@ -1,9 +1,11 @@
 '''Action Related Views'''
-from django.views.generic import TemplateView, View
+from django.views.generic import TemplateView, View, DeleteView
 from BookClub.helpers import *
-from BookClub.models.club import Club, User
+from BookClub.models.club import Club
+from BookClub.models.user import User
+from BookClub.models.club_membership import ClubMembership
 from django.shortcuts import redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -12,7 +14,7 @@ class ActionView(TemplateView):
     """Class for views that make an action"""
 
     def get(self, request, *args, **kwargs):
-        return redirect(self.redirect_location)
+        return redirect('home')
 
     def post(self, request, *args, **kwargs):
         """
@@ -56,7 +58,6 @@ class PromoteMemberView(LoginRequiredMixin, ActionView):
     """Promoting a member to a moderator"""
 
     redirect_location = 'member_list'
-    requiredRanking = ClubMembership.UserRoles.OWNER
 
     def is_actionable(self, currentUser, targetUser, club):
         """Check if member can be promoted."""
@@ -77,7 +78,6 @@ class DemoteMemberView(LoginRequiredMixin, ActionView):
     """Demoting a moderator to a member"""
 
     redirect_location = 'member_list'
-    requiredRanking = ClubMembership.UserRoles.OWNER  # check with Jack
 
     def is_actionable(self, currentUser, targetUser, club):
         """Check if moderator can be demoted"""
@@ -98,7 +98,6 @@ class KickMemberView(LoginRequiredMixin, ActionView):
     """Kicks the target user from the club"""
 
     redirect_location = 'member_list'
-    requiredRanking = ClubMembership.UserRoles.OWNER or ClubMembership.UserRoles.MODERATOR
 
     def is_actionable(self, currentUser, targetUser, club):
         """Check if currentUser can kick targetUser"""
@@ -119,7 +118,6 @@ class TransferOwnershipView(LoginRequiredMixin, ActionView):
     """Transfer ownership to another moderator"""
 
     redirect_location = 'member_list'
-    requiredRanking = ClubMembership.UserRoles.OWNER
 
     def is_actionable(self, currentUser, targetUser, club):
         """Check if the ownership can be transferred to a valid moderator"""
@@ -141,6 +139,9 @@ class JoinClubView(LoginRequiredMixin, View):
     """Users can join/apply to clubs"""
 
     redirect_location = 'available_clubs'
+
+    def get(self, request, *args, **kwargs):
+        return redirect(self.redirect_location)
 
     def is_actionable(self, currentUser, club):
         """Check if user can join/apply to a club"""
@@ -172,6 +173,7 @@ class JoinClubView(LoginRequiredMixin, View):
             currentUser = self.request.user
         except:
             messages.error(self.request, "Error, user or club not found.")
+            return redirect(self.redirect_location)
 
         if (self.is_actionable(currentUser, club)):
             self.action(currentUser, club)
@@ -185,6 +187,9 @@ class LeaveClubView(LoginRequiredMixin, View):
     """User can leave their club"""
 
     redirect_location = 'my_club_memberships'
+
+    def get(self, request, *args, **kwargs):
+        return redirect(self.redirect_location)
 
     def is_actionable(self, currentUser, club):
         """Check if currentUser is in the club"""
@@ -213,6 +218,7 @@ class LeaveClubView(LoginRequiredMixin, View):
             currentUser = self.request.user
         except:
             messages.error(self.request, "Error, user or club not found.")
+            return redirect(self.redirect_location)
 
         if (self.is_actionable(currentUser, club)):
             self.action(currentUser, club)
@@ -220,3 +226,36 @@ class LeaveClubView(LoginRequiredMixin, View):
             self.is_not_actionable(currentUser, club)
 
         return redirect(self.redirect_location)
+
+#Still unsure about where to redirect in successful/unsuccessful action
+class DeleteClubView(LoginRequiredMixin,View):
+
+    redirect_location = 'available_clubs'
+
+
+    def is_actionable(self,currentUser,club):
+        return has_owner_rank(currentUser,club)
+
+    def is_not_actionable(self):
+
+        messages.error(self.request, f"You are not allowed to delete the club!")
+
+    def action(self,currentUser,club):
+        delete_club(club)
+        messages.success(self.request, "You have deleted the club.")
+
+
+    def post(self, request, *args, **kwargs):
+        try:
+            club = Club.objects.get(url_name=self.kwargs['url_name'])
+            currentUser = self.request.user
+            if self.is_actionable(currentUser,club):
+                self.action(currentUser,club)
+                return redirect(self.redirect_location)
+            else:
+                self.is_not_actionable()
+        except:
+            messages.error(self.request, "Error, user or club not found.")
+
+        #Redirects to home if user cannot delete club
+        return redirect('home')
