@@ -17,11 +17,12 @@ class ClubDashboardViewTest(TestCase):
     def setUp(self):
         self.user = User.objects.get(username="johndoe")
         self.jane = User.objects.get(username="janedoe")
-        self.jack = User.objects.get(username="jackdoe")
+        self.jack = User.objects.get(username="jackdoe") 
         self.club = Club.objects.get(name="Johnathan Club")
         self.url = reverse("club_dashboard", kwargs={"club_url_name": self.club.url_name})
         self.private_club = Club.objects.get(name="Jack Club")
         self.private_url = reverse("available_clubs")
+        
 
 
     def test_club_dashboard_url(self):
@@ -103,3 +104,8 @@ class ClubDashboardViewTest(TestCase):
         self.assertNotContains(response, "Club Administration")
         self.assertNotContains(response, "Manage Club")
         self.assertNotContains(response, "Club Settings")
+
+    def test_applicant_cannot_see_private_clubs(self):
+        self.client.login(username=self.jack.username, password="Password123")
+        response = self.client.get(reverse("club_dashboard", kwargs={"club_url_name": self.private_club.url_name}))
+        self.assertRedirects(response, expected_url=reverse("available_clubs"), status_code=302, target_status_code=200)
