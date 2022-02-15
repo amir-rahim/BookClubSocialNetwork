@@ -61,9 +61,9 @@ class EditClubViewTestCase(TestCase):
         response = self.client.get(self.url)
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'edit_club.html')
+        self.assertTemplateUsed(response, 'edit_club2.html')
         self.assertEqual(len(messages), 0)
-        
+
     def test_edit_club_logged_in_not_in_club(self):
         self.client.login(username='janedoe', password='Password123')
         response = self.client.get(self.url)
@@ -78,7 +78,7 @@ class EditClubViewTestCase(TestCase):
         self.assertTemplateNotUsed(response, 'edit_club.html')
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
-        
+
     def test_edit_club_logged_in_moderator_rank(self):
         user = User.objects.get(pk=5)
         self.client.login(username=user.username, password='Password123')
@@ -87,13 +87,15 @@ class EditClubViewTestCase(TestCase):
         self.assertTemplateNotUsed(response, 'edit_club.html')
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
-        
+
     def test_edit_club_post_valid_data(self):
         self.client.login(username=self.user.username, password='Password123')
         self.created_on_pre_test = self.club.created_on
-        response = self.client.post(self.url, self.data)
-        self.assertEqual(response.status_code, 302)
+        response = self.client.post(self.url, self.data, follow = True)
         self.club = Club.objects.get(pk=1)
+        response_url = reverse('club_dashboard', kwargs={'club_url_name': self.club.url_name})
+        self.assertEqual(response.status_code, 302)
+
         self.assertEqual(self.club.name, self.data['name'])
         self.assertEqual(self.club.description, self.data['description'])
         self.assertEqual(self.club.tagline, self.data['tagline'])

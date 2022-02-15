@@ -8,17 +8,20 @@ from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from BookClub.helpers import RankRequiredMixin
 from BookClub.models.club import Club
+from BookClub.forms.club import ClubForm
 from BookClub.models.club_membership import ClubMembership
 from django.conf import settings
 
 
-class EditClubView(LoginRequiredMixin, UserPassesTestMixin, DetailView, UpdateView):
+class EditClubView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Club
-    fields = ['name','description','rules','is_private']
-    template_name = 'edit_club.html'
+    form_class = ClubForm
+    # fields = ['name','description','rules','is_private']
+    # template_name = 'edit_club.html'
+    template_name = 'edit_club2.html'
     permission_denied_message = "Access denied"
     raise_exception = False
-    
+
     def test_func(self):
         try:
             club = Club.objects.get(url_name=self.kwargs['url_name'])
@@ -31,16 +34,16 @@ class EditClubView(LoginRequiredMixin, UserPassesTestMixin, DetailView, UpdateVi
         except:
             messages.add_message(self.request, messages.ERROR,'Club not found or you are not a member of this club')
             return False
-         
-        
-    
+
+
+
     def get_object(self):
         try:
             return Club.objects.get(url_name=self.kwargs['url_name'])
         except:
             messages.add_message(self.request,messages.ERROR,'Club not found!')
             return None
-        
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         try:
@@ -49,9 +52,10 @@ class EditClubView(LoginRequiredMixin, UserPassesTestMixin, DetailView, UpdateVi
         except:
             return context
         return context
-        
-    def get_success_url(self):
-        messages.add_message(self.request,messages.SUCCESS,'Club updated!')
-        return reverse(settings.REDIRECT_URL_WHEN_LOGGED_IN)
-    
+
+    # def get_success_url(self):
+    #     messages.add_message(self.request,messages.SUCCESS,'Club updated!')
+    #     print('got to success url')
+    #     return reverse(settings.REDIRECT_URL_WHEN_LOGGED_IN)
+
     #TODO: more testing
