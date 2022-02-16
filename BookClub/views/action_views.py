@@ -99,6 +99,43 @@ class DemoteMemberView(LoginRequiredMixin, ActionView):
     def post(self, request, *args, **kwargs):
         return super().post(self, request, *args, **kwargs)
 
+class ApproveApplicantView(LoginRequiredMixin, ActionView):
+    """Promoting a member to a moderator"""
+
+    redirect_location = 'applicant_list'
+
+    def is_actionable(self, currentUser, targetUser, club):
+        """Check if member can be promoted."""
+
+        return ((has_owner_rank(currentUser, club) or has_moderator_rank(currentUser,club)) and has_applicant_rank(targetUser, club))
+
+    def action(self, currentUser, targetUser, club):
+        """Promotes the member to moderator"""
+
+        messages.success(self.request, f"You have successfully approved the applicant.")
+        set_rank(targetUser, club, ClubMembership.UserRoles.MEMBER)
+
+    def post(self, request, *args, **kwargs):
+        return super().post(self, request, *args, **kwargs)
+
+class RejectApplicantView(LoginRequiredMixin, ActionView):
+    """Rejecting an applicant"""
+
+    redirect_location = 'applicant_list'
+
+    def is_actionable(self, currentUser, targetUser, club):
+        """Check if applicant can be rejected."""
+
+        return ((has_owner_rank(currentUser, club) or has_moderator_rank(currentUser,club)) and has_applicant_rank(targetUser, club))
+
+    def action(self, currentUser, targetUser, club):
+        """Promotes the member to moderator"""
+
+        messages.success(self.request, f"You have successfully rejected the applicant.")
+        remove_from_club(targetUser, club)
+
+    def post(self, request, *args, **kwargs):
+        return super().post(self, request, *args, **kwargs)
 
 class KickMemberView(LoginRequiredMixin, ActionView):
     """Kicks the target user from the club"""
