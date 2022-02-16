@@ -35,7 +35,7 @@ urlpatterns = [
     
     # '''Club URLs'''
     path('club_dashboard/', views.club_dashboard, name='club_dashboard'), 
-    path('available_clubs/', views.AvailableClubsView.as_view(), name='available_clubs'),
-    path('my_club_memberships/', views.MyClubMembershipsView.as_view(), name='my_club_memberships'),
-    path('create_club/', views.clubs.CreateClubView.as_view(), name = 'create_club')
+    path('club/', views.AvailableClubsView.as_view(), name='available_clubs'),
+    path('memberships/', views.MyClubMembershipsView.as_view(), name='my_club_memberships'),
+    path('create_club/', views.clubs.CreateClubView.as_view(), name = 'create_club'),
 ]
