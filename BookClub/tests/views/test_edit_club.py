@@ -50,9 +50,10 @@ class EditClubViewTestCase(TestCase):
         )
         self.assertTemplateUsed(response, 'login.html')
 
-    def test_get_edit_club_redirects_when_not_logged_in(self):
-        redirect_url = reverse_with_next('login', self.url)
-        response = self.client.get(self.url, follow=True)
+    def test_get_edit_club_redirects_when_not_logged_in_invalid_club(self):
+        url = reverse('edit_club', kwargs= {'club_url_name' : 'fakeclub'})
+        redirect_url = reverse_with_next('login', url)
+        response = self.client.get(url, follow=True)
         self.assertRedirects(response, redirect_url,
             status_code=302, target_status_code=200, fetch_redirect_response=True
         )
@@ -72,14 +73,14 @@ class EditClubViewTestCase(TestCase):
     def test_edit_club_logged_in_not_in_club(self):
         self.client.login(username='janedoe', password='Password123')
         response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 302)
         self.assertTemplateNotUsed(response, 'edit_club.html')
 
     def test_edit_club_logged_in_member_rank(self):
         user = User.objects.get(pk=3)
         self.client.login(username=user.username, password='Password123')
         response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 302)
         self.assertTemplateNotUsed(response, 'edit_club.html')
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
@@ -88,7 +89,7 @@ class EditClubViewTestCase(TestCase):
         user = User.objects.get(pk=5)
         self.client.login(username=user.username, password='Password123')
         response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 302)
         self.assertTemplateNotUsed(response, 'edit_club.html')
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)

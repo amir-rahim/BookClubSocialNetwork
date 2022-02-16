@@ -1,11 +1,11 @@
 """Unit tests of the club dashboard view."""
-from django.test import TestCase
+from django.test import TestCase, tag
 from BookClub.models import Club, User, ClubMembership
 from django.urls import reverse
 from BookClub.tests.helpers import reverse_with_next
 from django.test import Client
 
-
+@tag('clubdashboard')
 class ClubDashboardViewTest(TestCase):
     """Unit tests of the club page view."""
     fixtures = [
@@ -108,4 +108,9 @@ class ClubDashboardViewTest(TestCase):
     def test_applicant_cannot_see_private_clubs(self):
         self.client.login(username=self.jack.username, password="Password123")
         response = self.client.get(reverse("club_dashboard", kwargs={"club_url_name": self.private_club.url_name}))
+        self.assertRedirects(response, expected_url=reverse("available_clubs"), status_code=302, target_status_code=200)
+        
+    def test_invalid_club(self):
+        self.client.login(username=self.jack.username, password="Password123")
+        response = self.client.get(reverse("club_dashboard", kwargs={"club_url_name":'fakeclub'}))
         self.assertRedirects(response, expected_url=reverse("available_clubs"), status_code=302, target_status_code=200)

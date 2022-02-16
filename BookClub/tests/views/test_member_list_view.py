@@ -1,10 +1,10 @@
 """Tests of the Join Club view."""
-from django.test import TestCase
+from django.test import TestCase, tag
 from django.urls import reverse
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from BookClub.models import User, Club, ClubMembership
-
+@tag('memberlist')
 class MemberListTestCase(TestCase):
     """Tests of the Member List view."""
 

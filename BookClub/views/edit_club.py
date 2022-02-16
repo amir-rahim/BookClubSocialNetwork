@@ -17,8 +17,6 @@ class EditClubView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Club
     form_class = ClubForm
     template_name = 'edit_club.html'
-    permission_denied_message = "Access denied"
-    raise_exception = False
     
     def test_func(self):
         try:
@@ -33,6 +31,13 @@ class EditClubView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             messages.add_message(self.request, messages.ERROR,'Club not found or you are not a member of this club')
             return False
 
+    def handle_no_permission(self):
+        if not self.request.user.is_authenticated:
+            return super(LoginRequiredMixin, self).handle_no_permission()
+        else:
+            url = reverse('club_dashboard', kwargs=self.kwargs)
+            return redirect(url)
+    
     def get_object(self):
         try:
             return Club.objects.get(url_name=self.kwargs['club_url_name'])

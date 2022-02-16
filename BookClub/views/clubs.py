@@ -1,6 +1,6 @@
 '''Club Related Views'''
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic.base import TemplateView
 from django.shortcuts import render, redirect
@@ -31,18 +31,26 @@ class CreateClubView(LoginRequiredMixin, CreateView):
 
 
 
-class ClubDashboardView(TemplateView):
+class ClubDashboardView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
     template_name = "club_dashboard.html"
 
     # Redirect if club is private and user is not a member
-    def get(self, request, *args, **kwargs):
-        current_club = Club.objects.get(url_name=self.kwargs['club_url_name'])
-        if current_club.is_private:
-            if not current_club.is_member(request.user):
-                messages.add_message(request, messages.ERROR, 'This club is private and you are not a member.')
-                return redirect('available_clubs')
-        return render(request, 'club_dashboard.html', context=self.get_context_data(**kwargs))
-
+    def test_func(self):
+        try:
+            current_club = Club.objects.get(url_name=self.kwargs['club_url_name'])
+            if current_club.is_private and not current_club.is_member(self.request.user):
+                messages.add_message(self.request, messages.ERROR, 'This club is private')
+                return False
+            else:
+                return True
+        except:
+            return False
+        
+    def handle_no_permission(self):
+        if not self.request.user.is_authenticated:
+            return super(LoginRequiredMixin, self).handle_no_permission()
+        else:
+            return redirect('available_clubs')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
