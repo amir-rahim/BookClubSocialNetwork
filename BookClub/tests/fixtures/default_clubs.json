@@ -1,11 +1,10 @@
-[
-    {
+[{
         "model": "BookClub.club",
         "pk": 1,
         "fields": {
 
             "name": "Johnathan Club",
-            "url_name": "JohnathansClub",
+            "url_name": "Johnathan_Club",
             "description": "This is a very cool club that is owned by a certain Johnathan. Reading certain books...",
             "tagline": "Welcome to Johnathan's club! We read the best books!!!",
             "rules": "Don't be annoying",
@@ -14,19 +13,19 @@
         }
     },
 
-    
+
     {
         "model": "BookClub.club",
         "pk": 2,
         "fields": {
 
-          "name": "Jeannette Club",
-          "url_name": "JeannettesClub",
-          "description": "This is a club owned by a certain Jeannette",
-          "tagline": "",
-          "rules": "",
-          "is_private": false,
-          "created_on": "2022-02-03"
+            "name": "Jeannette Club",
+            "url_name": "Jeannette_Club",
+            "description": "This is a club owned by a certain Jeannette",
+            "tagline": "",
+            "rules": "",
+            "is_private": false,
+            "created_on": "2022-02-03"
         }
     },
 
@@ -35,13 +34,13 @@
         "pk": 3,
         "fields": {
 
-          "name": "Jack Club",
-          "url_name": "JacksClub",
-          "description": "a club created by some Jack",
-          "tagline": "Just Read It",
-          "rules": "Know the inside jokes",
-          "is_private": true,
-          "created_on": "2022-02-02"
+            "name": "Jack Club",
+            "url_name": "Jack_Club",
+            "description": "a club created by some Jack",
+            "tagline": "Just Read It",
+            "rules": "Know the inside jokes",
+            "is_private": true,
+            "created_on": "2022-02-02"
         }
     }
 ]
