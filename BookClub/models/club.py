@@ -1,3 +1,4 @@
+
 import re
 from django.db import models
 from django.urls import reverse
@@ -67,6 +68,7 @@ class Club(models.Model):
     def get_review_score(self):
         pass
 
+
     def get_my_clubs(self):
         try:
             club_ids = ClubMembership.objects.filter(self=self).values_list('Club', flat=True)
@@ -114,7 +116,7 @@ class Club(models.Model):
 
     def add_moderator(self, user):
         self.add_user(user, ClubMembership.UserRoles.MODERATOR)
-
+      
     def add_owner(self, user):
         if not (ClubMembership.objects.filter(club=self, membership=ClubMembership.UserRoles.OWNER).exists()):
             self.add_user(user, ClubMembership.UserRoles.OWNER)
