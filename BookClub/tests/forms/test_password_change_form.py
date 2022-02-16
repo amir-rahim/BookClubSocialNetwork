@@ -1,10 +1,10 @@
 """Tests for the new password form."""
 
-from django.test import TestCase
+from django.test import TestCase, tag
 from BookClub.models import User
 from BookClub.forms.user_forms import ChangePasswordForm
 
-
+@tag('auth','user')
 class PasswordFormTestCase(TestCase):
     """Unit tests for the new password form."""
 

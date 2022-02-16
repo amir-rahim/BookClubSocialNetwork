@@ -2,13 +2,13 @@
 
 from distutils.log import Log
 from django.contrib.auth.hashers import check_password
-from django.test import TestCase
+from django.test import TestCase, tag
 from django.urls import reverse
 from BookClub.forms.user_forms import ChangePasswordForm
 from BookClub.models import User
 from BookClub.tests.helpers import reverse_with_query, LogInTester
 
-
+@tag('passwordchange','auth','user')
 class PasswordViewTest(TestCase, LogInTester):
     """Unit tests for the password change view."""
 

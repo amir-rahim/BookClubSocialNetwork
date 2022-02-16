@@ -1,10 +1,10 @@
 """Tests of the profile view."""
 
-from django.test import TestCase
+from django.test import TestCase, tag
 from django.urls import reverse
 from BookClub.models import User
 from BookClub.tests.helpers import reverse_with_query
-
+@tag('editprofile','user')
 class ProfileViewTest(TestCase):
     """Unit tests of the profile view."""
 

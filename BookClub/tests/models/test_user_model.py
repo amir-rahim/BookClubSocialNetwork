@@ -1,8 +1,8 @@
-from django.test import TestCase
+from django.test import TestCase, tag
 from BookClub.models import User
 from django.core.exceptions import ValidationError  # Create your tests here.
 
-
+@tag('usermodel','user')
 class UserModelTestCase(TestCase):
 
     fixtures = ['BookClub/tests/fixtures/default_users.json']
