@@ -1,0 +1,11 @@
+from item_based_collaborative_filtering import ItemBasedCollaborativeFiltering
+
+# Number of minimum ratings for a book to be kept in the filtered ratings dataset
+filtering_min_ratings_threshold = 15
+# We use item-based collaborative filtering
+item_based = ItemBasedCollaborativeFiltering(filtering_min_ratings_threshold)
+
+# Test
+test_subject = 278188
+recommendations = item_based.get_recommendations_from_user_id(test_subject)
+print(recommendations)
