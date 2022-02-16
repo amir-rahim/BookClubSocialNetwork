@@ -27,7 +27,7 @@ class EditClubViewTestCase(TestCase):
         super(TestCase, self).setUp()
         self.user = User.objects.get(username='johndoe')
         self.club = Club.objects.get(pk=1)
-        self.url = reverse('edit_club', kwargs = {'club_url_name': self.club.url_name})
+        self.url = reverse('edit_club', kwargs = {'club_url_name': self.club.club_url_name})
         self.data = {
             'name': "Johnathan Club",
             'description': 'This is a very cool club that is owned by a certain Johnathan. Reading certain books...',
@@ -38,7 +38,7 @@ class EditClubViewTestCase(TestCase):
         }
         
     def test_edit_club_url(self):
-        self.assertEqual(self.url, '/club/'+self.club.url_name+'/edit/')
+        self.assertEqual(self.url, '/club/'+self.club.club_url_name+'/edit/')
 
 
     def test_post_edit_club_redirects_when_not_logged_in(self):
@@ -100,7 +100,7 @@ class EditClubViewTestCase(TestCase):
         response = self.client.post(self.url, self.data)
        
         self.club = Club.objects.get(pk=1)
-        responseUrl = reverse('club_dashboard', kwargs = {'club_url_name' : self.club.url_name})
+        responseUrl = reverse('club_dashboard', kwargs = {'club_url_name' : self.club.club_url_name})
         self.assertRedirects(response, expected_url=responseUrl, status_code=302, target_status_code=200)
         self.assertEqual(self.club.name, self.data['name'])
         self.assertEqual(self.club.description, self.data['description'])
@@ -117,7 +117,7 @@ class EditClubViewTestCase(TestCase):
         response = self.client.post(self.url, self.data)
         
         self.club = Club.objects.get(pk=1)
-        responseUrl = reverse('club_dashboard', kwargs = {'club_url_name' : self.club.url_name})
+        responseUrl = reverse('club_dashboard', kwargs = {'club_url_name' : self.club.club_url_name})
         self.assertRedirects(response, expected_url=responseUrl, status_code=302, target_status_code=200)
         self.assertEqual(self.club.name, self.data['name'])
         self.assertEqual(self.club.description, self.data['description'])
@@ -133,7 +133,7 @@ class EditClubViewTestCase(TestCase):
         self.data['rules'] = "test rules"
         response = self.client.post(self.url, self.data)
         self.club = Club.objects.get(pk=1)
-        responseUrl = reverse('club_dashboard', kwargs = {'club_url_name' : self.club.url_name})
+        responseUrl = reverse('club_dashboard', kwargs = {'club_url_name' : self.club.club_url_name})
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, expected_url=responseUrl, status_code=302, target_status_code=200)
         self.assertEqual(self.club.name, self.data['name'])
@@ -151,7 +151,7 @@ class EditClubViewTestCase(TestCase):
         self.data['tagline'] = "tagline test"
         response = self.client.post(self.url, self.data)
         self.club = Club.objects.get(pk=1)
-        responseUrl = reverse('club_dashboard', kwargs = {'club_url_name' : self.club.url_name})
+        responseUrl = reverse('club_dashboard', kwargs = {'club_url_name' : self.club.club_url_name})
         self.assertRedirects(response, expected_url=responseUrl, status_code=302, target_status_code=200)
         self.assertEqual(self.club.name, self.data['name'])
         self.assertEqual(self.club.description, self.data['description'])
@@ -167,7 +167,7 @@ class EditClubViewTestCase(TestCase):
         self.data['is_private'] = True
         response = self.client.post(self.url, self.data)
         self.club = Club.objects.get(pk=1)
-        responseUrl = reverse('club_dashboard', kwargs = {'club_url_name' : self.club.url_name})
+        responseUrl = reverse('club_dashboard', kwargs = {'club_url_name' : self.club.club_url_name})
         self.assertRedirects(response, expected_url=responseUrl, status_code=302, target_status_code=200)
         self.assertEqual(self.club.name, self.data['name'])
         self.assertEqual(self.club.description, self.data['description'])

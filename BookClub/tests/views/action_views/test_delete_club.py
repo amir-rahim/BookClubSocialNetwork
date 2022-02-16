@@ -35,13 +35,13 @@ class DeleteClubTest(TestCase):
             user = self.user4,club = self.club,
             membership = ClubMembership.UserRoles.APPLICANT
         )
-        self.url = reverse("delete_club",kwargs={"url_name" : self.club.url_name})
+        self.url = reverse("delete_club",kwargs={"club_url_name" : self.club.club_url_name})
         
 
         
     
     def test_delete_club_url(self):
-        self.assertEqual(self.url,f'/delete_club/{self.club.url_name}/')
+        self.assertEqual(self.url,f'/delete_club/{self.club.club_url_name}/')
 
     
     def test_delete_club_not_logged_in_redirect(self):

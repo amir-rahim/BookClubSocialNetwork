@@ -19,7 +19,7 @@ class EditClubView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     
     def test_func(self):
         try:
-            club = Club.objects.get(url_name=self.kwargs['club_url_name'])
+            club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
             rank = ClubMembership.objects.get(club=club, user=self.request.user)
             if(rank.membership != ClubMembership.UserRoles.OWNER):
                 messages.add_message(self.request, messages.ERROR,'Access denied')
@@ -39,7 +39,7 @@ class EditClubView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     
     def get_object(self):
         try:
-            return Club.objects.get(url_name=self.kwargs['club_url_name'])
+            return Club.objects.get(club_url_name=self.kwargs['club_url_name'])
         except:
             messages.add_message(self.request,messages.ERROR,'Club not found!')
             return None
@@ -47,7 +47,7 @@ class EditClubView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         try:
-            club = Club.objects.get(url_name=self.kwargs['club_url_name'])
+            club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
             context['club'] = club
         except:
             return context

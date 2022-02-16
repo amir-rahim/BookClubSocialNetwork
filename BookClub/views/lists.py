@@ -21,7 +21,7 @@ class MembersListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
 
     def test_func(self):
         try:
-            current_club = Club.objects.get(url_name=self.kwargs['url_name'])
+            current_club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
             if current_club.is_private and not current_club.is_member(self.request.user):
                 messages.add_message(self.request, messages.ERROR, 'This club is private and you are not a member.')
                 return False
@@ -41,7 +41,7 @@ class MembersListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
         """Generate context data to be shown in the template."""
 
         context = super().get_context_data(**kwargs)
-        club = Club.objects.get(url_name=self.kwargs['url_name'])
+        club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
         user = User.objects.get(id = self.request.user.id)
         try:
             rank = ClubMembership.objects.get(user=user, club=club)

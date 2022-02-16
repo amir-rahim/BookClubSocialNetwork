@@ -10,7 +10,7 @@ class ClubFormTestCase(TestCase):
     def setUp(self):
         self.form_input = {
             'name': 'Johnathan\'s Club',
-            'url_name': 'Johnathans_Club',
+            'club_url_name': 'Johnathans_Club',
             'description': 'This is a very cool club that is owned by a certain Johnathan. Reading certain books...',
             'tagline': 'Welcome to Johnathan\'s club! We read the best books!!!',
             'rules': 'Don\'t be annoying',
@@ -45,7 +45,7 @@ class ClubFormTestCase(TestCase):
         self.assertEqual(after_count, before_count + 1)
         club = Club.objects.get(name = self.form_input['name'])
         self.assertEqual(club.name, self.form_input['name'])
-        self.assertEqual(club.url_name, self.form_input['url_name'])
+        self.assertEqual(club.club_url_name, self.form_input['club_url_name'])
         self.assertEqual(club.description, self.form_input['description'])
         self.assertEqual(club.tagline, self.form_input['tagline'])
         self.assertEqual(club.rules, self.form_input['rules'])

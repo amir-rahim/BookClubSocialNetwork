@@ -37,7 +37,7 @@ class ClubDashboardView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
     # Redirect if club is private and user is not a member
     def test_func(self):
         try:
-            current_club = Club.objects.get(url_name=self.kwargs['club_url_name'])
+            current_club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
             if current_club.is_private and not current_club.is_member(self.request.user):
                 messages.add_message(self.request, messages.ERROR, 'This club is private')
                 return False
@@ -54,7 +54,7 @@ class ClubDashboardView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        current_club = Club.objects.get(url_name=self.kwargs['club_url_name'])
+        current_club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
         context['current_club'] = current_club
         context['owner'] = current_club.get_club_owner()
         context['user'] = self.request.user

@@ -31,7 +31,7 @@ class ActionView(TemplateView):
         """
 
         try:
-            club = Club.objects.get(url_name=self.kwargs['url_name'])
+            club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
             currentUser = self.request.user
             targetUser = User.objects.get(username=self.request.POST.get('user'))
         except:
@@ -42,7 +42,7 @@ class ActionView(TemplateView):
         else:
             self.is_not_actionable(currentUser, targetUser, club)
 
-        return redirect(self.redirect_location, kwargs['url_name'])
+        return redirect(self.redirect_location, kwargs['club_url_name'])
 
     def is_actionable(self, currentUser, targetUser, club):
         """Check if the action is legal"""
@@ -175,7 +175,7 @@ class JoinClubView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
 
         try:
-            club = Club.objects.get(url_name=self.kwargs['url_name'])
+            club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
             currentUser = self.request.user
         except:
             messages.error(self.request, "Error, user or club not found.")
@@ -220,7 +220,7 @@ class LeaveClubView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
 
         try:
-            club = Club.objects.get(url_name=self.kwargs['url_name'])
+            club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
             currentUser = self.request.user
         except:
             messages.error(self.request, "Error, user or club not found.")
@@ -253,7 +253,7 @@ class DeleteClubView(LoginRequiredMixin,View):
 
     def post(self, request, *args, **kwargs):
         try:
-            club = Club.objects.get(url_name=self.kwargs['url_name'])
+            club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
             currentUser = self.request.user
             if self.is_actionable(currentUser,club):
                 self.action(currentUser,club)

@@ -14,7 +14,7 @@ from BookClub.models.club_membership import ClubMembership
 
 class Club(models.Model):
     name = models.CharField(unique=True, max_length=100, blank=False)
-    url_name = models.CharField(
+    club_url_name = models.CharField(
             unique=True,
             max_length=100,
             blank=False,
@@ -32,13 +32,13 @@ class Club(models.Model):
     created_on = models.DateField(auto_now_add=True)
     
     def clean(self):
-        if self.url_name is None or self.url_name == "":
+        if self.club_url_name is None or self.club_url_name == "":
             url = self.convertNameToUrl(self.name)
-            self.url_name = url
+            self.club_url_name = url
         super().clean()
     
     def get_absolute_url(self):
-        return reverse('club_dashboard', kwargs = {'club_url_name': self.url_name})
+        return reverse('club_dashboard', kwargs = {'club_url_name': self.club_url_name})
 
     def __str__(self):
         return self.name

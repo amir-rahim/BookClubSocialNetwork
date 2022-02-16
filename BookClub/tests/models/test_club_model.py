@@ -48,28 +48,28 @@ class ClubModelTestCase(TestCase):
         self._assert_club_is_invalid()
         
 #URL Name Testing
-    def test_url_name_cannot_be_blank(self):
-        self.club1.url_name = ''
+    def test_club_url_name_cannot_be_blank(self):
+        self.club1.club_url_name = ''
         self._assert_club_is_invalid()
 
-    def test_url_name_must_be_unique(self):
-        self.club1.url_name = self.club2.url_name
+    def test_club_url_name_must_be_unique(self):
+        self.club1.club_url_name = self.club2.club_url_name
         self._assert_club_is_invalid()
         
-    def test_url_name_can_be_100_characters_long(self):
-        self.club1.url_name = 'x' * 100
+    def test_club_url_name_can_be_100_characters_long(self):
+        self.club1.club_url_name = 'x' * 100
         self._assert_club_is_valid()
 
-    def test_url_name_cannot_be_over_100_characters_long(self):
-        self.club1.url_name = 'x' * 101
+    def test_club_url_name_cannot_be_over_100_characters_long(self):
+        self.club1.club_url_name = 'x' * 101
         self._assert_club_is_invalid()
         
-    def test_url_name_cannot_have_special_chars(self):
-        self.club1.url_name = 'x/xaaa'
+    def test_club_url_name_cannot_have_special_chars(self):
+        self.club1.club_url_name = 'x/xaaa'
         self._assert_club_is_invalid()
         
-    def test_url_name_can_have_underscores(self):
-        self.club1.url_name = 'x_xaaa'
+    def test_club_url_name_can_have_underscores(self):
+        self.club1.club_url_name = 'x_xaaa'
         self._assert_club_is_valid()
 
 # Description testing
