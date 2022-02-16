@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 from BookClub.models import User, Club, ClubMembership
 
+
 class AvailableClubsViewTestCase(TestCase):
     """Tests of the available_clubs view."""
 
@@ -17,7 +18,7 @@ class AvailableClubsViewTestCase(TestCase):
         self.user = User.objects.get(username="johndoe")
 
     def test_url(self):
-        self.assertEqual(self.url,'/available_clubs/')
+        self.assertEqual(self.url, '/club/')
 
     def test_get_template_logged_in(self):
         self.client.login(username=self.user.username, password="Password123")
@@ -32,9 +33,11 @@ class AvailableClubsViewTestCase(TestCase):
 
     def test_no_club(self):
         self.client.login(username=self.user.username, password='Password123')
-        membership1 = ClubMembership.objects.create(user=self.user, club=Club.objects.get(name="Jeannette's Club"), membership=ClubMembership.UserRoles.MEMBER)
+        membership1 = ClubMembership.objects.create(user=self.user, club=Club.objects.get(name="Jeannette's Club"),
+                                                    membership=ClubMembership.UserRoles.MEMBER)
         membership1.save()
-        membership2 = ClubMembership.objects.create(user=self.user, club=Club.objects.get(name="Jack's Club"), membership=ClubMembership.UserRoles.MEMBER)
+        membership2 = ClubMembership.objects.create(user=self.user, club=Club.objects.get(name="Jack's Club"),
+                                                    membership=ClubMembership.UserRoles.MEMBER)
         membership2.save()
         response = self.client.get(self.url)
 
@@ -42,7 +45,7 @@ class AvailableClubsViewTestCase(TestCase):
         self.assertTemplateUsed(response, 'available_clubs.html')
         clubs = list(response.context['clubs'])
         self.assertEqual(len(clubs), 0)
-        self.assertContains(response, "<p>There are no available clubs at the moment.</p>")
+        self.assertContains(response, "There are no available clubs at the moment.")
 
     def test_contains_club_not_member_of(self):
         self.client.login(username=self.user.username, password='Password123')
@@ -66,7 +69,8 @@ class AvailableClubsViewTestCase(TestCase):
 
     def test_contains_club_is_applicant(self):
         self.client.login(username=self.user.username, password='Password123')
-        new_membership = ClubMembership.objects.create(user=self.user, club=Club.objects.get(name="Jeannette's Club"), membership=ClubMembership.UserRoles.APPLICANT)
+        new_membership = ClubMembership.objects.create(user=self.user, club=Club.objects.get(name="Jeannette's Club"),
+                                                       membership=ClubMembership.UserRoles.APPLICANT)
         new_membership.save()
         response = self.client.get(self.url)
 
