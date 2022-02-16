@@ -26,7 +26,7 @@ class ClubDashboardViewTest(TestCase):
 
 
     def test_club_dashboard_url(self):
-        self.assertEqual(self.url, f"/club/JohnathansClub/")
+        self.assertEqual(self.url, f"/club/Johnathan_Club/")
 
     def test_club_dashboard_has_club_info(self):
         self.client.login(username=self.user.username, password="Password123")

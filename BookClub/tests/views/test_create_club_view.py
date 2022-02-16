@@ -1,6 +1,6 @@
 from datetime import date
 
-from django.test import TestCase
+from django.test import TestCase, tag
 from django.urls import reverse
 
 from BookClub.models.user import User
@@ -10,7 +10,7 @@ from BookClub.models.club_membership import ClubMembership
 from BookClub.forms.club import ClubForm
 
 from BookClub.tests.helpers import reverse_with_next
-
+@tag('createclub','club')
 class CreateClubViewTestcase(TestCase):
     fixtures = [
         "BookClub/tests/fixtures/default_users.json",
@@ -23,7 +23,6 @@ class CreateClubViewTestcase(TestCase):
         self.url = reverse('create_club')
         self.data = {
             'name': 'A test Club',
-            'url_name': 'testclub',
             'description': 'This is a very cool club that is owned by a certain Johnathan. Reading certain books...',
             'tagline': 'Welcome to Johnathan\'s club! We read the best books!!!',
             'rules': 'Don\'t be annoying',
@@ -91,7 +90,6 @@ class CreateClubViewTestcase(TestCase):
         self.assertRedirects(response, response_url, status_code=302, target_status_code=200)
         self.assertTemplateUsed(response, 'club_dashboard.html')
         self.assertEqual(club.name, self.data['name'])
-        self.assertEqual(club.url_name, self.data['url_name'])
         self.assertEqual(club.description, self.data['description'])
         self.assertEqual(club.tagline, self.data['tagline'])
         self.assertEqual(club.rules, self.data['rules'])

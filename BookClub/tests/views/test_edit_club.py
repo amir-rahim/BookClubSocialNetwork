@@ -14,7 +14,7 @@ from BookClub.tests.helpers import reverse_with_next
     Testing for edit_club
     Carried out by Jack and Rav
 """
-@tag('editclub')
+@tag('editclub','club')
 class EditClubViewTestCase(TestCase):
     fixtures = [
         "BookClub/tests/fixtures/default_users.json",
@@ -31,7 +31,6 @@ class EditClubViewTestCase(TestCase):
         self.data = {
             'name': "Johnathan Club",
             'description': 'This is a very cool club that is owned by a certain Johnathan. Reading certain books...',
-            'url_name':"JohnathansClub",
             'tagline': 'Welcome to Johnathan\'s club! We read the best books!!!',
             'rules': 'Don\'t be annoying',
             'is_private': False,
@@ -99,8 +98,9 @@ class EditClubViewTestCase(TestCase):
         self.created_on_pre_test = self.club.created_on
         self.data['name'] = 'Test club'
         response = self.client.post(self.url, self.data)
-        responseUrl = reverse('club_dashboard', kwargs = {'club_url_name' : self.club.url_name})
+       
         self.club = Club.objects.get(pk=1)
+        responseUrl = reverse('club_dashboard', kwargs = {'club_url_name' : self.club.url_name})
         self.assertRedirects(response, expected_url=responseUrl, status_code=302, target_status_code=200)
         self.assertEqual(self.club.name, self.data['name'])
         self.assertEqual(self.club.description, self.data['description'])
@@ -115,8 +115,9 @@ class EditClubViewTestCase(TestCase):
         self.created_on_pre_test = self.club.created_on
         self.data['description'] = "test description"
         response = self.client.post(self.url, self.data)
-        responseUrl = reverse('club_dashboard', kwargs = {'club_url_name' : self.club.url_name})
+        
         self.club = Club.objects.get(pk=1)
+        responseUrl = reverse('club_dashboard', kwargs = {'club_url_name' : self.club.url_name})
         self.assertRedirects(response, expected_url=responseUrl, status_code=302, target_status_code=200)
         self.assertEqual(self.club.name, self.data['name'])
         self.assertEqual(self.club.description, self.data['description'])
@@ -131,8 +132,8 @@ class EditClubViewTestCase(TestCase):
         self.created_on_pre_test = self.club.created_on
         self.data['rules'] = "test rules"
         response = self.client.post(self.url, self.data)
-        responseUrl = reverse('club_dashboard', kwargs = {'club_url_name' : self.club.url_name})
         self.club = Club.objects.get(pk=1)
+        responseUrl = reverse('club_dashboard', kwargs = {'club_url_name' : self.club.url_name})
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, expected_url=responseUrl, status_code=302, target_status_code=200)
         self.assertEqual(self.club.name, self.data['name'])
@@ -149,8 +150,8 @@ class EditClubViewTestCase(TestCase):
         self.created_on_pre_test = self.club.created_on
         self.data['tagline'] = "tagline test"
         response = self.client.post(self.url, self.data)
-        responseUrl = reverse('club_dashboard', kwargs = {'club_url_name' : self.club.url_name})
         self.club = Club.objects.get(pk=1)
+        responseUrl = reverse('club_dashboard', kwargs = {'club_url_name' : self.club.url_name})
         self.assertRedirects(response, expected_url=responseUrl, status_code=302, target_status_code=200)
         self.assertEqual(self.club.name, self.data['name'])
         self.assertEqual(self.club.description, self.data['description'])
@@ -165,8 +166,8 @@ class EditClubViewTestCase(TestCase):
         self.created_on_pre_test = self.club.created_on
         self.data['is_private'] = True
         response = self.client.post(self.url, self.data)
-        responseUrl = reverse('club_dashboard', kwargs = {'club_url_name' : self.club.url_name})
         self.club = Club.objects.get(pk=1)
+        responseUrl = reverse('club_dashboard', kwargs = {'club_url_name' : self.club.url_name})
         self.assertRedirects(response, expected_url=responseUrl, status_code=302, target_status_code=200)
         self.assertEqual(self.club.name, self.data['name'])
         self.assertEqual(self.club.description, self.data['description'])
