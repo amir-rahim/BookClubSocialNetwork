@@ -6,7 +6,6 @@ from django.views.generic.edit import UpdateView
 from django.views.generic import DetailView
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from BookClub.helpers import RankRequiredMixin
 from BookClub.models.club import Club
 from BookClub.forms.club import ClubForm
 from BookClub.models.club_membership import ClubMembership
