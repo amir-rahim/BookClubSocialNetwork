@@ -1,0 +1,141 @@
+{% extends 'base_content.html' %}
+
+{% block page_title %}
+Library Dashboard
+{% endblock page_title %}
+
+{% block page_subtitle %}
+This is the Library, you can look at our books, user-curated lists & reviews and our AI recommendations!
+{% endblock page_subtitle %}
+
+{% block content %}
+
+<div class="columns">
+
+    <div class="column is-3">
+
+        <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+
+            <ul class="menu-list">
+                <li><a class="is-active"><b>Dashboard</b></a></li>
+            </ul>
+
+            <p class="menu-label">Our Book Library</p>
+
+            <ul class="menu-list">
+                <li><a>View Library</a></li>
+            </ul>
+
+            <p class="menu-label">Book Lists</p>
+
+            <ul class="menu-list">
+                <li><a>View Book Lists</a></li>
+                <li><a>Create Book Lists</a></li>
+            </ul>
+
+            <p class="menu-label">Recommender</p>
+
+            <ul class="menu-list">
+                <li><a>AI Recommended Books</a></li>
+            </ul>
+
+            <p class="menu-label">Reviews</p>
+
+            <ul class="menu-list">
+                <li><a>Make Review</a></li>
+                <li><a>View Personal Reviews</a></li>
+            </ul>
+
+        </aside>
+
+    </div>
+
+    <div class="column is-9">
+
+        <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Library</a></li>
+                <li><a href="#">Dashboard</a></li>
+            </ul>
+        </nav>
+
+        <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">Our Library</h1>
+                    <h2 class="subtitle">View our table of books in our database, and view the books you are interested in.</h2>
+                </div>
+            </div>
+            <div class="hero-foot">
+                <nav class="tabs is-boxed is-fullwidth">
+                    <div class="container">
+                        <ul>
+                            <li><a>View Library</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </section>
+
+        <section class="hero is-success welcome is-small" style="margin: 10px 0px;">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">Book Lists</h1>
+                    <h2 class="subtitle">View and Create book lists, which are compiled lists of books.</h2>
+                </div>
+            </div>
+            <div class="hero-foot">
+                <nav class="tabs is-boxed is-fullwidth">
+                    <div class="container">
+                        <ul>
+                            <li><a>View Book Lists</a></li>
+                            <li><a>Create Book Lists</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </section>
+
+        <section class="hero is-warning welcome is-small" style="margin: 10px 0px;">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">Recommender</h1>
+                    <h2 class="subtitle">In here, you will find recommendations based off of the books you like and have reviewed.</h2>
+                </div>
+            </div>
+            <div class="hero-foot">
+                <nav class="tabs is-boxed is-fullwidth">
+                    <div class="container">
+                        <ul>
+                            <li><a>AI Recommended Books</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </section>
+
+        <section class="hero is-danger welcome is-small" style="margin: 10px 0px;">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">Reviews</h1>
+                    <h2 class="subtitle">Create reviews for your read books and view your previous reviews.</h2>
+                </div>
+            </div>
+            <div class="hero-foot">
+                <nav class="tabs is-boxed is-fullwidth">
+                    <div class="container">
+                        <ul>
+                            <li><a>Make Review</a></li>
+                            <li><a>View Reviews</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </section>
+
+    </div>
+
+</div>
+
+{% endblock %}
