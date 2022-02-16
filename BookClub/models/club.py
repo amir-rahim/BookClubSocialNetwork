@@ -1,3 +1,4 @@
+import re
 from django.db import models
 from django.urls import reverse
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
@@ -28,7 +29,13 @@ class Club(models.Model):
     rules = models.CharField(max_length=200, blank=True)
     is_private = models.BooleanField(default=False, blank=False, null=False)
     created_on = models.DateField(auto_now_add=True)
-
+    
+    def clean(self):
+        if self.url_name is None or self.url_name == "":
+            url = self.convertNameToUrl(self.name)
+            self.url_name = url
+        super().clean()
+    
     def get_absolute_url(self):
         return reverse('club_dashboard', kwargs = {'club_url_name': self.url_name})
 
@@ -44,6 +51,10 @@ class Club(models.Model):
     def is_member(self, user):
         return ClubMembership.objects.filter(club=self, user=user, membership__gte=ClubMembership.UserRoles.MEMBER)
 
+    def convertNameToUrl(self, name):
+        updated = re.sub(" +", "_", name)
+        updated = re.sub("[^0-9a-zA-Z_]+", "", updated)
+        return updated
     # Has unimplemented dependencies
     def get_number_of_meetings(self):
         pass
