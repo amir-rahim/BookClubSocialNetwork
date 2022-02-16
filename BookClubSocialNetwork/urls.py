@@ -38,4 +38,7 @@ urlpatterns = [
     path('club/', views.AvailableClubsView.as_view(), name='available_clubs'),
     path('memberships/', views.MyClubMembershipsView.as_view(), name='my_club_memberships'),
     path('create_club/', views.clubs.CreateClubView.as_view(), name = 'create_club'),
+
+    # '''Library URLs'''
+    path('library/', views.library_dashboard, name='library_dashboard')
 ]
