@@ -1,9 +1,9 @@
-from django.test import TestCase
+from django.test import TestCase, tag
 
 from BookClub.models.club import Club, ClubMembership
 # from BookClub.models.club_membership import ClubMembership
 from django.core.exceptions import ValidationError
-
+@tag('clubmodel', 'club')
 class ClubModelTestCase(TestCase):
 
     fixtures = [
@@ -132,3 +132,22 @@ class ClubModelTestCase(TestCase):
     def test_get_number_of_members(self):
         number_of_members = ClubMembership.objects.filter(club = self.club1, membership__gte = ClubMembership.UserRoles.MEMBER).count()
         self.assertEqual(self.club1.get_number_of_members(), number_of_members, 'Club object returned a wrong number of members')
+        
+    def test_convert_to_url_replaces_spaces(self):
+        testName = "Daves Club Of Spaces"
+        expectedUrl = "Daves_Club_Of_Spaces"
+        resultUrl = Club.convertNameToUrl(None, testName)
+        self.assertEqual(expectedUrl, resultUrl)
+        
+    def test_convert_to_url_replaces_non_alpha_numerics(self):
+        testName = "Dave's?ClubOfSpaces!"
+        expectedUrl = "DavesClubOfSpaces"
+        resultUrl = Club.convertNameToUrl(None, testName)
+        self.assertEqual(expectedUrl, resultUrl)
+    
+    def test_convert_to_url_replaces_non_alpha_numerics_and_spaces(self):
+        testName = "Dave's ?Club Of Spaces!"
+        expectedUrl = "Daves_Club_Of_Spaces"
+        resultUrl = Club.convertNameToUrl(None, testName)
+        self.assertEqual(expectedUrl, resultUrl)
+    
