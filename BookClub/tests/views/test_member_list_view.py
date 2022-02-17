@@ -16,7 +16,6 @@ class MemberListTestCase(TestCase):
     
     def setUp(self):
         self.club = Club.objects.get(pk=1)
-        self.url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
         self.user = User.objects.get(username="johndoe")
         self.jack = User.objects.get(username="jackdoe")
         self.jane = User.objects.get(username="janedoe")
@@ -25,12 +24,12 @@ class MemberListTestCase(TestCase):
         self.members = Club.objects.get(pk=1).get_members()
         
     def test_url(self):
-        self.assertEqual(self.url, '/club/'+self.club.club_url_name+'/member_list/')
+        url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
+        self.assertEqual(url, '/club/'+self.club.club_url_name+'/members/')
         
     def test_get_template_logged_in(self):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
-
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'club_members.html')
         
@@ -40,29 +39,59 @@ class MemberListTestCase(TestCase):
     
     def test_owner_has_admin_options(self):
         self.client.login(username=self.jane.username, password="Password123")
-        response = self.client.get(self.url)
+        url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
+        response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'club_members.html')
         self.assertContains(response, "Club Administration")
         self.assertContains(response, "Manage Club")
         self.assertContains(response, "Club Settings")
 
     def test_mod_has_no_admin_options(self):
         self.client.login(username=self.user.username, password="Password123")
-        url = reverse("club_dashboard", kwargs={"club_url_name": self.club.club_url_name})
+        url = reverse("member_list", kwargs={"club_url_name": self.club.club_url_name})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'club_members.html')
         self.assertNotContains(response, "Club Administration")
         self.assertNotContains(response, "Manage Club")
         self.assertNotContains(response, "Club Settings")
     
     def test_member_has_no_admin_options(self):
         self.client.login(username=self.jack.username, password="Password123")
-        url = reverse("club_dashboard", kwargs={"club_url_name": self.club.club_url_name})
+        url = reverse("member_list", kwargs={"club_url_name": self.club.club_url_name})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'club_members.html')
         self.assertNotContains(response, "Club Administration")
         self.assertNotContains(response, "Manage Club")
         self.assertNotContains(response, "Club Settings")
-        
-    
+
+    def test_owner_is_visible(self):
+        self.client.login(username=self.jack.username, password="Password123")
+        url = reverse("member_list", kwargs={"club_url_name": self.club.club_url_name})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'club_members.html')
+        self.assertContains(response, "Name: janedoe")
+        self.assertContains(response, "Public Bio: Hello World!")
+
+    def test_no_moderators(self):
+        self.client.login(username=self.jack.username, password="Password123")
+        example_club = Club.objects.create(name="Example", description="Example Club", tagline="Welcome", rules="None")
+        url = reverse("member_list", kwargs={"club_url_name": self.club.club_url_name})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'club_members.html')
+        self.assertContains(response, "There is no moderators to this club.")
+
+    def test_no_members(self):
+        self.client.login(username=self.jack.username, password="Password123")
+        example_club = Club.objects.create(name="Example", description="Example Club", tagline="Welcome", rules="None")
+        url = reverse("member_list", kwargs={"club_url_name": example_club.club_url_name})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'club_members.html')
+        self.assertContains(response, "There is no members to this club.")
+
     
