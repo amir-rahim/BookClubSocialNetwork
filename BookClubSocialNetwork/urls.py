@@ -54,5 +54,7 @@ urlpatterns = [
     path('club/<str:club_url_name>/member_list/', views.MembersListView.as_view(), name='member_list'),
     path('club/<str:club_url_name>/edit/', views.EditClubView.as_view(), name='edit_club'),
 
+    #'''Meeting URLs'''
+    path('club/<str:club_url_name>/meetings/<int:meeting_id>/edit',views.EditMeetingView.as_view(),name='edit_meeting')
 
 ]
