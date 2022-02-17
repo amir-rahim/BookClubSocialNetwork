@@ -1,6 +1,8 @@
+from ast import Pass
 from django.test import TestCase
 from django.utils import timezone
 import pytz
+import datetime
 
 from BookClub.models import Meeting, Club, User, Book
 # from BookClub.models.club_membership import ClubMembership
@@ -21,6 +23,8 @@ class MeetingTestCase(TestCase):
         self.meeting.meeting_time = timezone.now()
         self.user = User.objects.get(username = 'johndoe')
         self.jack = User.objects.get(username = "jackdoe")
+        self.jane = User.objects.get(username = 'janedoe')
+        self.book = Book.objects.get(pk = 1)
     
     def _assert_meeting_is_valid(self):
         try:
@@ -126,4 +130,45 @@ class MeetingTestCase(TestCase):
         self.meeting.book = None
         self._assert_meeting_is_valid()
         
+# Function testing
+    def test_str_returns_title(self):
+        self.assertEqual(str(self.meeting), self.meeting.get_title())
 
+    def test_get_organiser(self):
+        self.assertEqual(self.meeting.get_organiser(), self.user)
+
+    def test_get_club(self):
+        self.assertEqual(self.meeting.get_club(), self.club)
+
+    def test_get_created_on(self):
+        self.assertEqual(self.meeting.get_created_on(), datetime.date(2022, 2, 10))
+
+    def test_get_location(self):
+        self.assertEqual(self.meeting.get_location(), "Franklin Wilkins Library GS04")
+    
+    def test_get_title(self):
+        self.assertEqual(self.meeting.get_title(), "Book meeting 1")
+
+    def test_get_description(self):
+        self.assertEqual(self.meeting.get_description(), "This is a book meeting, helll yeahhhh")
+    
+    def test_get_members(self):
+        self.assertQuerysetEqual(self.meeting.get_members(), [self.user, self.jane], ordered = False)
+
+    def test_get_type(self):
+        self.assertEqual(self.meeting.get_type(), "B")
+
+    def test_get_book(self):
+        self.assertEqual(self.meeting.get_book(), self.book)
+    
+    def test_get_number_of_attendants(self):
+        self.assertEqual(self.meeting.get_number_of_attendants(), 2)
+
+    def test_not_join_member(self):
+        self.meeting.join_member(self.user)
+        self.assertNotEqual(self.meeting.get_number_of_attendants(), 3)
+    
+    def test_not_leave_member(self):
+        self.meeting.leave_member(self.jack)
+        self.assertNotEqual(self.meeting.get_number_of_attendants(), 1)
+    

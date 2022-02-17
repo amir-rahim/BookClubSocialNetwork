@@ -10,7 +10,7 @@ class Meeting(models.Model):
 
     organiser = models.ForeignKey(User, related_name='meeting_organiser', blank = False, on_delete = models.CASCADE)
     club = models.ForeignKey(Club, blank = False, on_delete = models.CASCADE)
-    meeting_time = models.DateTimeField(blank = False)
+    meeting_time = models.DateTimeField(blank = False) 
     created_on = models.DateField(auto_now_add = True, editable = False)
     location = models.CharField(max_length = 120, blank = True)
     title = models.CharField(max_length = 120, blank = False)
@@ -45,7 +45,7 @@ class Meeting(models.Model):
         return self.description
 
     def get_members(self):
-        return self.members
+        return self.members.all()
 
     def get_type(self):
         return self.type
