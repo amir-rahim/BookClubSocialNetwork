@@ -1,9 +1,10 @@
 from django.core.exceptions import ValidationError
-from django.test import TestCase
+from django.test import TestCase, tag
 from BookClub.models.user import User
 from BookClub.models.club import Club
 from BookClub.models.club_membership import ClubMembership
 
+@tag('clubmembershipmodel','club')
 class ClubMembershipModelTestCase(TestCase):
 
     fixtures = [

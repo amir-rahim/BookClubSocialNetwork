@@ -1,10 +1,10 @@
 """Unit tests of the sign up form."""
 from django.contrib.auth.hashers import check_password
 from django import forms
-from django.test import TestCase
+from django.test import TestCase, tag
 from BookClub.forms import SignUpForm
 from BookClub.models import User
-
+@tag('auth','user')
 class SignUpFormTestCase(TestCase):
     """Unit tests of the sign up form."""
 
