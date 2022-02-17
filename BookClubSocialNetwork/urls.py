@@ -35,5 +35,7 @@ urlpatterns = [
 
     # '''Club URLs'''
     path('club_dashboard/', views.club_dashboard, name='club_dashboard'),
-    path('create_club/', views.clubs.CreateClubView.as_view(), name = 'create_club')
+    path('create_club/', views.clubs.CreateClubView.as_view(), name = 'create_club'),
+    path('club/<str:club_url_name>/meetings/<int:meeting_id>/join', views.JoinMeetingView.as_view(), name='join_meeting'),
+    path('club/<str:club_url_name>/meetings/<int:meeting_id>/leave', views.LeaveMeetingView.as_view(), name='leave_meeting'),
 ]
