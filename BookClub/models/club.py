@@ -32,9 +32,8 @@ class Club(models.Model):
     created_on = models.DateField(auto_now_add=True)
     
     def clean(self):
-        if self.club_url_name is None or self.club_url_name == "":
-            url = self.convertNameToUrl(self.name)
-            self.club_url_name = url
+        url = self.convertNameToUrl(self.name)
+        self.club_url_name = url
         super().clean()
     
     def get_absolute_url(self):

@@ -53,6 +53,7 @@ class ClubModelTestCase(TestCase):
         self._assert_club_is_invalid()
 
     def test_club_url_name_must_be_unique(self):
+        self.club1.name = self.club2.name
         self.club1.club_url_name = self.club2.club_url_name
         self._assert_club_is_invalid()
         
