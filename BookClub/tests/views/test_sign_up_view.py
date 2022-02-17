@@ -1,11 +1,11 @@
 """Tests of the sign up view."""
 from django.contrib.auth.hashers import check_password
-from django.test import TestCase
+from django.test import TestCase, tag
 from django.urls import reverse
 from BookClub.forms import SignUpForm
 from BookClub.models import User
 from BookClub.tests.helpers import LogInTester
-
+@tag('auth','user')
 class SignUpViewTestCase(TestCase, LogInTester):
     """Tests of the sign up view."""
 
