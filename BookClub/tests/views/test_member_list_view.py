@@ -18,6 +18,7 @@ class MemberListTestCase(TestCase):
     
     def setUp(self):
         self.club = Club.objects.get(pk=1)
+        self.url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
         self.user = User.objects.get(username="johndoe")
         self.jack = User.objects.get(username="jackdoe")
         self.jane = User.objects.get(username="janedoe")
@@ -92,7 +93,6 @@ class MemberListTestCase(TestCase):
         self.assertTemplateUsed(response, 'club_members.html')
         for mod in self.moderators:
             self.assertContains(response, mod.username)
-            self.assertContains(response, mod.public_bio)
 
     def test_can_see_members(self):
         self.client.login(username=self.user.username, password="Password123")
@@ -101,7 +101,6 @@ class MemberListTestCase(TestCase):
         self.assertTemplateUsed(response, 'club_members.html')
         for member in self.members:
             self.assertContains(response, member.username)
-            self.assertContains(response, member.public_bio)
 
     def test_cannot_see_applicants(self):
         self.client.login(username=self.user.username, password="Password123")
@@ -110,7 +109,6 @@ class MemberListTestCase(TestCase):
         self.assertTemplateUsed(response, 'club_members.html')
         for applicant in self.applicants:
             self.assertNotContains(response, applicant.username)
-            self.assertNotContains(response, applicant.public_bio)
 
     def test_owner_can_see_delete_club_button(self):
         self.client.login(username=self.jane.username, password="Password123")
