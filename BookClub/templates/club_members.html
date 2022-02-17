@@ -76,13 +76,14 @@ This is the list of members for this club.
         <hr class="solid">
 
         <p class="subtitle">Owner</p>
-        <div class="delete">
-            <form method="post" action="{% url 'delete_club' club_url_name=club.club_url_name %}">
-                {% csrf_token %}
-                <button type="submit" class="button is-danger is-small" onclick="return confirm('Confirm you want to delete club {{club.name}}?');">Delete Club</button>
-        </form>
-
-        </div>
+        {% if user == club.get_club_owner %}
+            <div class="delete">
+                <form method="post" action="{% url 'delete_club' club_url_name=club.club_url_name %}">
+                    {% csrf_token %}
+                    <button type="submit" class="button is-danger is-small" onclick="return confirm('Confirm you want to delete club {{club.name}}?');">Delete Club</button>
+                </form>
+            </div>
+        {% endif %}       
 
         <hr class="solid">
 
