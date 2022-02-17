@@ -20,7 +20,6 @@ class MeetingTestCase(TestCase):
     def setUp(self):
         self.club = Club.objects.get(pk = 1)
         self.meeting = Meeting.objects.get(pk = 1)
-        self.meeting.meeting_time = timezone.now()
         self.user = User.objects.get(username = 'johndoe')
         self.jack = User.objects.get(username = "jackdoe")
         self.jane = User.objects.get(username = 'janedoe')
@@ -139,6 +138,9 @@ class MeetingTestCase(TestCase):
 
     def test_get_club(self):
         self.assertEqual(self.meeting.get_club(), self.club)
+
+    def test_get_meeting_time(self):
+        self.assertEqual(str(self.meeting.get_meeting_time()), "2022-02-22 19:00:00+00:00")
 
     def test_get_created_on(self):
         self.assertEqual(self.meeting.get_created_on(), datetime.date(2022, 2, 10))
