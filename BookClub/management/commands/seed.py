@@ -42,30 +42,35 @@ class Command(BaseCommand):
         for i in range(count):
             print("Club: " + str(i+1))
             try:
-                genOwner = Command.generateUser()
-                    
-                self.club = Club.objects.create(
-                    name=self.faker.text(max_nb_chars=10),
-                    description=self.faker.text(max_nb_chars=200), 
-                    tagline=self.faker.text(max_nb_chars=30), 
-                    rules=self.faker.text(max_nb_chars=30), 
-                )
-                
-                self.club.add_owner(genOwner)
-                #3 applicants/members
-                    
-                ran_member = random.randrange(10,15)
-                ran_applicant = random.randrange(5,7)
-                ran_moderator = random.randrange(1,3)
-                
-                for x in range (ran_applicant):
-                    self.club.add_applicant(Command.generateUser())
-                for y in range(ran_member):
-                    self.club.add_member(Command.generateUser())
-                #1 officer    
-                for z in range(ran_moderator):
-                    self.club.add_moderator(Command.generateUser())
+                self.create_club()
 
             except IntegrityError as e:
                 print("Integrity error was found, attempting again")
                 print(str(e))
+                
+    def create_club(self):
+        genOwner = Command.generateUser()
+        name = self.faker.sentence(nb_words=1)
+        club = Club.objects.create(
+            name=name,
+            club_url_name=Club.convertNameToUrl(None, name),
+            description=self.faker.text(max_nb_chars=200), 
+            tagline=self.faker.text(max_nb_chars=30), 
+            rules=self.faker.text(max_nb_chars=30), 
+        )
+
+        
+        club.add_owner(genOwner)
+        #3 applicants/members
+            
+        ran_member = random.randrange(10,15)
+        ran_applicant = random.randrange(5,7)
+        ran_moderator = random.randrange(1,3)
+        
+        for x in range (ran_applicant):
+            club.add_applicant(Command.generateUser())
+        for y in range(ran_member):
+            club.add_member(Command.generateUser())
+        #1 officer    
+        for z in range(ran_moderator):
+            club.add_moderator(Command.generateUser())

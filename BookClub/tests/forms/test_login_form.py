@@ -1,8 +1,9 @@
 """Unit tests of the log in form."""
 from django import forms
-from django.test import TestCase
+from django.test import TestCase, tag
 from BookClub.forms import LogInForm
 
+@tag('auth','user')
 class LogInFormTestCase(TestCase):
     """Unit tests of the log in form."""
     def setUp(self):

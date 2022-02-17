@@ -1,0 +1,44 @@
+[{
+        "model": "BookClub.ClubMembership",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "club": 1,
+            "membership": 2,
+            "joined_on": "2022-02-04"
+        }
+    },
+
+    {
+        "model": "BookClub.ClubMembership",
+        "pk": 2,
+        "fields": {
+            "user": 2,
+            "club": 2,
+            "membership": 2,
+            "joined_on": "2022-02-03"
+        }
+    },
+
+    {
+        "model": "BookClub.ClubMembership",
+        "pk": 3,
+        "fields": {
+            "user": 3,
+            "club": 3,
+            "membership": 2,
+            "joined_on": "2022-02-03"
+        }
+    },
+    {
+        "model": "BookClub.ClubMembership",
+        "pk": 4,
+        "fields": {
+            "user": 4,
+            "club": 1,
+            "membership": 0,
+            "joined_on": "2022-02-03"
+        }
+    }
+
+]
