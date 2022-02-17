@@ -86,7 +86,7 @@ class CreateClubViewTestcase(TestCase):
         club = Club.objects.get(name = self.data['name'])
         after_count = Club.objects.count()
         self.assertEqual(after_count, before_count+1)
-        response_url = reverse('club_dashboard', kwargs={'club_url_name': club.url_name})
+        response_url = reverse('club_dashboard', kwargs={'club_url_name': club.club_url_name})
         self.assertRedirects(response, response_url, status_code=302, target_status_code=200)
         self.assertTemplateUsed(response, 'club_dashboard.html')
         self.assertEqual(club.name, self.data['name'])

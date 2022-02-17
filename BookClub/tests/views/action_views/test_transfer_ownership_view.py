@@ -39,10 +39,10 @@ class PromoteMemberView(TestCase, LogInTester):
         self.club2 = Club.objects.get(pk=2)
         ClubMembership.objects.create(user=self.applicant,club=self.club2,membership = ClubMembership.UserRoles.MODERATOR)
 
-        self.url = reverse('transfer_ownership', kwargs={'url_name': self.club.url_name})
+        self.url = reverse('transfer_ownership', kwargs={'club_url_name': self.club.club_url_name})
 
     def test_transfer_ownership_url(self):
-        self.assertEqual(self.url,f'/transfer_ownership/{self.club.url_name}/')
+        self.assertEqual(self.url,f'/transfer_ownership/{self.club.club_url_name}/')
 
     def test_transfer_ownership_redirect_not_logged_in(self):
         """Test for redirecting user when not logged in"""
@@ -61,7 +61,7 @@ class PromoteMemberView(TestCase, LogInTester):
         self.assertTrue(ClubMembership.objects.filter(user=self.moderator, club=self.club, membership=ClubMembership.UserRoles.MODERATOR).exists())
         
         response = self.client.post(self.url, {'user': self.moderator.username})
-        redirect_url = reverse('member_list', kwargs={'url_name': self.club.url_name})
+        redirect_url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
         response_message = self.client.get(redirect_url)
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -84,7 +84,7 @@ class PromoteMemberView(TestCase, LogInTester):
         self.assertEqual(target_user_rank_before,ClubMembership.UserRoles.MODERATOR)
 
         response = self.client.post(self.url, {'user': self.moderator.username})
-        redirect_url = reverse('member_list', kwargs={'url_name': self.club.url_name})
+        redirect_url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
         response_message = self.client.get(redirect_url)
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -113,7 +113,7 @@ class PromoteMemberView(TestCase, LogInTester):
         self.assertEqual(target_user_rank_before,ClubMembership.UserRoles.MODERATOR)
 
         response = self.client.post(self.url, {'user': self.moderator.username})
-        redirect_url = reverse('member_list', kwargs={'url_name': self.club.url_name})
+        redirect_url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
         response_message = self.client.get(redirect_url)
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -143,7 +143,7 @@ class PromoteMemberView(TestCase, LogInTester):
         self.assertEqual(target_user_rank_before,ClubMembership.UserRoles.MODERATOR)
 
         response = self.client.post(self.url, {'user': self.moderator.username})
-        redirect_url = reverse('member_list', kwargs={'url_name': self.club.url_name})
+        redirect_url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
         response_message = self.client.get(redirect_url)
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -173,7 +173,7 @@ class PromoteMemberView(TestCase, LogInTester):
         self.assertEqual(target_user_rank_before,ClubMembership.UserRoles.MODERATOR)
 
         response = self.client.post(self.url, {'user': self.moderator.username})
-        redirect_url = reverse('member_list', kwargs={'url_name': self.club.url_name})
+        redirect_url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
         response_message = self.client.get(redirect_url)
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -205,7 +205,7 @@ class PromoteMemberView(TestCase, LogInTester):
         self.assertEqual(target_user_rank_before,ClubMembership.UserRoles.MEMBER)
 
         response = self.client.post(self.url, {'user': targetUser.username})
-        redirect_url = reverse('member_list', kwargs={'url_name': self.club.url_name})
+        redirect_url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
         response_message = self.client.get(redirect_url)
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -237,7 +237,7 @@ class PromoteMemberView(TestCase, LogInTester):
         self.assertEqual(target_user_rank_before,ClubMembership.UserRoles.MEMBER)
 
         response = self.client.post(self.url, {'user': targetUser.username})
-        redirect_url = reverse('member_list', kwargs={'url_name': self.club.url_name})
+        redirect_url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
         response_message = self.client.get(redirect_url)
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -269,7 +269,7 @@ class PromoteMemberView(TestCase, LogInTester):
         self.assertEqual(target_user_rank_before,ClubMembership.UserRoles.MEMBER)
 
         response = self.client.post(self.url, {'user': targetUser.username})
-        redirect_url = reverse('member_list', kwargs={'url_name': self.club.url_name})
+        redirect_url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
         response_message = self.client.get(redirect_url)
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -301,7 +301,7 @@ class PromoteMemberView(TestCase, LogInTester):
         self.assertEqual(target_user_rank_before,ClubMembership.UserRoles.MEMBER)
 
         response = self.client.post(self.url, {'user': targetUser.username})
-        redirect_url = reverse('member_list', kwargs={'url_name': self.club.url_name})
+        redirect_url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
         response_message = self.client.get(redirect_url)
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -333,7 +333,7 @@ class PromoteMemberView(TestCase, LogInTester):
         self.assertEqual(target_user_rank_before,ClubMembership.UserRoles.MEMBER)
 
         response = self.client.post(self.url, {'user': targetUser.username})
-        redirect_url = reverse('member_list', kwargs={'url_name': self.club.url_name})
+        redirect_url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
         response_message = self.client.get(redirect_url)
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -365,7 +365,7 @@ class PromoteMemberView(TestCase, LogInTester):
         self.assertEqual(target_user_rank_before,ClubMembership.UserRoles.APPLICANT)
 
         response = self.client.post(self.url, {'user': targetUser.username})
-        redirect_url = reverse('member_list', kwargs={'url_name': self.club.url_name})
+        redirect_url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
         response_message = self.client.get(redirect_url)
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -397,7 +397,7 @@ class PromoteMemberView(TestCase, LogInTester):
         self.assertEqual(target_user_rank_before,ClubMembership.UserRoles.APPLICANT)
 
         response = self.client.post(self.url, {'user': targetUser.username})
-        redirect_url = reverse('member_list', kwargs={'url_name': self.club.url_name})
+        redirect_url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
         response_message = self.client.get(redirect_url)
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -429,7 +429,7 @@ class PromoteMemberView(TestCase, LogInTester):
         self.assertEqual(target_user_rank_before,ClubMembership.UserRoles.APPLICANT)
 
         response = self.client.post(self.url, {'user': targetUser.username})
-        redirect_url = reverse('member_list', kwargs={'url_name': self.club.url_name})
+        redirect_url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
         response_message = self.client.get(redirect_url)
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -461,7 +461,7 @@ class PromoteMemberView(TestCase, LogInTester):
         self.assertEqual(target_user_rank_before,ClubMembership.UserRoles.APPLICANT)
 
         response = self.client.post(self.url, {'user': targetUser.username})
-        redirect_url = reverse('member_list', kwargs={'url_name': self.club.url_name})
+        redirect_url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
         response_message = self.client.get(redirect_url)
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -493,7 +493,7 @@ class PromoteMemberView(TestCase, LogInTester):
         self.assertEqual(target_user_rank_before,ClubMembership.UserRoles.APPLICANT)
 
         response = self.client.post(self.url, {'user': targetUser.username})
-        redirect_url = reverse('member_list', kwargs={'url_name': self.club.url_name})
+        redirect_url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
         response_message = self.client.get(redirect_url)
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -525,7 +525,7 @@ class PromoteMemberView(TestCase, LogInTester):
         self.assertEqual(target_user_rank_before,ClubMembership.UserRoles.OWNER)
 
         response = self.client.post(self.url, {'user': targetUser.username})
-        redirect_url = reverse('member_list', kwargs={'url_name': self.club.url_name})
+        redirect_url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
         response_message = self.client.get(redirect_url)
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -559,7 +559,7 @@ class PromoteMemberView(TestCase, LogInTester):
         self.assertEqual(target_user_rank_before,ClubMembership.UserRoles.MODERATOR)
 
         response = self.client.post(self.url, {'user': targetUser.username})
-        redirect_url = reverse('member_list', kwargs={'url_name': self.club.url_name})
+        redirect_url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
         response_message = self.client.get(redirect_url)
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)

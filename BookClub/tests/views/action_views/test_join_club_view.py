@@ -18,10 +18,10 @@ class JoinClubViewTestCase(TestCase, LogInTester):
         self.user = User.objects.get(username="johndoe")
         self.public_club = Club.objects.get(pk = "1")
         self.private_club = Club.objects.get(pk = "3")
-        self.url = reverse('join_club', kwargs={'url_name': self.public_club.url_name})
+        self.url = reverse('join_club', kwargs={'club_url_name': self.public_club.club_url_name})
 
     def test_url(self):
-        self.assertEqual(self.url,f'/join_club/{self.public_club.url_name}/')
+        self.assertEqual(self.url,f'/join_club/{self.public_club.club_url_name}/')
 
     def test_redirect_when_not_logged_in(self):
         self.assertFalse(self._is_logged_in())
@@ -33,7 +33,7 @@ class JoinClubViewTestCase(TestCase, LogInTester):
 
         self.client.login(username=self.user.username, password='Password123')
         self.assertTrue(self._is_logged_in())
-        response = self.client.get(reverse('join_club', kwargs={'url_name': self.public_club.url_name}))
+        response = self.client.get(reverse('join_club', kwargs={'club_url_name': self.public_club.club_url_name}))
         redirect_url = reverse('available_clubs')
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
@@ -42,7 +42,7 @@ class JoinClubViewTestCase(TestCase, LogInTester):
     def test_user_applies_to_private_club(self):
         self.client.login(username=self.user.username, password='Password123')
         before_count = ClubMembership.objects.count()
-        response = self.client.post(reverse('join_club', kwargs={'url_name': self.private_club.url_name}))
+        response = self.client.post(reverse('join_club', kwargs={'club_url_name': self.private_club.club_url_name}))
         after_count = ClubMembership.objects.count()
         self.assertEqual(before_count, after_count - 1)
         self.assertTrue(ClubMembership.objects.filter(user=self.user, club=self.private_club, membership=ClubMembership.UserRoles.APPLICANT).exists())
@@ -67,9 +67,9 @@ class JoinClubViewTestCase(TestCase, LogInTester):
 
     def test_user_action_invalid_club(self):
         self.client.login(username=self.user.username, password='Password123')
-        response = self.client.post(reverse('join_club', kwargs={'url_name': "wrong"}))
+        response = self.client.post(reverse('join_club', kwargs={'club_url_name': "wrong"}))
         with self.assertRaises(ObjectDoesNotExist):
-            Club.objects.get(url_name = "wrong").exists()
+            Club.objects.get(club_url_name = "wrong").exists()
         response_message = self.client.get(reverse('available_clubs'))
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -81,7 +81,7 @@ class JoinClubViewTestCase(TestCase, LogInTester):
         membership = ClubMembership.objects.create(user=self.user, club=self.private_club, membership=ClubMembership.UserRoles.APPLICANT)
         membership.save()
         before_count = ClubMembership.objects.count()
-        response = self.client.post(reverse('join_club', kwargs={'url_name': self.private_club.url_name}))
+        response = self.client.post(reverse('join_club', kwargs={'club_url_name': self.private_club.club_url_name}))
         after_count = ClubMembership.objects.count()
         self.assertEqual(before_count, after_count)
         self.assertTrue(ClubMembership.objects.filter(user=self.user, club=self.private_club, membership=ClubMembership.UserRoles.APPLICANT).exists())
@@ -108,9 +108,9 @@ class JoinClubViewTestCase(TestCase, LogInTester):
 
     def test_applicant_action_invalid_club(self):
         self.client.login(username=self.user.username, password='Password123')
-        response = self.client.post(reverse('join_club', kwargs={'url_name': "wrong"}))
+        response = self.client.post(reverse('join_club', kwargs={'club_url_name': "wrong"}))
         with self.assertRaises(ObjectDoesNotExist):
-            Club.objects.get(url_name = "wrong").exists()
+            Club.objects.get(club_url_name = "wrong").exists()
         response_message = self.client.get(reverse('available_clubs'))
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -122,7 +122,7 @@ class JoinClubViewTestCase(TestCase, LogInTester):
         membership = ClubMembership.objects.create(user=self.user, club=self.private_club, membership=ClubMembership.UserRoles.APPLICANT)
         membership.save()
         before_count = ClubMembership.objects.count()
-        response = self.client.post(reverse('join_club', kwargs={'url_name': self.private_club.url_name}))
+        response = self.client.post(reverse('join_club', kwargs={'club_url_name': self.private_club.club_url_name}))
         after_count = ClubMembership.objects.count()
         self.assertEqual(before_count, after_count)
         self.assertTrue(ClubMembership.objects.filter(user=self.user, club=self.private_club, membership=ClubMembership.UserRoles.APPLICANT).exists())
@@ -149,9 +149,9 @@ class JoinClubViewTestCase(TestCase, LogInTester):
 
     def test_member_action_invalid_club(self):
         self.client.login(username=self.user.username, password='Password123')
-        response = self.client.post(reverse('join_club', kwargs={'url_name': "wrong"}))
+        response = self.client.post(reverse('join_club', kwargs={'club_url_name': "wrong"}))
         with self.assertRaises(ObjectDoesNotExist):
-            Club.objects.get(url_name = "wrong").exists()
+            Club.objects.get(club_url_name = "wrong").exists()
         response_message = self.client.get(reverse('available_clubs'))
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -163,7 +163,7 @@ class JoinClubViewTestCase(TestCase, LogInTester):
         membership = ClubMembership.objects.create(user=self.user, club=self.private_club, membership=ClubMembership.UserRoles.MODERATOR)
         membership.save()
         before_count = ClubMembership.objects.count()
-        response = self.client.post(reverse('join_club', kwargs={'url_name': self.private_club.url_name}))
+        response = self.client.post(reverse('join_club', kwargs={'club_url_name': self.private_club.club_url_name}))
         after_count = ClubMembership.objects.count()
         self.assertEqual(before_count, after_count)
         self.assertTrue(ClubMembership.objects.filter(user=self.user, club=self.private_club, membership=ClubMembership.UserRoles.MODERATOR).exists())
@@ -190,9 +190,9 @@ class JoinClubViewTestCase(TestCase, LogInTester):
 
     def test_moderator_action_invalid_club(self):
         self.client.login(username=self.user.username, password='Password123')
-        response = self.client.post(reverse('join_club', kwargs={'url_name': "wrong"}))
+        response = self.client.post(reverse('join_club', kwargs={'club_url_name': "wrong"}))
         with self.assertRaises(ObjectDoesNotExist):
-            Club.objects.get(url_name = "wrong").exists()
+            Club.objects.get(club_url_name = "wrong").exists()
         response_message = self.client.get(reverse('available_clubs'))
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -204,7 +204,7 @@ class JoinClubViewTestCase(TestCase, LogInTester):
         membership = ClubMembership.objects.create(user=self.user, club=self.private_club, membership=ClubMembership.UserRoles.OWNER)
         membership.save()
         before_count = ClubMembership.objects.count()
-        response = self.client.post(reverse('join_club', kwargs={'url_name': self.private_club.url_name}))
+        response = self.client.post(reverse('join_club', kwargs={'club_url_name': self.private_club.club_url_name}))
         after_count = ClubMembership.objects.count()
         self.assertEqual(before_count, after_count)
         self.assertTrue(ClubMembership.objects.filter(user=self.user, club=self.private_club, membership=ClubMembership.UserRoles.OWNER).exists())
@@ -231,9 +231,9 @@ class JoinClubViewTestCase(TestCase, LogInTester):
 
     def test_owner_action_invalid_club(self):
         self.client.login(username=self.user.username, password='Password123')
-        response = self.client.post(reverse('join_club', kwargs={'url_name': "wrong"}))
+        response = self.client.post(reverse('join_club', kwargs={'club_url_name': "wrong"}))
         with self.assertRaises(ObjectDoesNotExist):
-            Club.objects.get(url_name = "wrong").exists()
+            Club.objects.get(club_url_name = "wrong").exists()
         response_message = self.client.get(reverse('available_clubs'))
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)

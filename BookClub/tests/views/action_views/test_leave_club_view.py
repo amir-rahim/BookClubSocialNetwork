@@ -28,10 +28,10 @@ class LeaveClubViewTestCase(TestCase, LogInTester):
         ClubMembership.objects.create(user=self.member, club=self.club, membership=ClubMembership.UserRoles.MEMBER)
         ClubMembership.objects.create(user=self.applicant, club=self.club, membership=ClubMembership.UserRoles.APPLICANT)
 
-        self.url = reverse('leave_club', kwargs={'url_name': self.club.url_name})
+        self.url = reverse('leave_club', kwargs={'club_url_name': self.club.club_url_name})
 
     def test_url(self):
-        self.assertEqual(self.url,f'/leave_club/{self.club.url_name}/')
+        self.assertEqual(self.url,f'/leave_club/{self.club.club_url_name}/')
 
     def test_redirect_when_not_logged_in(self):
         self.assertFalse(self._is_logged_in())
@@ -43,7 +43,7 @@ class LeaveClubViewTestCase(TestCase, LogInTester):
 
         self.client.login(username=self.member.username, password='Password123')
         self.assertTrue(self._is_logged_in())
-        response = self.client.get(reverse('leave_club', kwargs={'url_name': self.club.url_name}))
+        response = self.client.get(reverse('leave_club', kwargs={'club_url_name': self.club.club_url_name}))
         redirect_url = reverse('my_club_memberships')
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
@@ -113,7 +113,7 @@ class LeaveClubViewTestCase(TestCase, LogInTester):
     # Tests for user leaving a club they're not in
     def test_member_leave_wrong_club(self):
         self.client.login(username=self.member.username, password='Password123')
-        self.url = reverse('leave_club', kwargs={'url_name': self.wrong_club.url_name})
+        self.url = reverse('leave_club', kwargs={'club_url_name': self.wrong_club.club_url_name})
         before_count = ClubMembership.objects.count()
         response = self.client.post(self.url)
         after_count = ClubMembership.objects.count()
@@ -121,7 +121,7 @@ class LeaveClubViewTestCase(TestCase, LogInTester):
 
     def test_moderator_leave_wrong_club(self):
         self.client.login(username=self.moderator.username, password='Password123')
-        self.url = reverse('leave_club', kwargs={'url_name': self.wrong_club.url_name})
+        self.url = reverse('leave_club', kwargs={'club_url_name': self.wrong_club.club_url_name})
         before_count = ClubMembership.objects.count()
         response = self.client.post(self.url)
         after_count = ClubMembership.objects.count()
@@ -129,7 +129,7 @@ class LeaveClubViewTestCase(TestCase, LogInTester):
 
     def test_owner_leave_wrong_club(self):
         self.client.login(username=self.owner.username, password='Password123')
-        self.url = reverse('leave_club', kwargs={'url_name': self.wrong_club.url_name})
+        self.url = reverse('leave_club', kwargs={'club_url_name': self.wrong_club.club_url_name})
         before_count = ClubMembership.objects.count()
         response = self.client.post(self.url)
         after_count = ClubMembership.objects.count()
@@ -137,7 +137,7 @@ class LeaveClubViewTestCase(TestCase, LogInTester):
 
     def test_applicant_leave_wrong_club(self):
         self.client.login(username=self.applicant.username, password='Password123')
-        self.url = reverse('leave_club', kwargs={'url_name': self.wrong_club.url_name})
+        self.url = reverse('leave_club', kwargs={'club_url_name': self.wrong_club.club_url_name})
         before_count = ClubMembership.objects.count()
         response = self.client.post(self.url)
         after_count = ClubMembership.objects.count()
@@ -147,9 +147,9 @@ class LeaveClubViewTestCase(TestCase, LogInTester):
     # Test for user leaving an invalid club
     def test_member_leave_invalid_club(self):
         self.client.login(username=self.member.username, password='Password123')
-        response = self.client.post(reverse('leave_club', kwargs={'url_name': "wrong"}))
+        response = self.client.post(reverse('leave_club', kwargs={'club_url_name': "wrong"}))
         with self.assertRaises(ObjectDoesNotExist):
-            Club.objects.get(url_name = "wrong").exists()
+            Club.objects.get(club_url_name = "wrong").exists()
         response_message = self.client.get(reverse('my_club_memberships'))
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -157,9 +157,9 @@ class LeaveClubViewTestCase(TestCase, LogInTester):
 
     def test_moderator_leave_invalid_club(self):
         self.client.login(username=self.moderator.username, password='Password123')
-        response = self.client.post(reverse('leave_club', kwargs={'url_name': "wrong"}))
+        response = self.client.post(reverse('leave_club', kwargs={'club_url_name': "wrong"}))
         with self.assertRaises(ObjectDoesNotExist):
-            Club.objects.get(url_name = "wrong").exists()
+            Club.objects.get(club_url_name = "wrong").exists()
         response_message = self.client.get(reverse('my_club_memberships'))
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -167,9 +167,9 @@ class LeaveClubViewTestCase(TestCase, LogInTester):
 
     def test_owner_leave_invalid_club(self):
         self.client.login(username=self.owner.username, password='Password123')
-        response = self.client.post(reverse('leave_club', kwargs={'url_name': "wrong"}))
+        response = self.client.post(reverse('leave_club', kwargs={'club_url_name': "wrong"}))
         with self.assertRaises(ObjectDoesNotExist):
-            Club.objects.get(url_name = "wrong").exists()
+            Club.objects.get(club_url_name = "wrong").exists()
         response_message = self.client.get(reverse('my_club_memberships'))
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -177,9 +177,9 @@ class LeaveClubViewTestCase(TestCase, LogInTester):
 
     def test_applicant_leave_invalid_club(self):
         self.client.login(username=self.applicant.username, password='Password123')
-        response = self.client.post(reverse('leave_club', kwargs={'url_name': "wrong"}))
+        response = self.client.post(reverse('leave_club', kwargs={'club_url_name': "wrong"}))
         with self.assertRaises(ObjectDoesNotExist):
-            Club.objects.get(url_name = "wrong").exists()
+            Club.objects.get(club_url_name = "wrong").exists()
         response_message = self.client.get(reverse('my_club_memberships'))
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)

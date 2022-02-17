@@ -13,7 +13,7 @@ from BookClub.models.club_membership import ClubMembership
 
 class Club(models.Model):
     name = models.CharField(unique=True, max_length=100, blank=False)
-    url_name = models.CharField(
+    club_url_name = models.CharField(
         unique=True,
         max_length=100,
         blank=False,
@@ -31,13 +31,12 @@ class Club(models.Model):
     created_on = models.DateField(auto_now_add=True)
 
     def clean(self):
-        if self.url_name is None or self.url_name == "":
-            url = self.convertNameToUrl(self.name)
-            self.url_name = url
+        url = self.convertNameToUrl(self.name)
+        self.club_url_name = url
         super().clean()
 
     def get_absolute_url(self):
-        return reverse('club_dashboard', kwargs={'club_url_name': self.url_name})
+        return reverse('club_dashboard', kwargs={'club_url_name': self.club_url_name})
 
     def __str__(self):
         return self.name
@@ -95,7 +94,7 @@ class Club(models.Model):
         return User.objects.filter(id__in=filterBy)
 
     def get_applicants(self):
-        """Get all the applicants from the given club."""
+        """Get all the applicants from the  given club."""
 
         return self.get_users(ClubMembership.UserRoles.APPLICANT)
 

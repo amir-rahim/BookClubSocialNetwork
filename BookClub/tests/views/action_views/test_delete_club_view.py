@@ -36,13 +36,13 @@ class DeleteClubTest(TestCase,LogInTester):
             user = self.user4,club = self.club,
             membership = ClubMembership.UserRoles.APPLICANT
         )
-        self.url = reverse("delete_club",kwargs={"url_name" : self.club.url_name})
+        self.url = reverse("delete_club",kwargs={"club_url_name" : self.club.club_url_name})
         
 
         
     
     def test_delete_club_url(self):
-        self.assertEqual(self.url,f'/delete_club/{self.club.url_name}/')
+        self.assertEqual(self.url,f'/delete_club/{self.club.club_url_name}/')
 
     
     def test_delete_club_not_logged_in_redirect(self):
@@ -104,10 +104,10 @@ class DeleteClubTest(TestCase,LogInTester):
         
     def test_owner_delete_invalid_club(self):
         self.client.login(username=self.owner.user.username, password='Password123')
-        response = self.client.post(reverse('delete_club', kwargs={'url_name': "wrong"}))
+        response = self.client.post(reverse('delete_club', kwargs={'club_url_name': "wrong"}))
         redirect_url = '/'
         with self.assertRaises(ObjectDoesNotExist):
-            Club.objects.get(url_name = "wrong").exists()
+            Club.objects.get(club_url_name = "wrong").exists()
 
         response_message = self.client.get(redirect_url)
         messages_list = list(response_message.context['messages'])

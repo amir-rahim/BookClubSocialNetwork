@@ -4,7 +4,7 @@
         "fields": {
 
             "name": "Johnathan Club",
-            "url_name": "Johnathan_Club",
+            "club_url_name": "Johnathan_Club",
             "description": "This is a very cool club that is owned by a certain Johnathan. Reading certain books...",
             "tagline": "Welcome to Johnathan's club! We read the best books!!!",
             "rules": "Don't be annoying",
@@ -20,7 +20,7 @@
         "fields": {
 
             "name": "Jeannette Club",
-            "url_name": "Jeannette_Club",
+            "club_url_name": "Jeannette_Club",
             "description": "This is a club owned by a certain Jeannette",
             "tagline": "",
             "rules": "",
@@ -35,7 +35,7 @@
         "fields": {
 
             "name": "Jack Club",
-            "url_name": "Jack_Club",
+            "club_url_name": "Jack_Club",
             "description": "a club created by some Jack",
             "tagline": "Just Read It",
             "rules": "Know the inside jokes",
