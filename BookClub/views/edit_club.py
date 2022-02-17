@@ -16,6 +16,9 @@ class EditClubView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Club
     form_class = ClubForm
     template_name = 'edit_club.html'
+    slug_url_kwarg = 'club_url_name'
+    slug_field = 'club_url_name'
+    context_object_name = 'club'
     
     def test_func(self):
         try:
@@ -39,19 +42,10 @@ class EditClubView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     
     def get_object(self):
         try:
-            return Club.objects.get(club_url_name=self.kwargs['club_url_name'])
+            return super().get_object()
         except:
             messages.add_message(self.request,messages.ERROR,'Club not found!')
             return None
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data()
-        try:
-            club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
-            context['club'] = club
-        except:
-            return context
-        return context
 
     # def get_success_url(self):
     #     messages.add_message(self.request,messages.SUCCESS,'Club updated!')
