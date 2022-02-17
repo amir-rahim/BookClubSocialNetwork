@@ -18,7 +18,6 @@ class MemberListTestCase(TestCase):
     
     def setUp(self):
         self.club = Club.objects.get(pk=1)
-        self.url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
         self.user = User.objects.get(username="johndoe")
         self.jack = User.objects.get(username="jackdoe")
         self.jane = User.objects.get(username="janedoe")
@@ -28,29 +27,34 @@ class MemberListTestCase(TestCase):
         self.applicants = Club.objects.get(pk=1).get_applicants()
         
     def test_url(self):
-        self.assertEqual(self.url, '/club/'+self.club.club_url_name+'/member_list/')
+        url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
+        self.assertEqual(url, '/club/'+self.club.club_url_name+'/members/')
         
     def test_get_template_logged_in(self):
         self.client.login(username=self.user.username, password="Password123")
-        response = self.client.get(self.url)
-
+        url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
+        response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'club_members.html')
         
     def test_redirect_when_not_logged_in(self):
-        response = self.client.get(self.url)
+        url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
+        response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
     
     def test_can_see_club_name(self):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'club_members.html')
         self.assertContains(response, self.club.name)
     
     def test_owner_has_admin_options(self):
         self.client.login(username=self.jane.username, password="Password123")
-        response = self.client.get(self.url)
+        url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
+        response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'club_members.html')
         self.assertContains(response, "Club Administration")
         self.assertContains(response, "Manage Club")
         self.assertContains(response, "Club Settings")
@@ -59,6 +63,7 @@ class MemberListTestCase(TestCase):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'club_members.html')
         self.assertNotContains(response, "Club Administration")
         self.assertNotContains(response, "Manage Club")
         self.assertNotContains(response, "Club Settings")
@@ -67,6 +72,7 @@ class MemberListTestCase(TestCase):
         self.client.login(username=self.jack.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'club_members.html')
         self.assertNotContains(response, "Club Administration")
         self.assertNotContains(response, "Manage Club")
         self.assertNotContains(response, "Club Settings")
@@ -75,6 +81,7 @@ class MemberListTestCase(TestCase):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'club_members.html')
         self.assertContains(response, self.owner.username)
         self.assertContains(response, self.owner.public_bio)
 
@@ -82,6 +89,7 @@ class MemberListTestCase(TestCase):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'club_members.html')
         for mod in self.moderators:
             self.assertContains(response, mod.username)
             self.assertContains(response, mod.public_bio)
@@ -90,6 +98,7 @@ class MemberListTestCase(TestCase):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'club_members.html')
         for member in self.members:
             self.assertContains(response, member.username)
             self.assertContains(response, member.public_bio)
@@ -98,6 +107,7 @@ class MemberListTestCase(TestCase):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'club_members.html')
         for applicant in self.applicants:
             self.assertNotContains(response, applicant.username)
             self.assertNotContains(response, applicant.public_bio)
@@ -106,23 +116,58 @@ class MemberListTestCase(TestCase):
         self.client.login(username=self.jane.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'club_members.html')
         self.assertContains(response, "Delete Club")
         
     def test_mod_cannot_see_delete_button(self):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'club_members.html')
         self.assertNotContains(response, "Delete Club")
 
     def test_member_cannot_see_delete_button(self):
         self.client.login(username=self.jack.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'club_members.html')
         self.assertNotContains(response, "Delete Club")
 
     def test_applicant_cannot_see_delete_button(self):
         self.client.login(username=self.applicants[0].username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'club_members.html')
         self.assertNotContains(response, "Delete Club")
+
+    def test_owner_is_visible(self):
+        self.client.login(username=self.jack.username, password="Password123")
+        example_club = Club.objects.create(name="Example", club_url_name="example", description="Example Club", tagline="Welcome", rules="None")
+        example_owner = ClubMembership.objects.create(club=example_club, user=self.jack, membership=2)
+        url = reverse("member_list", kwargs={"club_url_name": example_club.club_url_name})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'club_members.html')
+        self.assertContains(response, "<b>Name: </b> "+self.jack.username)
+        self.assertContains(response, "<b>Public Bio: </b> "+self.jack.public_bio)
+
+    def test_no_moderators(self):
+        self.client.login(username=self.jack.username, password="Password123")
+        example_club = Club.objects.create(name="Example", club_url_name="example", description="Example Club", tagline="Welcome", rules="None")
+        example_owner = ClubMembership.objects.create(club=example_club, user=self.jack, membership=2)
+        url = reverse("member_list", kwargs={"club_url_name": example_club.club_url_name})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'club_members.html')
+        self.assertContains(response, "There is no moderators to this club.")
+
+    def test_no_members(self):
+        self.client.login(username=self.jack.username, password="Password123")
+        example_club = Club.objects.create(name="Example", club_url_name="example", description="Example Club", tagline="Welcome", rules="None")
+        example_owner = ClubMembership.objects.create(club=example_club, user=self.jack, membership=2)
+        url = reverse("member_list", kwargs={"club_url_name": example_club.club_url_name})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'club_members.html')
+        self.assertContains(response, "There is no members to this club.")
     
