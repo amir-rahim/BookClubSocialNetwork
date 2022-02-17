@@ -14,10 +14,10 @@ from BookClub.models.club_membership import ClubMembership
 class Club(models.Model):
     name = models.CharField(unique=True, max_length=100, blank=False)
     club_url_name = models.CharField(
-        unique=True,
-        max_length=100,
-        blank=False,
-        validators=[
+            unique=True,
+            max_length=100,
+            blank=False,
+            validators=[
             RegexValidator(
                 regex='^[a-zA-Z0-9_]+$',
                 message='Can contain A-Z, a-z and 0-9 and underscores characters only.',
@@ -36,7 +36,7 @@ class Club(models.Model):
         super().clean()
 
     def get_absolute_url(self):
-        return reverse('club_dashboard', kwargs={'club_url_name': self.club_url_name})
+        return reverse('club_dashboard', kwargs = {'club_url_name': self.club_url_name})
 
     def __str__(self):
         return self.name

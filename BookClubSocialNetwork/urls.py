@@ -46,8 +46,6 @@ urlpatterns = [
     path('kick_member/<str:club_url_name>/', views.KickMemberView.as_view(), name='kick_member'),
     path('delete_club/<str:club_url_name>/',views.DeleteClubView.as_view(),name='delete_club'),
 
-
-
     # '''Membership URLs'''
     path('club/available_clubs/', views.AvailableClubsView.as_view(), name='available_clubs'),
     path('club/my_club_memberships/', views.MyClubMembershipsView.as_view(), name='my_club_memberships'),
@@ -56,7 +54,7 @@ urlpatterns = [
     # '''Club URLs'''
     path('club/<str:club_url_name>/', views.ClubDashboardView.as_view(), name='club_dashboard'),
     path('club/<str:club_url_name>/members/', views.MembersListView.as_view(), name='member_list'),
-    path('club/<str:club_url_name>/applicant_list/', views.ApplicantListView.as_view(), name='applicant_list'),
+    path('club/<str:club_url_name>/applicants/', views.ApplicantListView.as_view(), name='applicant_list'),
     path('club/<str:club_url_name>/edit/', views.EditClubView.as_view(), name='edit_club'),
 
 
