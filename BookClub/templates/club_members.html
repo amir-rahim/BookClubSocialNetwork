@@ -121,24 +121,19 @@ This is the list of members for this club.
 
         <hr class="solid">
 
-        {% for moderator in moderators %}
-        <div class="columns">
+        {% if moderators %}
+            {% for moderator in moderators %}
+            <div class="columns">
 
-            <div class="column is-12">
-                <div class="card">
-                    <div class="card-content">
-                        <div class="media">
-                            <div class="media-left">
-                                <figure class="image is-64x64">
-                                    <img class="is-rounded" src="{{ moderator.gravatar }}" alt="Placeholder image">
-                                </figure>
-                            </div>
-                            <div class="media-content">
-                                <div class="content">
-                                    <p class="text"><b>Name: </b> {{ moderator.username }}</p>
-                                    <p class="text"><b>Public Bio: </b> {{ moderator.public_bio }}</p>
+                <div class="column is-12">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="media">
+                                <div class="media-left">
+                                    <figure class="image is-64x64">
+                                        <img class="is-rounded" src="{{ moderator.gravatar }}" alt="Placeholder image">
+                                    </figure>
                                 </div>
-
                                 <hr class="solid">
                                 <div class="buttons">
 
@@ -160,16 +155,17 @@ This is the list of members for this club.
                                         <button type="submit" class="button is-danger is-small" style="margin-right: 5px" onclick="return confirm('Confirm you want to kick {{moderator.username}}?');">Kick</button>
                                     </form>
                                   {% endif %}
-
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-        </div>
-        {% endfor %}
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>There is no moderators to this club.</p>
+        {% endif %}
 
         <hr class="solid">
 
@@ -177,24 +173,19 @@ This is the list of members for this club.
 
         <hr class="solid">
 
-        {% for member in members %}
-        <div class="columns">
+        {% if members %}
+            {% for member in members %}
+            <div class="columns">
 
-            <div class="column is-12">
-                <div class="card">
-                    <div class="card-content">
-                        <div class="media">
-                            <div class="media-left">
-                                <figure class="image is-64x64">
-                                    <img class="is-rounded" src="{{ member.gravatar }}" alt="Placeholder image">
-                                </figure>
-                            </div>
-                            <div class="media-content">
-                                <div class="content">
-                                    <p class="text"><b>Name: </b> {{ member.username }}</p>
-                                    <p class="text"><b>Public Bio: </b> {{ member.public_bio }}</p>
+                <div class="column is-12">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="media">
+                                <div class="media-left">
+                                    <figure class="image is-64x64">
+                                        <img class="is-rounded" src="{{ member.gravatar }}" alt="Placeholder image">
+                                    </figure>
                                 </div>
-
                                 <hr class="solid">
 
                                 <div class="buttons">
@@ -218,10 +209,12 @@ This is the list of members for this club.
                         </div>
                     </div>
                 </div>
-            </div>
 
-        </div>
-        {% endfor %}
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>There is no members to this club.</p>
+        {% endif %}
 
     </div>
 
