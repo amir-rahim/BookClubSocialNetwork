@@ -39,10 +39,10 @@ class RejectApplicantView(TestCase, LogInTester):
         ClubMembership.objects.create(user=self.another_applicant, club=self.club,
                                       membership=ClubMembership.UserRoles.APPLICANT)
 
-        self.url = reverse('reject_applicant', kwargs={'url_name': self.club.url_name})
+        self.url = reverse('reject_applicant', kwargs={'club_url_name': self.club.club_url_name})
 
     def test_reject_applicant_url(self):
-        self.assertEqual(self.url, f'/reject_applicant/{self.club.url_name}/')
+        self.assertEqual(self.url, f'/reject_applicant/{self.club.club_url_name}/')
 
     def test_get_reject_applicant_redirects_when_not_logged_in(self):
         """Test for redirecting user when not logged in."""
@@ -59,13 +59,13 @@ class RejectApplicantView(TestCase, LogInTester):
         self.assertTrue(ClubMembership.objects.filter(user=self.applicant, club=self.club,
                                                       membership=ClubMembership.UserRoles.APPLICANT).exists())
         response = self.client.post(self.url, {'user': self.applicant.username})
-        redirect_url = reverse('applicant_list', kwargs={'url_name': self.club.url_name})
+        redirect_url = reverse('applicant_list', kwargs={'club_url_name': self.club.club_url_name})
         response_message = self.client.get(redirect_url)
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.SUCCESS)
         self.assertFalse(ClubMembership.objects.filter(user=self.applicant, club=self.club,
-                                                       membership=ClubMembership.UserRoles.APPLICANT).exists())
+                                                      membership=ClubMembership.UserRoles.MEMBER).exists())
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_moderator_reject_applicant(self):
@@ -76,13 +76,13 @@ class RejectApplicantView(TestCase, LogInTester):
         self.assertTrue(ClubMembership.objects.filter(user=self.applicant, club=self.club,
                                                       membership=ClubMembership.UserRoles.APPLICANT).exists())
         response = self.client.post(self.url, {'user': self.applicant.username})
-        redirect_url = reverse('applicant_list', kwargs={'url_name': self.club.url_name})
+        redirect_url = reverse('applicant_list', kwargs={'club_url_name': self.club.club_url_name})
         response_message = self.client.get(redirect_url)
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.SUCCESS)
         self.assertFalse(ClubMembership.objects.filter(user=self.applicant, club=self.club,
-                                                       membership=ClubMembership.UserRoles.APPLICANT).exists())
+                                                      membership=ClubMembership.UserRoles.MEMBER).exists())
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     """Unit tests for user not being able to reject a member"""
@@ -95,7 +95,7 @@ class RejectApplicantView(TestCase, LogInTester):
         self.assertTrue(ClubMembership.objects.filter(user=self.member, club=self.club,
                                                       membership=ClubMembership.UserRoles.MEMBER).exists())
         response = self.client.post(self.url, {'user': self.member.username})
-        redirect_url = reverse('applicant_list', kwargs={'url_name': self.club.url_name})
+        redirect_url = reverse('applicant_list', kwargs={'club_url_name': self.club.club_url_name})
         response_message = self.client.get(redirect_url)
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -112,7 +112,7 @@ class RejectApplicantView(TestCase, LogInTester):
         self.assertTrue(ClubMembership.objects.filter(user=self.member, club=self.club,
                                                       membership=ClubMembership.UserRoles.MEMBER).exists())
         response = self.client.post(self.url, {'user': self.member.username})
-        redirect_url = reverse('applicant_list', kwargs={'url_name': self.club.url_name})
+        redirect_url = reverse('applicant_list', kwargs={'club_url_name': self.club.club_url_name})
         response_message = self.client.get(redirect_url)
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -182,7 +182,7 @@ class RejectApplicantView(TestCase, LogInTester):
         self.assertTrue(ClubMembership.objects.filter(user=self.moderator, club=self.club,
                                                       membership=ClubMembership.UserRoles.MODERATOR).exists())
         response = self.client.post(self.url, {'user': self.moderator.username})
-        redirect_url = reverse('applicant_list', kwargs={'url_name': self.club.url_name})
+        redirect_url = reverse('applicant_list', kwargs={'club_url_name': self.club.club_url_name})
         response_message = self.client.get(redirect_url)
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -199,7 +199,7 @@ class RejectApplicantView(TestCase, LogInTester):
         self.assertTrue(ClubMembership.objects.filter(user=self.moderator, club=self.club,
                                                       membership=ClubMembership.UserRoles.MODERATOR).exists())
         response = self.client.post(self.url, {'user': self.moderator.username})
-        redirect_url = reverse('applicant_list', kwargs={'url_name': self.club.url_name})
+        redirect_url = reverse('applicant_list', kwargs={'club_url_name': self.club.club_url_name})
         response_message = self.client.get(redirect_url)
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -250,7 +250,7 @@ class RejectApplicantView(TestCase, LogInTester):
         self.assertTrue(ClubMembership.objects.filter(user=self.moderator, club=self.club,
                                                       membership=ClubMembership.UserRoles.MODERATOR).exists())
         response = self.client.post(self.url, {'user': self.moderator.username})
-        redirect_url = reverse('applicant_list', kwargs={'url_name': self.club.url_name})
+        redirect_url = reverse('applicant_list', kwargs={'club_url_name': self.club.club_url_name})
         response_message = self.client.get(redirect_url)
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -322,7 +322,7 @@ class RejectApplicantView(TestCase, LogInTester):
         self.assertTrue(ClubMembership.objects.filter(user=self.owner, club=self.club,
                                                       membership=ClubMembership.UserRoles.OWNER).exists())
         response = self.client.post(self.url, {'user': self.owner.username})
-        redirect_url = reverse('applicant_list', kwargs={'url_name': self.club.url_name})
+        redirect_url = reverse('applicant_list', kwargs={'club_url_name': self.club.club_url_name})
         response_message = self.client.get(redirect_url)
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -373,7 +373,7 @@ class RejectApplicantView(TestCase, LogInTester):
         self.assertTrue(ClubMembership.objects.filter(user=self.owner, club=self.club,
                                                       membership=ClubMembership.UserRoles.OWNER).exists())
         response = self.client.post(self.url, {'user': self.owner.username})
-        redirect_url = reverse('applicant_list', kwargs={'url_name': self.club.url_name})
+        redirect_url = reverse('applicant_list', kwargs={'club_url_name': self.club.club_url_name})
         response_message = self.client.get(redirect_url)
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
