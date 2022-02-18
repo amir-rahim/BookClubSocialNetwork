@@ -1,0 +1,74 @@
+{% extends 'base_content.html' %}
+
+{% block page_title %}
+Create Club
+{% endblock page_title %}
+
+{% block page_subtitle %}
+This is a page to create your own club.
+{% endblock page_subtitle %}
+
+{% block content %}
+<div class="columns">
+    <div class="column is-9">
+
+        <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a>{{ creator.username }}</a></li>
+                <li><a>Lists</a></li>
+            </ul>
+        </nav>
+
+        <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">Lists by {{creator.username}}</h1>
+                </div>
+            </div>
+        </section>
+
+        <div class="columns">
+
+            <div class="column is-12">
+              <div class="container">
+                <table class="table is-fullwidth is-hoverable is-striped is-bordered">
+                  <tbody>
+
+                  {% for list in booklists%}
+                    <tr>
+                      <td class="container">
+                        {# <div class="box"> #}
+                          <p class="is-medium"><strong><a href="#">{{list.title}}</a></strong></p>
+                          {% if list.description %}<p>{{list.description}}</p>{% endif %}
+                        {# </div> #}
+                      </td>
+                      {% if self %}
+                        <td style="width:8%; text-align:right;">
+
+                            <a href="#" class="button is-dark">
+                              <span>Edit</span>
+                            </a>
+
+                        </td>
+                      {% endif %}
+                      {# </td> #}
+                    </tr>
+                  {% empty %}
+
+                  <div class="box">
+                    No lists. {% if self %}<a href="#">Create one?</a>{% endif %}
+                  </div>
+
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
