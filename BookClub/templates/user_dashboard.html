@@ -73,16 +73,14 @@ This is the User Dashboard, the main home page for your user profile!
                         <div class="media">
                             <div class="media-left">
                                 <figure class="image is-128x128">
-                                    <img class="is-rounded" src="https://image.shutterstock.com/image-vector/default-avatar-profile-icon-grey-600w-518740741.jpg" alt="Placeholder image">
+                                    <img class="is-rounded" src="{{ gravatar }}" alt="Placeholder image">
                                 </figure>
                             </div>
                             <div class="media-content">
                                 <div class="content">
-                                    <!-- <p class="subtitle is-5"><b>Full Name: </b> *Full Name*</p> -->
-                                    <p class="subtitle is-5"><b>Username: </b> {{ user.username }}</p>
-                                    <p class="subtitle is-5"><b>Email: </b> {{ user.email }}</p>
-                                    <p class="subtitle is-5"><b>Public Bio: </b> {{ user.public_bio }}</p>
-                                    <!-- <p class="subtitle is-5"><b>Phone: </b> *Phone Number*</p> -->
+                                    <p class="subtitle is-5"><b>Username: </b> {{ username }}</p>
+                                    <p class="subtitle is-5"><b>Email: </b> {{ email }}</p>
+                                    <p class="subtitle is-5"><b>Public Bio: </b> {{ public_bio }}</p>
                                 </div>
                             </div>
                         </div>
@@ -99,7 +97,7 @@ This is the User Dashboard, the main home page for your user profile!
 
                 <div class="card">
                     <div class="card-content">
-                        <p class="title">Friends</p>
+                        <p class="title">Following</p>
                         
                     </div>
                     <div class="card-footer">
@@ -139,7 +137,7 @@ This is the User Dashboard, the main home page for your user profile!
             <div class="tile is-parent">
                 <article class="tile is-child box">
                     <p class="title">69k</p>
-                    <p class="subtitle">Books Read</p>
+                    <p class="subtitle">Following</p>
                 </article>
             </div>
             <div class="tile is-parent">
