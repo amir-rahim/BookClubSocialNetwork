@@ -47,8 +47,8 @@ This is the User Dashboard, the main home page for your user profile!
 
         <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
             <ul>
-                <li><a href=" url 'home' ">Home</a></li>
-                <li><a>Profile</a></li>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'user_dashboard' %}>Profile</a></li>
                 <li><a>Dashboard</a></li>
             </ul>
         </nav>
@@ -56,7 +56,7 @@ This is the User Dashboard, the main home page for your user profile!
         <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
             <div class="hero-body">
                 <div class="container">
-                    <h1 class="title">{{ user.username }}</h1>
+                    <h1 class="title">{{ user.username }}'s Dashboard</h1>
                     <h2 class="subtitle">Welcome to your profile page!</h2>
                 </div>
             </div>

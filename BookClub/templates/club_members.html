@@ -28,7 +28,7 @@ This is the list of members for this club.
                 <p class="menu-label">Club Administration</p>
 
                 <ul class="menu-list">
-                    <li><a>Manage Club</a></li>
+                    <li><a href="{% url 'edit_club' club.club_url_name %}">Manage Club</a></li>
                     <li><a>Club Settings</a></li>
                 </ul>
 
@@ -58,7 +58,7 @@ This is the list of members for this club.
         <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
             <ul>
                 <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a>Club</a></li>
+                <li><a href="{% url 'my_club_memberships' %}">Club</a></li>
                 <li><a>{{ club.name }}</a></li>
                 <li><a href="#">Member List</a></li>
             </ul>

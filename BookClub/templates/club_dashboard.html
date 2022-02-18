@@ -28,7 +28,7 @@ This is the Club Dashboard, the main home page for each club!
                 <p class="menu-label">Club Administration</p>
 
                 <ul class="menu-list">
-                    <li><a>Manage Club</a></li>
+                    <li><a href="{% url 'edit_club' current_club.club_url_name %}">Manage Club</a></li>
                     <li><a>Club Settings</a></li>
                 </ul>
 
@@ -58,7 +58,7 @@ This is the Club Dashboard, the main home page for each club!
         <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
             <ul>
                 <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a>Club</a></li>
+                <li><a href="{% url 'available_clubs' %}">Club</a></li>
                 <li><a>{{ current_club.name }}</a></li>
                 <li><a href="#">Dashboard</a></li>
             </ul>

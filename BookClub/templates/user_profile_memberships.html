@@ -44,7 +44,7 @@ This is the User Profile, this is where you can view other profiles!
         <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
             <ul>
                 <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a>Profile</a></li>
+                <li><a {% url 'user_dashboard' %}>Profile</a></li>
                 <li><a href="{% url 'user_profile' username %}">{{ username }}</a></li>
                 <li><a>Club Memberships</a></li>
             </ul>
@@ -53,7 +53,7 @@ This is the User Profile, this is where you can view other profiles!
         <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
             <div class="hero-body">
                 <div class="container">
-                    <h1 class="title">{{ username }}</h1>
+                    <h1 class="title">{{ username }}'s Memberships</h1>
                     <h2 class="subtitle">This is the clubs that this user is apart of.</h2>
                 </div>
             </div>
