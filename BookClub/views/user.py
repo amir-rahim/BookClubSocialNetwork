@@ -8,7 +8,8 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from BookClub.helpers import LoginProhibitedMixin
 from django.views.generic import FormView, TemplateView, UpdateView
-from BookClub.models import User
+from BookClub.models import User, ClubMembership, Club
+from django.db.models import Exists, Q, OuterRef
 
 class UserDashboardView(LoginRequiredMixin, TemplateView):
     """
@@ -22,9 +23,51 @@ class UserDashboardView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         user = self.request.user
         context = super(UserDashboardView, self).get_context_data(**kwargs)
+        context['gravatar'] = user.gravatar
         context['username'] = user.username
         context['email'] = user.email
         context['public_bio'] = user.public_bio
+        return context
+
+class UserProfileView(LoginRequiredMixin, TemplateView):
+    """
+    
+    Class based view for user profile
+
+    """
+    model = User
+    template_name = 'user_profile.html'
+    
+    def get_context_data(self, **kwargs):
+        user = User.objects.get(username=self.kwargs['username'])
+        context = super(UserProfileView, self).get_context_data(**kwargs)
+        context['gravatar'] = user.gravatar
+        context['username'] = user.username
+        context['public_bio'] = user.public_bio
+        return context
+
+class UserProfileMembershipsView(LoginRequiredMixin, TemplateView):
+    """Class based view for user profile memberships"""
+    
+    model = Club
+    template_name = 'user_profile_memberships.html'
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        user = User.objects.get(username=self.kwargs['username'])
+        subquery = ClubMembership.objects.filter(user=user, club=OuterRef('pk'))
+        clubs = Club.objects.filter(
+            Q(Exists(subquery)) &
+            ~Q(Exists(subquery.filter(membership=ClubMembership.UserRoles.APPLICANT)))
+        )
+        return clubs
+
+    def get_context_data(self, **kwargs):
+        user = User.objects.get(username=self.kwargs['username'])
+        context = super().get_context_data(**kwargs)
+        context['username'] = user.username
+        context['public_bio'] = user.public_bio
+        context['clubs'] = self.get_queryset()
         return context
 
 class EditProfileView(LoginRequiredMixin, UpdateView):
