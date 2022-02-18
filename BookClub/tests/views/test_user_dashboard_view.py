@@ -6,7 +6,7 @@ from BookClub.models import User
 from BookClub.tests.helpers import reverse_with_query
 @tag('editprofile','user')
 
-class ProfileViewTest(TestCase):
+class UserDashboardViewTest(TestCase):
     """Unit tests of the profile view."""
 
     fixtures = [
@@ -17,7 +17,7 @@ class ProfileViewTest(TestCase):
         self.user = User.objects.get(username='johndoe')
         self.url = reverse('user_dashboard')
 
-    def test_profile_url(self):
+    def test_dashboard_url(self):
         self.assertEqual(self.url, '/user/')
 
     def test_get_profile(self):
@@ -25,7 +25,6 @@ class ProfileViewTest(TestCase):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user_dashboard.html')
-
 
     def test_get_profile_redirects_when_not_logged_in(self):
         redirect_url = reverse_with_query('login',query_kwargs={'next':reverse('user_dashboard')})
