@@ -1,9 +1,9 @@
-from django.test import TestCase
+from django.test import TestCase, tag
 
 from BookClub.models.club import Club, ClubMembership
 # from BookClub.models.club_membership import ClubMembership
 from django.core.exceptions import ValidationError
-
+@tag('clubmodel', 'club')
 class ClubModelTestCase(TestCase):
 
     fixtures = [
@@ -46,6 +46,32 @@ class ClubModelTestCase(TestCase):
     def test_name_cannot_be_over_100_characters_long(self):
         self.club1.name = 'x' * 101
         self._assert_club_is_invalid()
+        
+#URL Name Testing
+    def test_club_url_name_cannot_be_blank(self):
+        self.club1.club_url_name = ''
+        self._assert_club_is_invalid()
+
+    def test_club_url_name_must_be_unique(self):
+        self.club1.name = self.club2.name
+        self.club1.club_url_name = self.club2.club_url_name
+        self._assert_club_is_invalid()
+        
+    def test_club_url_name_can_be_100_characters_long(self):
+        self.club1.club_url_name = 'x' * 100
+        self._assert_club_is_valid()
+
+    def test_club_url_name_cannot_be_over_100_characters_long(self):
+        self.club1.club_url_name = 'x' * 101
+        self._assert_club_is_invalid()
+        
+    def test_club_url_name_cannot_have_special_chars(self):
+        self.club1.club_url_name = 'x/xaaa'
+        self._assert_club_is_invalid()
+        
+    def test_club_url_name_can_have_underscores(self):
+        self.club1.club_url_name = 'x_xaaa'
+        self._assert_club_is_valid()
 
 # Description testing
     def test_description_cannot_be_blank(self):
@@ -107,3 +133,22 @@ class ClubModelTestCase(TestCase):
     def test_get_number_of_members(self):
         number_of_members = ClubMembership.objects.filter(club = self.club1, membership__gte = ClubMembership.UserRoles.MEMBER).count()
         self.assertEqual(self.club1.get_number_of_members(), number_of_members, 'Club object returned a wrong number of members')
+        
+    def test_convert_to_url_replaces_spaces(self):
+        testName = "Daves Club Of Spaces"
+        expectedUrl = "Daves_Club_Of_Spaces"
+        resultUrl = Club.convertNameToUrl(None, testName)
+        self.assertEqual(expectedUrl, resultUrl)
+        
+    def test_convert_to_url_replaces_non_alpha_numerics(self):
+        testName = "Dave's?ClubOfSpaces!"
+        expectedUrl = "DavesClubOfSpaces"
+        resultUrl = Club.convertNameToUrl(None, testName)
+        self.assertEqual(expectedUrl, resultUrl)
+    
+    def test_convert_to_url_replaces_non_alpha_numerics_and_spaces(self):
+        testName = "Dave's ?Club Of Spaces!"
+        expectedUrl = "Daves_Club_Of_Spaces"
+        resultUrl = Club.convertNameToUrl(None, testName)
+        self.assertEqual(expectedUrl, resultUrl)
+    

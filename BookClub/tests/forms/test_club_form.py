@@ -1,15 +1,16 @@
 from django import forms
-from django.test import TestCase
+from django.test import TestCase, tag
 from BookClub.models.club import Club
 from BookClub.forms.club import ClubForm
 
 from datetime import date
-
+@tag('clubform','club')
 class ClubFormTestCase(TestCase):
     """Unit tests for Club Form"""
     def setUp(self):
         self.form_input = {
             'name': 'Johnathan\'s Club',
+            'club_url_name': 'Johnathans_Club',
             'description': 'This is a very cool club that is owned by a certain Johnathan. Reading certain books...',
             'tagline': 'Welcome to Johnathan\'s club! We read the best books!!!',
             'rules': 'Don\'t be annoying',
@@ -42,12 +43,11 @@ class ClubFormTestCase(TestCase):
         form.save()
         after_count = Club.objects.count()
         self.assertEqual(after_count, before_count + 1)
-
         club = Club.objects.get(name = self.form_input['name'])
         self.assertEqual(club.name, self.form_input['name'])
+        self.assertEqual(club.club_url_name, self.form_input['club_url_name'])
         self.assertEqual(club.description, self.form_input['description'])
         self.assertEqual(club.tagline, self.form_input['tagline'])
         self.assertEqual(club.rules, self.form_input['rules'])
         self.assertEqual(club.is_private, self.form_input['is_private'])
-
         self.assertEqual(club.created_on, saving_date)
