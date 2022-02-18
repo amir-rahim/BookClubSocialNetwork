@@ -2,13 +2,14 @@
 from django.conf import settings
 from django.contrib import messages
 from django.views.generic.edit import UpdateView
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView,ListView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect
 from BookClub.helpers import *
 from BookClub.models.user import User
 from BookClub.models.club import *
 from BookClub.models.club_membership import ClubMembership
+from BookClub.models.meeting import Meeting
 from django.conf import settings
 
 
@@ -54,3 +55,30 @@ class MembersListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
         context['request_user'] = rank
 
         return context
+
+class MeetingListView(LoginRequiredMixin,TemplateView):
+    """View to display meeting list"""
+
+    template_name = 'meeting_list.html'
+    
+    """Deals with a guest"""
+    def handle_no_permission(self):
+        if not self.request.user.is_authenticated:
+            return super(LoginRequiredMixin, self).handle_no_permission()
+        else:
+            url = reverse('login')
+            return redirect(url)
+    
+    def get_queryset(self):
+        #Change queryset to filter for club specific meetings etc
+        #subquery = ????
+        #Meeting.objects.filter(.......)
+        return Meeting.objects.all()
+        
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['meetings'] = Meeting.objects.all() 
+        # Add more context for meeting actions
+        return context
+    
