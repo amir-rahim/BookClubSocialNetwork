@@ -18,7 +18,7 @@ class ProfileViewTest(TestCase):
         self.url = reverse('user_dashboard')
 
     def test_profile_url(self):
-        self.assertEqual(self.url, '/user_dashboard/')
+        self.assertEqual(self.url, '/user/')
 
     def test_get_profile(self):
         self.client.login(username=self.user.username, password='Password123')
