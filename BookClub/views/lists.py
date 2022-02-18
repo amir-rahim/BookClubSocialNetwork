@@ -56,10 +56,11 @@ class MembersListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
 
         return context
 
-class MeetingListView(LoginRequiredMixin,TemplateView):
+class MeetingListView(LoginRequiredMixin,ListView):
     """View to display meeting list"""
 
     template_name = 'meeting_list.html'
+    context_object_name = 'meetings'
     
     """Deals with a guest"""
     def handle_no_permission(self):
@@ -70,15 +71,9 @@ class MeetingListView(LoginRequiredMixin,TemplateView):
             return redirect(url)
     
     def get_queryset(self):
-        #Change queryset to filter for club specific meetings etc
-        #subquery = ????
-        #Meeting.objects.filter(.......)
-        return Meeting.objects.all()
+        club = Club.objects.get(club_url_name = self.kwargs.get('club_url_name'))
+        subquery = Meeting.objects.filter(club=club)
+        return subquery
         
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        context['meetings'] = Meeting.objects.all() 
-        # Add more context for meeting actions
-        return context
+    
     
