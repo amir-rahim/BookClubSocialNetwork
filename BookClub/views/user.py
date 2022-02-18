@@ -81,15 +81,12 @@ class UserProfileFollowingView(LoginRequiredMixin, TemplateView):
         context['gravatar'] = user.gravatar
         context['username'] = user.username
         context['public_bio'] = user.public_bio
-        context['following'] = None #to be updated with following when implemented
+        context['following'] = list() #to be updated with following when implemented
         return context
 
 class EditProfileView(LoginRequiredMixin, UpdateView):
-    """
+    """Class based view for editing user profile"""
     
-    Class based view for editing user profile
-    
-    """
     model = User
     form_class = EditProfileForm
     template_name = 'edit_profile.html'
