@@ -30,10 +30,16 @@ urlpatterns = [
     path('login/', views.LogInView.as_view(), name='login'),
     path('sign_up/', views.SignUpView.as_view(), name='sign_up'),
     path('log_out/', views.LogOutView.as_view(), name='log_out'),
+    
     # '''User URLs'''
     path('user_dashboard/', views.UserDashboardView.as_view(), name='user_dashboard'),
     path('edit_profile/', views.EditProfileView.as_view(), name='edit_profile'),
     path('password_change/', views.ChangePasswordView.as_view(), name='password_change'),
+    
+    # '''User Profile URLs'''
+    path('user/<str:username>/', views.UserProfileView.as_view(), name='user_profile'),
+    path('user/<str:username>/memberships/', views.UserProfileMembershipsView.as_view(), name='user_memberships'),
+    path('user/<str:username>/following/', views.UserProfileView.as_view(), name='user_following'),
     
     # '''Action URLs'''
     path('join_club/<str:club_url_name>/', views.JoinClubView.as_view(), name='join_club'),
