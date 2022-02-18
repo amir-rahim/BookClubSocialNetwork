@@ -50,5 +50,8 @@ class UserModelTestCase(TestCase):
     def test_bio_cannot_be_blank(self):
         self.user.public_bio = ""
         self._assert_user_is_invalid()
-
+        
+    def test_gravatar_correct_return(self):
+        gravatar = "https://www.gravatar.com/avatar/fd876f8cd6a58277fc664d47ea10ad19?size=120&default=mp"
+        self.assertEqual(gravatar, self.user.gravatar())
         

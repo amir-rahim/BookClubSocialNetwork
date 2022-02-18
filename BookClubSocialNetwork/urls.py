@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from BookClub import views
+from django.contrib.staticfiles.storage import staticfiles_storage
+from django.views.generic.base import RedirectView
 
 # from BookClub.views.action_views import DemoteMemberView, PromoteView
 
@@ -24,16 +26,23 @@ urlpatterns = [
     # '''Core URLs'''
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
+    path('favicon.ico', RedirectView.as_view(url=staticfiles_storage.url('favicon.ico'))),
 
 
     # '''Authentication URLs'''
     path('login/', views.LogInView.as_view(), name='login'),
     path('sign_up/', views.SignUpView.as_view(), name='sign_up'),
     path('log_out/', views.LogOutView.as_view(), name='log_out'),
+    
     # '''User URLs'''
-    path('user_dashboard/', views.UserDashboardView.as_view(), name='user_dashboard'),
+    path('user/', views.UserDashboardView.as_view(), name='user_dashboard'),
     path('edit_profile/', views.EditProfileView.as_view(), name='edit_profile'),
     path('password_change/', views.ChangePasswordView.as_view(), name='password_change'),
+    
+    # '''User Profile URLs'''
+    path('profile/<str:username>/', views.UserProfileView.as_view(), name='user_profile'),
+    path('profile/<str:username>/memberships/', views.UserProfileMembershipsView.as_view(), name='user_memberships'),
+    path('profile/<str:username>/following/', views.UserProfileFollowingView.as_view(), name='user_following'),
     
     # '''Action URLs'''
     path('join_club/<str:club_url_name>/', views.JoinClubView.as_view(), name='join_club'),
@@ -48,9 +57,9 @@ urlpatterns = [
     path('delete_club/<str:club_url_name>/',views.DeleteClubView.as_view(),name='delete_club'),
 
     # '''Membership URLs'''
-    path('club/available_clubs/', views.AvailableClubsView.as_view(), name='available_clubs'),
-    path('club/my_club_memberships/', views.MyClubMembershipsView.as_view(), name='my_club_memberships'),
-    path('club/create_club/', views.clubs.CreateClubView.as_view(), name = 'create_club'),
+    path('club/', views.AvailableClubsView.as_view(), name='available_clubs'),
+    path('memberships/', views.MyClubMembershipsView.as_view(), name='my_club_memberships'),
+    path('create/', views.clubs.CreateClubView.as_view(), name = 'create_club'),
 
     # '''Club URLs'''
     path('club/<str:club_url_name>/', views.ClubDashboardView.as_view(), name='club_dashboard'),
