@@ -1,6 +1,6 @@
 from django.test import TestCase, tag
 from django.urls import reverse
-from django.contrib import messages
+from django.contrib.messages import get_messages
 from django.core.exceptions import ObjectDoesNotExist
 from BookClub.models import User, Meeting, Club, ClubMembership
 from django.utils import timezone
@@ -56,10 +56,9 @@ class JoinMeetingViewTestCase(TestCase, LogInTester):
         after_count = self.future_meeting.get_members().count()
         self.assertEqual(before_count, after_count - 1)
         self.assertTrue(self.future_meeting.get_members().filter(username = self.user.username).exists())
-        response_message = self.client.get(reverse('join_meeting', kwargs={'club_url_name' : self.club.club_url_name, 'meeting_id': self.future_meeting.id}))
-        messages_list = list(response_message.context['messages']) 
-        self.assertEqual(len(messages_list), 1)
-        self.assertEqual(messages_list[0].level, messages.SUCCESS)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), 'You have joined the meeting.')
 
     def test_member_cannot_join_meeting_already_in(self):
         self.client.login(username=self.user.username, password='Password123')
@@ -74,10 +73,9 @@ class JoinMeetingViewTestCase(TestCase, LogInTester):
         after_count = self.future_meeting.get_members().count()
         self.assertEqual(before_count, after_count)                                                    
         self.assertTrue(self.future_meeting.get_members().filter(username = self.user.username).exists())
-        response_message = self.client.get(reverse('join_meeting', kwargs={'club_url_name' : self.club.club_url_name, 'meeting_id': self.future_meeting.id}))
-        messages_list = list(response_message.context['messages']) 
-        self.assertEqual(len(messages_list), 1)
-        self.assertEqual(messages_list[0].level, messages.INFO)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), 'You cannot join this meeting.')
 
     def test_member_cannot_join_meeting_in_past(self):
         self.client.login(username=self.user.username, password='Password123')
@@ -94,9 +92,9 @@ class JoinMeetingViewTestCase(TestCase, LogInTester):
         self.assertEqual(before_count, after_count)                                                     
         self.assertFalse(self.past_meeting.get_members().filter(username = self.user.username).exists())
         response_message = self.client.get(reverse('join_meeting', kwargs={'club_url_name' : self.club.club_url_name, 'meeting_id': self.future_meeting.id}))
-        messages_list = list(response_message.context['messages']) 
-        self.assertEqual(len(messages_list), 1)
-        self.assertEqual(messages_list[0].level, messages.INFO)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]),  'You cannot join this meeting.')
 
     def test_member_joins_invalid_meeting(self):
         self.client.login(username=self.user.username, password='Password123')
@@ -108,13 +106,9 @@ class JoinMeetingViewTestCase(TestCase, LogInTester):
                                                             })) 
         with self.assertRaises(ObjectDoesNotExist):
             Meeting.objects.get(id = 0).exists()      
-        response_message = self.client.get(reverse('join_meeting', kwargs={
-                                                                'club_url_name': self.club.club_url_name, 
-                                                                'meeting_id' : 0
-                                                            }))
-        messages_list = list(response_message.context['messages']) 
-        self.assertEqual(len(messages_list), 1)
-        self.assertEqual(messages_list[0].level, messages.ERROR)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), 'Error, meeting not found.')
 
     def test_organiser_cannot_join_upcoming_meeting_again(self):
         self.client.login(username=self.organiser.username, password='Password123')
@@ -128,7 +122,6 @@ class JoinMeetingViewTestCase(TestCase, LogInTester):
         after_count = self.future_meeting.get_members().count()
         self.assertEqual(before_count, after_count)                                                         
         self.assertTrue(self.future_meeting.get_members().filter(username = self.organiser.username).exists())
-        response_message = self.client.get(reverse('join_meeting', kwargs={'club_url_name' : self.club.club_url_name, 'meeting_id': self.future_meeting.id}))
-        messages_list = list(response_message.context['messages']) 
-        self.assertEqual(len(messages_list), 1)
-        self.assertEqual(messages_list[0].level, messages.INFO)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), 'You cannot join this meeting.')
