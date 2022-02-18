@@ -32,9 +32,8 @@ class Club(models.Model):
     created_on = models.DateField(auto_now_add=True)
     
     def clean(self):
-        if self.club_url_name is None or self.club_url_name == "":
-            url = self.convertNameToUrl(self.name)
-            self.club_url_name = url
+        url = self.convertNameToUrl(self.name)
+        self.club_url_name = url
         super().clean()
     
     def get_absolute_url(self):
@@ -85,6 +84,11 @@ class Club(models.Model):
                     .filter(membership=search_role)
                     .values_list('user__id', flat=True))
         return User.objects.filter(id__in=filterBy)
+    
+    def get_applicants(self):
+        """Get all the applicants from the  given club."""
+
+        return self.get_users(ClubMembership.UserRoles.APPLICANT)
 
     def get_members(self):
         """Get all the members from the given club."""

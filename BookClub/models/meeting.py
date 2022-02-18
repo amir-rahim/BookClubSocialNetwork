@@ -45,7 +45,8 @@ class Meeting(models.Model):
         return self.description
 
     def get_members(self):
-        return self.members
+
+        return self.members.all()
 
     def get_type(self):
         return self.type
