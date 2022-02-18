@@ -62,14 +62,7 @@ class MeetingListView(LoginRequiredMixin,ListView):
     template_name = 'club_meetings.html'
     context_object_name = 'meetings'
     
-    """Deals with a guest"""
-    def handle_no_permission(self):
-        if not self.request.user.is_authenticated:
-            return super(LoginRequiredMixin, self).handle_no_permission()
-        else:
-            url = reverse('login')
-            return redirect(url)
-    
+
     def get_queryset(self):
         club = Club.objects.get(club_url_name = self.kwargs.get('club_url_name'))
         subquery = Meeting.objects.filter(club=club)
@@ -78,7 +71,6 @@ class MeetingListView(LoginRequiredMixin,ListView):
     def get_context_data(self, **kwargs):
         #Override get_context_data for context other than meetings
         context = super().get_context_data(**kwargs)
-        context['meetings'] = self.get_queryset()
         context['club'] = Club.objects.get(club_url_name = self.kwargs.get('club_url_name'))
         return context
     
