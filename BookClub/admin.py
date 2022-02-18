@@ -3,6 +3,7 @@ from BookClub.models.user import User
 from BookClub.models.club import Club
 from BookClub.models.club_membership import ClubMembership
 from BookClub.models.book import Book
+from BookClub.models.booklist import BookList
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -31,3 +32,8 @@ class ClubMembershipAdmin(admin.ModelAdmin):
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
     list_display = ['title','author']
+
+
+@admin.register(BookList)
+class BookAdmin(admin.ModelAdmin):
+    list_display = ['title','creator', 'created_on']
