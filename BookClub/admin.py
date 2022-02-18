@@ -2,6 +2,7 @@ from django.contrib import admin
 from BookClub.models.user import User
 from BookClub.models.club import Club
 from BookClub.models.club_membership import ClubMembership
+from BookClub.models.meeting import Meeting
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -25,4 +26,12 @@ class ClubMembershipAdmin(admin.ModelAdmin):
 
     list_display = [
         'club','user', 'membership', 'joined_on'
+    ]
+
+@admin.register(Meeting)
+class MeetingAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for meetings."""
+
+    list_display = [
+        'title', 'description', 'meeting_time', 'location'
     ]
