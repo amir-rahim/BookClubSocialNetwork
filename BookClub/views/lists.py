@@ -59,7 +59,7 @@ class MembersListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
 class MeetingListView(LoginRequiredMixin,ListView):
     """View to display meeting list"""
 
-    template_name = 'meeting_list.html'
+    template_name = 'club_meetings.html'
     context_object_name = 'meetings'
     
     """Deals with a guest"""
@@ -75,5 +75,11 @@ class MeetingListView(LoginRequiredMixin,ListView):
         subquery = Meeting.objects.filter(club=club)
         return subquery
         
+    def get_context_data(self, **kwargs):
+        #Override get_context_data for context other than meetings
+        context = super().get_context_data(**kwargs)
+        context['meetings'] = self.get_queryset()
+        context['club'] = Club.objects.get(club_url_name = self.kwargs.get('club_url_name'))
+        return context
     
     
