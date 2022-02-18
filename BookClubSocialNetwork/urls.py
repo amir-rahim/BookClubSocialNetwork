@@ -42,6 +42,7 @@ urlpatterns = [
     path('demote_member/<str:club_url_name>/', views.DemoteMemberView.as_view(), name='demote_member'),
     path('approve_applicant/<str:club_url_name>/', views.ApproveApplicantView.as_view(), name='approve_applicant'),
     path('reject_applicant/<str:club_url_name>/', views.RejectApplicantView.as_view(), name='reject_applicant'),
+
     path('transfer_ownership/<str:club_url_name>/', views.TransferOwnershipView.as_view(), name='transfer_ownership'),
     path('kick_member/<str:club_url_name>/', views.KickMemberView.as_view(), name='kick_member'),
     path('delete_club/<str:club_url_name>/',views.DeleteClubView.as_view(),name='delete_club'),
@@ -55,6 +56,7 @@ urlpatterns = [
     path('club/<str:club_url_name>/', views.ClubDashboardView.as_view(), name='club_dashboard'),
     path('club/<str:club_url_name>/members/', views.MembersListView.as_view(), name='member_list'),
     path('club/<str:club_url_name>/applicants/', views.ApplicantListView.as_view(), name='applicant_list'),
+
     path('club/<str:club_url_name>/edit/', views.EditClubView.as_view(), name='edit_club'),
 
 
