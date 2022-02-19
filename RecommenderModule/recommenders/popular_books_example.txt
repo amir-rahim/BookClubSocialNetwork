@@ -1,7 +1,7 @@
-from popular_books_recommender import PopularBooks
+from popular_books_recommender import PopularBooksRecommender
 
 # We use Popular Books recommendations
-popular_books = PopularBooks()
+popular_books = PopularBooksRecommender()
 
 # Can add a list of the user's read books as a parameter (user_read_books) of get_recommendation methods to avoid already read books
 

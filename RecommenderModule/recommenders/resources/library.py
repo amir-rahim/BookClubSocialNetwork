@@ -3,7 +3,7 @@ import pandas as pd
 """This class acts as a library to recover information about a book"""
 class Library:
     
-    books_path = "book-review-dataset/BX_Books.csv"
+    books_path = "resources/book-review-dataset/BX_Books.csv"
     books_df = None
     
     def __init__(self):

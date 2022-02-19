@@ -5,7 +5,7 @@ import pandas as pd
 """This class loads the ratings dataset from the 'BX-Book-Ratings.csv' file and builds the train sets"""
 class DataProvider:
 
-    ratings_path = "book-review-dataset/BX-Book-Ratings.csv"
+    ratings_path = "resources/book-review-dataset/BX-Book-Ratings.csv"
     ratings_trainset = None
     ratings_df = None
     train_df = None

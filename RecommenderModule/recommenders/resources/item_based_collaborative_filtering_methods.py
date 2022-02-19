@@ -1,13 +1,12 @@
-from data_provider import DataProvider
-from library import Library
+from resources.data_provider import DataProvider
+from resources.library import Library
 from surprise import KNNBasic
 from collections import defaultdict
 from operator import itemgetter
-import heapq
 import math
 
-"""This class allows the developer to recommend books to a user, similar to the user's rated books"""
-class ItemBasedCollaborativeFiltering:
+"""This class provides the developer with methods to recommend books to a user, similar to the user's rated books"""
+class ItemBasedCollaborativeFilteringMethods:
 
     data_provider = None
     trainset = None
@@ -88,47 +87,6 @@ class ItemBasedCollaborativeFiltering:
                     print(book_title, rating_sum)
                     final_recommendations.append(book_isbn)
                     if (len(final_recommendations) >= 10): # Get the top 10 recommendations
-                        break
-                except:
-                    pass
-                
-        return final_recommendations
-    
-    
-    
-    """Get recommendations from trainset, corresponding similarities matrix and user's inner id
-        (user must be part of trainset)"""
-    def get_recommendations_from_inner_user(self, user_inner_id):
-        
-        # Get the top K items we rated
-        user_ratings = self.trainset.ur[user_inner_id]
-        k_neighbors = heapq.nlargest(10, user_ratings, key=lambda t: t[1])
-        
-        # Weigh items by rating
-        candidates = defaultdict(float)
-        for item_id, rating in k_neighbors:
-            similarity_row = self.similarities_matrix[item_id]
-            for inner_id, score in enumerate(similarity_row):
-                candidates[inner_id] += score * (rating / 5.0)
-            
-        # Build a dictionary of stuff the user has already seen
-        watched = {}
-        for item_id, rating in self.trainset.ur[user_inner_id]:
-            watched[item_id] = 1
-            
-        # Get top-rated items from similar users
-        library = Library()
-        final_recommendations = []
-        pos = 0
-        for item_id, rating_sum in sorted(candidates.items(), key=itemgetter(1), reverse=True):
-            if not item_id in watched:
-                try:
-                    book_isbn = self.trainset.to_raw_iid(item_id)
-                    book_title = library.get_book_title(book_isbn)
-                    print(book_title, rating_sum)
-                    final_recommendations.append(book_isbn)
-                    pos += 1
-                    if (pos > 10):
                         break
                 except:
                     pass
