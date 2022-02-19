@@ -1,4 +1,4 @@
-"""Tests of the Join Club view."""
+"""Tests of the Member List view."""
 from ast import Pass
 from email.mime import application
 from django.test import TestCase, tag
