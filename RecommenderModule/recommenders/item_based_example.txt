@@ -7,5 +7,11 @@ item_based = ItemBasedCollaborativeFiltering(filtering_min_ratings_threshold)
 
 # Test
 test_subject = 278188
-recommendations = item_based.get_recommendations_from_user_id(test_subject)
-print(recommendations)
+
+# Recommendations based on all books the user has rated
+recommendations_all_ratings = item_based.get_recommendations_all_ratings_from_user_id(test_subject)
+print(recommendations_all_ratings)
+
+# Recommendations based on all books the user has rated with a positive value (> 6/10)
+recommendations_positive_ratings = item_based.get_recommendations_positive_ratings_only_from_user_id(test_subject)
+print(recommendations_positive_ratings)

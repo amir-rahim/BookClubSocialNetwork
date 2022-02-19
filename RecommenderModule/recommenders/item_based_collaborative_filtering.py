@@ -34,28 +34,40 @@ class ItemBasedCollaborativeFiltering:
         model.fit(self.trainset)
         self.similarities_matrix = model.sim
     
-    """Get the recommended books (up to 10) from a specified user_id"""
-    def get_recommendations_from_user_id(self, user_id):
+    """Get the recommended books (up to 10) given a specified user_id, from all of the user's rated books"""
+    def get_recommendations_all_ratings_from_user_id(self, user_id):
         user_ratings = self.get_trainset_user_book_ratings(user_id)
         recommendations = self.get_recommendations_from_user_inner_ratings(user_ratings)
         return recommendations
     
-    """Get all the ratings from the specified user, of books that are in the trainset"""
-    def get_trainset_user_book_ratings(self, user_id):
+    """Get the recommended books (up to 10) given a specified user_id, from all of the user's positively (> 6/10) rated books"""
+    def get_recommendations_positive_ratings_only_from_user_id(self, user_id, min_rating=6):
+        user_ratings = self.get_trainset_user_book_ratings(user_id)
+        positive_user_ratings = self.get_trainset_user_book_ratings(user_id, min_rating=min_rating)
+        recommendations = self.get_recommendations_from_user_inner_ratings(positive_user_ratings, all_books_rated=user_ratings)
+        return recommendations
+    
+    """Get all the ratings from the specified user, of books that are in the trainset, with a minimum rating value of {min_rating}"""
+    def get_trainset_user_book_ratings(self, user_id, min_rating=0):
         items = self.data_provider.get_all_books_rated_by_user(user_id)
         inner_items = []
         for item in items:
             try:
                 inner_item = self.trainset.to_inner_iid(item)
                 rating = self.data_provider.get_rating_from_user_and_book(user_id, item)
-                inner_items.append((inner_item, rating))
+                if (rating >= min_rating):
+                    inner_items.append((inner_item, rating))
             except:
                 pass
         return inner_items
     
     """Get recommendations from trainset, corresponding similarities matrix and user's ratings
         as inner ratings (from similarities matrix)"""
-    def get_recommendations_from_user_inner_ratings(self, ratings):
+    def get_recommendations_from_user_inner_ratings(self, ratings, all_books_rated=None):
+        
+        # Define all books rated (read) by the user
+        if all_books_rated == None:
+            all_books_rated = ratings
         
         # Weigh items by rating
         candidates = defaultdict(float)
@@ -67,17 +79,15 @@ class ItemBasedCollaborativeFiltering:
         # Get top-rated items from similar users
         library = Library()
         final_recommendations = []
-        pos = 1
         for item_id, rating_sum in sorted(candidates.items(), key=itemgetter(1), reverse=True):
             # Check if user has already read the book, and only recommend the book if it has some similarity
-            if (not item_id in ratings) and (not math.isnan(rating_sum)) and rating_sum != 0:
+            if (not item_id in all_books_rated) and (not math.isnan(rating_sum)) and rating_sum != 0:
                 try:
                     book_isbn = self.trainset.to_raw_iid(item_id)
                     book_title = library.get_book_title(book_isbn)
                     print(book_title, rating_sum)
                     final_recommendations.append(book_isbn)
-                    pos += 1
-                    if (pos > 10): # Get the top 10 recommendations
+                    if (len(final_recommendations) >= 10): # Get the top 10 recommendations
                         break
                 except:
                     pass
