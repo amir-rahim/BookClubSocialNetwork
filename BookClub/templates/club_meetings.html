@@ -52,10 +52,10 @@ Find the Meeting you are looking for here!
           </div>
       </div>
     </section>
-    
+
     <section class="hero is-fullheight">
       <div class="column is-4 is-offset-4">
-        {% if meetings %} <!-- If there are clubs available to the logged-in user -->
+        {% if meetings %} <!-- If there are meetings available to the logged-in user -->
           <div class="table-container">
             <table class="table is-hoverable" id="table-clubs" data-toggle="table" data-pagination="true">
                 <thead>
@@ -68,8 +68,10 @@ Find the Meeting you are looking for here!
                 </thead>
                 <tbody>
                     {% for meeting in meetings %}
-                      <!-- For each available club, add a row linked to the corresponding club dashboard page -->
-                        <tr onclick="window.location='{% url 'meeting_dashboard' meeting.get_title %}';">
+                      <!-- For each meeting, add a row linked to the corresponding meeeting -->
+
+                      <!-- Need to change onclick location to actual meeting dashboard.-->
+                       <!-- <tr onclick="window.location='{% url 'club_dashboard' meeting.get_title %}';"> --> 
                             <td>{{meeting.club.name}}</td>
                             <td>{{meeting.organiser.username}}</td>
                             <td>{{meeting.meeting_time}}
