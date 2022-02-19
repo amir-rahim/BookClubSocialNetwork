@@ -89,7 +89,8 @@ class PopularBooks:
     def get_recommendations_from_popularity_list(self, popularity_list, user_read_books=[]):
         final_recommendations = []
         for (isbn, score) in popularity_list:
-            if (not isbn in user_read_books) and (score > 0):
+            if (isbn not in user_read_books) and (score > 0):
+                print(f"{isbn}: {score}")
                 final_recommendations.append(isbn)
                 if (len(final_recommendations) >= 10):
                     break
