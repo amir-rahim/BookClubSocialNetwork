@@ -2,15 +2,18 @@ from django.core.management.base import BaseCommand
 import time
 from BookClub.models import Book
 import pandas as pd
-from pandas import DataFrame, MultiIndex
+from pandas import DataFrame
 import requests
 import multiprocessing
 import csv
+from surprise import Dataset
+from surprise import Reader
 
 class Command(BaseCommand):
     """The database seeder."""
         
     def handle(self, *args, **options):
+        self.bla()
         tic = time.time()
         pairs = self.getSubjectsPool()
         aDict = {}
@@ -56,7 +59,7 @@ class Command(BaseCommand):
     
     def getSubjectsPool(self):
         books = Book.objects.all()
-        books = books[:2000]
+        books = books[:100]
         pool = multiprocessing.Pool()
         result = pool.map(do_work, books)
         pool.close()
@@ -71,6 +74,37 @@ class Command(BaseCommand):
         result = map(do_work, books)
         return result
     
+    def bla(self):
+        file_path = ("RecommenderModule/dataset/BX-Book-Ratings.csv")
+        file = open(file_path,'rb',0)
+
+        data = DataFrame(pd.read_csv(file_path,header=0,encoding = "ISO-8859-1",sep=';'))
+        data = data.astype({"User-ID" : int, "ISBN" : str, "Book-Rating":int})
+        reader = Reader(rating_scale=(0,10))
+
+        dataset = Dataset.load_from_df(data, reader)
+
+        counts = data.value_counts(subset = 'ISBN')
+
+        book_file_path = ("RecommenderModule/dataset/BX_Books.csv")
+
+        bookdata = DataFrame(pd.read_csv(book_file_path, header=0, encoding= "ISO-8859-1", sep=';'))
+
+
+        countLimit = 5;
+        # convert our series of isbn,counts into a list of tuples, then take only the first ten
+        counts = list(counts.items())
+        i = 0
+        # for each isbn and count, print the count, then find the relevant row in the book csv and print it out
+        for name, count in counts:
+            if(count >= countLimit):
+                i+=1
+                #row = bookdata.loc[bookdata['ISBN'] == name, ['ISBN', 'Book-Title']]
+                #if not(row.empty):
+                #    print("Recommendations: " + str(count) + " for " + row['Book-Title'])
+                #    print(" --- ")
+                
+        print(i)
 def do_work(book):
     isbn = book.ISBN
     try:
