@@ -39,6 +39,17 @@ class DataProvider:
         ratings_trainset = Dataset.load_from_df(train_df, reader)
         self.ratings_trainset = ratings_trainset.build_full_trainset()
         
+    """Filter the book dataset to keep only books with at least {self.filtering_min_ratings_threshold} ratings"""
+    def get_filtered_books_list(self):
+        # Get original data from csv
+        ratings_df = self.ratings_df
+        ratings_counts = ratings_df["ISBN"].value_counts()
+        # Get list of all books with at least {self.filtering_min_ratings_threshold} ratings
+        filtered_books_list = []
+        for isbn in ratings_counts.keys():
+          if ratings_counts[isbn] >= self.filtering_min_ratings_threshold:
+            filtered_books_list.append(isbn)
+        return filtered_books_list
         
     """Filter the original dataset to keep only books having at least
         {self.filtering_min_ratings_threshold} (defined in constructor) ratings 
@@ -46,14 +57,10 @@ class DataProvider:
     def load_filtered_ratings_dataset(self):
         # Get original data from csv
         ratings_df = self.ratings_df
-        ratings_counts = ratings_df["ISBN"].value_counts()
-        # Get list of all books with at least 10 ratings
-        books_over_10_ratings = []
-        for isbn in ratings_counts.keys():
-          if ratings_counts[isbn] >= self.filtering_min_ratings_threshold:
-            books_over_10_ratings.append(isbn)
-        # Filter the original DataFrame to only keep the books having at least 10 ratings
-        filtered_ratings_df = ratings_df.loc[ratings_df["ISBN"].isin(books_over_10_ratings)]
+        # Get list of all books with at least {self.filtering_min_ratings_threshold} ratings
+        filtered_books_list = self.get_filtered_books_list()
+        # Filter the original DataFrame to only keep the books having at least {self.filtering_min_ratings_threshold} ratings
+        filtered_ratings_df = ratings_df.loc[ratings_df["ISBN"].isin(filtered_books_list)]
         self.filtered_ratings_df = filtered_ratings_df
         # Create surprise dataset
         reader = Reader(line_format='user item rating', sep=';', skip_lines=0, rating_scale=(0,10))
@@ -78,3 +85,7 @@ class DataProvider:
         user_ratings = self.ratings_df.loc[self.ratings_df["User-ID"] == user_id]
         rating = (user_ratings.loc[user_ratings["ISBN"] == book_isbn])["Book-Rating"].values[0]
         return rating
+    
+    """Get all the ratings values for the specified book"""
+    def get_all_ratings_for_isbn(self, isbn):
+        return (self.ratings_df.loc[self.ratings_df["ISBN"] == isbn])["Book-Rating"].values
