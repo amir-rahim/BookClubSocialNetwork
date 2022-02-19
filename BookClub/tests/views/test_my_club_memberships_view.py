@@ -49,8 +49,8 @@ class MyClubsMembershipsViewTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'my_club_memberships.html')
         clubs = list(response.context['clubs'])
-        self.assertNotIn(Club.objects.get(name="Jeannette's Club"), clubs)
-        self.assertNotContains(response, "<td>Jeannette&#x27;s Club</td>")
+        self.assertNotIn(Club.objects.get(name="Jeannette Club"), clubs)
+        self.assertNotContains(response, "<td>Jeannettes Club</td>")
 
     def test_contains_club_member_of(self):
         self.client.login(username=self.user.username, password='Password123')
@@ -59,24 +59,24 @@ class MyClubsMembershipsViewTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'my_club_memberships.html')
         clubs = list(response.context['clubs'])
-        self.assertIn(Club.objects.get(name="Johnathan's Club"), clubs)
-        self.assertContains(response, "<td>Johnathan&#x27;s Club</td>")
+        self.assertIn(Club.objects.get(name="Johnathan Club"), clubs)
+        self.assertContains(response, "<td>Johnathan Club</td>")
 
     def test_not_contains_club_is_applicant(self):
         self.client.login(username=self.user.username, password='Password123')
-        new_membership = ClubMembership.objects.create(user=self.user, club=Club.objects.get(name="Jeannette's Club"), membership=ClubMembership.UserRoles.APPLICANT)
+        new_membership = ClubMembership.objects.create(user=self.user, club=Club.objects.get(name="Jeannette Club"), membership=ClubMembership.UserRoles.APPLICANT)
         new_membership.save()
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'my_club_memberships.html')
         clubs = list(response.context['clubs'])
-        self.assertNotIn(Club.objects.get(name="Jeannette's Club"), clubs)
-        self.assertNotContains(response, "<td>Jeannette&#x27;s Club</td>")
+        self.assertNotIn(Club.objects.get(name="Jeannette Club"), clubs)
+        self.assertNotContains(response, "<td>Jeannette Club</td>")
 
     def test_can_contain_multiple_clubs(self):
         self.client.login(username=self.user.username, password='Password123')
-        new_membership = ClubMembership.objects.create(user=self.user, club=Club.objects.get(name="Jeannette's Club"), membership=ClubMembership.UserRoles.MEMBER)
+        new_membership = ClubMembership.objects.create(user=self.user, club=Club.objects.get(name="Jeannette Club"), membership=ClubMembership.UserRoles.MEMBER)
         new_membership.save()
         response = self.client.get(self.url)
 

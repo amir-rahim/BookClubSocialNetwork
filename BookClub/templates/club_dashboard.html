@@ -16,13 +16,23 @@ This is the Club Dashboard, the main home page for each club!
 
         <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
 
-            <p class="menu-label">Club Administration</p>
+            <p class="menu-label">Club Views</p>
 
             <ul class="menu-list">
-                <li><a class="is-active"><b>Dashboard</b></a></li>
-                <li><a>Manage Club</a></li>
-                <li><a>Club Settings</a></li>
+                <li><a class="is-active" href="{% url 'club_dashboard' current_club.club_url_name %}"><b>Dashboard</b></a></li>
+                <li><a href="{% url 'member_list' current_club.club_url_name %}">Member List</a></li>
             </ul>
+
+            {% if user == current_club.get_club_owner %}
+
+                <p class="menu-label">Club Administration</p>
+
+                <ul class="menu-list">
+                    <li><a>Manage Club</a></li>
+                    <li><a>Club Settings</a></li>
+                </ul>
+
+            {% endif %}
 
             <p class="menu-label">Forum & Reviews</p>
 
@@ -47,9 +57,9 @@ This is the Club Dashboard, the main home page for each club!
 
         <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
             <ul>
-                <li><a href="./home.html">Home</a></li>
+                <li><a href="{% url 'home' %}">Home</a></li>
                 <li><a>Club</a></li>
-                <li><a>*Club Name*</a></li>
+                <li><a>{{ current_club.name }}</a></li>
                 <li><a href="#">Dashboard</a></li>
             </ul>
         </nav>
@@ -57,17 +67,17 @@ This is the Club Dashboard, the main home page for each club!
         <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
             <div class="hero-body">
                 <div class="container">
-                    <h1 class="title">*Club Name*</h1>
-                    <h2 class="subtitle">Welcome to the club!</h2>
+                    <h1 class="title">{{ current_club.name }}</h1>
+                    <h2 class="subtitle">{{ current_club.tagline }}</h2>
                 </div>
             </div>
         </section>
 
-        <div class="columns">
+        <div class="columns is-fullheight">
 
-            <div class="column is-12">
+            <div class="column is-6">
                 
-                <div class="card">
+                <div class="card card-equal-height">
                     
                     <div class="card-content">
                         <p class="title">Club Details</p>
@@ -79,10 +89,9 @@ This is the Club Dashboard, the main home page for each club!
                             </div>
                             <div class="media-content">
                                 <div class="content">
-                                    <p class="subtitle is-5"><b>Club Name: </b> *Full Name*</p>
-                                    <p class="subtitle is-5"><b>Club Owner: </b> *Username*</p>
-                                    <p class="subtitle is-5"><b>Contact Details: </b> *Email Address*</p>
-                                    <p class="subtitle is-5"><b>Date of Creation: </b> *Phone Number*</p>
+                                    <p class="subtitle is-5"><b>Club Owner: </b> {{ owner.username }} </p>
+                                    <p class="subtitle is-5"><b>Contact Details: </b> {{ owner.email }} </p>
+                                    <p class="subtitle is-5"><b>Date of Creation: </b> {{ current_club.created_on }}</p>
                                 </div>
                             </div>
                         </div>
@@ -91,30 +100,50 @@ This is the Club Dashboard, the main home page for each club!
 
             </div>
 
+            <div class="column is-6">
+                <div class="card card-equal-height">
+
+                    <div class="card-content">
+                        <p class="title">Club Details</p>
+
+                        <div class="media">
+                            <div class="media-content">
+                                <div class="content">
+                                    <p class="subtitle is-5"><b>Club Description: </b> {{ current_club.description }} </p>
+                                    <p class="subtitle is-5"><b>Club Rules: </b> {{ current_club.rules }} </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
         </div>
 
         <div class="tile is-ancestor has-text-centered">
-            <div class="tile is-parent">
+            <div class="tile is-parent" onclick="location.href='{% url 'member_list' current_club.club_url_name  %}'" style="cursor: pointer">
                 <article class="tile is-child box">
-                    <p class="title">20</p>
+                    <p class="title"> {{ current_club.get_number_of_members }} </p>
                     <p class="subtitle">Members</p>
                 </article>
             </div>
             <div class="tile is-parent">
                 <article class="tile is-child box">
-                    <p class="title">69k</p>
+                    <p class="title"> *meetings* </p>
                     <p class="subtitle">Meetings</p>
                 </article>
             </div>
             <div class="tile is-parent">
                 <article class="tile is-child box">
-                    <p class="title">5</p>
+                    <p class="title"> *posts* </p>
                     <p class="subtitle">Blog Posts</p>
                 </article>
             </div>
             <div class="tile is-parent">
                 <article class="tile is-child box">
-                    <p class="title">+19</p>
+                    <p class="title"> *review score* </p>
                     <p class="subtitle">Overall Review Score</p>
                 </article>
             </div>

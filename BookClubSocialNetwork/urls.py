@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import path
 from BookClub import views
 
+# from BookClub.views.action_views import DemoteMemberView, PromoteView
+
 urlpatterns = [
     # '''Core URLs'''
     path('admin/', admin.site.urls),
@@ -33,12 +35,27 @@ urlpatterns = [
     path('edit_profile/', views.EditProfileView.as_view(), name='edit_profile'),
     path('password_change/', views.ChangePasswordView.as_view(), name='password_change'),
     
-    # '''Club URLs'''
-    path('club_dashboard/', views.club_dashboard, name='club_dashboard'), 
+    # '''Action URLs'''
+    path('join_club/<str:club_url_name>/', views.JoinClubView.as_view(), name='join_club'),
+    path('leave_club/<str:club_url_name>/', views.LeaveClubView.as_view(), name='leave_club'),
+    path('promote_member/<str:club_url_name>/', views.PromoteMemberView.as_view(), name='promote_member'),
+    path('demote_member/<str:club_url_name>/', views.DemoteMemberView.as_view(), name='demote_member'),
+    path('transfer_ownership/<str:club_url_name>/', views.TransferOwnershipView.as_view(), name='transfer_ownership'),
+    path('kick_member/<str:club_url_name>/', views.KickMemberView.as_view(), name='kick_member'),
+    path('delete_club/<str:club_url_name>/',views.DeleteClubView.as_view(),name='delete_club'),
+
+    # '''Membership URLs'''
     path('club/', views.AvailableClubsView.as_view(), name='available_clubs'),
     path('memberships/', views.MyClubMembershipsView.as_view(), name='my_club_memberships'),
     path('create_club/', views.clubs.CreateClubView.as_view(), name = 'create_club'),
 
+    # '''Club URLs'''
+    path('club/<str:club_url_name>/', views.ClubDashboardView.as_view(), name='club_dashboard'),
+    path('club/<str:club_url_name>/members/', views.MembersListView.as_view(), name='member_list'),
+    path('club/<str:club_url_name>/edit/', views.EditClubView.as_view(), name='edit_club'),
+
     # '''Library URLs'''
     path('library/', views.library_dashboard, name='library_dashboard')
+
+
 ]

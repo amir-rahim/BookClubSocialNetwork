@@ -2,9 +2,10 @@
 
 
 from django.forms import ValidationError
-from django.test import TestCase
+from django.test import TestCase, tag
 from BookClub.models import Club, User, ClubMembership
 from django.db import IntegrityError, transaction
+@tag('clubmodel','club')
 class AddUserTestCase(TestCase):
     
     fixtures = [

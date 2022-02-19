@@ -3,10 +3,11 @@ from django.core.exceptions import ValidationError
 
 from BookClub.models.user import User
 
+
 class ClubMembership(models.Model):
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields = ['user', 'club'], name = 'unique_member')
+            models.UniqueConstraint(fields=['user', 'club'], name='unique_member')
         ]
 
     class UserRoles(models.IntegerChoices):
@@ -15,10 +16,10 @@ class ClubMembership(models.Model):
         MODERATOR = 1
         OWNER = 2
 
-    user = models.ForeignKey(User, blank = False, null = False, on_delete = models.CASCADE)
-    club = models.ForeignKey('Club', blank = False, null = False, on_delete = models.CASCADE)
-    membership = models.IntegerField(choices = UserRoles.choices, blank = False, default = UserRoles.APPLICANT)
-    joined_on = models.DateField(auto_now_add = True)
+    user = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE)
+    club = models.ForeignKey('Club', blank=False, null=False, on_delete=models.CASCADE)
+    membership = models.IntegerField(choices=UserRoles.choices, blank=False, default=UserRoles.APPLICANT)
+    joined_on = models.DateField(auto_now_add=True)
 
     def clean(self):
         super().clean()
@@ -28,3 +29,4 @@ class ClubMembership(models.Model):
                 membership = ClubMembership.UserRoles.OWNER
             ).exclude(user = self.user)) > 0:
                 raise ValidationError(message = 'A club can only have 1 owner')
+

@@ -1,11 +1,11 @@
 """Tests of the update user details form."""
 
 from django import forms
-from django.test import TestCase
+from django.test import TestCase, tag
 from django.urls import reverse
 from BookClub.forms.user_forms import EditProfileForm
 from BookClub.models import User
-
+@tag('editprofileform','user')
 class ProfileFormTestCase(TestCase):
     """Unit tests of the update user details form."""
 
