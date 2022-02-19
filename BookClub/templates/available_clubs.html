@@ -75,16 +75,15 @@ Find the Book Club you are looking for here!
                           <td>{{club.description}}</td>
                           <td>{% if clubs.is_private %} Private {% else %} Public {% endif %}</td>
                           <td><button class="button is-fullwidth is-success">View</button>
-                              <button class="button is-fullwidth is-link">Join</button>
                             {% if club.is_private == True %}
                               <form method="post" action="{% url 'join_club' club_url_name=club.club_url_name %}">
                                 {% csrf_token %}
-                                <button type="submit" class="button is-success">Apply</button>
+                                <button type="submit" class="button is-fullwidth is-success">Apply</button>
                               </form>
                             {% else %}
                               <form method="post" action="{% url 'join_club' club_url_name=club.club_url_name %}">
                                 {% csrf_token %}
-                                <button type="submit" class="button is-info">Join</button>
+                                <button type="submit" class="button is-fullwidth is-info">Join</button>
                               </form>
                             {% endif %}
                           </td>
