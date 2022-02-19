@@ -31,13 +31,15 @@ class MeetingListTest(TestCase):
 
     def test_get_template_logged_in(self):
         self.client.login(username=self.john.username, password="Password123")
-        response = self.client.get(self.url) #error here
+        response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'club_meetings.html')
 
     def test_redirect_when_not_logged_in(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 302)
+
+    #Testing to see what information is displayed
 
     def test_can_see_club_name(self):
         self.client.login(username=self.john.username, password="Password123")
@@ -74,8 +76,6 @@ class MeetingListTest(TestCase):
         self.assertContains(response,'Book meeting 2')
         self.assertContains(response,'janedoe')
 
-    #Need to add tests involving the action views ()
-    #test contains correct info
-    #test multiple meetings
+    #Need to add tests involving the action views for meeting list (like join)
     
 
