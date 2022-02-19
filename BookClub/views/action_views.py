@@ -37,7 +37,7 @@ class ActionView(TemplateView):
         except:
             messages.error(self.request, "Error, user or club not found.")
 
-        if (self.is_actionable(currentUser, targetUser, club)):
+        if self.is_actionable(currentUser, targetUser, club):
             self.action(currentUser, targetUser, club)
         else:
             self.is_not_actionable(currentUser, targetUser, club)
@@ -95,6 +95,60 @@ class DemoteMemberView(LoginRequiredMixin, ActionView):
 
         messages.success(self.request, f"You have successfully demoted the moderator.")
         set_rank(targetUser, club, ClubMembership.UserRoles.MEMBER)
+
+    def post(self, request, *args, **kwargs):
+        return super().post(self, request, *args, **kwargs)
+
+
+class ApproveApplicantView(LoginRequiredMixin, ActionView):
+    """Approving an applicant to a member"""
+
+    redirect_location = 'applicant_list'
+
+    def is_actionable(self, currentUser, targetUser, club):
+        """Check if applicant can be approved."""
+
+        return ((has_owner_rank(currentUser, club) or has_moderator_rank(currentUser, club)) and has_applicant_rank(
+            targetUser, club))
+
+    def is_not_actionable(self, currentUser, targetUser, club):
+        """Displays a message if the action is illegal"""
+
+        redirect_location = 'home'
+        messages.error(self.request, f"You cannot do that!")
+
+    def action(self, currentUser, targetUser, club):
+        """Approves the applicant to a member"""
+
+        messages.success(self.request, f"You have successfully approved the applicant.")
+        set_rank(targetUser, club, ClubMembership.UserRoles.MEMBER)
+
+    def post(self, request, *args, **kwargs):
+        return super().post(self, request, *args, **kwargs)
+
+
+class RejectApplicantView(LoginRequiredMixin, ActionView):
+    """Rejecting an applicant"""
+
+    redirect_location = 'applicant_list'
+
+    def is_actionable(self, currentUser, targetUser, club):
+        """Check if applicant can be rejected."""
+
+        return ((has_owner_rank(currentUser, club) or has_moderator_rank(currentUser, club)) and has_applicant_rank(
+            targetUser, club))
+
+    def is_not_actionable(self, currentUser, targetUser, club):
+        """Displays a message if the action is illegal"""
+
+        redirect_location = 'home'
+        messages.error(self.request, f"You cannot do that!")
+
+    def action(self, currentUser, targetUser, club):
+        """Rejects the applicant"""
+
+        messages.success(self.request, f"You have successfully rejected the applicant.")
+        remove_from_club(targetUser, club)
 
     def post(self, request, *args, **kwargs):
         return super().post(self, request, *args, **kwargs)
@@ -233,35 +287,33 @@ class LeaveClubView(LoginRequiredMixin, View):
 
         return redirect(self.redirect_location)
 
-#Still unsure about where to redirect in successful/unsuccessful action
-class DeleteClubView(LoginRequiredMixin,View):
 
+# Still unsure about where to redirect in successful/unsuccessful action
+class DeleteClubView(LoginRequiredMixin, View):
     redirect_location = 'available_clubs'
 
-
-    def is_actionable(self,currentUser,club):
-        return has_owner_rank(currentUser,club)
+    def is_actionable(self, currentUser, club):
+        return has_owner_rank(currentUser, club)
 
     def is_not_actionable(self):
 
         messages.error(self.request, f"You are not allowed to delete the club!")
 
-    def action(self,currentUser,club):
+    def action(self, currentUser, club):
         delete_club(club)
         messages.success(self.request, "You have deleted the club.")
-
 
     def post(self, request, *args, **kwargs):
         try:
             club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
             currentUser = self.request.user
-            if self.is_actionable(currentUser,club):
-                self.action(currentUser,club)
+            if self.is_actionable(currentUser, club):
+                self.action(currentUser, club)
                 return redirect(self.redirect_location)
             else:
                 self.is_not_actionable()
         except:
             messages.error(self.request, "Error, user or club not found.")
 
-        #Redirects to home if user cannot delete club
+        # Redirects to home if user cannot delete club
         return redirect('home')

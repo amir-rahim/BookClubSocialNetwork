@@ -11,13 +11,38 @@ This is a page to create your own club.
 {% block content %}
 
 <div class="columns">
+
+    <div class="column is-3">
+
+        <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+
+            <p class="menu-label">Clubs</p>
+
+            <ul class="menu-list">
+                <li><a href="{% url 'available_clubs' %}">Available Clubs</a></li>
+                <li><a href="{% url 'my_club_memberships' %}">Memberships</a></li>
+                <li><a class="is-active" href="{% url 'create_club' %}"><b>Create Club</b></a></li>
+            </ul>
+
+             <p class="menu-label">Useful Links</p>
+
+            <ul class="menu-list">
+                <li><a href="{% url 'user_dashboard' %}">User Profile</a></li>
+                <li><a>Library</a></li>
+                <li><a>Forum</a></li>
+            </ul>
+
+        </aside>
+
+    </div>
+
     <div class="column is-9">
 
         <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
             <ul>
                 <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a>Club</a></li>
-                <li><a>Create Club</a></li>
+                <li><a href="{% url 'available_clubs' %}">Club</a></li>
+                <li><a href="{% url 'create_club' %}">Create Club</a></li>
             </ul>
         </nav>
 
