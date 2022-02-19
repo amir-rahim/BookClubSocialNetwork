@@ -1,0 +1,22 @@
+from popular_books_recommender import PopularBooks
+
+# We use Popular Books recommendations
+popular_books = PopularBooks()
+
+# Can add a list of the user's read books as a parameter (user_read_books) of get_recommendation methods to avoid already read books
+
+# Popularity recommendations based on books average ratings
+recommendations_average = popular_books.get_recommendations_from_average()
+print(f"Average: {recommendations_average}")
+
+# Popularity recommendations based on books median ratings
+recommendations_median = popular_books.get_recommendations_from_median()
+print(f"Median: {recommendations_median}")
+
+# Popularity recommendations based on books average and median ratings
+recommendations_average_and_median = popular_books.get_recommendations_from_average_and_median()
+print(f"Average and median: {recommendations_average_and_median}")
+
+# Popularity recommendations based on books average and median ratings, excluding '0439064864' already read by user
+recommendations_user_read_book = popular_books.get_recommendations_from_average_and_median(user_read_books=["0439064864"])
+print(f"Average and median - user read book: {recommendations_user_read_book}")
