@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase, tag
 from django.urls import reverse
+# from time import ZoneInfo
 
 
 @tag('meetinglist')
@@ -18,7 +19,7 @@ class MeetingListTest(TestCase):
     def setUp(self):
         self.club = Club.objects.get(pk=1)
         self.meeting = Meeting.objects.get(pk=1,club=self.club)
-        self.meeting2 = Meeting.objects.get(pk=2,club=self.club)
+        
         self.url = reverse("meeting_list",kwargs={'club_url_name':self.club.club_url_name})
         self.john = User.objects.get(username="johndoe")
         self.jane = User.objects.get(username="janedoe")
@@ -55,16 +56,24 @@ class MeetingListTest(TestCase):
         self.assertTemplateUsed(response, 'club_meetings.html')
         self.assertContains(response, self.club.name)
 
+    def test_can_see_organiser_name(self):
+        self.client.login(username=self.john.username, password="Password123")
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'club_meetings.html')
+        self.assertContains(response, self.john.username)
+
     def test_can_see_a_meeting(self):
         self.client.login(username = self.john.username, password = "Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'club_meetings.html')
         self.assertContains(response,'Book meeting 1')
-        # self.assertContains(response,'2022-02-22T19:00+00:00')
+        self.assertContains(response, 'Feb. 22, 2022, 7 p.m.')
         self.assertContains(response,'johndoe')
 
     def test_can_see_multiple_meetings(self):
+        self.meeting2 = Meeting.objects.get(pk=2,club=self.club)
         self.client.login(username = self.john.username, password = "Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
@@ -72,10 +81,17 @@ class MeetingListTest(TestCase):
 
         self.assertContains(response,'Book meeting 1')
         self.assertContains(response,'johndoe')
+        self.assertContains(response, 'Feb. 22, 2022, 7 p.m.')
 
         self.assertContains(response,'Book meeting 2')
         self.assertContains(response,'janedoe')
+        self.assertContains(response, 'Feb. 22, 2022, 8 p.m.')
 
-    #Need to add tests involving the action views for meeting list (like join)
+    def test_can_see_join_button(self):
+        self.client.login(username=self.john.username,password = "Password123")
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'club_meetings.html')
+        self.assertContains(response, 'Join Meeting')
     
 
