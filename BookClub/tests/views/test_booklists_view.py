@@ -82,7 +82,7 @@ class UserBooklistsViewTestCase(TestCase):
 
     def test_view_lists_of_another_user_without_lists(self):
         self.client.login(username = self.user.username, password = 'Password123')
-        response = self.client.get(self._get_url_for_user('jeannettedoe'))
+        response = self.client.get(self._get_url_for_user('sebdoe'))
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user_booklists.html')
@@ -91,8 +91,8 @@ class UserBooklistsViewTestCase(TestCase):
         self.assertContains(response, '<div class="box">No lists. </div>')
 
     def test_user_without_lists_viewing_own_lists(self):
-        self.client.login(username = 'jeannettedoe', password = 'Password123')
-        response = self.client.get(self._get_url_for_user('jeannettedoe'))
+        self.client.login(username = 'sebdoe', password = 'Password123')
+        response = self.client.get(self._get_url_for_user('sebdoe'))
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user_booklists.html')
