@@ -68,7 +68,7 @@ def do_work(book):
         return None              
         
 def getJson(isbn):
-    url = "https://www.googleapis.com/books/v1/volumes?q=isbn:"+isbn+"&key=AIzaSyC9gRUY33rc30RiurpdigVBW2PnWlnM63g"
+    url = "https://www.googleapis.com/books/v1/volumes?q=isbn:"+isbn+"&key="
     r = requests.get(url)
     if r.json() is None:
         raise ValueError
