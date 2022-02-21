@@ -56,12 +56,24 @@ class MembersListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
 
         return context
 
-class MeetingListView(LoginRequiredMixin,ListView):
+class MeetingListView(LoginRequiredMixin,UserPassesTestMixin,ListView):
     """View to display meeting list"""
 
     template_name = 'club_meetings.html'
     context_object_name = 'meetings'
     
+    def test_func(self):
+        try:
+            current_club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
+            current_user = self.request.user
+            rank = ClubMembership.objects.get(user = current_user, club = current_club)
+            if rank.membership == ClubMembership.UserRoles.APPLICANT:
+                messages.add_message(self.request, messages.ERROR, 'You must be a member of this club to view meetings.')
+                return False
+            else:
+                return True
+        except:
+            return False
 
     def get_queryset(self):
         club = Club.objects.get(club_url_name = self.kwargs.get('club_url_name'))

@@ -14,21 +14,6 @@
             "type": "B",
             "book": 1
         }
-    },
-    {
-        "model": "BookClub.meeting",
-        "pk": 2,
-        "fields": {
-            "organiser": 2,
-            "club": 1,
-            "meeting_time": "2022-02-22T20:00+00:00",
-            "created_on": "2022-02-10",
-            "location": "Franklin Wilkins Library GS05",
-            "title": "Book meeting 2",
-            "description": "This is a book meeting, yuh",
-            "members": [1, 2],
-            "type": "B",
-            "book": 1
-        }
     }
+    
 ]
