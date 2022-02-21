@@ -1,4 +1,3 @@
-from pickle import NONE
 from django.db import IntegrityError, models
 from BookClub.models import User, Club, Book
 
