@@ -8,7 +8,7 @@ from django.test import TestCase
 class BookTestCase(TestCase):
     
     fixtures=[
-        'BookClub/tests/fixtures/books.json'
+        'BookClub/tests/fixtures/default_books.json'
     ]
     
     def setUp(self):
