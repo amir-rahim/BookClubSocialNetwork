@@ -1,32 +1,93 @@
+
 [
     {
+
         "model": "BookClub.ClubMembership",
+
         "pk": 1,
         "fields": {
             "club": 1,
             "user": 2,
+
             "membership": 2,
             "joined_on": "2022-02-06"
         }
     },
     {
         "model": "BookClub.ClubMembership",
+
         "pk": 2,
         "fields": {
             "club": 1,
             "user": 1,
+
             "membership": 1,
             "joined_on": "2022-02-08"
         }
     },
     {
         "model": "BookClub.ClubMembership",
+
         "pk": 3,
         "fields": {
             "club": 1,
             "user": 3,
+
             "membership": 0,
             "joined_on": "2022-02-10"
+        }
+    },
+    {
+
+        "model": "BookClub.ClubMembership",
+
+        "pk": 4,
+        "fields": {
+            "club": 3,
+            "user": 2,
+
+            "membership": 2,
+            "joined_on": "2022-02-06"
+        }
+    },
+
+    {
+
+        "model": "BookClub.ClubMembership",
+
+        "pk": 5,
+        "fields": {
+            "club": 3,
+            "user": 3,
+
+            "membership": -1,
+            "joined_on": "2022-02-06"
+        }
+    },
+    {
+
+        "model": "BookClub.ClubMembership",
+
+        "pk": 6,
+        "fields": {
+            "club": 1,
+            "user": 4,
+
+            "membership": -1,
+            "joined_on": "2022-02-06"
+        }
+    },
+    {
+
+        "model": "BookClub.ClubMembership",
+
+        "pk": 7,
+        "fields": {
+            "club": 1,
+            "user": 5,
+
+            "membership": -1,
+            "joined_on": "2022-02-06"
         }
     }
 ]

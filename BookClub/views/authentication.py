@@ -22,6 +22,7 @@ class SignUpView(LoginProhibitedMixin, FormView):
     def form_valid(self, form):
         self.object = form.save()
         login(self.request, self.object)
+        messages.add_message(self.request, messages.SUCCESS, "Welcome to the club")
         return super().form_valid(form)
 
     def form_invalid(self, form):

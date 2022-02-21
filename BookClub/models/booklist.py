@@ -10,9 +10,3 @@ class BookList(models.Model):
     books = models.ManyToManyField(Book)
     created_on = models.DateTimeField(auto_now_add=True)
 
-
-    # def addBooks(self, *new_books):
-    #     return self.books.add(new_books)
-
-    # Django ManyToManyField acts as a set, and ignores duplicates automatically.
-    #   Therefore, we can directly use .add() and .set() methods on books field

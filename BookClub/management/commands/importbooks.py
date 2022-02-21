@@ -1,11 +1,9 @@
 from django.core.management.base import BaseCommand
-from faker import Faker
 import random
 from BookClub.models import Book
-from django.db.utils import IntegrityError
 import pandas as pd
-from pandas import Series
 from pandas import DataFrame
+import requests
 
 class Command(BaseCommand):
     """The database seeder."""
@@ -38,8 +36,11 @@ class Command(BaseCommand):
         ) for record in df_records]
         count = int(len(model_instances)*(percent/100))
         random_sample = random.sample(model_instances, count)
-        Book.objects.bulk_create(random_sample)
-        
+        try:
+            Book.objects.bulk_create(random_sample)
+        except:
+            print('unique error')
+            
     def cleanYear(self, year):
         string = str(year)
         if string == "0":
