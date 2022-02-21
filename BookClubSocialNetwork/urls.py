@@ -67,6 +67,5 @@ urlpatterns = [
     path('club/<str:club_url_name>/applicants/', views.ApplicantListView.as_view(), name='applicant_list'),
 
     path('club/<str:club_url_name>/edit/', views.EditClubView.as_view(), name='edit_club'),
-
-
+    path('club/<str:club_url_name>/meetings/',views.MeetingListView.as_view(),name='meeting_list')
 ]
