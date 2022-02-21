@@ -4,6 +4,7 @@ from BookClub.models.club import Club
 from BookClub.models.club_membership import ClubMembership
 from BookClub.models.book import Book
 from BookClub.models.booklist import BookList
+from BookClub.models.meeting import Meeting
 
 
 @admin.register(User)
