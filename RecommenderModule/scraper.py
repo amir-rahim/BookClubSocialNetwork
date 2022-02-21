@@ -1,17 +1,10 @@
 import csv
-import multiprocessing
 from multiprocessing.pool import ThreadPool
-from threading import Thread
 import time
-import requests
-from queue import Queue
 from bs4 import BeautifulSoup as BS
 from selenium import webdriver
-from webdriver_manager.firefox import GeckoDriverManager
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.firefox.options import Options
+from .bookinfo import BookInfo
 
 class DataRetriever():
     verbose = False
@@ -50,35 +43,6 @@ class DataRetriever():
             print(title)
         return title
         
-    
-class BookInfo():
-    
-    def __init__(self, t="", isbn="", g=[], *args, **kwargs):
-        self.genres = g
-        self.title = t
-        self.isbn = isbn
-        
-    def __str__(self):
-        return self.title
-    
-    def genres(self):
-        return self.genres
-    
-    def title(self):
-        return self.title
-    
-    def isbn(self):
-        return self.isbn
-    
-    def setGenres(self, genres):
-        self.genres = genres
-        
-    def isbn(self, isbn):
-        self.isbn = isbn
-        
-    def title(self, title):
-        self.title = title
-        
 class ISBNScraper():
     
     verbose = False
@@ -97,7 +61,7 @@ class ISBNScraper():
     def processBooks(self, isbns):
         pages = self.get_pagesM(isbns,8)
         books = self.scrape_books(isbns, pages)
-        self.books_to_csv(books)
+        BookInfo.books_to_csv(books)
         
     def processPages(self, isbns):
         pages = self.get_pagesM(isbns, 8)
@@ -119,29 +83,6 @@ class ISBNScraper():
                 continue
             
         return books
-    
-    def scrape_booksM(self, listOfISBNs, pages):
-        
-        pool = multiprocessing.Pool()
-        pagesList = list(pages)
-        results = pool.map(self.getBookInfoM, pagesList)
-        pool.close()
-        
-        pool.join()
-        
-        return results
-    
-    def getBookInfoM(self, page):
-        for page, isbn in page:
-            try:
-                genres = self.retrieve.getGenres(page) 
-                
-                title = self.retrieve.getTitle(page)
-                
-                book = BookInfo(t=title, isbn=isbn, g=genres)
-                return book
-            except:
-                continue
             
             
     def get_pages(self, listOfISBNs):
@@ -166,20 +107,7 @@ class ISBNScraper():
         options.headless = True
         requester = webdriver.Firefox(options=options)
         return requester
-            
-    def books_to_csv(self, books):
-        tic = time.time()
-        with open(str(tic)+'.csv', 'w', newline='') as csvfile:
-            write = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-            for book in books:
-                name = book.title
-                if self.verbose:
-                    print(name)
-                isbn = book.isbn
-                subjects = book.genres
-                write.writerow([name] + [isbn] + subjects)
-            
-        csvfile.close()
+
         
     def page_to_csv(self, pages):
         """
@@ -214,3 +142,4 @@ class ISBNScraper():
         page = requester.page_source
         requester.quit()
         return (page, isbn)
+import multiprocessing
