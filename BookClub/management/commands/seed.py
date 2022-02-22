@@ -3,6 +3,7 @@ from faker import Faker
 import random
 from BookClub.models import User, Club, ClubMembership
 from django.db.utils import IntegrityError
+from django.core.management import call_command
 
 class Command(BaseCommand):
     """The database seeder."""
@@ -47,7 +48,8 @@ class Command(BaseCommand):
             except IntegrityError as e:
                 print("Integrity error was found, attempting again")
                 print(str(e))
-                
+        
+        call_command('importbooks',5)
     def create_club(self):
         genOwner = Command.generateUser()
         name = self.faker.sentence(nb_words=1)
@@ -74,3 +76,5 @@ class Command(BaseCommand):
         #1 officer    
         for z in range(ran_moderator):
             club.add_moderator(Command.generateUser())
+            
+    
