@@ -53,7 +53,7 @@ Find the Book Club you are looking for here!
             </div>
         </section>
 
-      {% if clubs %} <!-- If there are clubs available to the logged-in user -->
+        {% if clubs %} <!-- If there are clubs available to the logged-in user -->
         <div class="table-container">
            <table class="table is-hoverable is-fullwidth" id="table-clubs" data-toggle="table" data-pagination="true">
               <thead>
@@ -74,7 +74,6 @@ Find the Book Club you are looking for here!
                           <td>{{club.description}}</td>
                           <td>{% if clubs.is_private %} Private {% else %} Public {% endif %}</td>
                           <td><button class="button is-fullwidth is-success">View</button>
-                              <button class="button is-fullwidth is-link">Join</button>
                             {% if club.is_private == True %}
                               <form method="post" action="{% url 'join_club' club_url_name=club.club_url_name %}">
                                 {% csrf_token %}
@@ -92,11 +91,11 @@ Find the Book Club you are looking for here!
               </tbody>
           </table>
         </div>
-      {% else %} <!-- If there is no club available to the logged-in user -->
-          <hr>
-          <p style="text-align: center">There are no available clubs at the moment.</p>
-          <hr>
-      {% endif %}
+        {% else %} <!-- If there is no club available to the logged-in user -->
+            <hr>
+            <p style="text-align: center">There are no available clubs at the moment.</p>
+            <hr>
+        {% endif %}
     </div>
 </div>
 <script>

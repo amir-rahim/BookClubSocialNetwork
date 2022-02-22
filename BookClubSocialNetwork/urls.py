@@ -55,7 +55,8 @@ urlpatterns = [
     path('club/<str:club_url_name>/edit/', views.EditClubView.as_view(), name='edit_club'),
 
     # '''Library URLs'''
-    path('library/', views.library_dashboard, name='library_dashboard')
+    path('library/', views.library_dashboard, name='library_dashboard'),
+    path('library/books', views.BookListView.as_view(), name='library_books'),
 
 
 ]
