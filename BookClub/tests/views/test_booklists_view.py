@@ -26,7 +26,7 @@ class UserBooklistsViewTestCase(TestCase):
     def test_url(self):
         self.assertEqual(self.url,f"/user/{self.user.username}/lists")
 
-    # def test_does_not_redirect_when_not_logged_in(self):
+    # def test_redirects_when_not_logged_in(self):
     #     redirect_url = reverse_with_next('login', self.url)
     #     response = self.client.get(self.url, follow = True)
     #     self.assertRedirects(response, redirect_url,
