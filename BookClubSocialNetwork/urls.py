@@ -69,8 +69,10 @@ urlpatterns = [
 
     path('club/<str:club_url_name>/edit/', views.EditClubView.as_view(), name='edit_club'),
 
+
     # '''BookList URLs'''
-    path('user/<slug:username>/lists', BooklistListView.as_view(), name='booklists_list')
+    path('user/<slug:username>/lists', BooklistListView.as_view(), name='booklists_list'),
   
+    path('club/<str:club_url_name>/meetings/',views.MeetingListView.as_view(),name='meeting_list')
 
 ]
