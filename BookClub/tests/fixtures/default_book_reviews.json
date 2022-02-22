@@ -1,0 +1,23 @@
+[{
+        "model": "BookClub.BookReview",
+        "pk": 1,
+        "fields": {
+            "book": 1,
+            "rating": 1,
+            "review": "Lorem Ipsum",
+            "user": 1,
+            "createdOn": "2022-02-22T19:00+00:00"
+        }
+    },
+    {
+        "model": "BookClub.BookReview",
+        "pk": 1,
+        "fields": {
+            "book": 1,
+            "rating": 1,
+            "review": "Lorem Ipsum",
+            "user": 1,
+            "createdOn": "2022-02-22T19:00+00:00"
+        }
+    }
+]
