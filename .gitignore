@@ -888,6 +888,3 @@ FodyWeavers.xsd
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/django,python,visualstudio,macos,windows,linux,pycharm,sublimetext,xcode,visualstudiocode,venv
-isbns.csv
-subjects full.csv
-subjects.csv
