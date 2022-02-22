@@ -13,7 +13,7 @@ class MeetingDetailsViewTestCase(TestCase, LogInTester):
         'BookClub/tests/fixtures/default_clubs.json',
         'BookClub/tests/fixtures/default_memberships.json',
         'BookClub/tests/fixtures/default_meetings.json',
-        'BookClub/tests/fixtures/books.json'
+        'BookClub/tests/fixtures/default_books.json'
     ]
 
     def setUp(self):
@@ -131,5 +131,6 @@ class MeetingDetailsViewTestCase(TestCase, LogInTester):
         self.assertTemplateUsed(response, "meeting_details.html")
         self.assertNotContains(response, "Meeting Administration")
         self.assertNotContains(response, "Manage Meeting")
+
 
 
