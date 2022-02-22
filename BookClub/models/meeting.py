@@ -17,7 +17,7 @@ class Meeting(models.Model):
     description = models.CharField(max_length = 250, blank = False)
     members = models.ManyToManyField(User, related_name='meeting_attendees')
     type = models.CharField(max_length=1, choices = MeetingType.choices, blank = False)
-    book = models.ForeignKey(Book, blank = True, on_delete = models.CASCADE)
+    book = models.ForeignKey(Book, null=True, blank = True, on_delete = models.CASCADE)
 
 
     def __str__(self):
@@ -34,13 +34,13 @@ class Meeting(models.Model):
 
     def get_created_on(self):
         return self.created_on
-    
+
     def get_location(self):
         return self.location
 
     def get_title(self):
         return self.title
-    
+
     def get_description(self):
         return self.description
 
@@ -65,6 +65,3 @@ class Meeting(models.Model):
         if self.members.filter(username = member.username).exists():
             self.members.remove(member)
             self.save()
-
-
-    
