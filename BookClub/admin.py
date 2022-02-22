@@ -3,7 +3,6 @@ from BookClub.models.user import User
 from BookClub.models.club import Club
 from BookClub.models.club_membership import ClubMembership
 from BookClub.models.book import Book
-from BookClub.models.booklist import BookList
 from BookClub.models.meeting import Meeting
 
 @admin.register(User)
@@ -32,17 +31,19 @@ class ClubMembershipAdmin(admin.ModelAdmin):
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
-    list_display = ['title','author']
+    """Configuration of the admin interface for Books ."""
 
-
-@admin.register(BookList)
-class BookAdmin(admin.ModelAdmin):
-    list_display = ['title','creator', 'created_on']
-
+    list_display = [
+        'title', 'ISBN' , 'author' , 'publicationYear' ,'publisher'
+    ]
 
 @admin.register(Meeting)
-class MeetingAdmin(admin.ModelAdmin):
+class ClubMeetingAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for club meetings."""
+
     list_display = [
-        'pk','club', 'organiser', 'meeting_time', 'location', 'title', 'description', 'type', 'book'
+        'pk', 'organiser','club', 'meeting_time', 'created_on' ,'location' , 'title' , 'description' , 'type', 'book'
     ]
+
+
+
