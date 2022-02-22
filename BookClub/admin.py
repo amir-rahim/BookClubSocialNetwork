@@ -4,6 +4,7 @@ from BookClub.models.club import Club
 from BookClub.models.club_membership import ClubMembership
 from BookClub.models.book import Book
 from BookClub.models.booklist import BookList
+from BookClub.models.meeting import Meeting
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -37,3 +38,11 @@ class BookAdmin(admin.ModelAdmin):
 @admin.register(BookList)
 class BookAdmin(admin.ModelAdmin):
     list_display = ['title','creator', 'created_on']
+
+
+@admin.register(Meeting)
+class MeetingAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for club meetings."""
+    list_display = [
+        'pk','club', 'organiser', 'meeting_time', 'location', 'title', 'description', 'type', 'book'
+    ]
