@@ -1,0 +1,78 @@
+{% extends 'base_content.html' %}
+
+{% block page_title %}
+{{ book.title }}
+{% endblock page_title %}
+
+{% block page_subtitle %}
+This is the detail view for {{book.title}}
+{% endblock page_subtitle %}
+
+{% block content %}
+
+<div class="row columns is-multiline">
+
+    <div class="column is-3">
+
+        <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+
+            <p class="menu-label">Club Views</p>
+
+            <ul class="menu-list">
+            </ul>
+
+            <p class="menu-label">Forum & Reviews</p>
+
+            <ul class="menu-list">
+                <li><a>Forum</a></li>
+                <li><a>Members Reviews</a></li>
+            </ul>
+
+        </aside>
+
+    </div>
+    
+    <div class="column is-5">
+        <div class="box">
+            <p class="title"> {{book.title}}</p>
+        </div>
+        <div class="box">
+            <article class="media has-text-centered">
+                <figure class="media-content is-is-center">
+                        <img src="{{ book.imageL }}">
+                </figure>
+            </article>
+        </div>
+        <div class="card">
+            <div class="card-content">
+                <p class="subtitle is-5"><b>Published in: </b> 
+                    {% if book.getPublicationYear == 1%}
+                        Information not available
+                    {%else%}
+                        {{ book.getPublicationYear }} 
+                    {%endif%}</p>
+                <p class="subtitle is-5"><b>Published by: </b> {{ book.publisher }}</p>
+                <p class="subtitle is-5"><b>ISBN: </b>{{ book.ISBN }}</p>
+                <p class="subtitle is-5"><b>Author: </b>{{ book.author }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="column is-3">
+        <div class="box">
+            {% if reviews %}
+                average rating
+            </div>
+            </div class= "box"> {%for review in reviews%}  p {%endfor%}</div>
+            {% else %}
+            <p> No reviews as of yet </p>
+
+            {%endif%}
+
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock %}
