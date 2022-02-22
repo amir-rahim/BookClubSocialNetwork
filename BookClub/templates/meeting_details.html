@@ -16,7 +16,7 @@ Meeting
 
                 <ul class="menu-list">
 
-                    <li><a>Meeting List</a></li>
+                    <li><a href="{% url 'meeting_list' club.club_url_name %}">Meeting List</a></li>
                     <li><a class="is-active" href="{% url 'meeting_details' club.club_url_name meeting.id %}"><b>Meeting Details</b></a></li>
                     <li><a>Meeting Participants</a></li>
 
@@ -38,13 +38,12 @@ Meeting
 
         <div class="coumn is-9">
 
-            {% comment %} Add link for meeting list {% endcomment %}
             <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
                 <ul>
                     <li><a href="{% url 'home' %}">Home</a></li>
                     <li><a href="{% url 'available_clubs' %}">Club</a></li>
                     <li><a href="{% url 'club_dashboard' club.club_url_name %}"> {{ club.name }} </a></li>
-                    <li><a>Meeting List</a></li>
+                    <li><a href="{% url 'meeting_list' club.club_url_name %}">Meeting List</a></li>
                     <li><a href="{% url 'meeting_details' club.club_url_name meeting.id %}">Meeting Details</a></li>
                 </ul>
             </nav>
@@ -108,12 +107,9 @@ Meeting
     
             </div>
 
-            {% comment %} add space {% endcomment %}
-
             <div class="tile is-ancestor has-text-centered">
                 <div class="tile is-vertical">
                     <div class="tile">
-                    {% comment %} change these links {% endcomment %}
                         <div class="tile is-parent">
                             <div class="tile is-child" onclick="location.href='{% url "home"  %}'" style="cursor: pointer">
                                 <article class="tile is-child box">
