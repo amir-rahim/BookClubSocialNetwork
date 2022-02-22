@@ -12,7 +12,7 @@ class UserBooklistsViewTestCase(TestCase):
 
     fixtures = [
         'BookClub/tests/fixtures/default_users.json',
-        'BookClub/tests/fixtures/books.json',
+        'BookClub/tests/fixtures/default_books.json',
         'BookClub/tests/fixtures/booklists.json'
     ]
 
