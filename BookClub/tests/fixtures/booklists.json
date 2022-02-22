@@ -1,0 +1,46 @@
+[
+  {
+    "model": "BookClub.BookList",
+    "pk": 1,
+    "fields": {
+        "title": "Mythical List",
+        "description": "All books related to mythologies",
+        "creator": 1,
+        "books": [1, 3],
+        "created_on": "2021-12-02"
+    }
+  },
+  {
+    "model": "BookClub.BookList",
+    "pk": 2,
+    "fields": {
+        "title": "Non-fiction",
+        "description": "All non-fiction books in the small library",
+        "creator": 2,
+        "books": [1, 2, 3],
+        "created_on": "2022-02-02"
+    }
+  },
+  {
+    "model": "BookClub.BookList",
+    "pk": 3,
+    "fields": {
+        "title": "Bestsellers",
+        "description": "Bestseller books in the small library",
+        "creator": 3,
+        "books": [2, 4],
+        "created_on": "2020-06-12"
+    }
+  },
+  {
+    "model": "BookClub.BookList",
+    "pk": 4,
+    "fields": {
+        "title": "Empty List",
+        "description": "",
+        "creator": 1,
+        "books": [],
+        "created_on": "2022-02-18"
+    }
+  }
+]

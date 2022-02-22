@@ -27,8 +27,7 @@ class CreateClubView(LoginRequiredMixin, CreateView):
 
     def form_invalid(self, form):
         messages.add_message(self.request, messages.ERROR, "The data provided was invalid!")
-        return super().form_invalid(form)
-
+        return super().form_invalid(form);
 
 class ClubDashboardView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     template_name = "club_dashboard.html"

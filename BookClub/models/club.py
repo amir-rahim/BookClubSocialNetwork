@@ -1,4 +1,3 @@
-
 import re
 from django.db import models
 from django.urls import reverse
@@ -30,12 +29,11 @@ class Club(models.Model):
     rules = models.CharField(max_length=200, blank=True)
     is_private = models.BooleanField(default=False, blank=False, null=False)
     created_on = models.DateField(auto_now_add=True)
-    
+
     def clean(self):
         url = self.convertNameToUrl(self.name)
         self.club_url_name = url
         super().clean()
-    
     def get_absolute_url(self):
         return reverse('club_dashboard', kwargs = {'club_url_name': self.club_url_name})
 
@@ -48,8 +46,22 @@ class Club(models.Model):
     def get_number_of_members(self):
         return ClubMembership.objects.filter(club=self, membership__gte=ClubMembership.UserRoles.MEMBER).count()
 
+    def is_applicant(self, user):
+        return ClubMembership.objects.filter(club=self, user=user, membership__gte=ClubMembership.UserRoles.APPLICANT)
+
     def is_member(self, user):
         return ClubMembership.objects.filter(club=self, user=user, membership__gte=ClubMembership.UserRoles.MEMBER)
+
+    def is_moderator(self, user):
+        return ClubMembership.objects.get(club=self, user=user, membership__gte=ClubMembership.UserRoles.MODERATOR)
+
+    def is_owner(self, user):
+        return ClubMembership.objects.get(club=self, user=user, membership__gte=ClubMembership.UserRoles.OWNER)
+
+    def convertNameToUrl(self, name):
+        updated = re.sub(" +", "_", name)
+        updated = re.sub("[^0-9a-zA-Z_]+", "", updated)
+        return updated
 
     def convertNameToUrl(self, name):
         updated = re.sub(" +", "_", name)
@@ -66,7 +78,6 @@ class Club(models.Model):
     # Has unimplemented dependencies
     def get_review_score(self):
         pass
-
 
     def get_my_clubs(self):
         try:
@@ -90,6 +101,11 @@ class Club(models.Model):
 
         return self.get_users(ClubMembership.UserRoles.APPLICANT)
 
+    def get_applicants(self):
+        """Get all the applicants from the  given club."""
+
+        return self.get_users(ClubMembership.UserRoles.APPLICANT)
+
     def get_members(self):
         """Get all the members from the given club."""
 
@@ -108,9 +124,9 @@ class Club(models.Model):
     def add_user(self, user, rank):
         try:
             ClubMembership.objects.create(
-                user = user,
-                club = self,
-                membership = rank,
+                user=user,
+                club=self,
+                membership=rank,
             )
         except IntegrityError:
             pass
@@ -120,13 +136,14 @@ class Club(models.Model):
 
     def add_moderator(self, user):
         self.add_user(user, ClubMembership.UserRoles.MODERATOR)
-      
+        
     def add_owner(self, user):
         if not (ClubMembership.objects.filter(club=self, membership=ClubMembership.UserRoles.OWNER).exists()):
             self.add_user(user, ClubMembership.UserRoles.OWNER)
         else:
-            #print("Owner already set")
+            # print("Owner already set")
             pass
+
     def add_applicant(self, user):
         self.add_user(user, ClubMembership.UserRoles.APPLICANT)
 

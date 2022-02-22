@@ -31,7 +31,7 @@ class CreateClubViewTestcase(TestCase):
         }
 
     def test_create_club_url(self):
-        self.assertEqual(self.url, '/create_club/')
+        self.assertEqual(self.url, '/create/')
 
 
     def test_post_create_club_redirects_when_not_logged_in(self):

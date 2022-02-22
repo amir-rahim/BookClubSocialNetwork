@@ -21,12 +21,13 @@ Find the Book Clubs you have memberships for here!
             <ul class="menu-list">
                 <li><a href="{% url 'available_clubs' %}">Available Clubs</a></li>
                 <li><a class="is-active"><b>Memberships</b></a></li>
+                <li><a href="{% url 'create_club' %}">Create Club</a></li>
             </ul>
 
              <p class="menu-label">Useful Links</p>
 
             <ul class="menu-list">
-                <li><a>User Profile</a></li>
+                <li><a href="{% url 'user_dashboard' %}">User Profile</a></li>
                 <li><a>Library</a></li>
                 <li><a>Forum</a></li>
             </ul>
@@ -65,19 +66,14 @@ Find the Book Clubs you have memberships for here!
           </thead>
           <tbody>
               {% for club in clubs %}
-                    <!-- For each available club, add a row linked to the corresponding club dashboard page -->
-                    <tr onclick="window.location='{% url 'home' %}';">
-                        <td>{{club.name}}</td>
-                        <td>{{club.tagline}}</td>
-                        <td>{{club.description}}</td>
-                        <td><button class="button is-fullwidth is-success">View</button>
-                        <td>
-                            <form method="post" action="{% url 'leave_club' club_url_name=club.club_url_name %}">
-                                {% csrf_token %}
-                                <button type="submit" class="button is-danger" onclick="return confirm('Confirm you want to leave {{club.name}}?');">Leave</button>
-                            </form>
-                        </td>
-                    </tr>
+                  <!-- For each available club, add a row linked to the corresponding club dashboard page -->
+                  <tr onclick="window.location='{% url 'club_dashboard' club.club_url_name %}';">
+                      <td>{{club.name}}</td>
+                      <td>{{club.tagline}}</td>
+                      <td>{{club.description}}</td>
+                      <td><button class="button is-fullwidth is-success">View</button>
+                          <button class="button is-fullwidth is-danger">Leave</button></td>
+                  </tr>
               {% endfor %}
           </tbody>
        </table>

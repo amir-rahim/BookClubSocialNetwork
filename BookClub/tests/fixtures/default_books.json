@@ -1,0 +1,60 @@
+[
+  {
+    "model": "BookClub.Book",
+    "pk": 1,
+    "fields": {
+        "title": "Classical Mythology",
+        "ISBN": "0195153448",
+        "author": "Mark P. O. Morford",
+        "publicationYear": "2002-02-02",
+        "publisher": "Oxford University Press",
+        "imageS": "http://images.amazon.com/images/P/0195153448.01.THUMBZZZ.jpg",
+        "imageM": "http://images.amazon.com/images/P/0195153448.01.MZZZZZZZ.jpg",
+        "imageL": "http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg"
+    }
+  },
+  {
+    "model": "BookClub.Book",
+    "pk": 2,
+    "fields": {
+        "title": "Show Your Work!: 10 Ways To Share Your Creativity And Get Discovered",
+        "ISBN": "076117897X",
+        "author": "Austin Kleon",
+        "publicationYear": "2014-04-01",
+        "publisher": "Algonquin Books (division of Workman)",
+        "imageS": "https://images-na.ssl-images-amazon.com/images/I/71MTgEEjNVL._AC_SY75_CR,0,0,75,75_.jpg",
+        "imageM": "https://images-na.ssl-images-amazon.com/images/I/71MTgEEjNVL._AC_SY75_CR,0,0,75,75_.jpg",
+        "imageL": "https://images-na.ssl-images-amazon.com/images/I/71MTgEEjNVL._AC_SY75_CR,0,0,75,75_.jpg"
+    }
+  },
+
+  {
+    "model": "BookClub.Book",
+    "pk": 3,
+    "fields": {
+        "title": "The Greek Myths: The Complete and Definitive Edition",
+        "ISBN": "9780241982358",
+        "author": "Robert Graves",
+        "publicationYear": "2017-09-28",
+        "publisher": "Penguin",
+        "imageS": "https://images-na.ssl-images-amazon.com/images/I/814qasAs6FL._AC_SX75_CR,0,0,75,75_.jpg",
+        "imageM": "https://images-na.ssl-images-amazon.com/images/I/814qasAs6FL._AC_SX75_CR,0,0,75,75_.jpg",
+        "imageL": "https://images-na.ssl-images-amazon.com/images/I/814qasAs6FL._AC_SX75_CR,0,0,75,75_.jpg"
+    }
+  },
+
+  {
+    "model": "BookClub.Book",
+    "pk": 4,
+    "fields": {
+        "title": "Harry Potter and the Philosopher's Stone: 1/7 (Harry Potter, 1)",
+        "ISBN": "9781408855652",
+        "author": "J.K. Rowling",
+        "publicationYear": "2014-09-01",
+        "publisher": "Bloomsbury Children's Books",
+        "imageS": "https://images-na.ssl-images-amazon.com/images/I/81-Q4oeHicL._AC_SX75_CR,0,0,75,75_.jpg",
+        "imageM": "https://images-na.ssl-images-amazon.com/images/I/81-Q4oeHicL._AC_SX75_CR,0,0,75,75_.jpg",
+        "imageL": "https://images-na.ssl-images-amazon.com/images/I/81-Q4oeHicL._AC_SX75_CR,0,0,75,75_.jpg"
+    }
+  }
+]
