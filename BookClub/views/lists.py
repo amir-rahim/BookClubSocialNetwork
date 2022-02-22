@@ -1,6 +1,7 @@
 '''View for lists'''
 from django.conf import settings
 from django.contrib import messages
+from django.urls import reverse
 from django.views.generic.edit import UpdateView
 from django.views.generic import TemplateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
