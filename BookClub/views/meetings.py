@@ -12,9 +12,6 @@ class MeetingDetailsView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     pk_url_kwarg = 'meeting_id'
     context_object_name = 'meeting'
     redirect_location='home' # should be meeting list
-
-    # def get(self, request, *args, **kwargs):
-    #     return redirect(self.redirect_location)
     
     # Redirect if club is private and user is not a member
     def test_func(self):
@@ -35,7 +32,8 @@ class MeetingDetailsView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
             return redirect('available_clubs')
 
     def get_context_data(self, **kwargs):
-        #Override get_context_data for context other than meetings
+        """Generate context data to be shown in the template."""
+        # Overrides get_context_data for context other than meetings
         context = super().get_context_data(**kwargs)
         context['club'] = Club.objects.get(club_url_name = self.kwargs['club_url_name'])
         context['user'] = self.request.user
