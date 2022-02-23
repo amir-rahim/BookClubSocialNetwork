@@ -22,6 +22,8 @@ from django.views.generic.base import RedirectView
 
 # from BookClub.views.action_views import DemoteMemberView, PromoteView
 
+from BookClub.views.booklists_view import BooklistListView
+
 urlpatterns = [
     # '''Core URLs'''
     path('admin/', admin.site.urls),
@@ -60,12 +62,17 @@ urlpatterns = [
     path('club/', views.AvailableClubsView.as_view(), name='available_clubs'),
     path('memberships/', views.MyClubMembershipsView.as_view(), name='my_club_memberships'),
     path('create/', views.clubs.CreateClubView.as_view(), name = 'create_club'),
-
-    # '''Club URLs'''
+  
     path('club/<str:club_url_name>/', views.ClubDashboardView.as_view(), name='club_dashboard'),
     path('club/<str:club_url_name>/members/', views.MembersListView.as_view(), name='member_list'),
     path('club/<str:club_url_name>/applicants/', views.ApplicantListView.as_view(), name='applicant_list'),
 
     path('club/<str:club_url_name>/edit/', views.EditClubView.as_view(), name='edit_club'),
+
+
+    # '''BookList URLs'''
+    path('user/<slug:username>/lists', BooklistListView.as_view(), name='booklists_list'),
+  
     path('club/<str:club_url_name>/meetings/',views.MeetingListView.as_view(),name='meeting_list')
+
 ]
