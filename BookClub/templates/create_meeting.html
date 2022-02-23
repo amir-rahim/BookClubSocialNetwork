@@ -70,7 +70,7 @@ This is a page to create your meeting
           <div class="hero-body">
               <div class="container">
                   <h1 class="title">Create a Meeting</h1>
-                  <h2 class="subtitle">Enter details for meeting for {{ current_club.name }}</h2>
+                  <h2 class="subtitle">Enter details for meeting for club {{ current_club.name }}</h2>
               </div>
           </div>
       </section>
@@ -78,7 +78,7 @@ This is a page to create your meeting
       <div class="columns">
 
           <div class="column is-12">
-              <form method="post">
+              <form action="{% url 'create_meeting' current_club.club_url_name %}" method="post">
                 {% csrf_token %}
                 {% include 'partials/bulma_form.html' with form=form %}
                 <input type="submit" value="Create meeting" class="button is-link">
