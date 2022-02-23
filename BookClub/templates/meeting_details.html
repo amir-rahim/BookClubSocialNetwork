@@ -4,6 +4,10 @@
 Meeting
 {% endblock page_title %}
 
+{% block page_subtitle %}
+Meeting details for {{ meeting.get_title }}
+{% endblock page_subtitle %}
+
 {% block content %}
 
     <div class="columns">
@@ -18,7 +22,7 @@ Meeting
 
                     <li><a href="{% url 'meeting_list' club.club_url_name %}">Meeting List</a></li>
                     <li><a class="is-active" href="{% url 'meeting_details' club.club_url_name meeting.id %}"><b>Meeting Details</b></a></li>
-                    <li><a>Meeting Participants</a></li>
+                    <li><a href="{% url 'meeting_participants' club.club_url_name meeting.id %}">Meeting Participants</a></li>
 
                 </ul>
 
@@ -44,7 +48,7 @@ Meeting
                     <li><a href="{% url 'available_clubs' %}">Club</a></li>
                     <li><a href="{% url 'club_dashboard' club.club_url_name %}"> {{ club.name }} </a></li>
                     <li><a href="{% url 'meeting_list' club.club_url_name %}">Meeting List</a></li>
-                    <li><a href="{% url 'meeting_details' club.club_url_name meeting.id %}">Meeting Details</a></li>
+                    <li><a href="{% url 'meeting_details' club.club_url_name meeting.id %}">{{ meeting.get_title}}</a></li>
                 </ul>
             </nav>
 
@@ -111,7 +115,7 @@ Meeting
                 <div class="tile is-vertical">
                     <div class="tile">
                         <div class="tile is-parent">
-                            <div class="tile is-child" onclick="location.href='{% url "home"  %}'" style="cursor: pointer">
+                            <div class="tile is-child" onclick="location.href='{% url "meeting_participants" club.club_url_name meeting.id %}'" style="cursor: pointer">
                                 <article class="tile is-child box">
                                     <p class="title is-size-3"> {{ meeting.get_number_of_attendants }} </p>
                                     <p class="subtitle">Participants</p>
