@@ -14,7 +14,7 @@ class LeaveMeetingViewTestCase(TestCase, LogInTester):
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_clubs.json',
         'BookClub/tests/fixtures/default_meetings.json',
-        'BookClub/tests/fixtures/books.json',
+        'BookClub/tests/fixtures/default_books.json',
     ]
 
     def setUp(self):
