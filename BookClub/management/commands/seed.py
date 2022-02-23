@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from faker import Faker
 import random
-from BookClub.models import User, Club, ClubMembership
+from BookClub.models import User, Club, ClubMembership, Book, BookReview
 from django.db.utils import IntegrityError
 from django.core.management import call_command
 
@@ -50,6 +50,13 @@ class Command(BaseCommand):
                 print(str(e))
         
         call_command('importbooks',5)
+        id1 = Book.objects.all()[0].id
+        print(id1)
+        self.add_reviews_to(id1)
+        id2 = Book.objects.all()[1].id
+        print(id2)
+        self.add_reviews_to(id2)
+        
     def create_club(self):
         genOwner = Command.generateUser()
         name = self.faker.sentence(nb_words=1)
@@ -77,4 +84,22 @@ class Command(BaseCommand):
         for z in range(ran_moderator):
             club.add_moderator(Command.generateUser())
             
-    
+        
+            
+    def add_reviews_to(self, pk):
+        try:
+            book = Book.objects.get(pk=pk)
+        except:
+            print("book not found")
+            return
+            
+        for i in range(1,random.randrange(2,20)):
+            user = User.objects.order_by('?')[0]
+            review = BookReview.objects.create(
+                user = user,
+                book = book,
+                rating = random.randrange(0, 10),
+                review = "Material Gworl"               
+            )
+
+            
