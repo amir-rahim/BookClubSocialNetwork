@@ -68,5 +68,6 @@ urlpatterns = [
     # '''Meeting URLs'''
     path('club/<str:club_url_name>/meetings/', views.MeetingListView.as_view(), name='meeting_list'),
     path('club/<str:club_url_name>/meetings/create/', views.CreateMeetingView.as_view(), name='create_meeting'),
+    path('club/<str:club_url_name>/meetings/<int:meeting_id>/delete/', views.DeleteMeetingView.as_view(), name='delete_meeting'),
 
 ]

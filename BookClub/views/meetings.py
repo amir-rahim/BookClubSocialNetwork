@@ -1,7 +1,7 @@
 '''Meetings Related Views'''
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, View
 from django.shortcuts import reverse, redirect
 from django.urls import reverse_lazy
 from BookClub.forms.meeting import MeetingForm
@@ -61,3 +61,37 @@ class CreateMeetingView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
         context['current_club'] = club
         return context
+
+
+class DeleteMeetingView(LoginRequiredMixin, View):
+    redirect_location = 'meeting_list'
+
+    def is_actionable(self, currentUser, club, meeting):
+        return has_owner_rank(self.request.user, club) or (meeting.get_organiser() == currentUser)
+
+    def is_not_actionable(self):
+        messages.error(self.request, f"You are not allowed to delete the meeting!")
+
+    def action(self, currentUser, club, meeting):
+        delete_meeting(meeting)
+        messages.success(self.request, "You have deleted the meeting.")
+
+    def post(self, request, *args, **kwargs):
+
+        try:
+            meeting = Meeting.objects.get(id=self.kwargs['meeting_id'])
+            club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
+            currentUser = self.request.user
+        except:
+            messages.error(self.request, "Error, meeting not found.")
+            return redirect(self.redirect_location, kwargs['club_url_name'])
+
+        if self.is_actionable(currentUser, club, meeting):
+            self.action(currentUser, club, meeting)
+        else:
+            self.is_not_actionable()
+
+        return redirect(self.redirect_location, kwargs['club_url_name'])
+
+    def get(self, request, *args, **kwargs):
+        return redirect(self.redirect_location, kwargs['club_url_name'])
