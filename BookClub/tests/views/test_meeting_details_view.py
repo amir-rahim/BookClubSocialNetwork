@@ -2,6 +2,7 @@
 from django.test import TestCase, tag
 from BookClub.models import Meeting, User, Club
 from django.urls import reverse
+from BookClub.models.club_membership import ClubMembership
 from BookClub.tests.helpers import LogInTester
 
 @tag('meetingdetails')
@@ -37,6 +38,12 @@ class MeetingDetailsViewTestCase(TestCase, LogInTester):
     def test_redirect_if_not_member_of_club_private(self):
         # johndoe is not in the private club
         self.client.login(username=self.organiser.username, password="Password123") 
+        response = self.client.get(reverse("meeting_details", kwargs={"club_url_name": self.private_club.club_url_name, 'meeting_id': self.private_meeting.id}))
+        self.assertRedirects(response, expected_url=reverse("available_clubs"), status_code=302, target_status_code=200)
+
+    def test_redirect_applicant(self):
+        self.client.login(username=self.organiser.username, password="Password123")
+        ClubMembership.objects.create(user = self.organiser, club = self.private_club, membership = ClubMembership.UserRoles.APPLICANT)
         response = self.client.get(reverse("meeting_details", kwargs={"club_url_name": self.private_club.club_url_name, 'meeting_id': self.private_meeting.id}))
         self.assertRedirects(response, expected_url=reverse("available_clubs"), status_code=302, target_status_code=200)
 
@@ -198,5 +205,7 @@ class MeetingDetailsViewTestCase(TestCase, LogInTester):
         self.assertNotContains(response, "Meeting Administration")
         self.assertNotContains(response, "Manage Meeting")
 
-
-
+    def test_invalid_club(self):
+        self.client.login(username=self.organiser.username, password="Password123")
+        response = self.client.get(reverse("meeting_details", kwargs={"club_url_name":'fakeclub', "meeting_id":'100'}))
+        self.assertRedirects(response, expected_url=reverse("available_clubs"), status_code=302, target_status_code=200)
