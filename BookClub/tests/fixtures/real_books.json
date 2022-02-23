@@ -1,0 +1,14 @@
+[{
+    "model": "BookClub.book",
+    "pk": 54273,
+    "fields": {
+        "title": "Arthur's Tooth (Arthur Adventure Series)",
+        "ISBN": "0316112461",
+        "author": "Marc Brown",
+        "publicationYear": "1986-01-01",
+        "publisher": "Little, Brown",
+        "imageS": "http://images.amazon.com/images/P/0316112461.01.THUMBZZZ.jpg",
+        "imageM": "http://images.amazon.com/images/P/0316112461.01.MZZZZZZZ.jpg",
+        "imageL": "http://images.amazon.com/images/P/0316112461.01.LZZZZZZZ.jpg"
+    }
+}]
