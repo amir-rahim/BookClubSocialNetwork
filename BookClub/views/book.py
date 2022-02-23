@@ -1,3 +1,4 @@
+from numpy import average
 from BookClub.models import Book, BookReview
 from django.views.generic import DetailView
 
@@ -11,8 +12,14 @@ class BookDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         book = context.get('book')
         if book is not None:
-            reviews = BookReview.objects.filter()
+            reviews = BookReview.objects.filter(book=book)
             if reviews:
-                context['reviews'] = reviews    
-
+                context['reviews'] = reviews
+                sum = 0
+                for review in reviews:
+                    sum += review.rating
+                avg = sum/len(reviews)
+                context['average'] = avg
+            else:
+                reviews = None
         return context
