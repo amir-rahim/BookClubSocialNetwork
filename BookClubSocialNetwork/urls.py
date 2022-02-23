@@ -70,6 +70,7 @@ urlpatterns = [
 
     # '''Meeting URLs'''
     path('club/<str:club_url_name>/meetings/',views.MeetingListView.as_view(),name='meeting_list'),
-    path('club/<str:club_url_name>/meetings/<int:meeting_id>/', views.MeetingDetailsView.as_view(), name='meeting_details')
+    path('club/<str:club_url_name>/meetings/<int:meeting_id>/', views.MeetingDetailsView.as_view(), name='meeting_details'),
+    path('club/<str:club_url_name>/meetings/<int:meeting_id>/participants/', views.MeetingParticipantsView.as_view(), name='meeting_participants')
 
 ]
