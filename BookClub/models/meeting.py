@@ -17,7 +17,7 @@ class Meeting(models.Model):
     description = models.CharField(max_length = 250, blank = False)
     members = models.ManyToManyField(User, related_name='meeting_attendees')
     type = models.CharField(max_length=1, choices = MeetingType.choices, blank = False)
-    book = models.ForeignKey(Book, null=True, blank = True, on_delete = models.CASCADE)
+    book = models.ForeignKey(Book, blank = True, null = True, on_delete = models.CASCADE)
 
 
     def __str__(self):

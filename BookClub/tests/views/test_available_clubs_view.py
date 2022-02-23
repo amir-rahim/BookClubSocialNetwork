@@ -17,7 +17,7 @@ class AvailableClubsViewTestCase(TestCase):
         self.user = User.objects.get(username="johndoe")
 
     def test_url(self):
-        self.assertEqual(self.url,'/club/available_clubs/')
+        self.assertEqual(self.url,'/club/')
 
     def test_get_template_logged_in(self):
         self.client.login(username=self.user.username, password="Password123")
@@ -42,7 +42,7 @@ class AvailableClubsViewTestCase(TestCase):
         self.assertTemplateUsed(response, 'available_clubs.html')
         clubs = list(response.context['clubs'])
         self.assertEqual(len(clubs), 0)
-        self.assertContains(response, "<p>There are no available clubs at the moment.</p>")
+        self.assertContains(response, "<p style=\"text-align: center\">There are no available clubs at the moment.</p>")
 
     def test_contains_club_not_member_of(self):
         self.client.login(username=self.user.username, password='Password123')

@@ -1,11 +1,11 @@
 {% extends 'base_content.html' %}
 
 {% block page_title %}
-User Dashboard
+User Profile
 {% endblock page_title %}
 
 {% block page_subtitle %}
-This is the User Dashboard, the main home page for your user profile!
+This is the User Profile, this is where you can view other profiles!
 {% endblock page_subtitle %}
 
 {% block content %}
@@ -15,28 +15,24 @@ This is the User Dashboard, the main home page for your user profile!
     <div class="column is-3">
 
         <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
-
+            
             <p class="menu-label">Profile</p>
 
             <ul class="menu-list">
                 <li><a class="is-active"><b>Profile Dashboard</b></a></li>
-                <li><a href="{% url 'edit_profile' %}"> Edit Profile</a></li>
-                <li><a href="{% url 'password_change' %}">Change Password</a></li>
-                <li><a>Profile Settings</a></li>
+                <li><a href="{% url 'user_following' username %}">Following</a></li>
             </ul>
 
             <p class="menu-label">Clubs</p>
 
             <ul class="menu-list">
-                <li><a href="{% url 'create_club' %}">Create Club</a></li>
-                <li><a href="{% url 'available_clubs' %}">Join club</a></li>
-                <li><a href="{% url 'my_club_memberships' %}">Memberships</a></li>
+                <li><a href="{% url 'user_memberships' username %}">Club Memberships</a></li>
             </ul>
 
-            <p class="menu-label">Calendar</p>
+            <p class="menu-label">Books</p>
 
             <ul class="menu-list">
-                <li><a>View Calendar</a></li>
+                <li><a>Book Lists</a></li>
             </ul>
 
         </aside>
@@ -48,16 +44,16 @@ This is the User Dashboard, the main home page for your user profile!
         <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
             <ul>
                 <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'user_dashboard' %}">Profile</a></li>
-                <li><a>Dashboard</a></li>
+                <li><a {% url 'user_dashboard' %}>Profile</a></li>
+                <li><a>{{ username }}</a></li>
             </ul>
         </nav>
 
         <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
             <div class="hero-body">
                 <div class="container">
-                    <h1 class="title">{{ user.username }}'s Dashboard</h1>
-                    <h2 class="subtitle">Welcome to your profile page!</h2>
+                    <h1 class="title">{{ username }}'s Dashboard</h1>
+                    <h2 class="subtitle">Welcome to {{ username }}'s profile page!</h2>
                 </div>
             </div>
         </section>
@@ -79,7 +75,6 @@ This is the User Dashboard, the main home page for your user profile!
                             <div class="media-content">
                                 <div class="content">
                                     <p class="subtitle is-5"><b>Username: </b> {{ username }}</p>
-                                    <p class="subtitle is-5"><b>Email: </b> {{ email }}</p>
                                     <p class="subtitle is-5"><b>Public Bio: </b> {{ public_bio }}</p>
                                 </div>
                             </div>
@@ -98,7 +93,6 @@ This is the User Dashboard, the main home page for your user profile!
                 <div class="card">
                     <div class="card-content">
                         <p class="title">Following</p>
-                        
                     </div>
                     <div class="card-footer">
                         <p class="card-footer-item">
@@ -113,7 +107,7 @@ This is the User Dashboard, the main home page for your user profile!
 
                 <div class="card">
                     <div class="card-content">
-                        <p class="title">Clubs</p>
+                        <p class="title">Club Memberships</p>
                         
                     </div>
                     <div class="card-footer">
