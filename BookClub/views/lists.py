@@ -125,6 +125,7 @@ class MeetingListView(LoginRequiredMixin,UserPassesTestMixin,ListView):
         #Override get_context_data for context other than meetings
         context = super().get_context_data(**kwargs)
         context['club'] = Club.objects.get(club_url_name = self.kwargs.get('club_url_name'))
+        context['current_user'] = self.request.user
         return context
     
 class MeetingParticipantsView(LoginRequiredMixin, UserPassesTestMixin, ListView):

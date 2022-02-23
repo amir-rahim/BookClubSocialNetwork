@@ -67,12 +67,22 @@ Find the Meeting you are looking for here!
                                 <td>{{meeting.organiser.username}}</td>
                                 <td>{{meeting.meeting_time}}</td>
                                 <td>
-                                  	<!--Insert URL for join meeting here-->
-                                  
-                                  	{% comment %} <form method="post" action="{% url 'join meeting url' club_url_name=club.club_url_name %}"> {% endcomment %}
-										{% comment %} {% csrf_token %} {% endcomment %}
-										<button type="submit" class="button is-info">Join Meeting</button>
-                                  	{% comment %} </form> {% endcomment %}
+                                    {% if current_user not in meeting.get_members %}
+
+                                        <form method="post" action="{% url 'join_meeting' club_url_name=club.club_url_name meeting_id=meeting.id %}"> 
+										    {% csrf_token %}
+										    <button type="submit" class="button is-info">Join Meeting</button>
+                                  	    </form>
+
+                                    {% elif current_user in meeting.get_members %}
+
+                                        <form method="post" action="{% url 'leave_meeting' club_url_name=club.club_url_name meeting_id=meeting.id %}"> 
+										    {% csrf_token %}
+										    <button type="submit" class="button is-info">Leave Meeting</button>
+                                  	    </form>
+
+                                    {% endif %}
+                                  	
                                 </td>
                             </tr>
                         {% endfor %}
