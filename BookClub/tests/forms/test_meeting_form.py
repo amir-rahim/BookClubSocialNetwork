@@ -1,9 +1,6 @@
 from django import forms
 from django.test import TestCase, tag
-from BookClub.models.book import Book
-from BookClub.models.user import User
-from BookClub.models.club import Club
-from BookClub.models.meeting import Meeting
+from BookClub.models import User, Club, ClubMembership, Meeting, Book
 from BookClub.forms.meeting import MeetingForm
 
 from datetime import date, datetime
