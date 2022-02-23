@@ -48,7 +48,7 @@ This is the list of members for this club.
             <p class="menu-label">Meetings</p>
 
             <ul class="menu-list">
-                <li><a>All Meetings</a></li>
+                <li><a href="{% url 'meeting_list' club.club_url_name %}">All Meetings</a></li>
                 <li><a href="{% url 'create_meeting' club.club_url_name %}">Create a Meeting</a></li>
                 <li><a>Joined Upcoming Meetings</a></li>
                 <li><a>Prior Meetings</a></li>

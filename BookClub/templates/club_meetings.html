@@ -9,100 +9,126 @@ Find the Meeting you are looking for here!
 {% endblock page_subtitle %}
 
 {% block content %}
-<div class = "columns">
+
+<div class="columns">
+
   <div class="column is-3">
 
-    <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+      <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
 
-      <p class="menu-label">Partition 1</p>
+          <p class="menu-label">Club Views</p>
 
-      <ul class="menu-list">
-          <li><a>Placeholder 1</a></li>
-          <li><a>Placeholder 2</a></li>
-      </ul>
+          <ul class="menu-list">
+              <li><a href="{% url 'club_dashboard' club.club_url_name %}">Dashboard</a></li>
+              <li><a href="{% url 'member_list' club.club_url_name %}">Member List</a></li>
+          </ul>
 
-       <p class="menu-label">Partition 2</p>
+          {% if user == club.get_club_owner %}
 
-      <ul class="menu-list">
-        <li><a>Placeholder 3</a></li>
-        <li><a class="is-active">Club Meetings</a></li>
-      </ul>
+              <p class="menu-label">Club Administration</p>
 
-    </aside>
-  
+              <ul class="menu-list">
+                  <li><a>Manage Club</a></li>
+                  <li><a>Club Settings</a></li>
+              </ul>
+
+          {% endif %}
+
+          <p class="menu-label">Forum & Reviews</p>
+
+          <ul class="menu-list">
+              <li><a>Forum</a></li>
+              <li><a>Members Reviews</a></li>
+          </ul>
+
+          <p class="menu-label">Meetings</p>
+
+          <ul class="menu-list">
+              <li><a class="is-active"><b>All Meetings</b></a></li>
+              <li><a href="{% url 'create_meeting' club.club_url_name %}">Create a Meeting</a></li>
+              <li><a>Joined Upcoming Meetings</a></li>
+              <li><a>Prior Meetings</a></li>
+          </ul>
+
+      </aside>
 
   </div>
 
   <div class="column is-9">
 
-    <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
-      <ul>
-          <li><a href="{% url 'home' %}">Home</a></li>
-          <li><a>Club</a></li>
-          <li><a>{{ club.name }}</a></li>
-          <li><a href="#">Meeting List</a></li>
-      </ul>
-    </nav>
+      <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
+          <ul>
+              <li><a href="{% url 'home' %}">Home</a></li>
+              <li><a>Club</a></li>
+              <li><a>{{ club.name }}</a></li>
+              <li><a href="#">Meetings</a></li>
+          </ul>
+      </nav>
 
-    <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
-      <div class="hero-body">
-          <div class="container">
-              <h1 class="title">{{ club.name }}</h1>
-              <h2 class="subtitle">{{ club.tagline }}</h2>
+      <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
+          <div class="hero-body">
+              <div class="container">
+                  <h1 class="title">{{ club.name }}</h1>
+                  <h2 class="subtitle">{{ club.tagline }}</h2>
+              </div>
           </div>
+      </section>
+
+      <div class="columns">
+                <div class="column is-12">
+                    {% if meetings %} <!-- If there are meetings available to the logged-in user -->
+                      <div class="table-container">
+                        <table class="table is-hoverable" id="table-clubs" data-toggle="table" data-pagination="true">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Meeting Name</th>
+                                    <th scope="col">Organiser</th>
+                                    <th scope="col">Time</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for meeting in meetings %}
+                                  <!-- For each meeting, add a row linked to the corresponding meeeting -->
+
+                                  <!-- Need to change onclick location to actual meeting dashboard.-->
+                                   {% comment %} <tr onclick="window.location='{% url 'meeting view url' meeting.get_title %}';">  {% endcomment %}
+                                        <td>{{meeting.title}}</td>
+                                        <td>{{meeting.organiser.username}}</td>
+                                        <td>{{meeting.meeting_time}}</td>
+                                        <td>
+                                          <!--Insert URL for join meeting here-->
+
+                                              {% comment %} <form method="post" action="{% url 'join meeting url' club_url_name=club.club_url_name %}"> {% endcomment %}
+                                                {% comment %} {% csrf_token %} {% endcomment %}
+                                                <button type="submit" class="button is-info">Join Meeting</button>
+                                              {% comment %} </form> {% endcomment %}
+
+
+
+                                              <form method="post" action="{% url 'delete_meeting' meeting_id=meeting.id club_url_name=club.club_url_name %}">
+                                                  {% csrf_token %}
+                                                  <button type="submit" class="button is-danger" onclick="return confirm('Confirm you want to delete meeting?');">Delete Meeting</button>
+                                              </form>
+
+
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                      </div>
+                    {% else %} <!-- If there is no meetings available to the logged-in user -->
+                      <hr class="solid">
+                      <p>There are no available meetings at the moment.</p>
+                    {% endif %}
+
+                 </div>
+
       </div>
-    </section>
 
-    <section class="hero is-fullheight">
-      <div class="column is-4 is-offset-4">
-        {% if meetings %} <!-- If there are meetings available to the logged-in user -->
-          <div class="table-container">
-            <table class="table is-hoverable" id="table-clubs" data-toggle="table" data-pagination="true">
-                <thead>
-                    <tr>
-                        <th scope="col">Meeting Name</th>
-                        <th scope="col">Organiser</th>
-                        <th scope="col">Time</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for meeting in meetings %}
-                      <!-- For each meeting, add a row linked to the corresponding meeeting -->
-
-                      <!-- Need to change onclick location to actual meeting dashboard.-->
-                       {% comment %} <tr onclick="window.location='{% url 'meeting view url' meeting.get_title %}';">  {% endcomment %}
-                            <td>{{meeting.title}}</td>
-                            <td>{{meeting.organiser.username}}</td>
-                            <td>{{meeting.meeting_time}}</td>
-                            <td>
-                              <!--Insert URL for join meeting here-->
-                              
-                              {% comment %} <form method="post" action="{% url 'join meeting url' club_url_name=club.club_url_name %}"> {% endcomment %}
-                                {% comment %} {% csrf_token %} {% endcomment %}
-                                <button type="submit" class="button is-info">Join Meeting</button>
-                              {% comment %} </form> {% endcomment %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-          </div>
-        {% else %} <!-- If there is no meetings available to the logged-in user -->
-          <hr class="solid">
-          <p>There are no available meetings at the moment.</p>
-        {% endif %}
-    </section>
-  
   </div>
+
 </div>
-<script>
-const dataTable = new simpleDatatables.DataTable("#table-clubs", {
-    fixedHeight: true,
-    columns: [
-      {select: [1], sortable:false}
-    ]
-})
-</script>
 
 {% endblock %}
