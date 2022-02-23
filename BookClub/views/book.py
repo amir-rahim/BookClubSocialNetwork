@@ -14,7 +14,7 @@ class BookDetailView(DetailView):
         if book is not None:
             reviews = BookReview.objects.filter(book=book)
             if reviews:
-                context['reviews'] = reviews
+                context['reviews'] = reviews[:3]
                 sum = 0
                 for review in reviews:
                     sum += review.rating
