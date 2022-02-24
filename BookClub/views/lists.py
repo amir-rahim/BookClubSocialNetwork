@@ -116,6 +116,13 @@ class MeetingListView(LoginRequiredMixin,UserPassesTestMixin,ListView):
         except:
             return False
 
+    def handle_no_permission(self):
+        if not self.request.user.is_authenticated:
+            return super(LoginRequiredMixin, self).handle_no_permission()
+        else:
+            url = reverse('club_dashboard', kwargs=self.kwargs)
+            return redirect(url)
+        
     def get_queryset(self):
         club = Club.objects.get(club_url_name = self.kwargs.get('club_url_name'))
         subquery = Meeting.objects.filter(club=club)
