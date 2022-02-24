@@ -73,6 +73,7 @@ urlpatterns = [
     # '''Libary URLs'''
     #path('library/book/') # searching and book table
     path('library/book/<int:book_id>/', views.BookDetailView.as_view(), name='book_view'), # book view
+    path('library/book/<int:book_id>/reviews/', views.BookReviewListView.as_view(), name = 'book_reviews'),
     #path('library/review/<int:book_id>') # create review for book represented by id
     #path('library/review/<int:book_id>/edit') # edit review for book represented by id
     #path('library/review/<int:book_id/delete') # delete review for book represented by id

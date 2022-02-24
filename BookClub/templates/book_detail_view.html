@@ -61,24 +61,31 @@ This is the detail view for {{book.title}}
     <div class="column is-3">
         <form method="post" action="{% url 'home' %}">
             {% csrf_token %}
-            <button class="button is-fullwidth is-light" href="{%url 'home'%}" >Add Review</button>
+            <button class="button is-fullwidth is-light">Add Review</button>
           </form>
             
         {% if reviews %}
             <div class="box">
-                <b>Average rating: </b>{{average}}
+                <b>Average rating: </b>{{average}} out of 10
             </div>
             
                     {%for review in reviews%}  
                     <div class="box">
                         <div class="card-content">
-                        <p class="subtitle is-5"><b>Review by: </b> {{ review.user }}</p>
-                        <p class="subtitle is-5"><b>Created on: </b>{{ review.createdOn }}</p>
-                        <p class="subtitle is-5"><b>Review text:</b> {{ review.review }} </p>
-                        <p class="subtitle is-5"><b>Rating: </b>{{ review.rating }}</p>
+                        <p class="is-6"><b>Review by: </b> {{ review.user }}</p>
+                        <p class="is-6"><b>Created on: </b>{{ review.createdOn }}</p>
+                        <p class="is-6"><b>Review text:</b> {{ review.review }} </p>
+                        <p class="is-6"><b>Rating: </b>{{ review.rating }}</p>
                         </div>
                     </div>
                     {%endfor%}
+                    {% if more %}
+                    <form method="get" action="{% url 'book_reviews' book.id %}">
+                        <div class="buttons is-right">
+                        <button class="button is-light">See more</button>
+                        </div>
+                      </form>
+                    {% endif%}
                 
         {% else %}
             <div class="box">
