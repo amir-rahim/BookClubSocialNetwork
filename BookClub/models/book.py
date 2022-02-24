@@ -1,12 +1,13 @@
 
-
 from datetime import datetime
 from django.db import models
 
 class Book(models.Model):
+    class Meta:
+        ordering = ['-id']
     
     title = models.CharField(unique=False, max_length=200, blank=False)
-    ISBN = models.CharField(unique=True, max_length=15,blank=False)
+    ISBN = models.CharField(unique=True, max_length=15 ,blank=False)
     author = models.CharField(unique=False, blank=False, max_length=100)
     publicationYear = models.DateField(unique=False, blank=False)
     publisher = models.CharField(unique=False, blank=False, max_length=100)
