@@ -20,9 +20,6 @@ from BookClub import views
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.views.generic.base import RedirectView
 
-# from BookClub.views.action_views import DemoteMemberView, PromoteView
-
-# from BookClub.views.action_views import DemoteMemberView, PromoteView
 
 urlpatterns = [
     # '''Core URLs'''
@@ -62,17 +59,23 @@ urlpatterns = [
     path('club/', views.AvailableClubsView.as_view(), name='available_clubs'),
     path('memberships/', views.MyClubMembershipsView.as_view(), name='my_club_memberships'),
     path('create/', views.clubs.CreateClubView.as_view(), name = 'create_club'),
-
-    # '''Club URLs'''
+  
     path('club/<str:club_url_name>/', views.ClubDashboardView.as_view(), name='club_dashboard'),
     path('club/<str:club_url_name>/members/', views.MembersListView.as_view(), name='member_list'),
     path('club/<str:club_url_name>/applicants/', views.ApplicantListView.as_view(), name='applicant_list'),
     path('club/<str:club_url_name>/edit/', views.EditClubView.as_view(), name='edit_club'),
-
+    path('club/<str:club_url_name>/meetings/',views.MeetingListView.as_view(),name='meeting_list'),
+    
     # '''Library URLs'''
     path('library/', views.library_dashboard, name='library_dashboard'),
-    path('library/books', views.BookListView.as_view(), name='library_books'),
+    path('library/books/'), # searching and book table
+    path('library/books/<int:book_id>/', views.BookDetailView.as_view(), name='book_view'), # book view
+    path('library/books/<int:book_id>/reviews/', views.BookReviewListView.as_view(), name = 'book_reviews'),
+    #path('library/review/<int:book_id>') # create review for book represented by id
+    #path('library/review/<int:book_id>/edit') # edit review for book represented by id
+    #path('library/review/<int:book_id/delete') # delete review for book represented by id
 
-    #'''Meeting URLs'''
-    path('club/<str:club_url_name>/meetings/',views.MeetingListView.as_view(),name='meeting_list')
+    # '''BookList URLs'''
+    path('user/<slug:username>/lists', views.BooklistListView.as_view(), name='booklists_list'),
+  
 ]
