@@ -46,7 +46,8 @@ class EditMeetingView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
         if not self.request.user.is_authenticated:
             return super(LoginRequiredMixin, self).handle_no_permission()
         else:
-            url = reverse('meeting_list', kwargs=self.kwargs)
+            url = reverse('meeting_list', kwargs={"club_url_name":self.kwargs.get('club_url_name')})
+            # url = reverse('home')
             return redirect(url)
 
     def get_object(self):
@@ -62,6 +63,7 @@ class EditMeetingView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
             meeting = self.get_object()
             context['meeting'] = meeting
             context['id'] = meeting.id
+            context['club'] = meeting.club
         except:
             return context
         return context
