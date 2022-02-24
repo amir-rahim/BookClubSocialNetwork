@@ -2,6 +2,9 @@ from multiprocessing.sharedctypes import Value
 import os
 from django.core.management.base import BaseCommand
 import time
+import concurrent
+import urllib
+import urllib3.request
 from BookClub.models import Book
 import pandas as pd
 from pandas import DataFrame
@@ -12,6 +15,7 @@ from surprise import Dataset
 from surprise import Reader
 from RecommenderModule.bookinfo import BookInfo
 
+
 class Command(BaseCommand):
     """The database seeder."""
         
@@ -19,20 +23,19 @@ class Command(BaseCommand):
         tic = time.time()
         books = self.getSubjectsPool()
         unsuccessful = 0;
-        with open('subjects.csv', 'w', newline='') as csvfile:
+        if books is None:
+            return None
+        else:
             for book in books:
-                if book is not None:
-                    write = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-                    name = book.title
-                    subjects = book.genres
-                    isbn = book.isbn
-                    if(subjects is not None):
-                        write.writerow([name] + [isbn] + subjects)
-                    else:
-                        write.writerow([name] + [isbn])
-                        unsuccessful += 1
+                if(len(book) <= 2):
+                    unsuccessful += 1 
                 else:
-                    unsuccessful += 1    
+                   for k in book.keys():
+                       j = book.get(k)
+                       if j.get('subjects') is None:
+                           unsuccessful +=1
+                       else:
+                           book = j
         toc = time.time()
         total = toc-tic
         items = len(books)
@@ -43,16 +46,41 @@ class Command(BaseCommand):
         
     
     def getSubjectsPool(self):
-        books = Book.objects.all()
-        books = books
-        pool = multiprocessing.Pool()
-        print(os.cpu_count())
-        result = pool.map(do_work, books)
-        pool.close()
+        books = Book.objects.all()[:100]
+        urls = []
+        isbns = map(lambda a : a.ISBN, books)
+        for isbn in isbns:
+            urls.append("https://openlibrary.org/api/books?bibkeys=ISBN:"+isbn+"&jscmd=data&format=json")
         
-        pool.join()
+        def load_url(url, timeout):
+            with urllib.request.urlopen(url, timeout=timeout) as conn:
+                return conn.read()
+
+        dataL = []
+        with concurrent.futures.ThreadPoolExecutor(max_workers=48) as executor:
+            # Start the load operations and mark each future with its URL
+            future_to_url = {executor.submit(load_url, url, 60): url for url in urls}
+            for future in concurrent.futures.as_completed(future_to_url):
+                url = future_to_url[future]
+                try:
+                    data = future.result()
+                except Exception as exc:
+                    print('%r generated an exception: %s' % (url, exc))
+                else:
+                    dataL.append(data)
+      
+                
+        return dataL
+
         
-        return result
+        #pool = multiprocessing.Pool()
+        #print(os.cpu_count())
+        #result = pool.map(do_work, books)
+        #pool.close()
+        
+        #pool.join()
+        
+        #return result
     
     def bla(self):
         file_path = ("RecommenderModule/dataset/BX-Book-Ratings.csv")
@@ -85,6 +113,15 @@ class Command(BaseCommand):
                 #    print(" --- ")
                 
         print(i)
+        
+
+    
+def get_json(book):
+    isbn = book.ISBN
+    try:
+        json = getJson(isbn)
+    except ValueError:
+        return None
         
 def do_work(book):
     isbn = book.ISBN
