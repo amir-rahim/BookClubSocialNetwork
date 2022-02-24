@@ -3,6 +3,7 @@ from datetime import date, datetime
 from django.test import TestCase, tag
 from django.urls import reverse
 from django.contrib import messages
+from django.contrib.messages import get_messages
 from BookClub.models import User, Club, ClubMembership, Meeting, Book
 from BookClub.forms.meeting import MeetingForm
 from BookClub.tests.helpers import reverse_with_next
@@ -40,7 +41,7 @@ class CreateMeetingViewTestCase(TestCase):
             "description": "This is our first weekly meeting for this weeks book!",
             "meeting_time": "2022-02-26 15:30:00",
             "location": "Maughan Library",
-            "type": "B",
+            "type": Meeting.MeetingType.BOOK,
             "book": self.book,
         }
 
@@ -100,6 +101,14 @@ class CreateMeetingViewTestCase(TestCase):
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.ERROR)
 
+    def test_create_successful_meeting(self):
+        self.client.login(username=self.owner.username, password='Password123')
+        before_count = Meeting.objects.count()
+        response = self.client.post(self.url, self.data, follow=True)
+        messages = list(get_messages(response.wsgi_request))
+        print(messages[0])
+        after_count = Meeting.objects.count()
+        # self.assertEqual(after_count, before_count + 1)
 
     # '''Test for users creating meetings for another club'''
     # def test_member_user_of_club_cannot_create_meetings_for_another_private_club(self):

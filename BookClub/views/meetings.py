@@ -40,11 +40,12 @@ class CreateMeetingView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def form_valid(self, form):
         club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
-        # meeting = form.save(commit=False)
-        form.instance.organiser = self.request.user
-        form.instance.club = club
-        form.instance.save()
-        form.instance.join_member(self.request.user)
+        meeting = form.save(commit=False)
+        meeting.organiser = self.request.user
+        meeting.club = club
+        print(meeting)
+        meeting.save()
+        meeting.join_member(self.request.user)
         messages.success(self.request, 'Successfully created a new meeting!')
         return super(CreateMeetingView, self).form_valid(form)
 
