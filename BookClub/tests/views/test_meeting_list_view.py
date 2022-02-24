@@ -29,8 +29,6 @@ class MeetingListTest(TestCase):
         ClubMembership.objects.create(user = self.moderator, club = self.club, membership = ClubMembership.UserRoles.MODERATOR)
         ClubMembership.objects.create(user = self.member, club = self.club, membership = ClubMembership.UserRoles.MEMBER)
         ClubMembership.objects.create(user = self.applicant, club = self.club, membership = ClubMembership.UserRoles.APPLICANT)
-        #need to make more club membership tings. 
-        #Then test that each one can see the tings. 
 
     def test_url(self):
         url = f'/club/{self.club.club_url_name}/meetings/'
