@@ -1,5 +1,6 @@
-'''Memberships Related Views'''
-from django.shortcuts import redirect, render
+'''Library Related Views'''
+from django.contrib import messages
+from django.shortcuts import redirect, render, reverse
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from BookClub.models import Book
@@ -11,16 +12,32 @@ def library_dashboard(request):
     return render(request, 'library_dashboard.html')
 
 
-class BookListView(LoginRequiredMixin, ListView):
+class BookListView(ListView):
     model = Book
     template_name = "library_books.html"
-    context_object_name = 'posts'
-    paginate_by = 10
+    context_object_name = 'books'
+    paginate_by = 20
+    
+    def post(self, request):
+        if request.POST.get('paginate_by'):
+            request.session['paginate_setting'] = request.POST['paginate_by']
+        if request.POST.get('q'):
+            request.session['query'] = request.POST['q']
 
-    def get_queryset(self):
-        return Book.objects.all()
+        return redirect(reverse('library_books', kwargs=self.kwargs))
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['books'] = self.get_queryset()
-        return context
+    def get_paginate_by(self, queryset):
+        if self.request.session.get('paginate_setting'):
+            return self.request.session.get('paginate_setting')
+        else:
+            return self.paginate_by
+
+    def get_queryset(self):  # new
+        query = self.request.session.get('query')
+        try:
+            object_list = Book.objects.filter(
+                Q(title__icontains=query) | Q(author__icontains=query) | Q(publisher__icontains=query)
+            )
+        except:
+            object_list = Book.objects.all()
+        return object_list
