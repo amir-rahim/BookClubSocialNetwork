@@ -2,7 +2,7 @@
 from django.conf import settings
 from django.contrib import messages
 from django.views.generic.edit import UpdateView
-from django.views.generic import TemplateView,ListView
+from django.views.generic import TemplateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect
 from BookClub.helpers import *
@@ -43,7 +43,7 @@ class MembersListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
 
         context = super().get_context_data(**kwargs)
         club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
-        user = User.objects.get(id = self.request.user.id)
+        user = User.objects.get(id=self.request.user.id)
         try:
             rank = ClubMembership.objects.get(user=user, club=club)
         except:
@@ -55,6 +55,7 @@ class MembersListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
         context['request_user'] = rank
 
         return context
+
 
 class ApplicantListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
     """View to display applicant list"""
@@ -84,7 +85,7 @@ class ApplicantListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
 
         context = super().get_context_data(**kwargs)
         club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
-        user = User.objects.get(id = self.request.user.id)
+        user = User.objects.get(id=self.request.user.id)
         try:
             rank = ClubMembership.objects.get(user=user, club=club)
         except:
@@ -96,20 +97,22 @@ class ApplicantListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
         context['request_user'] = rank
 
         return context
-    
-class MeetingListView(LoginRequiredMixin,UserPassesTestMixin,ListView):
+
+
+class MeetingListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     """View to display meeting list"""
 
     template_name = 'club_meetings.html'
     context_object_name = 'meetings'
-    
+
     def test_func(self):
         try:
             current_club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
             current_user = self.request.user
-            rank = ClubMembership.objects.get(user = current_user, club = current_club)
+            rank = ClubMembership.objects.get(user=current_user, club=current_club)
             if rank.membership == ClubMembership.UserRoles.APPLICANT:
-                messages.add_message(self.request, messages.ERROR, 'You must be a member of this club to view meetings.')
+                messages.add_message(self.request, messages.ERROR,
+                                     'You must be a member of this club to view meetings.')
                 return False
             else:
                 return True
@@ -122,16 +125,14 @@ class MeetingListView(LoginRequiredMixin,UserPassesTestMixin,ListView):
         else:
             url = reverse('club_dashboard', kwargs=self.kwargs)
             return redirect(url)
-        
+
     def get_queryset(self):
-        club = Club.objects.get(club_url_name = self.kwargs.get('club_url_name'))
+        club = Club.objects.get(club_url_name=self.kwargs.get('club_url_name'))
         subquery = Meeting.objects.filter(club=club)
         return subquery
-        
-    def get_context_data(self, **kwargs):
-        #Override get_context_data for context other than meetings
-        context = super().get_context_data(**kwargs)
-        context['club'] = Club.objects.get(club_url_name = self.kwargs.get('club_url_name'))
-        return context
-    
 
+    def get_context_data(self, **kwargs):
+        # Override get_context_data for context other than meetings
+        context = super().get_context_data(**kwargs)
+        context['club'] = Club.objects.get(club_url_name=self.kwargs.get('club_url_name'))
+        return context

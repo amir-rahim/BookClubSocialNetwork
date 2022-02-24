@@ -43,7 +43,6 @@ class CreateMeetingView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         meeting = form.save(commit=False)
         meeting.organiser = self.request.user
         meeting.club = club
-        print(meeting)
         meeting.save()
         meeting.join_member(self.request.user)
         messages.success(self.request, 'Successfully created a new meeting!')
