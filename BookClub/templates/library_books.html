@@ -86,7 +86,7 @@ This is our Library, you can look at our books and click and see further details
                   </thead>
                   <tbody>
                       {% for book in page_obj %}
-                          <tr onclick="window.location='{% url 'home' %}';">
+                          <tr onclick="window.location='{% url 'book_view' book.id %}';">
                               <td><img src="{{book.imageM}}" alt=""/></td>
                               <td>{{book.title}}</td>
                               <td>{{book.author}}</td>

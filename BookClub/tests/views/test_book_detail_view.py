@@ -22,7 +22,7 @@ class BookDetailViewTestCase(TestCase):
         self.url = reverse('book_view', kwargs={'book_id' : 54273})
         
     def test_url(self):
-        self.assertEquals(self.url, "/library/book/"+str(54273)+"/")
+        self.assertEquals(self.url, "/library/books/"+str(54273)+"/")
         
     def test_contains_book_data(self):
         response = self.client.get(self.url)        

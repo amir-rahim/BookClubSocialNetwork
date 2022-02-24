@@ -17,7 +17,7 @@ class LibraryBooksViewTestCase(TestCase):
         self.user = User.objects.get(username="johndoe")
 
     def test_books_url(self):
-        self.assertEqual(self.url, '/library/books')
+        self.assertEqual(self.url, '/library/books/')
 
     def test_get_dashboard_not_logged_in(self):
         response = self.client.get(self.url)

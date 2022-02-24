@@ -10,4 +10,5 @@ from .user import *
 from .membership import *
 from .library import *
 from .book import *
+from .booklists import *
 
