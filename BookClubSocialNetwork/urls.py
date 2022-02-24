@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from BookClub import views
+from BookClub.views.edit_meeting import EditMeetingView
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.views.generic.base import RedirectView
 
@@ -67,5 +68,7 @@ urlpatterns = [
     path('club/<str:club_url_name>/applicants/', views.ApplicantListView.as_view(), name='applicant_list'),
 
     path('club/<str:club_url_name>/edit/', views.EditClubView.as_view(), name='edit_club'),
-    path('club/<str:club_url_name>/meetings/',views.MeetingListView.as_view(),name='meeting_list')
+    path('club/<str:club_url_name>/meetings/',views.MeetingListView.as_view(),name='meeting_list'),
+
+    path('club/<str:club_url_name>/meetings/<int:meeting_id>/edit',views.EditMeetingView.as_view(),name='edit_meeting')
 ]
