@@ -54,9 +54,9 @@ This is the Library, you can look at our books, user-curated lists & reviews and
 
         <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
             <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Library</a></li>
-                <li><a href="#">Dashboard</a></li>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'library_dashboard' %}">Library</a></li>
+                <li><a href="{% url 'library_dashboard' %}">Dashboard</a></li>
             </ul>
         </nav>
 
@@ -71,7 +71,7 @@ This is the Library, you can look at our books, user-curated lists & reviews and
                 <nav class="tabs is-boxed is-fullwidth">
                     <div class="container">
                         <ul>
-                            <li><a>View Library</a></li>
+                            <li><a href="{% url 'library_books' %}">View Library</a></li>
                         </ul>
                     </div>
                 </nav>
