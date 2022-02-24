@@ -56,6 +56,7 @@ class MembersListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
 
         return context
 
+
 class ApplicantListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
     """View to display applicant list"""
 
@@ -97,6 +98,7 @@ class ApplicantListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
 
         return context
     
+
 class MeetingListView(LoginRequiredMixin,UserPassesTestMixin,ListView):
     """View to display meeting list"""
 
@@ -115,6 +117,14 @@ class MeetingListView(LoginRequiredMixin,UserPassesTestMixin,ListView):
                 return True
         except:
             return False
+
+            
+    def handle_no_permission(self):
+            if not self.request.user.is_authenticated:
+                return super(LoginRequiredMixin, self).handle_no_permission()
+            else:
+                url = reverse('club_dashboard', kwargs=self.kwargs)
+                return redirect(url)
 
     def get_queryset(self):
         club = Club.objects.get(club_url_name = self.kwargs.get('club_url_name'))
