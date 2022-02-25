@@ -61,20 +61,17 @@ urlpatterns = [
     path('club/', views.AvailableClubsView.as_view(), name='available_clubs'),
     path('memberships/', views.MyClubMembershipsView.as_view(), name='my_club_memberships'),
     path('create/', views.clubs.CreateClubView.as_view(), name = 'create_club'),
-
     path('club/<str:club_url_name>/', views.ClubDashboardView.as_view(), name='club_dashboard'),
     path('club/<str:club_url_name>/members/', views.MembersListView.as_view(), name='member_list'),
     path('club/<str:club_url_name>/applicants/', views.ApplicantListView.as_view(), name='applicant_list'),
     path('club/<str:club_url_name>/edit/', views.EditClubView.as_view(), name='edit_club'),
-
-
+   
     # '''Libary URLs'''
     #path('library/book/') # searching and book table
     path('library/book/<int:book_id>/', views.BookDetailView.as_view(), name='book_view'), # book view
     #path('library/review/<int:book_id>') # create review for book represented by id
     #path('library/review/<int:book_id>/edit') # edit review for book represented by id
     #path('library/review/<int:book_id/delete') # delete review for book represented by id
-
 
     # '''BookList URLs'''
     path('user/<slug:username>/lists', BooklistListView.as_view(), name='booklists_list'),
@@ -84,4 +81,4 @@ urlpatterns = [
     path('club/<str:club_url_name>/meetings/create/', views.CreateMeetingView.as_view(), name='create_meeting'),
     path('club/<str:club_url_name>/meetings/<int:meeting_id>/delete/', views.DeleteMeetingView.as_view(), name='delete_meeting'),
 
-]
+
