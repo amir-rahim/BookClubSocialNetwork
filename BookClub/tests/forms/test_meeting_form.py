@@ -26,7 +26,7 @@ class MeetingFormTestCase(TestCase):
             "meeting_time": "2022-02-26 15:30:00",
             "location": "Maughan Library",
             "type": "B",
-            "book": self.book,
+            "book": self.book.id,
         }
 
     def test_valid_meeting_form(self):
@@ -62,7 +62,7 @@ class MeetingFormTestCase(TestCase):
         # self.assertEqual(meeting.meeting_time, datetime.strptime(self.form_input['meeting_time'], '%Y-%m-%d %H:%M:%S'))
         self.assertEqual(meeting.location, self.form_input['location'])
         self.assertEqual(meeting.type, self.form_input['type'])
-        self.assertEqual(meeting.book, self.form_input['book'])
+        self.assertEqual(meeting.book.id, self.form_input['book'])
         self.assertEqual(meeting.organiser, self.user)
         self.assertEqual(meeting.club, self.club)
         self.assertEqual(meeting.created_on, saving_date)

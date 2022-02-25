@@ -24,11 +24,10 @@ class CreateMeetingViewTestCase(TestCase):
         self.moderator = User.objects.get(pk=2)
         self.member = User.objects.get(pk=3)
         self.applicant = User.objects.get(pk=4)
-        self.non_member = User.objects.get(pk=5)
 
         self.book = Book.objects.get(pk=1)
         self.club = Club.objects.get(pk=2)
-        self.private_club = Club.objects.get(pk=1)
+        self.private_club = Club.objects.get(pk=3)
         self.url = reverse('create_meeting', kwargs={'club_url_name': self.club.club_url_name})
         self.url_private_club = reverse('create_meeting', kwargs={'club_url_name': self.private_club.club_url_name})
 
@@ -36,6 +35,7 @@ class CreateMeetingViewTestCase(TestCase):
         ClubMembership.objects.create(user=self.moderator, club=self.club, membership=ClubMembership.UserRoles.MODERATOR)
         ClubMembership.objects.create(user=self.member, club=self.club, membership=ClubMembership.UserRoles.MEMBER)
         ClubMembership.objects.create(user=self.applicant, club=self.club, membership=ClubMembership.UserRoles.APPLICANT)
+        ClubMembership.objects.create(user=self.applicant, club=self.private_club, membership=ClubMembership.UserRoles.OWNER)
 
         self.data = {
             "title": "Weekly book review",
@@ -45,16 +45,6 @@ class CreateMeetingViewTestCase(TestCase):
             "type": "B",
             "book": self.book.id,
         }
-
-        self.wrong_data = {
-            "title": "Weekly book review",
-            "description": "This is our first weekly meeting for this weeks book!",
-            "meeting_time": "2022-02-26 15:30:00",
-            "location": "Maughan Library",
-            "type": "B",
-            "book": self.book, #MADE BOOK WRONG
-        }
-
 
     def test_create_meeting_url(self):
         self.assertEqual(self.url, f'/club/{self.club.club_url_name}/meetings/create/')
@@ -136,7 +126,6 @@ class CreateMeetingViewTestCase(TestCase):
         self.assertEqual(meeting.type, self.data['type'])
         self.assertEqual(meeting.book.id, self.data['book'])
 
-
     def test_moderator_create_meeting(self):
         self.client.login(username=self.moderator.username, password='Password123')
         before_count = Meeting.objects.count()
@@ -154,16 +143,39 @@ class CreateMeetingViewTestCase(TestCase):
         self.assertEqual(meeting.type, self.data['type'])
         self.assertEqual(meeting.book.id, self.data['book'])
 
-    # def test_owner_create_wrong_meeting(self):
-    #     self.client.login(username=self.owner.username, password='Password123')
-    #     before_count = Meeting.objects.count()
-    #     response = self.client.post(self.url, self.data, follow=True)
-    #     messages_list = list(get_messages(response.wsgi_request))
-    #     self.assertEqual(len(messages_list), 1)
-    #     self.assertEqual(messages_list[0].level, messages.ERROR)
-    #     after_count = Meeting.objects.count()
-    #     self.assertEqual(after_count, before_count)
+    '''Tests for users with permission unsuccessfully creating a meeting'''
 
+    def test_owner_create_wrong_meeting(self):
+        self.client.login(username=self.owner.username, password='Password123')
+        self.data['meeting_time'] = 'aaaa'
+        before_count = Meeting.objects.count()
+        response = self.client.post(self.url, self.data)
+        after_count = Meeting.objects.count()
+        self.assertEqual(after_count, before_count)
+        messages_list = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.ERROR)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'create_meeting.html')
+        form = response.context['form']
+        self.assertTrue(isinstance(form, MeetingForm))
+        self.assertTrue(form.is_bound)
+
+    def test_moderator_create_wrong_meeting(self):
+        self.client.login(username=self.moderator.username, password='Password123')
+        self.data['meeting_time'] = 'aaaa'
+        before_count = Meeting.objects.count()
+        response = self.client.post(self.url, self.data)
+        after_count = Meeting.objects.count()
+        self.assertEqual(after_count, before_count)
+        messages_list = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.ERROR)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'create_meeting.html')
+        form = response.context['form']
+        self.assertTrue(isinstance(form, MeetingForm))
+        self.assertTrue(form.is_bound)
 
     '''Tests for users not being able to creating a meeting'''
 
@@ -187,12 +199,76 @@ class CreateMeetingViewTestCase(TestCase):
         after_count = Meeting.objects.count()
         self.assertEqual(after_count, before_count)
 
-    # '''Test for users creating meetings for another club'''
-    # def test_member_user_of_club_cannot_create_meetings_for_another_private_club(self):
-    #     self.client.login(username=self.owner.username, password='Password123')
-    #     response = self.client.get(self.url_private_club, follow=True)
-    #     # self.assertEqual(response.status_code, 302)
-    #     response_message = self.client.get(reverse('available_clubs'))
-    #     messages_list = list(response_message.context['messages'])
-    #     self.assertEqual(len(messages_list), 1)
-    #     self.assertEqual(messages_list[0].level, messages.ERROR)
+    '''Tests for users creating meetings for another club'''
+
+    def test_owner_of_club_cannot_create_meetings_for_another_private_club(self):
+        self.client.login(username=self.owner.username, password='Password123')
+        response = self.client.post(self.url_private_club, self.data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        response_message = self.client.get(reverse('available_clubs'))
+        messages_list = list(response.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.ERROR)
+        self.assertTemplateUsed(response, 'available_clubs.html')
+
+    def test_moderator_of_club_cannot_create_meetings_for_another_private_club(self):
+        self.client.login(username=self.moderator.username, password='Password123')
+        response = self.client.post(self.url_private_club, self.data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        response_message = self.client.get(reverse('available_clubs'))
+        messages_list = list(response.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.ERROR)
+        self.assertTemplateUsed(response, 'available_clubs.html')
+
+    def test_member_of_club_cannot_create_meetings_for_another_private_club(self):
+        self.client.login(username=self.member.username, password='Password123')
+        response = self.client.post(self.url_private_club, self.data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        response_message = self.client.get(reverse('available_clubs'))
+        messages_list = list(response.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.ERROR)
+        self.assertTemplateUsed(response, 'available_clubs.html')
+
+    '''Tests for users creating meetings for invalid club'''
+
+    def test_owner_cannot_create_meeting_for_invalid_club(self):
+        self.client.login(username=self.owner.username, password='Password123')
+        before_count = Meeting.objects.count()
+        response = self.client.post(reverse('create_meeting', kwargs={'club_url_name': 'wrong'}), self.data, follow=True)
+        messages_list = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.ERROR)
+        after_count = Meeting.objects.count()
+        self.assertEqual(after_count, before_count)
+
+    def test_moderator_cannot_create_meeting_for_invalid_club(self):
+        self.client.login(username=self.moderator.username, password='Password123')
+        before_count = Meeting.objects.count()
+        response = self.client.post(reverse('create_meeting', kwargs={'club_url_name': 'wrong'}), self.data, follow=True)
+        messages_list = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.ERROR)
+        after_count = Meeting.objects.count()
+        self.assertEqual(after_count, before_count)
+
+    def test_member_cannot_create_meeting_for_invalid_club(self):
+        self.client.login(username=self.member.username, password='Password123')
+        before_count = Meeting.objects.count()
+        response = self.client.post(reverse('create_meeting', kwargs={'club_url_name': 'wrong'}), self.data, follow=True)
+        messages_list = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.ERROR)
+        after_count = Meeting.objects.count()
+        self.assertEqual(after_count, before_count)
+
+    def test_applicant_cannot_create_meeting_for_invalid_club(self):
+        self.client.login(username=self.applicant.username, password='Password123')
+        before_count = Meeting.objects.count()
+        response = self.client.post(reverse('create_meeting', kwargs={'club_url_name': 'wrong'}), self.data, follow=True)
+        messages_list = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.ERROR)
+        after_count = Meeting.objects.count()
+        self.assertEqual(after_count, before_count)
