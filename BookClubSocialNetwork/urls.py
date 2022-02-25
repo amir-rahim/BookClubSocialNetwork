@@ -21,11 +21,14 @@ from django.views.generic.base import RedirectView
 
 # from BookClub.views.action_views import DemoteMemberView, PromoteView
 
+from BookClub.views.booklists_view import BooklistListView
+
 urlpatterns = [
     # '''Core URLs'''
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
     path('favicon.ico', RedirectView.as_view(url=staticfiles_storage.url('favicon.ico'))),
+
 
     # '''Authentication URLs'''
     path('login/', views.LogInView.as_view(), name='login'),
@@ -52,14 +55,13 @@ urlpatterns = [
 
     path('transfer_ownership/<str:club_url_name>/', views.TransferOwnershipView.as_view(), name='transfer_ownership'),
     path('kick_member/<str:club_url_name>/', views.KickMemberView.as_view(), name='kick_member'),
-    path('delete_club/<str:club_url_name>/', views.DeleteClubView.as_view(), name='delete_club'),
+    path('delete_club/<str:club_url_name>/',views.DeleteClubView.as_view(),name='delete_club'),
 
     # '''Membership URLs'''
     path('club/', views.AvailableClubsView.as_view(), name='available_clubs'),
     path('memberships/', views.MyClubMembershipsView.as_view(), name='my_club_memberships'),
-    path('create/', views.clubs.CreateClubView.as_view(), name='create_club'),
+    path('create/', views.clubs.CreateClubView.as_view(), name = 'create_club'),
 
-    # '''Club URLs'''
     path('club/<str:club_url_name>/', views.ClubDashboardView.as_view(), name='club_dashboard'),
     path('club/<str:club_url_name>/members/', views.MembersListView.as_view(), name='member_list'),
     path('club/<str:club_url_name>/applicants/', views.ApplicantListView.as_view(), name='applicant_list'),
@@ -69,5 +71,18 @@ urlpatterns = [
     path('club/<str:club_url_name>/meetings/', views.MeetingListView.as_view(), name='meeting_list'),
     path('club/<str:club_url_name>/meetings/create/', views.CreateMeetingView.as_view(), name='create_meeting'),
     path('club/<str:club_url_name>/meetings/<int:meeting_id>/delete/', views.DeleteMeetingView.as_view(), name='delete_meeting'),
+
+    # '''Libary URLs'''
+    #path('library/book/') # searching and book table
+    path('library/book/<int:book_id>/', views.BookDetailView.as_view(), name='book_view'), # book view
+    #path('library/review/<int:book_id>') # create review for book represented by id
+    #path('library/review/<int:book_id>/edit') # edit review for book represented by id
+    #path('library/review/<int:book_id/delete') # delete review for book represented by id
+
+
+    # '''BookList URLs'''
+    path('user/<slug:username>/lists', BooklistListView.as_view(), name='booklists_list'),
+
+    path('club/<str:club_url_name>/meetings/',views.MeetingListView.as_view(),name='meeting_list')
 
 ]
