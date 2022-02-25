@@ -19,9 +19,6 @@ from BookClub import views
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.views.generic.base import RedirectView
 
-
-from BookClub.views.booklists_view import BooklistListView
-
 urlpatterns = [
     # '''Core URLs'''
     path('admin/', admin.site.urls),
@@ -83,7 +80,7 @@ urlpatterns = [
     #path('library/review/<int:book_id/delete') # delete review for book represented by id
 
     # '''BookList URLs'''
-    path('user/<slug:username>/lists', BooklistListView.as_view(), name='booklists_list'),
+    path('user/<slug:username>/lists', views.BooklistListView.as_view(), name='booklists_list'),
     path('user/<slug:username>/lists/create', views.CreateBookListView.as_view(), name = 'create_booklist'),
   
 ]
