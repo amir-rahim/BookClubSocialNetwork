@@ -1,4 +1,6 @@
 from datetime import date, datetime
+from django.contrib import messages
+from django.shortcuts import redirect
 from django.test import TestCase, tag
 from django.urls import reverse
 from BookClub.models import *
@@ -22,18 +24,25 @@ class EditMeetingTestCase(TestCase):
 
     def setUp(self):
         super(TestCase, self).setUp()
-        self.owner = User.objects.get(username='johndoe')
-        self.applicant = User.objects.get(username='janedoe')
-        self.member = User.objects.get(username='jackdoe')
-        self.club = Club.objects.get(pk=1)
+        self.meeting = Meeting.objects.get(pk=1)
+        
+        self.owner = User.objects.get(pk=7)
+        self.applicant = User.objects.get(pk=6)
+        self.member = User.objects.get(pk=5)
+        self.moderator = User.objects.get(pk=4)
+        self.not_in_club_user = User.objects.get(pk=3)
+
+        self.organiser = self.meeting.organiser
+        self.club = self.meeting.club
 
         ClubMembership.objects.create(user = self.owner, club = self.club, membership = ClubMembership.UserRoles.OWNER)
         ClubMembership.objects.create(user = self.applicant, club = self.club, membership = ClubMembership.UserRoles.APPLICANT)
         ClubMembership.objects.create(user = self.member, club = self.club, membership = ClubMembership.UserRoles.MEMBER)
-       
+        ClubMembership.objects.create(user = self.organiser,club=self.club,membership = ClubMembership.UserRoles.MODERATOR)
+        ClubMembership.objects.create(user = self.moderator,club=self.club,membership = ClubMembership.UserRoles.MODERATOR)
         
         self.book = Book.objects.get(pk=1)
-        self.meeting = Meeting.objects.get(pk=1)
+        
         
         self.url = reverse('edit_meeting', kwargs = {'club_url_name': self.club.club_url_name,'meeting_id':self.meeting.id})
         self.title = "new title"
@@ -41,14 +50,107 @@ class EditMeetingTestCase(TestCase):
         self.location = "somewhere"
         self.meetingtime = datetime.now()
         self.created = datetime(2022,2,22,15)
+        self.type = Meeting.MeetingType.OTHER
         self.data = {
             'title': self.title,
             'description': self.description,
             'location': self.location,
             'meeting_time': self.meetingtime,
-            'created_on': self.created,
-            'type': Meeting.MeetingType.OTHER,
+            'type': self.type,
             'book': self.book
         }
+        #Date time input format: "yyyy-mm-dd hh:mm:ss"
     def test_edit_meeting_url(self):
         self.assertEqual(self.url,f'/club/{self.club.club_url_name}/meetings/{self.meeting.id}/edit/')
+
+    def test_redirect_when_not_logged_in(self):
+        redirect_url = reverse_with_next('login',self.url)
+        response = self.client.post(self.url,self.data,follow=True)
+        self.assertRedirects(response,redirect_url,status_code=302,target_status_code=200,fetch_redirect_response=True)
+        self.assertTemplateUsed(response,'login.html')
+
+    def test_redirect_when_edit_invalid_meeting(self):
+        url = reverse('edit_meeting', kwargs = {'club_url_name': self.club.club_url_name,'meeting_id':100})
+        redirect_url = reverse_with_next('login',url)
+        response = self.client.post(url,self.data,follow=True)
+        self.assertRedirects(response,redirect_url,status_code=302,target_status_code=200,fetch_redirect_response=True)
+        self.assertTemplateUsed(response,'login.html')
+
+
+    def test_applicant_cannot_edit_meeting(self):
+        self.client.login(username=self.applicant.username,password="Password123")
+        response = self.client.get(self.url)
+        messages_list = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list),1)
+        self.assertEqual(messages_list[0].level,messages.ERROR)
+        self.assertEqual(response.status_code,302)
+
+    def test_member_cannot_edit_meeting(self):
+        self.client.login(username=self.member.username,password="Password123")
+        response = self.client.get(self.url)
+        messages_list = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list),1)
+        self.assertEqual(messages_list[0].level,messages.ERROR)
+        self.assertEqual(response.status_code,302)
+
+    def test_moderator_cannot_edit_meeting(self):
+        self.client.login(username=self.moderator.username,password="Password123")
+        response = self.client.get(self.url)
+        messages_list = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list),1)
+        self.assertEqual(messages_list[0].level,messages.ERROR)
+        self.assertEqual(response.status_code,302)
+
+    def test_user_not_in_club_cannot_edit_meeting(self):
+        self.client.login(username=self.not_in_club_user.username,password="Password123")
+        response = self.client.get(self.url)
+        messages_list = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list),2)
+        self.assertEqual(messages_list[0].level,messages.ERROR)
+        self.assertEqual(response.status_code,302)    
+        
+    def test_owner_edit_meeting(self):
+        self.client.login(username=self.owner.username,password="Password123")
+        response = self.client.get(self.url)
+        messages_list = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list),1)
+        self.assertEqual(messages_list[0].level,messages.SUCCESS)
+        self.assertTemplateUsed(response,'edit_meeting.html')
+        
+    def test_organiser_edit_meeting(self):
+        self.client.login(username=self.organiser.username,password="Password123")
+        response = self.client.get(self.url)
+        messages_list = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list),1)
+        self.assertEqual(messages_list[0].level,messages.SUCCESS)
+        self.assertTemplateUsed(response,'edit_meeting.html')
+
+    def test_valid_title_change(self):
+        self.client.login(username = self.owner.username,password="Password123")
+        self.data['title'] = "New Meeting"
+        response = self.client.post(self.url,self.data)
+        #Test for redirect to meeting view
+        # responseURL = reverse('meeting_view',kwargs = {'club_url_name':self.club.club_url_name,'meeting_id':self.meeting.id})
+        # self.assertRedirects(response,expected_url=responseURL,status_code=302,target_status_code=200)
+
+        self.assertContains(response,"New Meeting")
+        self.assertContains(response,self.description)
+        self.assertContains(response,self.location)
+        self.assertContains(response,self.meetingtime)
+        self.assertContains(response,self.type)
+        self.assertContains(response,self.book)
+        self.assertEqual(response.status_code,200)
+
+
+    def test_valid_description_change(self):
+        self.client.login(username = self.owner.username,password="Password123")
+        self.data['description'] = "A whole new world"
+        response = self.client.post(self.url,self.data)
+
+        self.assertContains(response,self.title)
+        self.assertContains(response,"A whole new world")
+        self.assertContains(response,self.location)
+        self.assertContains(response,self.meetingtime)
+        self.assertContains(response,self.type)
+        self.assertContains(response,self.book)
+        self.assertEqual(response.status_code,200)

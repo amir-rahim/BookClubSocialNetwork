@@ -47,6 +47,7 @@ class EditMeetingView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
             return super(LoginRequiredMixin, self).handle_no_permission()
         else:
             url = reverse('meeting_list', kwargs={"club_url_name":self.kwargs.get('club_url_name')})
+            messages.add_message(self.request, messages.ERROR,'You are not allowed to do that')
             # url = reverse('home')
             return redirect(url)
 
