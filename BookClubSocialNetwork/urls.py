@@ -81,7 +81,7 @@ urlpatterns = [
     #path('library/review/<int:book_id/delete') # delete review for book represented by id
 
     # '''BookList URLs'''
-    path('user/<slug:username>/lists', BooklistListView.as_view(), name='booklists_list'),
+    path('user/<slug:username>/lists', views.BooklistListView.as_view(), name='booklists_list'),
     path('club/<str:club_url_name>/meetings/',views.MeetingListView.as_view(),name='meeting_list'),
     path('user/<slug:username>/lists', views.BooklistListView.as_view(), name='booklists_list'),
     path('user/<slug:username>/lists/create', views.CreateBookListView.as_view(), name = 'create_booklist'),
