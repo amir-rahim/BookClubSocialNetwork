@@ -16,16 +16,34 @@ These are the reviews for {{book.title}}
 
         <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
 
-            <p class="menu-label">Club Views</p>
-
             <ul class="menu-list">
+                <li><a href="{% url 'library_dashboard' %}">Dashboard</a></li>
             </ul>
 
-            <p class="menu-label">Forum & Reviews</p>
+            <p class="menu-label">Our Book Library</p>
 
             <ul class="menu-list">
-                <li><a>Forum</a></li>
-                <li><a>Members Reviews</a></li>
+                <li><a href="{% url 'library_books' %}">View Library</a></li>
+            </ul>
+
+            <p class="menu-label">Book Lists</p>
+
+            <ul class="menu-list">
+                <li><a>View Book Lists</a></li>
+                <li><a>Create Book Lists</a></li>
+            </ul>
+
+            <p class="menu-label">Recommender</p>
+
+            <ul class="menu-list">
+                <li><a>AI Recommended Books</a></li>
+            </ul>
+
+            <p class="menu-label">Reviews</p>
+
+            <ul class="menu-list">
+                <li><a>Make Review</a></li>
+                <li><a>View Personal Reviews</a></li>
             </ul>
 
         </aside>
@@ -49,7 +67,7 @@ These are the reviews for {{book.title}}
                       <th scope="col">Rating</th>
                       <th scope="col">Text</th>
                       <th scope="col">Reviewed On</th>
-                      <th cope="col"></th>
+                      <th scope="col"></th>
                   </tr>
               </thead>
               <tbody>
@@ -60,19 +78,23 @@ These are the reviews for {{book.title}}
                           <td>{{review.review}}</td>
                           <td>{{review.createdOn}}</td>
                           {% if review.user == request.user %}
-                            <td><form method="get" action="{% url 'book_reviews' book.id %}">
-                                <button class="button is-danger is-outlined">
-                                    <span>Delete</span>
-                                </button>
-                              </form></td>
+                              <td>
+                                  <form method="get" action="{% url 'book_reviews' book.id %}">
+                                      <button class="button is-danger is-outlined">
+                                          <span>Delete</span>
+                                      </button>
+                                  </form>
+                              </td>
                           {% else %}
-                                <td></td>
+                              <td></td>
                           {% endif %}
                       </tr>
                   {% endfor %}
               </tbody>
           </table>
         </div>
+
+        {% include 'partials/pagination.html' %}
                 
         {% else %}
             <div class="box">

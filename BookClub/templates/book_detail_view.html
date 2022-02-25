@@ -10,91 +10,251 @@ This is the detail view for {{book.title}}
 
 {% block content %}
 
-<div class="columns">
+    <div class="columns">
 
-    <div class="column is-3">
+        <div class="column is-3">
 
-        <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+            <a class="button is-fullwidth is-link" href="{% url 'library_books' %}"><b>Back to Books</b></a>
 
-            <p class="menu-label">Club Views</p>
+            <hr class="solid">
 
-            <ul class="menu-list">
-            </ul>
-
-            <p class="menu-label">Forum & Reviews</p>
-
-            <ul class="menu-list">
-                <li><a>Forum</a></li>
-                <li><a>Members Reviews</a></li>
-            </ul>
-
-        </aside>
-
-    </div>
-    
-    <div class="column is-6">
-        <div class="box">
-            <p class="title"> {{book.title}}</p>
-        </div>
-        <div class="box">
-            <article class="media has-text-centered">
-                <figure class="media-content is-is-center">
-                        <img src="{{ book.imageL }}">
-                </figure>
-            </article>
-        </div>
-        <div class="card">
-            <div class="card-content">
-                <p class="subtitle is-5"><b>Published in: </b> 
-                    {% if book.getPublicationYear == 1%}
-                        Information not available
-                    {%else%}
-                        {{ book.getPublicationYear }} 
-                    {%endif%}</p>
-                <p class="subtitle is-5"><b>Published by: </b> {{ book.publisher }}</p>
-                <p class="subtitle is-5"><b>ISBN: </b>{{ book.ISBN }}</p>
-                <p class="subtitle is-5"><b>Author: </b>{{ book.author }}</p>
+            <div class="card">
+                <div class="card-image">
+                    <figure class="image">
+                        {% if book.imageL %}
+                        <img src="{{ book.imageL }}" alt="Book Cover">
+                        {% else %}
+                        <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" alt="Book Cover">
+                        {% endif %}
+                    </figure>
+                </div>
             </div>
+
+            <hr class="solid">
+
+            <div class="card">
+                <div class="card-content">
+                    <p class="subtitle"><b>Published in: </b>
+                        {% if book.getPublicationYear == 1 %}
+                            Information not available
+                        {%else%}
+                            {{ book.getPublicationYear }}
+                        {%endif%}</p>
+                    <p class="subtitle"><b>Published by: </b> {{ book.publisher }}</p>
+                    <p class="subtitle"><b>ISBN: </b>{{ book.ISBN }}</p>
+                    <p class="subtitle"><b>Author: </b>{{ book.author }}</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="column is-9">
+
+            <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
+                <ul>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'library_dashboard' %}">Library</a></li>
+                    <li><a href="{% url 'library_books' %}">Books</a></li>
+                    <li><a href="{% url 'book_view' book.id %}">{{ book.title }}</a></li>
+                </ul>
+            </nav>
+
+            <div id="tabs-with-content">
+                <div class="tabs is-centered">
+                    <ul>
+                        <li class="is-active">
+                            <a>
+                                <span class="icon is-small"><i class="far fa-file-alt" aria-hidden="true"></i></span>
+                                <span>Details</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a>
+                                <span class="icon is-small"><i class="fa-solid fa-user-pen"></i></span>
+                                <span>User Reviews</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a>
+                                <span class="icon is-small"><i class="fa-solid fa-book-open-reader" aria-hidden="true"></i></span>
+                                <span>Preview</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a>
+                                <span class="icon is-small"><i class="fa-solid fa-link" aria-hidden="true"></i></span>
+                                <span>Key Links</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                    <section class="tab-content">
+                        <div class="box"><b>Description:</b> <p id="description"></p></div>
+                        <div class="box"><b>Genre:</b> <p id="genre"></p></div>
+                        <div class="box"><b>Page Count:</b> <p id="pageCount"></p></div>
+                        <div class="box"><b>On Sale?:</b> <p id="saleability"></p></div>
+                        <div class="box"><b>Ebook Available?:</b> <p id="ebook"></p></div>
+                    </section>
+
+                    <section class="tab-content">
+
+                        {% if reviews %}
+                            <div class="box">
+                                <b>Average rating: </b>{{ average }} out of 10
+                            </div>
+
+                            {% for review in reviews %}
+                                <div class="box">
+                                    <div class="card-content">
+                                    <p><b>Review by: </b> {{ review.user }}</p>
+                                    <p><b>Created on: </b>{{ review.createdOn }}</p>
+                                    <p><b>Review:</b> {{ review.review }} </p>
+                                    <p><b>Rating: </b>{{ review.rating }}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+                            <div class="box">
+                                <form method="post" action="{% url 'home' %}">
+                                    {% csrf_token %}
+                                    <button class="button is-info is-fullwidth">Add Review</button>
+                                </form>
+
+                                {% if more %}
+                                    <form method="get" action="{% url 'book_reviews' book.id %}">
+                                        <button class="button is-link is-fullwidth">See more</button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <div class="box">
+                                <p>No reviews as of yet</p>
+                            </div>
+                        {% endif %}
+                    </section>
+
+                    <section class="tab-content">
+                        <script type="text/javascript" src="//books.google.com/books/previewlib.js"></script>
+                        <script type="text/javascript">
+                        GBS_insertEmbeddedViewer('ISBN:8401474736',600,500);
+                        </script>
+                    </section>
+
+                    <section class="tab-content">
+
+                    </section>
+
+                </div>
+
+            </div>
+
         </div>
     </div>
-    
-    <div class="column is-3">
-        <form method="post" action="{% url 'home' %}">
-            {% csrf_token %}
-            <button class="button is-fullwidth is-light">Add Review</button>
-          </form>
-            
-        {% if reviews %}
-            <div class="box">
-                <b>Average rating: </b>{{average}} out of 10
-            </div>
-            
-                    {%for review in reviews%}  
-                    <div class="box">
-                        <div class="card-content">
-                        <p class="is-6"><b>Review by: </b> {{ review.user }}</p>
-                        <p class="is-6"><b>Created on: </b>{{ review.createdOn }}</p>
-                        <p class="is-6"><b>Review text:</b> {{ review.review }} </p>
-                        <p class="is-6"><b>Rating: </b>{{ review.rating }}</p>
-                        </div>
-                    </div>
-                    {%endfor%}
-                    {% if more %}
-                    <form method="get" action="{% url 'book_reviews' book.id %}">
-                        <div class="buttons is-right">
-                        <button class="button is-light">See more</button>
-                        </div>
-                      </form>
-                    {% endif%}
-                
-        {% else %}
-            <div class="box">
-                <p> No reviews as of yet </p>
-            </div>
-        {%endif%}
-    </div>
+
+    <style>
+        #tabs-with-content .tabs:not(:last-child) {
+          margin-bottom: 0;
+        }
+
+        #tabs-with-content .tab-content {
+          padding: 1rem;
+          display: none;
+        }
+
+        #tabs-with-content .tab-content.is-active {
+          display: block;
+        }
+    </style>
+
+    <script>
+
+        window.onload = function() {
+            if (String({{ book.ISBN }}).length < 10) {
+                var url = "https://www.googleapis.com/books/v1/volumes?q=isbn:0" + String({{ book.ISBN }});
+            }
+            else {
+                var url = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + String({{ book.ISBN }});
+            }
+
+            const xhttp = new XMLHttpRequest();
+            xhttp.onload = function() {
+                try {
+                    //Parsing JSON Data
+                    var jsonData = JSON.parse(this.responseText);
+                    let data = jsonData.items;
+
+                    for (var key in data) {
+                        var genre = data[key].volumeInfo.categories[0];
+                        var genreElement = document.getElementById("genre");
+                        genreElement.innerHTML = String(genre);
+
+                        var description = data[key].volumeInfo.description;
+                        var descriptionElement = document.getElementById("description");
+                        descriptionElement.innerHTML = String(description);
+
+                        var pageCount = data[key].volumeInfo.pageCount;
+                        var pageCountElement = document.getElementById("pageCount");
+                        pageCountElement.innerHTML = String(pageCount);
+
+                        var saleability = data[key].saleInfo.saleability;
+                        var saleabilityElement = document.getElementById("saleability");
+                        saleabilityElement.innerHTML = String(saleability);
+
+                        var ebook = data[key].saleInfo.isEbook;
+                        var ebookElement = document.getElementById("ebook");
+                        ebookElement.innerHTML = String(ebook);
+                    }
 
 
-</div>
+                    {#var ebook = data.saleInfo.isEbook;#}
+                    {#var saleability = data.saleInfo.saleability;#}
+                    {#var webReaderLink = data.accessInfo.webReaderLink;#}
+
+                } catch (exception) {
+                    console.log(exception);
+                }
+            }
+            xhttp.open("GET", url, true);
+            xhttp.send();
+        }
+
+        let tabsWithContent = (function () {
+          let tabs = document.querySelectorAll('.tabs li');
+          let tabsContent = document.querySelectorAll('.tab-content');
+
+          let deactvateAllTabs = function () {
+            tabs.forEach(function (tab) {
+              tab.classList.remove('is-active');
+            });
+          };
+
+          let hideTabsContent = function () {
+            tabsContent.forEach(function (tabContent) {
+              tabContent.classList.remove('is-active');
+            });
+          };
+
+          let activateTabsContent = function (tab) {
+            tabsContent[getIndex(tab)].classList.add('is-active');
+          };
+
+          let getIndex = function (el) {
+            return [...el.parentElement.children].indexOf(el);
+          };
+
+          tabs.forEach(function (tab) {
+            tab.addEventListener('click', function () {
+              deactvateAllTabs();
+              hideTabsContent();
+              tab.classList.add('is-active');
+              activateTabsContent(tab);
+            });
+          })
+
+          tabs[0].click();
+        })();
+    </script>
 
 {% endblock %}
