@@ -19,10 +19,6 @@ from BookClub import views
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.views.generic.base import RedirectView
 
-# from BookClub.views.action_views import DemoteMemberView, PromoteView
-
-from BookClub.views.booklists_view import BooklistListView
-
 urlpatterns = [
     # '''Core URLs'''
     path('admin/', admin.site.urls),
@@ -73,15 +69,18 @@ urlpatterns = [
     path('club/<str:club_url_name>/meetings/<int:meeting_id>/participants/', views.MeetingParticipantsView.as_view(), name='meeting_participants'),
     path('club/<str:club_url_name>/meetings/<int:meeting_id>/delete/', views.DeleteMeetingView.as_view(), name='delete_meeting'),
     
-    # '''Libary URLs'''
-    #path('library/book/') # searching and book table
-    path('library/book/<int:book_id>/', views.BookDetailView.as_view(), name='book_view'), # book view
+    # '''Library URLs'''
+    path('library/', views.library_dashboard, name='library_dashboard'),
+    path('library/books/', views.BookListView.as_view(), name='library_books'), # searching and book table
+    path('library/books/<int:book_id>/', views.BookDetailView.as_view(), name='book_view'), # book view
+    path('library/books/<int:book_id>/reviews/', views.BookReviewListView.as_view(), name = 'book_reviews'),
+
     #path('library/review/<int:book_id>') # create review for book represented by id
     #path('library/review/<int:book_id>/edit') # edit review for book represented by id
     #path('library/review/<int:book_id/delete') # delete review for book represented by id
 
     # '''BookList URLs'''
-    path('user/<slug:username>/lists', BooklistListView.as_view(), name='booklists_list'),
+    path('user/<slug:username>/lists', views.BooklistListView.as_view(), name='booklists_list'),
     path('user/<slug:username>/lists/create', views.CreateBookListView.as_view(), name = 'create_booklist'),
   
 ]

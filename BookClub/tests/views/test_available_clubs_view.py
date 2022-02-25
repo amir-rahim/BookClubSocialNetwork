@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 from BookClub.models import User, Club, ClubMembership
 
+
 class AvailableClubsViewTestCase(TestCase):
     """Tests of the available_clubs view."""
 

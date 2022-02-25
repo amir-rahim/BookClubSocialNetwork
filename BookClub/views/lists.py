@@ -24,14 +24,14 @@ class MembersListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
                 return True
         except:
             return False
-
+    
     def handle_no_permission(self):
         if not self.request.user.is_authenticated:
             return super(LoginRequiredMixin, self).handle_no_permission()
         else:
             url = reverse('club_dashboard', kwargs=self.kwargs)
             return redirect(url)
-
+        
     def get_context_data(self, **kwargs):
         """Generate context data to be shown in the template."""
 

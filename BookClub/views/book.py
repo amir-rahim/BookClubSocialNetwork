@@ -1,6 +1,7 @@
 from numpy import average
 from BookClub.models import Book, BookReview
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
+
 
 class BookDetailView(DetailView):
     model = Book
@@ -19,7 +20,35 @@ class BookDetailView(DetailView):
                 for review in reviews:
                     sum += review.rating
                 avg = sum/len(reviews)
+                avg = round(avg, 2)
                 context['average'] = avg
+                if len(reviews) > 3:
+                    context['more'] = True
             else:
                 reviews = None
+        return context
+    
+class BookReviewListView(ListView):
+    model = BookReview
+    template_name = 'book_reviews.html'
+    context_object_name = 'reviews'
+    paginate_by = 10
+    
+    def get_queryset(self):
+        bookPk = self.kwargs.get('book_id')
+        if bookPk is not None:
+            book = Book.objects.get(pk=bookPk)
+            queryset = BookReview.objects.filter(book = book).order_by('-id')
+            return queryset
+        else:
+            return None
+        
+        
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        bookPk = self.kwargs.get('book_id')
+        if bookPk is not None:
+            book = Book.objects.get(pk=bookPk)
+            context['book'] = book
+            
         return context

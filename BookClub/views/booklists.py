@@ -1,13 +1,11 @@
+from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib import messages
-from django.urls import reverse
-from django.shortcuts import redirect
+
 from django.views.generic import ListView, CreateView
 
-from BookClub.models.user import User
-from BookClub.models.booklist import BookList
-from BookClub.forms.booklist_forms import *
+from BookClub.models import User, BookList
+from BookClub.forms import CreateBookListForm
 
 class BooklistListView(ListView):
     http_method_names = ['get']
@@ -41,4 +39,4 @@ class CreateBookListView(LoginRequiredMixin, CreateView):
 
     def form_invalid(self, form):
         messages.add_message(self.request, messages.ERROR, "The data provided was invalid!")
-        return super().form_invalid(form);
+        return super().form_invalid(form)
