@@ -3,8 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic.edit import CreateView, View
 from django.shortcuts import reverse, redirect
-from django.urls import reverse_lazy
-from BookClub.forms.meeting import MeetingForm
+from BookClub.forms import MeetingForm
 from BookClub.models import User, Club, ClubMembership, Meeting
 from BookClub.helpers import *
 
