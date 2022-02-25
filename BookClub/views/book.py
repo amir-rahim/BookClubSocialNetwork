@@ -2,6 +2,7 @@ from numpy import average
 from BookClub.models import Book, BookReview
 from django.views.generic import DetailView, ListView
 
+
 class BookDetailView(DetailView):
     model = Book
     template_name = 'book_detail_view.html'
@@ -51,5 +52,3 @@ class BookReviewListView(ListView):
             context['book'] = book
             
         return context
-            
-        

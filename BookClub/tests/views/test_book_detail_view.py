@@ -23,6 +23,7 @@ class BookDetailViewTestCase(TestCase):
         
     def test_url(self):
         self.assertEquals(self.url, "/library/books/"+str(54273)+"/")
+
         
     def test_contains_book_data(self):
         response = self.client.get(self.url)        
