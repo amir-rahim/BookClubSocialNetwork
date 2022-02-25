@@ -49,7 +49,7 @@ class MeetingListTest(TestCase):
     def test_applicant_cannot_see_meeting_list(self):
         self.client.login(username=self.applicant.username, password="Password123")
         response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 302)
         self.assertTemplateNotUsed(response, 'club_meetings.html')
     #Testing to see what information is displayed
 
@@ -63,7 +63,7 @@ class MeetingListTest(TestCase):
         self.assertContains(response,'johndoe')
         self.assertContains(response, 'Join Meeting')
         meetings = list(response.context['meetings'])
-        self.assertEqual(len(meetings), 1)
+        self.assertEqual(len(meetings), 5)
 
     def test_moderator_can_see_meeting_information(self):
         self.client.login(username=self.moderator.username, password="Password123")
@@ -75,7 +75,7 @@ class MeetingListTest(TestCase):
         self.assertContains(response,'johndoe')
         self.assertContains(response, 'Join Meeting')
         meetings = list(response.context['meetings'])
-        self.assertEqual(len(meetings), 1)
+        self.assertEqual(len(meetings), 5)
 
     def test_member_can_see_meeting_information(self):
         self.client.login(username=self.member.username, password="Password123")
@@ -87,7 +87,7 @@ class MeetingListTest(TestCase):
         self.assertContains(response,'johndoe')
         self.assertContains(response, 'Join Meeting')
         meetings = list(response.context['meetings'])
-        self.assertEqual(len(meetings), 1)
+        self.assertEqual(len(meetings), 5)
 
     def test_allowed_user_can_see_multiple_meetings(self):
         self.meeting3 = Meeting.objects.create(
@@ -117,7 +117,7 @@ class MeetingListTest(TestCase):
         self.assertContains(response, 'Join Meeting')
 
         meetings = list(response.context['meetings'])
-        self.assertEqual(len(meetings), 2)
+        self.assertEqual(len(meetings), 6)
 
     def test_allowed_user_can_see_join_button(self):
         self.client.login(username=self.owner.username,password = "Password123")

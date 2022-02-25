@@ -49,7 +49,7 @@ This is the User Dashboard, the main home page for your user profile!
             <ul>
                 <li><a href="{% url 'home' %}">Home</a></li>
                 <li><a href="{% url 'user_dashboard' %}">Profile</a></li>
-                <li><a>Dashboard</a></li>
+                <li><a href="{% url 'user_dashboard' %}">Dashboard</a></li>
             </ul>
         </nav>
 
@@ -118,7 +118,7 @@ This is the User Dashboard, the main home page for your user profile!
                     </div>
                     <div class="card-footer">
                         <p class="card-footer-item">
-                            <span><a href="#">View All</a></span>
+                            <span><a href="{% url 'my_club_memberships' %}">View All</a></span>
                         </p>
                     </div>
                 </div>
