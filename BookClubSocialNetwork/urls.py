@@ -1,5 +1,4 @@
 """BookClubSocialNetwork URL Configuration
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.2/topics/http/urls/
 Examples:
@@ -34,17 +33,17 @@ urlpatterns = [
     path('login/', views.LogInView.as_view(), name='login'),
     path('sign_up/', views.SignUpView.as_view(), name='sign_up'),
     path('log_out/', views.LogOutView.as_view(), name='log_out'),
-    
+
     # '''User URLs'''
     path('user/', views.UserDashboardView.as_view(), name='user_dashboard'),
     path('edit_profile/', views.EditProfileView.as_view(), name='edit_profile'),
     path('password_change/', views.ChangePasswordView.as_view(), name='password_change'),
-    
+
     # '''User Profile URLs'''
     path('profile/<str:username>/', views.UserProfileView.as_view(), name='user_profile'),
     path('profile/<str:username>/memberships/', views.UserProfileMembershipsView.as_view(), name='user_memberships'),
     path('profile/<str:username>/following/', views.UserProfileFollowingView.as_view(), name='user_following'),
-    
+
     # '''Action URLs'''
     path('join_club/<str:club_url_name>/', views.JoinClubView.as_view(), name='join_club'),
     path('leave_club/<str:club_url_name>/', views.LeaveClubView.as_view(), name='leave_club'),
@@ -61,25 +60,31 @@ urlpatterns = [
     path('club/', views.AvailableClubsView.as_view(), name='available_clubs'),
     path('memberships/', views.MyClubMembershipsView.as_view(), name='my_club_memberships'),
     path('create/', views.clubs.CreateClubView.as_view(), name = 'create_club'),
-  
     path('club/<str:club_url_name>/', views.ClubDashboardView.as_view(), name='club_dashboard'),
     path('club/<str:club_url_name>/members/', views.MembersListView.as_view(), name='member_list'),
     path('club/<str:club_url_name>/applicants/', views.ApplicantListView.as_view(), name='applicant_list'),
     path('club/<str:club_url_name>/edit/', views.EditClubView.as_view(), name='edit_club'),
+
+    # '''Meeting URLs'''
     path('club/<str:club_url_name>/meetings/',views.MeetingListView.as_view(),name='meeting_list'),
+    path('club/<str:club_url_name>/meetings/<int:meeting_id>/', views.MeetingDetailsView.as_view(), name='meeting_details'),
+    path('club/<str:club_url_name>/meetings/create/', views.CreateMeetingView.as_view(), name='create_meeting'),
+    path('club/<str:club_url_name>/meetings/<int:meeting_id>/participants/', views.MeetingParticipantsView.as_view(), name='meeting_participants'),
+    path('club/<str:club_url_name>/meetings/<int:meeting_id>/delete/', views.DeleteMeetingView.as_view(), name='delete_meeting'),
     
     # '''Library URLs'''
     path('library/', views.library_dashboard, name='library_dashboard'),
     path('library/books/', views.BookListView.as_view(), name='library_books'), # searching and book table
     path('library/books/<int:book_id>/', views.BookDetailView.as_view(), name='book_view'), # book view
     path('library/books/<int:book_id>/reviews/', views.BookReviewListView.as_view(), name = 'book_reviews'),
-    
+
     #path('library/review/<int:book_id>') # create review for book represented by id
     #path('library/review/<int:book_id>/edit') # edit review for book represented by id
     #path('library/review/<int:book_id/delete') # delete review for book represented by id
 
     # '''BookList URLs'''
     path('user/<slug:username>/lists', BooklistListView.as_view(), name='booklists_list'),
+    path('user/<slug:username>/lists/create', views.CreateBookListView.as_view(), name = 'create_booklist'),
   
-    path('club/<str:club_url_name>/meetings/',views.MeetingListView.as_view(),name='meeting_list'),
 ]
+

@@ -48,7 +48,8 @@ This is the list of members for this club.
             <p class="menu-label">Meetings</p>
 
             <ul class="menu-list">
-                <li><a>All Meetings</a></li>
+                <li><a href="{% url 'meeting_list' club.club_url_name %}">All Meetings</a></li>
+                <li><a href="{% url 'create_meeting' club.club_url_name %}">Create a Meeting</a></li>
                 <li><a>Joined Upcoming Meetings</a></li>
                 <li><a>Prior Meetings</a></li>
             </ul>
@@ -63,8 +64,8 @@ This is the list of members for this club.
             <ul>
                 <li><a href="{% url 'home' %}">Home</a></li>
                 <li><a href="{% url 'my_club_memberships' %}">Club</a></li>
-                <li><a>{{ club.name }}</a></li>
-                <li><a href="#">Member List</a></li>
+                <li><a href="{% url 'club_dashboard' club.club_url_name %}">{{ club.name }}</a></li>
+                <li><a href="{% url 'member_list' club.club_url_name %}">Member List</a></li>
             </ul>
         </nav>
 
@@ -87,7 +88,7 @@ This is the list of members for this club.
                     <button type="submit" class="button is-danger is-small" onclick="return confirm('Confirm you want to delete club {{club.name}}?');">Delete Club</button>
                 </form>
             </div>
-        {% endif %}       
+        {% endif %}
 
         <hr class="solid">
 
