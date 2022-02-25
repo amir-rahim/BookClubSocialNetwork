@@ -1,13 +1,10 @@
 '''View for lists'''
-from django.conf import settings
-from django.contrib import messages
-from django.views.generic.edit import UpdateView
-from django.views.generic import TemplateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.views.generic import TemplateView, ListView
+
 from BookClub.helpers import *
 from BookClub.models import User, Club, ClubMembership, Meeting
-from django.conf import settings
 
 
 class MembersListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
