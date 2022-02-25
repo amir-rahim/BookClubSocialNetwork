@@ -64,8 +64,8 @@ This is the list of members for this club.
             <ul>
                 <li><a href="{% url 'home' %}">Home</a></li>
                 <li><a href="{% url 'my_club_memberships' %}">Club</a></li>
-                <li><a>{{ club.name }}</a></li>
-                <li><a href="#">Member List</a></li>
+                <li><a href="{% url 'club_dashboard' club.club_url_name %}">{{ club.name }}</a></li>
+                <li><a href="{% url 'member_list' club.club_url_name %}">Member List</a></li>
             </ul>
         </nav>
 

@@ -63,8 +63,8 @@ This is the Club Dashboard, the main home page for each club!
             <ul>
                 <li><a href="{% url 'home' %}">Home</a></li>
                 <li><a href="{% url 'available_clubs' %}">Club</a></li>
-                <li><a>{{ current_club.name }}</a></li>
-                <li><a href="#">Dashboard</a></li>
+                <li><a href="{% url 'club_dashboard' current_club.club_url_name %}">{{ current_club.name }}</a></li>
+                <li><a href="{% url 'club_dashboard' current_club.club_url_name %}">Dashboard</a></li>
             </ul>
         </nav>
 
