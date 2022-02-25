@@ -1,0 +1,121 @@
+{% extends 'base_content.html' %}
+
+{% block page_title %}
+Meeting Participants
+{% endblock page_title %}
+
+{% block page_subtitle %}
+Participants of {{ current_meeting.get_title }}
+{% endblock page_subtitle %}
+
+{% block content %}
+    <div class = "columns">
+        <div class="column is-3">
+            <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+
+                <p class="menu-label">Meeting</p>
+
+                <ul class="menu-list">
+
+                    <li><a href="{% url 'meeting_list' current_club.club_url_name %}">Meeting List</a></li>
+                    <li><a href="{% url 'meeting_details' current_club.club_url_name current_meeting.id %}">Meeting Details</a></li>
+                    <li><a class="is-active" href="{% url 'meeting_participants' current_club.club_url_name current_meeting.id %}"><b>Meeting Participants</b></a></li>
+
+                </ul>
+
+                {% if current_user == current_meeting.get_organiser %} 
+
+                    <p class="menu-label">Meeting Administration</p>
+
+                    <ul class="menu-list">
+                        <li><a>Manage Meeting</a></li>
+                    </ul>
+
+                {% endif %}
+
+            </aside>
+    
+
+        </div>
+
+        <div class="column is-9">
+
+            <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
+                <ul>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'available_clubs' %}">Club</a></li>
+                    <li><a href="{% url 'club_dashboard' current_club.club_url_name %}">{{ current_club.name }}</a></li>
+                    <li><a href="{% url 'meeting_list' current_club.club_url_name %}">Meeting List</a></li>
+                    <li><a href="{% url 'meeting_details' current_club.club_url_name current_meeting.id%}">{{ current_meeting.get_title }}</a></li>
+                    <li><a href="{% url 'meeting_participants' current_club.club_url_name current_meeting.id %}"> Participants</a></li>
+                </ul>
+            </nav>
+
+            <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
+                <div class="hero-body">
+                    <div class="container">
+                        <h1 class="title">Participants</h1>
+                        <h2 class="subtitle">{{ current_meeting.get_name }}</h2>
+                    </div>
+                </div>
+            </section>
+
+            {% if participants %} <!-- If there are meetings available to the logged-in user -->
+                <div class="table-container is-fullwidth">
+                    <table class="table is-hoverable is-fullwidth" id="table-participants" data-toggle="table" data-pagination="true">
+                        <thead>
+                            <tr>
+                                <th scope="col">User</th>
+                                <th scope="col">Role</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for participant in participants %}
+
+                            <!-- Add onclick to user profile? -->
+                                <tr onclick="window.location='{% url 'user_profile' participant.username %}';">
+                                    <td>
+                                        <div class="media">
+                                            <div class="media-left">
+                                                <figure class="image is-48x48">
+                                                    <img class="is-rounded" src="https://image.shutterstock.com/image-vector/default-avatar-profile-icon-grey-600w-518740741.jpg" alt="Placeholder image">
+                                                </figure>
+                                            </div>
+                                            <div class="media-content">
+                                                <div class="content">
+                                                    {{ participant.username }}
+                                                </div>
+                                            </div> 
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {% if participant in members %}
+                                            Member
+                                        {% elif participant in moderators %}
+                                            Moderator
+                                        {% elif participant == current_club.get_club_owner %}
+                                            Owner
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% else %}
+            <hr class="solid">
+            <p>There are no participants for this meeting.</p>
+        {% endif %}
+    
+    </div>
+    <script>
+    const dataTable = new simpleDatatables.DataTable("#table-participants", {
+        fixedHeight: true,
+        columns: [
+        {select: [1], sortable:false}
+        ]
+    })
+    </script>
+
+{% endblock %}

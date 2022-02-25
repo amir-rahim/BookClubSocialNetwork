@@ -10,4 +10,4 @@ from .user import *
 from .membership import *
 from .book import *
 from .booklists_view import *
-
+from .meetings import *
