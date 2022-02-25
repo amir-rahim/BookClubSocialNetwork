@@ -39,7 +39,6 @@ class EditMeetingView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
         """Return redirect URL after successful update."""
         messages.add_message(self.request, messages.SUCCESS, "Meeting updated!")
         #Need to change to whatever the meeting page is called 
-        # return reverse('meetingview',kwargs = self.kwargs)
         return reverse('home')
 
     def handle_no_permission(self):
@@ -48,7 +47,6 @@ class EditMeetingView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
         else:
             url = reverse('meeting_list', kwargs={"club_url_name":self.kwargs.get('club_url_name')})
             messages.add_message(self.request, messages.ERROR,'You are not allowed to do that')
-            # url = reverse('home')
             return redirect(url)
 
     def get_object(self):

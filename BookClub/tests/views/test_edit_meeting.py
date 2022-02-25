@@ -42,7 +42,7 @@ class EditMeetingTestCase(TestCase):
         ClubMembership.objects.create(user = self.moderator,club=self.club,membership = ClubMembership.UserRoles.MODERATOR)
         
         self.book = Book.objects.get(pk=1)
-        
+        self.book2 = Book.objects.get(pk=2)
         
         self.url = reverse('edit_meeting', kwargs = {'club_url_name': self.club.club_url_name,'meeting_id':self.meeting.id})
         self.title = "new title"
@@ -83,6 +83,7 @@ class EditMeetingTestCase(TestCase):
         messages_list = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list),1)
         self.assertEqual(messages_list[0].level,messages.ERROR)
+        self.assertEqual(str(messages_list[0]),"You are not allowed to do that")
         self.assertEqual(response.status_code,302)
 
     def test_member_cannot_edit_meeting(self):
@@ -91,6 +92,7 @@ class EditMeetingTestCase(TestCase):
         messages_list = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list),1)
         self.assertEqual(messages_list[0].level,messages.ERROR)
+        self.assertEqual(str(messages_list[0]),"You are not allowed to do that")
         self.assertEqual(response.status_code,302)
 
     def test_moderator_cannot_edit_meeting(self):
@@ -99,6 +101,7 @@ class EditMeetingTestCase(TestCase):
         messages_list = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list),1)
         self.assertEqual(messages_list[0].level,messages.ERROR)
+        self.assertEqual(str(messages_list[0]),"You are not allowed to do that")
         self.assertEqual(response.status_code,302)
 
     def test_user_not_in_club_cannot_edit_meeting(self):
@@ -117,6 +120,7 @@ class EditMeetingTestCase(TestCase):
         self.assertEqual(messages_list[0].level,messages.SUCCESS)
         self.assertTemplateUsed(response,'edit_meeting.html')
         
+        
     def test_organiser_edit_meeting(self):
         self.client.login(username=self.organiser.username,password="Password123")
         response = self.client.get(self.url)
@@ -129,10 +133,7 @@ class EditMeetingTestCase(TestCase):
         self.client.login(username = self.owner.username,password="Password123")
         self.data['title'] = "New Meeting"
         response = self.client.post(self.url,self.data)
-        #Test for redirect to meeting view
-        # responseURL = reverse('meeting_view',kwargs = {'club_url_name':self.club.club_url_name,'meeting_id':self.meeting.id})
-        # self.assertRedirects(response,expected_url=responseURL,status_code=302,target_status_code=200)
-
+        
         self.assertContains(response,"New Meeting")
         self.assertContains(response,self.description)
         self.assertContains(response,self.location)
@@ -154,3 +155,57 @@ class EditMeetingTestCase(TestCase):
         self.assertContains(response,self.type)
         self.assertContains(response,self.book)
         self.assertEqual(response.status_code,200)
+
+    def test_valid_location_change(self):
+        self.client.login(username = self.owner.username,password="Password123")
+        self.data['location'] = "A new place"
+        response = self.client.post(self.url,self.data)
+
+        self.assertContains(response,self.title)
+        self.assertContains(response,self.description)
+        self.assertContains(response,"A new place")
+        self.assertContains(response,self.meetingtime)
+        self.assertContains(response,self.type)
+        self.assertContains(response,self.book)
+        self.assertEqual(response.status_code,200)
+    
+    def test_valid_time_change(self):
+        self.client.login(username = self.owner.username,password="Password123")
+        self.data['meeting_time'] = "2022-12-25 14:00:00"
+        response = self.client.post(self.url,self.data)
+
+        self.assertContains(response,self.title)
+        self.assertContains(response,self.description)
+        self.assertContains(response,self.location)
+        self.assertContains(response,"2022-12-25 14:00:00")
+        self.assertContains(response,self.type)
+        self.assertContains(response,self.book)
+        self.assertEqual(response.status_code,200)
+
+    def test_valid_type_change(self):
+        self.client.login(username = self.owner.username,password="Password123")
+        self.data['type'] = Meeting.MeetingType.SOCIAL
+        response = self.client.post(self.url,self.data)
+
+        self.assertContains(response,self.title)
+        self.assertContains(response,self.description)
+        self.assertContains(response,self.location)
+        self.assertContains(response,self.meetingtime)
+        self.assertContains(response,Meeting.MeetingType.SOCIAL)
+        self.assertContains(response,self.book)
+        self.assertEqual(response.status_code,200)
+
+    def test_valid_book_change(self):
+        self.client.login(username = self.owner.username,password="Password123")
+        self.data['book'] = self.book2
+        response = self.client.post(self.url,self.data)
+
+        self.assertContains(response,self.title)
+        self.assertContains(response,self.description)
+        self.assertContains(response,self.location)
+        self.assertContains(response,self.meetingtime)
+        self.assertContains(response,self.type)
+        self.assertContains(response,self.book2)
+        self.assertEqual(response.status_code,200)
+
+    #Test for redirect to meeting view 
