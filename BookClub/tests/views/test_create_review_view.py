@@ -31,7 +31,7 @@ class CreateReviewViewTestcase(TestCase):
         }
 
     def test_create_review_url(self):
-        self.assertEqual(self.url, '/library/review/1')
+        self.assertEqual(self.url, '/library/review/1/')
 
 
     def test_post_create_review_redirects_when_not_logged_in(self):
