@@ -25,13 +25,13 @@ class EditMeetingView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
             organiser = meeting.get_organiser()
             rank = ClubMembership.objects.get(club=club, user=self.request.user)
             #The only people who can edit the meeting are the Owner (of the club) or the organiser.
-            if(rank.membership != ClubMembership.UserRoles.OWNER or self.request.user != organiser):
-                messages.add_message(self.request, messages.ERROR,'Access denied')
-                return False
-            else:
+            if(rank.membership == ClubMembership.UserRoles.OWNER or self.request.user == organiser):
+                messages.add_message(self.request, messages.SUCCESS,'Click Update Meeting to update')
                 return True
+            else:
+                return False
         except:
-            messages.add_message(self.request, messages.ERROR,'Meeting not found or you are not a participant of this meeting')
+            messages.add_message(self.request, messages.ERROR,'Meeting not found or you are not a participant of this meeting or you do not have permission')
             return False
 
 
