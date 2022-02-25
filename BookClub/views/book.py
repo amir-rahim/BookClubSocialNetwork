@@ -37,7 +37,7 @@ class BookReviewListView(ListView):
         bookPk = self.kwargs.get('book_id')
         if bookPk is not None:
             book = Book.objects.get(pk=bookPk)
-            queryset = BookReview.objects.filter(book = book)
+            queryset = BookReview.objects.filter(book = book).order_by('-id')
             return queryset
         else:
             return None
