@@ -95,11 +95,17 @@ class Command(BaseCommand):
             
         for i in range(1,random.randrange(2,20)):
             user = User.objects.order_by('?')[0]
-            review = BookReview.objects.create(
-                user = user,
-                book = book,
-                rating = random.randrange(0, 10),
-                review = "Material Gworl"               
-            )
+            curReviews = BookReview.objects.filter(user=user, book=book)
+            while(curReviews.count() != 0):
+                user = User.objects.order_by('?')[0]
+                curReviews = BookReview.objects.filter(user=user, book=book)
+            
+            if(curReviews.count() == 0):
+                review = BookReview.objects.create(
+                    user = user,
+                    book = book,
+                    rating = random.randrange(0, 10),
+                    review = "Material Gworl"               
+                )
 
             
