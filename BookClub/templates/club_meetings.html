@@ -77,11 +77,14 @@ Find the Meeting you are looking for here!
                             <td>{{meeting.meeting_time}}</td>
                             <td>
                               <!--Insert URL for join meeting here-->
-                              
-                              {% comment %} <form method="post" action="{% url 'join meeting url' club_url_name=club.club_url_name %}"> {% endcomment %}
-                                {% comment %} {% csrf_token %} {% endcomment %}
-                                <button type="submit" class="button is-info">Join Meeting</button>
-                              {% comment %} </form> {% endcomment %}
+                                
+                              <button type="submit" class="button is-info">Join Meeting</button>
+                              <!--Move Edit button to somewhere more appropriate-->
+                              <form method="post" action="{% url 'edit_meeting' club.club_url_name meeting.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="button is-info">Edit Meeting</button>
+                              </form>
+
                             </td>
                         </tr>
                     {% endfor %}
