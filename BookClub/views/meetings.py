@@ -88,16 +88,6 @@ class LeaveMeetingView(LoginRequiredMixin, View):
 
         return redirect(self.redirect_location, club_url_name=self.kwargs['club_url_name'], meeting_id=self.kwargs['meeting_id'])
 
-    def get_success_url(self):
-        # Change to redirect to list of meetings
-        return reverse('create_meeting', kwargs={'club_url_name': self.kwargs['club_url_name']})
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
-        context['current_club'] = club
-        return context
-
 '''Meetings Related Views'''
 class CreateMeetingView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     '''Class for club owners and moderators creating meetings for the club'''
@@ -141,16 +131,6 @@ class CreateMeetingView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     def form_invalid(self, form):
         messages.error(self.request, "The data provided was invalid!")
         return super().form_invalid(form);
-
-    def get_success_url(self):
-        # Change to redirect to list of meetings
-        return reverse('create_meeting', kwargs={'club_url_name': self.kwargs['club_url_name']})
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
-        context['current_club'] = club
-        return context
 
     def get_success_url(self):
         # Change to redirect to list of meetings

@@ -55,6 +55,7 @@ class MeetingListTest(TestCase):
 
     def test_owner_can_see_meeting_information(self):
         self.client.login(username=self.owner.username, password="Password123")
+        self.meeting.leave_member(self.owner)
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'club_meetings.html')
@@ -67,6 +68,7 @@ class MeetingListTest(TestCase):
 
     def test_moderator_can_see_meeting_information(self):
         self.client.login(username=self.moderator.username, password="Password123")
+        self.meeting.leave_member(self.moderator)
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'club_meetings.html')
@@ -121,9 +123,15 @@ class MeetingListTest(TestCase):
 
     def test_allowed_user_can_see_join_button(self):
         self.client.login(username=self.owner.username,password = "Password123")
+        self.meeting.leave_member(self.owner)
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'club_meetings.html')
         self.assertContains(response, 'Join Meeting')
     
-
+    def test_allowed_user_can_see_leave_button(self):
+        self.client.login(username=self.owner.username,password = "Password123")
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'club_meetings.html')
+        self.assertContains(response, 'Leave Meeting')
