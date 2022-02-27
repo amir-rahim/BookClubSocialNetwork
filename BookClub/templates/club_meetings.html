@@ -93,7 +93,7 @@ Find the Meeting you are looking for here!
                                 <td>{{meeting.organiser.username}}</td>
                                 <td>{{meeting.meeting_time}}</td>
                                 <td>
-                                    {% if meeting.get_is_past %}
+                                    {% if meeting.get_is_not_past %}
 
                                         {% if user not in meeting.get_members %}
 
@@ -129,13 +129,3 @@ Find the Meeting you are looking for here!
 </div>
 
 {% endblock %}
-
-<script>
- 
-    function compare_time(current, other_time) {
-        if (current < time)
-            return true
-        return false
-    }
-
-</script>

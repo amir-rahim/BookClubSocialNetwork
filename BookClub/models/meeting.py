@@ -67,5 +67,5 @@ class Meeting(models.Model):
             self.members.remove(member)
             self.save()
 
-    def get_is_past(self):
-        return timezone.now() > self.meeting_time
+    def get_is_not_past(self):
+        return timezone.now() < self.meeting_time

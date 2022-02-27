@@ -174,5 +174,5 @@ class MeetingTestCase(TestCase):
         self.meeting.leave_member(self.jack)
         self.assertNotEqual(self.meeting.get_number_of_attendants(), 1)
     
-    def test_get_is_past(self):
-        self.assertEqual(self.meeting.get_is_past(), True)
+    def test_get_is_not_past(self):
+        self.assertEqual(self.meeting.get_is_not_past(), False)
