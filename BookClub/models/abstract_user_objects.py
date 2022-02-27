@@ -1,7 +1,7 @@
 from django.db import models
 
 class UserCreatedObject(models.Model):
-
+    """ Abstract class for giving all our UserCreatedObjects a creator(User) and a created_on field """
     class Meta:
         abstract = True
     
