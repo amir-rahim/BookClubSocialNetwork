@@ -51,8 +51,8 @@ View all book lists you've created
                 <table class="table is-fullwidth is-hoverable is-striped is-bordered">
                   <tbody>
 
-                  {% for list in booklists%}
-                    <tr>
+                  {% for list in booklists %}
+                    <tr onclick="window.location='{% url 'user_booklist' user.username list.id %}';" style="cursor:pointer;">
                       <td class="container">
                         {# <div class="box"> #}
                           <p class="is-medium"><strong><a href="#">{{list.title}}</a></strong></p>

@@ -13,3 +13,6 @@ class BookList(models.Model):
     def get_absolute_url(self):
         return reverse('booklists_list', kwargs = {'username': self.creator.username})
 
+    def get_books(self):
+        return self.books.all()
+

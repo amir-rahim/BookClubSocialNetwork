@@ -72,7 +72,6 @@ Participants of {{ current_meeting.get_title }}
                         <tbody>
                             {% for participant in participants %}
 
-                            <!-- Add onclick to user profile? -->
                                 <tr onclick="window.location='{% url 'user_profile' participant.username %}';">
                                     <td>
                                         <div class="media">
