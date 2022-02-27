@@ -52,7 +52,7 @@ These are the reviews for {{book.title}}
     
     <div class="column is-9">
         <div class="box">
-            <form method="post" action="{% url 'home' %}">
+            <form method="post" action="{% url 'create_review' book.id %}">
                 {% csrf_token %}
                 <button class="button is-fullwidth is-light">Add Review</button>
             </form>
@@ -79,11 +79,19 @@ These are the reviews for {{book.title}}
                           <td>{{review.createdOn}}</td>
                           {% if review.user == request.user %}
                               <td>
-                                  <form method="get" action="{% url 'book_reviews' book.id %}">
-                                      <button class="button is-danger is-outlined">
-                                          <span>Delete</span>
-                                      </button>
-                                  </form>
+                                  <div class="buttons">
+                                      <form method="get" action="{% url 'edit_review' book_review_id=review.id book_id=book.id %}">
+                                          <button class="button is-info is-small" style="margin-right: 5px">
+                                              <span>Edit</span>
+                                          </button>
+                                      </form>
+
+                                      <form method="get" action="{% url 'book_reviews' book.id %}">
+                                          <button class="button is-danger is-small" style="margin-right: 5px">
+                                              <span>Delete</span>
+                                          </button>
+                                      </form>
+                                  </div>
                               </td>
                           {% else %}
                               <td></td>
