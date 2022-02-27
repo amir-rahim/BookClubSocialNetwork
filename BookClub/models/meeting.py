@@ -1,5 +1,6 @@
 from django.db import IntegrityError, models
 from BookClub.models import User, Club, Book
+from django.utils import timezone
 
 class Meeting(models.Model):
     class MeetingType(models.TextChoices):
@@ -65,3 +66,6 @@ class Meeting(models.Model):
         if self.members.filter(username = member.username).exists():
             self.members.remove(member)
             self.save()
+
+    def get_is_past(self):
+        return timezone.now() > self.meeting_time

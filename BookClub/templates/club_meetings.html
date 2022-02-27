@@ -51,6 +51,7 @@ Find the Meeting you are looking for here!
           </ul>
 
       </aside>
+    </div>
 
     <div class="column is-9">
 
@@ -92,21 +93,26 @@ Find the Meeting you are looking for here!
                                 <td>{{meeting.organiser.username}}</td>
                                 <td>{{meeting.meeting_time}}</td>
                                 <td>
-                                    {% if current_user not in meeting.get_members %}
+                                    {% if meeting.get_is_past %}
 
-                                        <form method="post" action="{% url 'join_meeting' club_url_name=club.club_url_name meeting_id=meeting.id %}"> 
-										    {% csrf_token %}
-										    <button type="submit" class="button is-info">Join Meeting</button>
-                                  	    </form>
+                                        {% if user not in meeting.get_members %}
 
-                                    {% elif current_user in meeting.get_members %}
+                                            <form method="post" action="{% url 'join_meeting' club_url_name=club.club_url_name meeting_id=meeting.id %}"> 
+                                            {% csrf_token %}
+                                            <button type="submit" class="button is-info">Join Meeting</button>
+                                            </form>
 
-                                        <form method="post" action="{% url 'leave_meeting' club_url_name=club.club_url_name meeting_id=meeting.id %}"> 
-										    {% csrf_token %}
-										    <button type="submit" class="button is-info">Leave Meeting</button>
-                                  	    </form>
+                                        {% elif user in meeting.get_members %}
+
+                                            <form method="post" action="{% url 'leave_meeting' club_url_name=club.club_url_name meeting_id=meeting.id %}"> 
+                                            {% csrf_token %}
+                                            <button type="submit" class="button is-info">Leave Meeting</button>
+                                            </form>
+
+                                        {% endif %}
 
                                     {% endif %}
+                                    
                                   	
                                 </td>
                             </tr>
@@ -123,3 +129,13 @@ Find the Meeting you are looking for here!
 </div>
 
 {% endblock %}
+
+<script>
+ 
+    function compare_time(current, other_time) {
+        if (current < time)
+            return true
+        return false
+    }
+
+</script>
