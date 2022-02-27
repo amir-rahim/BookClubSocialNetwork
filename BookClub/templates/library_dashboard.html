@@ -88,8 +88,8 @@ This is the Library, you can look at our books, user-curated lists & reviews and
                 <nav class="tabs is-boxed is-fullwidth">
                     <div class="container">
                         <ul>
-                            <li><a>View Book Lists</a></li>
-                            <li><a>Create Book Lists</a></li>
+                            <li><a href="{% url 'booklists_list' user.username %}">View Book Lists</a></li>
+                            <li><a href="{% url 'create_booklist' user.username %}">Create Book Lists</a></li>
                         </ul>
                     </div>
                 </nav>
