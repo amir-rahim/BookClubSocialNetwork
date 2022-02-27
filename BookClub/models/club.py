@@ -34,7 +34,6 @@ class Club(models.Model):
         url = self.convertNameToUrl(self.name)
         self.club_url_name = url
         super().clean()
-
     def get_absolute_url(self):
         return reverse('club_dashboard', kwargs = {'club_url_name': self.club_url_name})
 
@@ -64,6 +63,10 @@ class Club(models.Model):
         updated = re.sub("[^0-9a-zA-Z_]+", "", updated)
         return updated
 
+    def convertNameToUrl(self, name):
+        updated = re.sub(" +", "_", name)
+        updated = re.sub("[^0-9a-zA-Z_]+", "", updated)
+        return updated
     # Has unimplemented dependencies
     def get_number_of_meetings(self):
         pass
@@ -133,7 +136,7 @@ class Club(models.Model):
 
     def add_moderator(self, user):
         self.add_user(user, ClubMembership.UserRoles.MODERATOR)
-
+        
     def add_owner(self, user):
         if not (ClubMembership.objects.filter(club=self, membership=ClubMembership.UserRoles.OWNER).exists()):
             self.add_user(user, ClubMembership.UserRoles.OWNER)

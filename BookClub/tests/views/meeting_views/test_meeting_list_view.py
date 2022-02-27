@@ -49,7 +49,7 @@ class MeetingListTest(TestCase):
     def test_applicant_cannot_see_meeting_list(self):
         self.client.login(username=self.applicant.username, password="Password123")
         response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 302)
         self.assertTemplateNotUsed(response, 'club_meetings.html')
     #Testing to see what information is displayed
 

@@ -1,0 +1,118 @@
+{% extends 'base_content.html' %}
+
+{% block page_title %}
+{{ book.title }}
+{% endblock page_title %}
+
+{% block page_subtitle %}
+These are the reviews for {{book.title}}
+{% endblock page_subtitle %}
+
+{% block content %}
+
+<div class="columns">
+
+    <div class="column is-3">
+
+        <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+
+            <ul class="menu-list">
+                <li><a href="{% url 'library_dashboard' %}">Dashboard</a></li>
+            </ul>
+
+            <p class="menu-label">Our Book Library</p>
+
+            <ul class="menu-list">
+                <li><a href="{% url 'library_books' %}">View Library</a></li>
+            </ul>
+
+            <p class="menu-label">Book Lists</p>
+
+            <ul class="menu-list">
+                <li><a>View Book Lists</a></li>
+                <li><a>Create Book Lists</a></li>
+            </ul>
+
+            <p class="menu-label">Recommender</p>
+
+            <ul class="menu-list">
+                <li><a>AI Recommended Books</a></li>
+            </ul>
+
+            <p class="menu-label">Reviews</p>
+
+            <ul class="menu-list">
+                <li><a>Make Review</a></li>
+                <li><a>View Personal Reviews</a></li>
+            </ul>
+
+        </aside>
+
+    </div>
+    
+    <div class="column is-9">
+        <div class="box">
+            <form method="post" action="{% url 'home' %}">
+                {% csrf_token %}
+                <button class="button is-fullwidth is-light">Add Review</button>
+            </form>
+        </div>
+            
+        {% if reviews %} <!-- If there are clubs available to the logged-in user -->
+        <div class="table-container">
+           <table class="table is-hoverable is-fullwidth" id="table-books" data-toggle="table" data-pagination="true">
+              <thead>
+                  <tr>
+                      <th scope="col">User</th>
+                      <th scope="col">Rating</th>
+                      <th scope="col">Text</th>
+                      <th scope="col">Reviewed On</th>
+                      <th scope="col"></th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for review in reviews %}
+                      <tr onclick="window.location='{% url 'home' %}';">
+                          <td>{{review.user}}</td>
+                          <td>{{review.rating}}</td>
+                          <td>{{review.review}}</td>
+                          <td>{{review.createdOn}}</td>
+                          {% if review.user == request.user %}
+                              <td>
+                                  <form method="get" action="{% url 'book_reviews' book.id %}">
+                                      <button class="button is-danger is-outlined">
+                                          <span>Delete</span>
+                                      </button>
+                                  </form>
+                              </td>
+                          {% else %}
+                              <td></td>
+                          {% endif %}
+                      </tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+        </div>
+
+        {% include 'partials/pagination.html' %}
+                
+        {% else %}
+            <div class="box">
+                <p> No reviews as of yet </p>
+            </div>
+        {%endif%}
+    </div>
+
+
+</div>
+
+<script>
+    const dataTable = new simpleDatatables.DataTable("#table-books", {
+        fixedHeight: true,
+        columns: [
+          {select: [1], sortable:false}
+        ]
+    })
+</script>
+
+{% endblock %}

@@ -104,3 +104,5 @@ def create_membership(club, user, membership):
 def delete_club(club):
     club.delete()
    
+def delete_meeting(meeting):
+    meeting.delete()
