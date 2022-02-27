@@ -40,7 +40,7 @@ class Requester():
         books = Book.objects.all()
         books = books[:100]
         pool = multiprocessing.Pool()
-        result = pool.map(do_work, books)
+        result = pool.map(self.do_work, books)
         pool.close()
         
         pool.join()
@@ -50,9 +50,9 @@ class Requester():
     def do_work(self, book):
         isbn = book.ISBN
         try:
-            json = getJson(isbn)
+            json = self.getJson(isbn)
             try:
-                book = getBook(json, isbn)
+                book = self.getBook(json, isbn)
                 return book
             except TypeError:
                 #print("No subject data for " + book.title)

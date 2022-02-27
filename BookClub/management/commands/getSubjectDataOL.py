@@ -9,11 +9,13 @@ from BookClub.models import Book
 import pandas as pd
 from pandas import DataFrame
 import requests
-import multiprocessing
+from multiprocessing import Manager
 import csv
+from pathlib import Path 
 from surprise import Dataset
 from surprise import Reader
 from RecommenderModule.bookinfo import BookInfo
+import json
 
 
 class Command(BaseCommand):
@@ -23,6 +25,8 @@ class Command(BaseCommand):
         tic = time.time()
         books = self.getSubjectsPool()
         unsuccessful = 0;
+        successful = 0
+        dataframes = []
         if books is None:
             return None
         else:
@@ -30,57 +34,67 @@ class Command(BaseCommand):
                 if(len(book) <= 2):
                     unsuccessful += 1 
                 else:
-                   for k in book.keys():
-                       j = book.get(k)
-                       if j.get('subjects') is None:
-                           unsuccessful +=1
-                       else:
-                           book = j
+                    df = pd.read_json(str(book.decode("utf-8")))
+                    dataframes.append(df)
+                    successful += 1
+                    # b = json.loads(book)
+                    # for k in b.keys():
+                    #     j = b.get(k)
+                    #     isbn = j.get('isbn_10') or j.get('isbn_13')
+                    #     if isbn is None:
+                    #         identifiers = j.get('identifiers')
+                    #         isbn = identifiers.get('isbn_10')[0] or identifiers.get('isbn_13')[0]
+                    #     bookDict[isbn] = j
+                        
+        
+        
+        concatenatedDataframe = pd.concat(dataframes, axis=1)
+        filepath = Path(str(time.time())+'/out.csv')  
+        filepath.parent.mkdir(parents=True, exist_ok=True)  
+        concatenatedDataframe.to_csv(filepath)
         toc = time.time()
         total = toc-tic
-        items = len(books)
-        itemTime = total/items
+        itemCount = successful-unsuccessful
+        itemTime = total/itemCount
         print('Done in {:.4f} seconds'.format(total))
         print('Item time is :{:.4f} seconds'.format(itemTime))
-        print("Number of successful books is " + str(items-unsuccessful))
+        print("Number of successful books is " + str(itemCount-unsuccessful))
         
     
     def getSubjectsPool(self):
-        books = Book.objects.all()[:100]
-        urls = []
-        isbns = map(lambda a : a.ISBN, books)
-        for isbn in isbns:
-            urls.append("https://openlibrary.org/api/books?bibkeys=ISBN:"+isbn+"&jscmd=data&format=json")
-        
-        def load_url(url, timeout):
-            with urllib.request.urlopen(url, timeout=timeout) as conn:
-                return conn.read()
-
+        fUrls = Manager().list()
         dataL = []
-        with concurrent.futures.ThreadPoolExecutor(max_workers=48) as executor:
-            # Start the load operations and mark each future with its URL
-            future_to_url = {executor.submit(load_url, url, 60): url for url in urls}
-            for future in concurrent.futures.as_completed(future_to_url):
-                url = future_to_url[future]
-                try:
-                    data = future.result()
-                except Exception as exc:
-                    print('%r generated an exception: %s' % (url, exc))
-                else:
-                    dataL.append(data)
-      
-                
-        return dataL
+        while len(dataL) < 1000 or len(fUrls) > 0:
+            books = Book.objects.all()[:500]
+            print("Books in: " + str(Book.objects.all().count()))
+            urls = []
+            isbns = map(lambda a : a.ISBN, books)
+            for isbn in isbns:
+                urls.append("https://openlibrary.org/api/books?bibkeys=ISBN:"+isbn+"&jscmd=data&format=json")
+            
+            urls.extend(fUrls)
+            def load_url(url, timeout):
+                with urllib.request.urlopen(url, timeout=timeout) as conn:
+                    return conn.read()
+            
+            with concurrent.futures.ThreadPoolExecutor(max_workers=48) as executor:
+                # Start the load operations and mark each future with its URL
+                future_to_url = {executor.submit(load_url, url, 30): url for url in urls}
+                for future in concurrent.futures.as_completed(future_to_url):
+                    url = future_to_url[future]
+                    try:
+                        data = future.result()
+                    except Exception as exc:
+                        print('%r generated an exception: %s' % (url, exc))
+                        fUrls.append(url)
+                    else:
+                        dataL.append(data)
 
-        
-        #pool = multiprocessing.Pool()
-        #print(os.cpu_count())
-        #result = pool.map(do_work, books)
-        #pool.close()
-        
-        #pool.join()
-        
-        #return result
+            for book in books:
+                book.delete()
+            print("Books out: " + str(Book.objects.all().count()))
+            if Book.objects.all().count() == 0:
+                return dataL
     
     def bla(self):
         file_path = ("RecommenderModule/dataset/BX-Book-Ratings.csv")
