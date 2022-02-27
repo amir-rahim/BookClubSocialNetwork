@@ -1,5 +1,6 @@
 from django.contrib import admin
 from BookClub.models import *
+from BookClub.models.forum import ForumPost
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -49,4 +50,22 @@ class ClubMeetingAdmin(admin.ModelAdmin):
 
     list_display = [
         'organiser', 'club', 'meeting_time', 'created_on', 'location', 'title', 'description', 'type', 'book'
+    ]
+
+
+@admin.register(ForumPost)
+class ForumPostAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for club meetings."""
+
+    list_display = [
+        'creator', 'created_on', 'title', 'content', 'rating'
+    ]
+
+
+@admin.register(Vote)
+class VoteAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for club meetings."""
+
+    list_display = [
+        'creator', 'created_on', 'content_type', 'object_id', 'target'
     ]
