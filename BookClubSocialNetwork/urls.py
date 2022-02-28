@@ -89,5 +89,5 @@ urlpatterns = [
     path('user/<slug:username>/lists', views.BooklistListView.as_view(), name='booklists_list'),
     path('user/<slug:username>/lists/create', views.CreateBookListView.as_view(), name='create_booklist'),
 
-    path('forum/', views.global_forum_view, name='forum'),
+    path('forum/', views.GlobalForumView.as_view(), name='global_forum'),
 ]
