@@ -154,14 +154,14 @@ This is the Global Forum, you can look at what our members are posting about!
                                 <form method="post">
                                     {% csrf_token %}
                                     {% include 'partials/bulma_form.html' with form=form %}
-                                    <input type="submit" value="Make Post" class="button is-link">
-                                </form>
+                                    
+                                
                             </div>
                         </div>
                         <footer class="card-footer">
-                            <a href="#" class="card-footer-item">Clear</a>
-                            <a href="#" class="card-footer-item">Post</a>
+                            <input type="submit" value="Make Post" class="button is-link is-fullwidth">
                         </footer>
+                        </form>
                     </div>
                 </div>
 
