@@ -88,4 +88,6 @@ urlpatterns = [
     path('club/<str:club_url_name>/meetings/', views.MeetingListView.as_view(), name='meeting_list'),
     path('user/<slug:username>/lists', views.BooklistListView.as_view(), name='booklists_list'),
     path('user/<slug:username>/lists/create', views.CreateBookListView.as_view(), name='create_booklist'),
+
+    path('forum/', views.global_forum_view, name='forum'),
 ]
