@@ -21,7 +21,7 @@ class RatedContent(UserCreatedObject):
         """Force our rating to be updated, by counting the positive and negative votes and resettting our rating.
     """
         count = 0
-        for vote in self.votes:
+        for vote in self.votes.all():
             if vote.type:
                 count += 1
             else:
