@@ -72,7 +72,7 @@ View all book lists you've created
                     </tr>
                   {% empty %}
 
-                  <div class="box">No lists. {% if self %}<a href="#">Create one?</a>{% endif %}</div>
+                  <div class="box">No lists. {% if self %}<a href="{% url 'create_booklist' user.username %}">Create one?</a>{% endif %}</div>
 
                   {% endfor %}
                   </tbody>

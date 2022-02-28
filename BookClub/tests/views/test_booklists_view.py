@@ -98,4 +98,6 @@ class UserBooklistsViewTestCase(TestCase):
         self.assertTemplateUsed(response, 'user_booklists.html')
         response_lists = list(response.context['booklists'])
         self.assertEqual(len(response_lists), 0)
-        self.assertContains(response, '<div class="box">No lists. <a href="#">Create one?</a></div>')
+        self.assertContains(response, "No lists.")
+        self.assertContains(response, "Create one?")
+
