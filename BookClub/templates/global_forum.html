@@ -41,7 +41,7 @@ This is the Global Forum, you can look at what our members are posting about!
                     <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 10px;">
                         <ul>
                             <li><a href="{% url 'home' %}">Home</a></li>
-                            <li><a href="{% url 'forum' %}">Forum</a></li>
+                            <li><a href="{% url 'global_forum' %}">Forum</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -59,25 +59,25 @@ This is the Global Forum, you can look at what our members are posting about!
                         <div class="level-item has-text-centered">
                             <div>
                                 <p class="heading">Posts</p>
-                                <p class="title">3,456</p>
+                                <p class="title">{{posts.count}}</p>
                             </div>
                         </div>
                         <div class="level-item has-text-centered">
                             <div>
                                 <p class="heading">Replies</p>
-                                <p class="title">123</p>
+                                <p class="title">{{replies}}</p>
                             </div>
                         </div>
                         <div class="level-item has-text-centered">
                             <div>
                                 <p class="heading">Votes Cast</p>
-                                <p class="title">456K</p>
+                                <p class="title">{{votes}}</p>
                             </div>
                         </div>
                         <div class="level-item has-text-centered">
                             <div>
                                 <p class="heading">Users</p>
-                                <p class="title">789</p>
+                                <p class="title">{{usercount}}</p>
                             </div>
                         </div>
                     </nav>
@@ -85,11 +85,12 @@ This is the Global Forum, you can look at what our members are posting about!
             </section>
 
             <hr class="solid">
-
+            {%for post in posts%}
+            <br>
             <div class="card">
                 <header class="card-header">
                     <div class="card-header-title">
-                        <p class="subtitle"><b>Subject About</b></p>
+                        <p class="subtitle"><b>{{post.title}}</b></p>
                     </div>
 
                     <div class="card-header-icon">
@@ -104,7 +105,7 @@ This is the Global Forum, you can look at what our members are posting about!
                             </span>
                         </button>
 
-                        <button class="button is-rounded" title="Disabled button" disabled>+100</button>
+                        <button class="button is-rounded" title="Disabled button" disabled>{{post.rating}}</button>
                     </div>
 
                 </header>
@@ -112,17 +113,24 @@ This is the Global Forum, you can look at what our members are posting about!
                 <div class="card-content">
                     <div class="content">
                         <span class="has-text-grey">
-                            Lorem ipsum leo risus, porta ac consectetur ac, vestibulum at eros. Donec id elit non mi porta gravida at eget metus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras mattis consectetur purus sit amet fermentum.
+                        {{post.content |truncatechars:240}}    
                         </span>
                     </div>
                 </div>
 
                 <footer class="card-footer">
-                    <p class="card-footer-item"><span class="is-small has-text-grey-light">Posted by: Username</span></p>
-                    <p class="card-footer-item has-text-grey-light">5 hours ago</p>
-                    <a href="#" class="card-footer-item">See More</a>
+                    <p class="card-footer-item"><span class="is-small has-text-grey-light">Posted by: {{post.creator}}</span></p>
+                    <p class="card-footer-item has-text-grey-light">{{ post.created_on | timesince }} ago</p>
+                    <a href="#" class="card-footer-item">
+                        {% if post.comments.count > 0 %} 
+                            See {{ post.comments.count }} comments
+                        {% else %} 
+                            Be the first to comment!
+                        {% endif %}</a>
                 </footer>
             </div>
+
+            {%endfor%}
 
             <br>
 
@@ -143,18 +151,11 @@ This is the Global Forum, you can look at what our members are posting about!
                         </div>
                         <div class="card-content">
                             <div class="container">
-                                <div class="field">
-                                    <label class="label">Subject</label>
-                                    <div class="control">
-                                        <input class="input" type="text" placeholder="Text input">
-                                    </div>
-                                </div>
-                                <div class="field">
-                                    <label class="label">Post</label>
-                                    <div class="control">
-                                        <textarea class="textarea" placeholder="Textarea"></textarea>
-                                    </div>
-                                </div>
+                                <form method="post">
+                                    {% csrf_token %}
+                                    {% include 'partials/bulma_form.html' with form=form %}
+                                    <input type="submit" value="Make Post" class="button is-link">
+                                </form>
                             </div>
                         </div>
                         <footer class="card-footer">
