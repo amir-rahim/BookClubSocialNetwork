@@ -51,7 +51,7 @@ View all book lists you've created
                 <table class="table is-fullwidth is-hoverable is-striped is-bordered">
                   <tbody>
 
-                  {% for list in booklists%}
+                  {% for list in booklists %}
                     <tr>
                       <td class="container">
                         {# <div class="box"> #}
@@ -65,6 +65,35 @@ View all book lists you've created
                             <a href="#" class="button is-dark">
                               <span>Edit</span>
                             </a>
+
+
+                            <button type="button" class="button is-danger js-modal-trigger" data-target="{{list.pk}}-delete-modal" aria-haspopup="true">
+                              <span class="icon is-small">
+                                  <i class="fas fa-trash"></i>
+                                </span>
+                                <span>Delete</span>
+                            </button>
+
+                            <div class="modal" id="{{list.pk}}-delete-modal">
+                              <div class="modal-background"></div>
+                              <div class="modal-card">
+                                <header class="modal-card-head">
+                                  <p class="modal-card-title" style="text-align:left">Confirm Deletion</p>
+                                  <button class="delete" aria-label="close"></button>
+                                </header>
+                                <section class="modal-card-body" style="text-align:left">
+                                  <p>Are you sure you want to delete {{list.title}}?</p>
+                                </section>
+                                <footer class="modal-card-foot">
+                                  <form class="" action="{% url 'delete_booklist' list_id=list.pk username=request.user.username %}" method="post">
+                                    {% csrf_token %}
+                                    <button class="button is-danger">Delete</button>
+                                  </form>
+                                  <button class="button">Cancel</button>
+                                </footer>
+                              </div>
+                            </div>
+
 
                         </td>
                       {% endif %}
