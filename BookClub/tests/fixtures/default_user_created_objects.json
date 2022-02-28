@@ -18,6 +18,13 @@
             "content": "blank",
             "rating": 0
         }
+    },
+    {
+        "model": "BookClub.Forum",
+        "pk": 1,
+        "fields": {
+            "title": "blank"
+        }
     }
 
 ]
