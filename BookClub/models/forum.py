@@ -1,6 +1,5 @@
 from django.db import models
-from BookClub.models import TextPost, RatedContent
-from BookClub.models.rated_content import TextComment
+from BookClub.models import TextPost, RatedContent, TextComment
 
 class ForumPost(TextPost):
     class Meta:
@@ -27,14 +26,14 @@ class ForumComment(TextComment):
     def remove_comment(self, comment):
         self.subComments.remove(comment)
         self.save()
-
 class Forum(models.Model):
     class Meta:
         unique_together = [['title','associatedWith']]
         
     title = models.CharField(max_length=30, blank=False, null=False)
     posts = models.ManyToManyField('ForumPost', related_name='Posts', blank=True)
-    associatedWith = models.ForeignKey('Club', on_delete=models.CASCADE, blank=True)
+    associatedWith = models.OneToOneField(
+        'Club', on_delete=models.CASCADE, blank=True, null=True)
     
     def add_post(self, post):
         self.posts.add(post)
