@@ -1,12 +1,20 @@
 <div class="navbar-item has-dropdown is-hoverable">
 
     <a class="navbar-link" href="#">
-        *username* <!-- {{ user.name }} -->
+        {{ request.user.username }}
     </a>
 
     <div class="navbar-dropdown is-boxed is-right">
-        <a class="navbar-item" href="#">
+        <a class="navbar-item" href="{% url 'user_dashboard' %}">
             Dashboard
+        </a>
+
+        <a class="navbar-item" href="{% url 'edit_profile' %}">
+            Edit Profile
+        </a>
+
+        <a class="navbar-item" href="{% url 'password_change' %}">
+            Change Password
         </a>
 
         <a class="navbar-item" href="#">
@@ -15,7 +23,7 @@
 
         <hr class="navbar-divider">
 
-        <a class="navbar-item" href="#">
+        <a class="navbar-item" href="{% url 'log_out' %}">
             Logout
         </a>
     </div>

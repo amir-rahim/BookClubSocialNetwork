@@ -24,26 +24,64 @@ $ source venv/bin/activate
 ```
 
 Install all required packages:
-
 ```
 $ pip3 install -r requirements.txt
 ```
 
-Migrate the database:
+Make migrations for the database:
+```
+$ python3 manage.py makemigrations
+```
 
+Migrate the database:
 ```
 $ python3 manage.py migrate
 ```
 
-Seed the development database with:
+## Seed and Unseed Commands
 
+Seed the development database with:
 ```
 $ python3 manage.py seed
 ```
 
+Alternatively, you can specify the number of clubs:
+```
+$ python3 manage.py seed *int: number*
+```
+
+Unseed the development database with:
+```
+$ python3 manage.py unseed
+```
+
+## Creating a Super User
+
+Create a Super User:
+```
+$ python3 manage.py createsuperuser
+```
+
+## Testing and Code Coverage
+
 Run all tests with:
 ```
 $ python3 manage.py test
+```
+
+Set of commands to get code coverage:
+```
+$ coverage run manage.py test
+```
+
+To get the results in the command line:
+```
+$ coverage report
+```
+
+To generate a HTML report of the coverage:
+```
+$ coverage html
 ```
 
 ## Sources

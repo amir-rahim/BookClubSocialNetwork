@@ -1,0 +1,160 @@
+{% extends 'base_content.html' %}
+
+{% block page_title %}
+Club Dashboard
+{% endblock page_title %}
+
+{% block page_subtitle %}
+This is the Club Dashboard, the main home page for each club!
+{% endblock page_subtitle %}
+
+{% block content %}
+
+<div class="columns">
+
+    <div class="column is-3">
+
+        <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+
+            <p class="menu-label">Club Views</p>
+
+            <ul class="menu-list">
+
+                <li><a class="is-active" href="{% url 'club_dashboard' current_club.club_url_name %}"><b>Dashboard</b></a></li>
+                <li><a href="{% url 'member_list' current_club.club_url_name %}">Member List</a></li>
+                <li><a href="{% url 'applicant_list' current_club.club_url_name %}">Applicant List</a></li>
+
+            </ul>
+
+            {% if user == current_club.get_club_owner %}
+
+                <p class="menu-label">Club Administration</p>
+
+                <ul class="menu-list">
+                    <li><a href="{% url 'edit_club' current_club.club_url_name %}">Manage Club</a></li>
+                    <li><a>Club Settings</a></li>
+                </ul>
+
+            {% endif %}
+
+            <p class="menu-label">Forum & Reviews</p>
+
+            <ul class="menu-list">
+                <li><a>Forum</a></li>
+                <li><a>Members Reviews</a></li>
+            </ul>
+
+            <p class="menu-label">Meetings</p>
+
+            <ul class="menu-list">
+                <li><a href="{% url 'meeting_list' current_club.club_url_name %}">All Meetings</a></li>
+                <li><a href="{% url 'create_meeting' current_club.club_url_name %}">Create a Meeting</a></li>
+                <li><a>Joined Upcoming Meetings</a></li>
+                <li><a>Prior Meetings</a></li>
+            </ul>
+
+        </aside>
+
+    </div>
+
+    <div class="column is-9">
+
+        <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'available_clubs' %}">Club</a></li>
+                <li><a href="{% url 'club_dashboard' current_club.club_url_name %}">{{ current_club.name }}</a></li>
+                <li><a href="{% url 'club_dashboard' current_club.club_url_name %}">Dashboard</a></li>
+            </ul>
+        </nav>
+
+        <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">{{ current_club.name }}</h1>
+                    <h2 class="subtitle">{{ current_club.tagline }}</h2>
+                </div>
+            </div>
+        </section>
+
+        <div class="columns is-fullheight">
+
+            <div class="column is-6">
+
+                <div class="card card-equal-height">
+
+                    <div class="card-content">
+                        <p class="title">Club Details</p>
+                        <div class="media">
+                            <div class="media-left">
+                                <figure class="image is-128x128">
+                                    <img class="is-rounded" src="https://image.shutterstock.com/image-vector/default-avatar-profile-icon-grey-600w-518740741.jpg" alt="Placeholder image">
+                                </figure>
+                            </div>
+                            <div class="media-content">
+                                <div class="content">
+                                    <p class="subtitle is-5"><b>Club Owner: </b> {{ owner.username }} </p>
+                                    <p class="subtitle is-5"><b>Contact Details: </b> {{ owner.email }} </p>
+                                    <p class="subtitle is-5"><b>Date of Creation: </b> {{ current_club.created_on }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="column is-6">
+                <div class="card card-equal-height">
+
+                    <div class="card-content">
+                        <p class="title">Club Details</p>
+
+                        <div class="media">
+                            <div class="media-content">
+                                <div class="content">
+                                    <p class="subtitle is-5"><b>Club Description: </b> {{ current_club.description }} </p>
+                                    <p class="subtitle is-5"><b>Club Rules: </b> {{ current_club.rules }} </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="tile is-ancestor has-text-centered">
+            <div class="tile is-parent" onclick="location.href='{% url 'member_list' current_club.club_url_name  %}'" style="cursor: pointer">
+                <article class="tile is-child box">
+                    <p class="title"> {{ current_club.get_number_of_members }} </p>
+                    <p class="subtitle">Members</p>
+                </article>
+            </div>
+            <div class="tile is-parent">
+                <article class="tile is-child box">
+                    <p class="title"> *meetings* </p>
+                    <p class="subtitle">Meetings</p>
+                </article>
+            </div>
+            <div class="tile is-parent">
+                <article class="tile is-child box">
+                    <p class="title"> *posts* </p>
+                    <p class="subtitle">Blog Posts</p>
+                </article>
+            </div>
+            <div class="tile is-parent">
+                <article class="tile is-child box">
+                    <p class="title"> *review score* </p>
+                    <p class="subtitle">Overall Review Score</p>
+                </article>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
