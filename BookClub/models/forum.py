@@ -34,6 +34,7 @@ class Forum(models.Model):
     posts = models.ManyToManyField('ForumPost', related_name='Posts', blank=True)
     associatedWith = models.OneToOneField(
         'Club', on_delete=models.CASCADE, blank=True, null=True)
+    slug = models.SlugField(max_length = 30)
     
     def add_post(self, post):
         self.posts.add(post)
