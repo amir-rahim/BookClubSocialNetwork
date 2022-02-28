@@ -6,8 +6,10 @@ from BookClub.models.abstract_user_objects import UserCreatedObject
         
 @tag('usercreated')        
 class UserCreatedObjectTestCase(TestCase):
-    fixtures = ['BookClub/tests/fixtures/default_user_created_objects.json', 'BookClub/tests/fixtures/default_users.json'
-                ]
+    fixtures = [
+        'BookClub/tests/fixtures/default_user_created_objects.json', 
+        'BookClub/tests/fixtures/default_users.json'
+        ]
     def setUp(self):
         self.usercreobj = ForumPost.objects.get(pk =1)
         
