@@ -43,6 +43,15 @@ class BookReview(admin.ModelAdmin):
         'book', 'user', 'rating' , 'review' , 'createdOn'
     ]
 
+@admin.register(BookList)
+class BookReview(admin.ModelAdmin):
+    """Configuration of the admin interface for Books Reviews ."""
+
+    list_display = [
+        'title', 'creator', 'description' , 'created_on'
+    ]
+
+
 @admin.register(Meeting)
 class ClubMeetingAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for club meetings."""
