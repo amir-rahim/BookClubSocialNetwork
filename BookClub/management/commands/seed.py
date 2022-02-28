@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from faker import Faker
 import random
-from BookClub.models import User, Club, ClubMembership, Book, BookReview
+from BookClub.models import User, Club, ClubMembership, Book, BookReview, ForumPost, Forum, ForumComment
 from django.db.utils import IntegrityError
 from django.core.management import call_command
 
@@ -57,6 +57,8 @@ class Command(BaseCommand):
         print(id2)
         self.add_reviews_to(id2)
         
+        self.create_global_forum()
+        
     def create_club(self):
         genOwner = Command.generateUser()
         name = self.faker.sentence(nb_words=1)
@@ -107,6 +109,24 @@ class Command(BaseCommand):
                     rating = random.randrange(0, 10),
                     review = "Material Gworl"               
                 )
+                
+    def create_global_forum(self):
+        globalForum = Forum.objects.create(title = "Global Forum")
 
+        for i in range(1, random.randrange(10, 15)):
+            user = User.objects.order_by('?')[0]
+            curPost = ForumPost.objects.create(
+                title = self.faker.text(max_nb_chars=30),
+                content = self.faker.text(max_nb_chars=1024),
+                creator = user
+            )
+            globalForum.add_post(curPost)
+            for x in range(1, random.randrange(0,5)):
+                commentUser = User.objects.order_by('?')[0]
+                curComment = ForumComment.objects.create(
+                    content = self.faker.text(max_nb_chars=240),
+                    creator = commentUser
+                )
+                curPost.add_comment(curComment)
 
             
