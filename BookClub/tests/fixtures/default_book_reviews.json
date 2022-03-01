@@ -11,11 +11,22 @@
     },
     {
         "model": "BookClub.BookReview",
-        "pk": 1,
+        "pk": 2,
         "fields": {
             "book": 1,
             "rating": 1,
             "review": "Lorem Ipsum",
+            "user": 7,
+            "createdOn": "2022-02-22T19:00+00:00"
+        }
+    },
+    {
+        "model": "BookClub.BookReview",
+        "pk": 3,
+        "fields": {
+            "book": 2,
+            "rating": 1,
+            "review": "Test review case 3",
             "user": 1,
             "createdOn": "2022-02-22T19:00+00:00"
         }
