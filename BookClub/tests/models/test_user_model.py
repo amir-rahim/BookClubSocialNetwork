@@ -1,5 +1,5 @@
 from django.test import TestCase, tag
-from BookClub.models import User
+from BookClub.models import User, BookReview
 from django.core.exceptions import ValidationError  # Create your tests here.
 
 @tag('usermodel','user')
@@ -50,8 +50,22 @@ class UserModelTestCase(TestCase):
     def test_bio_cannot_be_blank(self):
         self.user.public_bio = ""
         self._assert_user_is_invalid()
-        
+
     def test_gravatar_correct_return(self):
         gravatar = "https://www.gravatar.com/avatar/fd876f8cd6a58277fc664d47ea10ad19?size=120&default=mp"
         self.assertEqual(gravatar, self.user.gravatar())
-        
+
+    def test_get_popularity_recommendations(self):
+        recommendations = self.user.get_popularity_recommendations()
+        self.assertEqual(len(recommendations), 10)
+        self.assertTrue(all(isinstance(isbn, str) for isbn in recommendations))
+
+    def test_get_popularity_recommendations_exclude_books_read(self):
+        pass
+
+    def test_get_books_read(self):
+        pass
+
+    def test_get_books_read_no_book(self):
+        user_read_books = self.user.get_read_books()
+        self.assertEqual(user_read_books, [])
