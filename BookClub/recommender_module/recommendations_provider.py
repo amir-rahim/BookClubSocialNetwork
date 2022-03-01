@@ -13,7 +13,7 @@ def get_popularity_recommendations(user):
     return recommended_books
 
 """Retrain the popularity recommender with the current data."""
-def retrain_popularity_recommender(user):
+def retrain_popularity_recommender():
     PopularBooksMethods(retraining_and_saving=True)
 
 """Get a list of all books that the user has read."""
@@ -30,3 +30,7 @@ def get_user_read_books(user):
 """Get (up to) 10 book recommendations, from books the user has rated."""
 def get_item_based_recommendations(user, positive_ratings_only=True):
     user_read_books = self.get_user_read_books(user)
+
+"""Retrain the item-based recommender with the current data"""
+def retrain_item_based_recommender():
+    pass
