@@ -1,6 +1,7 @@
 from django.test import TestCase, tag
 from BookClub.models import User, BookReview
 from django.core.exceptions import ValidationError  # Create your tests here.
+from BookClub.recommender_module.recommenders.resources.popular_books_recommender_methods import PopularBooksMethods
 
 @tag('usermodel','user')
 class UserModelTestCase(TestCase):
