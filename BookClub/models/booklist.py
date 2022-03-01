@@ -13,3 +13,11 @@ class BookList(models.Model):
     def get_absolute_url(self):
         return reverse('booklists_list', kwargs = {'username': self.creator.username})
 
+    def get_delete_url(self):
+        return reverse('delete_booklist', kwargs = {'username' : self.creator.username, 'list_id' : self.pk})
+
+    def __str__(self):
+        return f"Book List '{self.title}' with {self.books.count()} titles"
+
+    def str(self):
+        return self.__str__()
