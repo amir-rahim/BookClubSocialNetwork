@@ -9,3 +9,4 @@ faker==10.0.0
 surprise
 pandas
 requests
+joblib

@@ -25,3 +25,6 @@ class RecommendersTestCase(TestCase):
     def test_get_books_read_by_user_no_book(self):
         user_read_books = recommendations_provider.get_user_read_books(self.user)
         self.assertEqual(user_read_books, [])
+
+    def test_retrain_item_based(self):
+        recommendations_provider.retrain_item_based_recommender()

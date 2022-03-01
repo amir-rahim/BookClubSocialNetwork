@@ -1,5 +1,6 @@
 from BookClub.recommender_module.recommenders.popular_books_recommender import PopularBooksRecommender
 from BookClub.recommender_module.recommenders.resources.popular_books_recommender_methods import PopularBooksMethods
+from BookClub.recommender_module.recommenders.resources.item_based_collaborative_filtering_methods import ItemBasedCollaborativeFilteringMethods
 from BookClub.models.review import BookReview
 
 
@@ -33,4 +34,4 @@ def get_item_based_recommendations(user, positive_ratings_only=True):
 
 """Retrain the item-based recommender with the current data"""
 def retrain_item_based_recommender():
-    pass
+    ItemBasedCollaborativeFilteringMethods(retraining_and_saving=True)
