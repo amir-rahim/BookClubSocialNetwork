@@ -59,8 +59,6 @@ class EditReviewView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             else:
                 messages.error(self.request, 'You cannot edit this review!')
                 return False
-            # reviewed = BookReview.objects.filter(book=book, user=self.request.user, id=self.kwargs['book_review_id']).exists()
-            # return reviewed
         except:
             messages.error(self.request, 'Book or review not found!')
             return False
