@@ -1,4 +1,5 @@
 from BookClub.recommender_module.recommenders.popular_books_recommender import PopularBooksRecommender
+from BookClub.recommender_module.recommenders.resources.popular_books_recommender_methods import PopularBooksMethods
 from BookClub.models.review import BookReview
 
 
@@ -10,6 +11,10 @@ def get_popularity_recommendations(user):
     popular_books = PopularBooksRecommender()
     recommended_books = popular_books.get_recommendations_from_average_and_median(user_read_books=user_read_books)
     return recommended_books
+
+"""Retrain the popularity recommender with the current data."""
+def retrain_popularity_recommender(user):
+    PopularBooksMethods(retraining_and_saving=True)
 
 """Get a list of all books that the user has read."""
 def get_user_read_books(user):
