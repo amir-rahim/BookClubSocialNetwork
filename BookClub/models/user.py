@@ -52,3 +52,7 @@ class User(AbstractUser):
         for review in user_reviews:
             isbn_list.append(review.book.ISBN)
         return isbn_list
+
+    """Get (up to) 10 book recommendations, from books the user has rated."""
+    def get_item_based_recommendations(self, positive_ratings_only=True):
+        user_read_books = self.get_read_books()
