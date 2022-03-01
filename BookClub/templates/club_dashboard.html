@@ -19,8 +19,11 @@ This is the Club Dashboard, the main home page for each club!
             <p class="menu-label">Club Views</p>
 
             <ul class="menu-list">
+
                 <li><a class="is-active" href="{% url 'club_dashboard' current_club.club_url_name %}"><b>Dashboard</b></a></li>
                 <li><a href="{% url 'member_list' current_club.club_url_name %}">Member List</a></li>
+                <li><a href="{% url 'applicant_list' current_club.club_url_name %}">Applicant List</a></li>
+
             </ul>
 
             {% if user == current_club.get_club_owner %}
@@ -28,7 +31,7 @@ This is the Club Dashboard, the main home page for each club!
                 <p class="menu-label">Club Administration</p>
 
                 <ul class="menu-list">
-                    <li><a>Manage Club</a></li>
+                    <li><a href="{% url 'edit_club' current_club.club_url_name %}">Manage Club</a></li>
                     <li><a>Club Settings</a></li>
                 </ul>
 
@@ -44,7 +47,8 @@ This is the Club Dashboard, the main home page for each club!
             <p class="menu-label">Meetings</p>
 
             <ul class="menu-list">
-                <li><a>All Meetings</a></li>
+                <li><a href="{% url 'meeting_list' current_club.club_url_name %}">All Meetings</a></li>
+                <li><a href="{% url 'create_meeting' current_club.club_url_name %}">Create a Meeting</a></li>
                 <li><a>Joined Upcoming Meetings</a></li>
                 <li><a>Prior Meetings</a></li>
             </ul>
@@ -58,9 +62,9 @@ This is the Club Dashboard, the main home page for each club!
         <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
             <ul>
                 <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a>Club</a></li>
-                <li><a>{{ current_club.name }}</a></li>
-                <li><a href="#">Dashboard</a></li>
+                <li><a href="{% url 'available_clubs' %}">Club</a></li>
+                <li><a href="{% url 'club_dashboard' current_club.club_url_name %}">{{ current_club.name }}</a></li>
+                <li><a href="{% url 'club_dashboard' current_club.club_url_name %}">Dashboard</a></li>
             </ul>
         </nav>
 
@@ -76,9 +80,9 @@ This is the Club Dashboard, the main home page for each club!
         <div class="columns is-fullheight">
 
             <div class="column is-6">
-                
+
                 <div class="card card-equal-height">
-                    
+
                     <div class="card-content">
                         <p class="title">Club Details</p>
                         <div class="media">

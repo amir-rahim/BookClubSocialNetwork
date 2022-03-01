@@ -4,7 +4,6 @@ from django.utils import timezone
 import pytz
 import datetime
 
-
 from BookClub.models import Meeting, Club, User, Book
 # from BookClub.models.club_membership import ClubMembership
 from django.core.exceptions import ValidationError
@@ -12,7 +11,7 @@ from django.core.exceptions import ValidationError
 class MeetingTestCase(TestCase):
 
     fixtures = [
-        'BookClub/tests/fixtures/books.json',
+        'BookClub/tests/fixtures/default_books.json',
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_clubs.json',
         'BookClub/tests/fixtures/default_meetings.json'
@@ -25,7 +24,6 @@ class MeetingTestCase(TestCase):
         self.jack = User.objects.get(username = "jackdoe")
         self.jane = User.objects.get(username = 'janedoe')
         self.book = Book.objects.get(pk = 1)
-
     
     def _assert_meeting_is_valid(self):
         try:
@@ -176,4 +174,3 @@ class MeetingTestCase(TestCase):
         self.meeting.leave_member(self.jack)
         self.assertNotEqual(self.meeting.get_number_of_attendants(), 1)
     
-

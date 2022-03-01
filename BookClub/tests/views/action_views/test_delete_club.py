@@ -61,7 +61,7 @@ class DeleteClubTest(TestCase):
         club_exists_before = Club.objects.filter(pk=clubid).exists()
         self.assertEqual(club_exists_before,True)
         response = self.client.post(self.url)
-        self.assertRedirects(response,f'/club/available_clubs/')
+        self.assertRedirects(response,f'/club/')
         self.assertEqual(response.status_code,302)
         club_exists_after = Club.objects.filter(pk=clubid).exists()
         self.assertEqual(club_exists_after,False)

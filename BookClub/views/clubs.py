@@ -6,10 +6,9 @@ from django.views.generic import DetailView
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
-from BookClub.models.club import Club, User
-from BookClub.forms.club import ClubForm
+from BookClub.models import Club, User, ClubMembership
+from BookClub.forms import ClubForm
 
-from BookClub.models.club_membership import ClubMembership
 
 class CreateClubView(LoginRequiredMixin, CreateView):
     template_name = 'create_club.html'
@@ -20,9 +19,10 @@ class CreateClubView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         response = super().form_valid(form)
         created_club = self.object
-        owner_membership = ClubMembership(user = self.request.user, club = created_club, membership = ClubMembership.UserRoles.OWNER)
+        owner_membership = ClubMembership(user=self.request.user, club=created_club,
+                                          membership=ClubMembership.UserRoles.OWNER)
         owner_membership.save()
-        messages.success(self.request, ('Successfully created a new club!'))
+        messages.success(self.request, 'Successfully created a new club!')
         return response
 
     def form_invalid(self, form):
