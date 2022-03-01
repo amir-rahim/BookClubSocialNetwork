@@ -75,9 +75,9 @@ urlpatterns = [
     path('library/books/<int:book_id>/', views.BookDetailView.as_view(), name='book_view'), # book view
     path('library/books/<int:book_id>/reviews/', views.BookReviewListView.as_view(), name = 'book_reviews'),
 
-    #path('library/review/<int:book_id>') # create review for book represented by id
-    #path('library/review/<int:book_id>/edit') # edit review for book represented by id
-    #path('library/review/<int:book_id/delete') # delete review for book represented by id
+    #path('library/review/<int:book_id>'), # create review for book represented by id
+    #path('library/review/<int:book_id>/edit'), # edit review for book represented by id
+    path('library/review/<int:book_id>/<int:book_review_id>/delete/',views.DeleteReviewView.as_view(),name='delete_review'), # delete review for book represented by id
 
     # '''BookList URLs'''
     path('user/<slug:username>/lists', views.BooklistListView.as_view(), name='booklists_list'),
