@@ -75,20 +75,12 @@ class EditReviewView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return reverse(self.redirect_location, kwargs={'book_id': self.kwargs['book_id']})
 
     def get_object(self):
-        try:
-            return BookReview.objects.get(id=self.kwargs['book_review_id'])
-        except:
-            messages.add_message(self.request, messages.ERROR, 'Book review not found!')
-            return None
+        return BookReview.objects.get(id=self.kwargs['book_review_id'])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        try:
-
-            book_review = self.get_object()
-            context['book_review'] = book_review
-            context['id'] = book_review.id
-            context['book'] = book_review.book
-        except:
-            return context
+        book_review = self.get_object()
+        context['book_review'] = book_review
+        context['id'] = book_review.id
+        context['book'] = book_review.book
         return context
