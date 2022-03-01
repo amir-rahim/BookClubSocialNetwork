@@ -1,48 +1,18 @@
 from BookClub.helpers import delete_bookreview
 from BookClub.models import *
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.shortcuts import redirect
-from django.views.generic import TemplateView, View, DeleteView
+from django.views.generic import View
 from BookClub.models import *
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 class DeleteReviewView(LoginRequiredMixin,View):
     redirect_location = 'home' #Need to change to review list view or somewhere else
-
+    """Checking whether the action is legal"""
     def is_actionable(self,currentUser,review):
         return currentUser == review.user
-        
 
+    """Handles no permssion and Reviews that don't exist"""
     def is_not_actionable(self):
         messages.error(self.request,"You are not allowed to delete this review or Review doesn\'t exist")
 
@@ -62,9 +32,9 @@ class DeleteReviewView(LoginRequiredMixin,View):
             else:
                 self.is_not_actionable()
         except:
-            # messages.error(self.request,"Error, Review not found.")
             self.is_not_actionable()
             return redirect(self.redirect_location)
-            
+
+    """Should look the same as post but will not do anything"""
     def get(self, request, *args, **kwargs):
         return redirect(self.redirect_location)

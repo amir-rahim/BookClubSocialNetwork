@@ -8,6 +8,7 @@ from BookClub.tests.helpers import LogInTester,reverse_with_next
 
 @tag('delete','delete_book_review','book_review','bookreview')
 class DeleteBookReview(TestCase,LogInTester):
+    """Testing done by Raymond"""
     fixtures = [
         "BookClub/tests/fixtures/default_users.json",
         "BookClub/tests/fixtures/default_clubs.json",
@@ -19,9 +20,7 @@ class DeleteBookReview(TestCase,LogInTester):
         self.review_author = self.bookreview.user
         self.review_book = self.bookreview.book
 
-        
         self.otherUser = User.objects.get(pk=6)
-
 
         self.url = reverse('delete_review', kwargs={'book_review_id': self.bookreview.id,'book_id':self.review_book.id})
         self.redirect_url = reverse('home')#Need to redirect to book review list 
@@ -34,6 +33,8 @@ class DeleteBookReview(TestCase,LogInTester):
         self.assertTrue(self._is_logged_in())
         response = self.client.get(self.url)
         self.assertRedirects(response,self.redirect_url,status_code=302,target_status_code=200)
+
+    """ Testing for unsuccessful deletes"""
 
     def test_delete_book_review_not_logged_in(self):
         """Test for a guest trying to delete a book review"""
@@ -82,7 +83,7 @@ class DeleteBookReview(TestCase,LogInTester):
 
         self.assertRedirects(response,self.redirect_url,status_code=302,target_status_code=200)
 
-
+    """Test for Successful delete"""
     def test_successful_delete(self):
         self.client.login(username = self.review_author.username,password = "Password123")
         self.assertTrue(self._is_logged_in())
@@ -99,4 +100,4 @@ class DeleteBookReview(TestCase,LogInTester):
         bookreview_exists_after =  BookReview.objects.filter(pk=self.bookreview.id).exists()
         self.assertNotEqual(bookreview_exists_before,bookreview_exists_after)
         self.assertRedirects(response,self.redirect_url,status_code=302,target_status_code=200)
-        #test
+        
