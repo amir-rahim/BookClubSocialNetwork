@@ -145,7 +145,7 @@ class BookListTestCase(TestCase):
     # Check helper methods
     def test_get_delete_url(self):
         url_from_model = self.bookList.get_delete_url()
-        correct_url = '/user/johndoe/list/1/delete'
+        correct_url = '/user/johndoe/list/1/delete/'
         self.assertEqual(url_from_model, correct_url)
 
     def test_string_function_returns_correct_value(self):
