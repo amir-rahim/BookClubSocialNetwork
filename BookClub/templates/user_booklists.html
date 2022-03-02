@@ -62,9 +62,11 @@ View all book lists you've created
                       {% if self %}
                         <td style="width:8%; text-align:right;">
 
-                            <a href="#" class="button is-dark">
-                              <span>Edit</span>
-                            </a>
+                          <form method="get" action="{% url 'edit_booklist' booklist_id=list.id username=request.user.username %}">
+                              <button class="button is-dark is-small" style="margin-right: 5px">
+                                  <span>Edit</span>
+                              </button>
+                          </form>
 
                         </td>
                       {% endif %}
