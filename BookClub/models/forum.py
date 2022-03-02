@@ -1,6 +1,6 @@
 from django.db import models
 from BookClub.models import TextPost, RatedContent, TextComment
-
+from django.utils.text import slugify
 
 class ForumPost(TextPost):
     class Meta:
@@ -15,6 +15,7 @@ class ForumPost(TextPost):
     def remove_comment(self, comment):
         self.comments.remove(comment)
         self.save()
+        
 
 
 class ForumComment(TextComment):
@@ -27,7 +28,8 @@ class ForumComment(TextComment):
     def remove_comment(self, comment):
         self.subComments.remove(comment)
         self.save()
-
+        
+    
 
 class Forum(models.Model):
     class Meta:
@@ -46,3 +48,7 @@ class Forum(models.Model):
     def remove_post(self, post):
         self.posts.remove(post)
         self.save()
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
