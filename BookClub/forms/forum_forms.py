@@ -1,15 +1,23 @@
+from django.forms import ModelForm, Textarea
 
-from django.db import models
-from django.forms import ModelForm, Textarea, IntegerField
-from BookClub.models import ForumPost
+from BookClub.models import ForumPost, ForumComment
 
 
 class CreatePostForm(ModelForm):
-    
     class Meta:
         model = ForumPost
         fields = ['title', 'content']
-        
+
         widgets = {
-            'content' : Textarea
+            'content': Textarea
+        }
+
+
+class CreateForumCommentForm(ModelForm):
+    class Meta:
+        model = ForumComment
+        fields = ['content']
+
+        widgets = {
+            'content': Textarea
         }
