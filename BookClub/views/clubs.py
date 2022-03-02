@@ -30,7 +30,6 @@ class CreateClubView(LoginRequiredMixin, CreateView):
         return super().form_invalid(form);
 
 
-
 class ClubDashboardView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     template_name = "club_dashboard.html"
     model = Club

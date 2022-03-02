@@ -34,11 +34,13 @@ class Meeting(models.Model):
 
     def get_created_on(self):
         return self.created_on
+
     def get_location(self):
         return self.location
 
     def get_title(self):
         return self.title
+
     def get_description(self):
         return self.description
 

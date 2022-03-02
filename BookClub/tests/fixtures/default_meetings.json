@@ -1,4 +1,6 @@
-[{
+
+[
+    {
         "model": "BookClub.meeting",
         "pk": 1,
         "fields": {
@@ -105,9 +107,9 @@
             "location": "Franklin Wilkins Library GS04",
             "title": "Other meeting 1",
             "description": "This is an other meeting, helll yeahhhh",
-            "members": [1, 2],
             "type": "O",
             "book": null
         }
     }
 ]
+

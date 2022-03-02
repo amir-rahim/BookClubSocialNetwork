@@ -173,4 +173,4 @@ class MeetingTestCase(TestCase):
     def test_not_leave_member(self):
         self.meeting.leave_member(self.jack)
         self.assertNotEqual(self.meeting.get_number_of_attendants(), 1)
-    
+
