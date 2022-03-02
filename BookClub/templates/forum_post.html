@@ -1,0 +1,243 @@
+{% extends 'base_content.html' %}
+
+{% block page_title %}
+Global Forum
+{% endblock page_title %}
+
+{% block page_subtitle %}
+This is the Global Forum, you can look at what our members are posting about!
+{% endblock page_subtitle %}
+
+{% block content %}
+
+    <div class="columns">
+
+        <div class="column is-3">
+            <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+
+                <p class="menu-label">Clubs</p>
+
+                <ul class="menu-list">
+                    <li><a href="{% url 'available_clubs' %}">Available Clubs</a></li>
+                    <li><a href="{% url 'my_club_memberships' %}">Memberships</a></li>
+                    <li><a href="{% url 'create_club' %}">Create Club</a></li>
+                </ul>
+
+                 <p class="menu-label">Useful Links</p>
+
+                <ul class="menu-list">
+                    <li><a href="{% url 'user_dashboard' %}">User Profile</a></li>
+                    <li><a>Library</a></li>
+                    <li><a>Forum</a></li>
+                </ul>
+
+            </aside>
+        </div>
+
+        <div class="column is-9">
+
+            <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 10px;">
+                <ul>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'global_forum' %}">Forum</a></li>
+                    <li><a href="{% url 'forum_post' post.id %}">{{ post.title }}</a></li>
+                </ul>
+            </nav>
+
+            <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
+                <div class="hero-body">
+                    <h1 class="title">Forum Post</h1>
+                </div>
+            </section>
+
+            <div class="card">
+                <header class="card-header">
+                    <div class="card-header-title">
+                        <p class="subtitle"><b>{{post.title}}</b></p>
+                    </div>
+
+                    <div class="card-header-icon">
+                        <button class="button is-info js-modal-trigger is-fullwidth is-rounded" data-target="modal-create-post">
+                            <span class="icon">
+                                <i class="fa-solid fa-pen"></i>
+                            </span>
+                            <span>
+                                Reply
+                            </span>
+                        </button>
+
+                        <button class="button is-success is-fullwidth is-rounded" aria-label="Edit Post">
+                            <span class="icon">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            </span>
+                            <span>Edit</span>
+                        </button>
+
+                        <button class="button is-danger is-fullwidth is-rounded" aria-label="Delete Post">
+                            <span class="icon">
+                                <i class="fa-solid fa-x"></i>
+                            </span>
+                            <span>Delete</span>
+                        </button>
+
+                        <button class="button is-primary is-rounded" aria-label="Upvote">
+                            <span class="icon">
+                                <i class="fa-solid fa-arrow-up"></i>
+                            </span>
+                        </button>
+
+                        <button class="button is-danger is-rounded" aria-label="Downvote">
+                            <span class="icon">
+                                <i class="fa-solid fa-arrow-down"></i>
+                            </span>
+                        </button>
+
+                        <button class="button is-rounded" title="Disabled button" disabled>{{post.rating}}</button>
+                    </div>
+
+                </header>
+
+                <div class="card-content">
+                    <div class="content">
+                        <span class="has-text-grey">
+                        {{ post.content }}
+                        </span>
+                    </div>
+                </div>
+
+                <footer class="card-footer">
+                    <p class="card-footer-item"><span class="is-small has-text-grey-light">Posted by: {{post.creator}}</span></p>
+                    <p class="card-footer-item has-text-grey-light">{{ post.created_on | timesince }} ago</p>
+                    <p class="card-footer-item">
+                        {% if post.comments.count > 0 %}
+                            See {{ post.comments.count }} comments
+                        {% else %}
+                            Be the first to comment!
+                        {% endif %}
+                    </p>
+                </footer>
+
+            </div>
+
+            <br>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-header-title">
+                        Comments to Post:
+                    </div>
+                </div>
+                <div class="card-content">
+                    {% if post.comments.count > 0 %}
+                        {% for comment in post.comments.all %}
+
+                            <article class="message">
+                                <div class="message-body">
+                                    <p class="has-text-justified">"{{ comment.content }}"</p>
+                                    <br>
+                                    <p class="has-text-right"><i>- by {{ comment.creator }}, {{ comment.created_on | timesince }} ago</i></p>
+                                </div>
+                            </article>
+
+                            <br>
+
+                        {% endfor %}
+
+                        {% include 'partials/pagination.html' %}
+                    {% else %}
+                        <p class="has-text-grey-light has-text-centered"><i>There are no comments for this post. Comment using the reply button on the post.</i></p>
+                        <br>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div id="modal-create-post" class="modal">
+                <div class="modal-background"></div>
+
+                <div class="modal-content">
+
+                    <div class="card">
+                        <div class="card-header">
+                            <button class="card-header-icon" aria-label="more options">
+                                <span class="icon">
+                                    <i class="card-header-icon fa-solid fa-pen-clip"></i>
+                                </span>
+                            </button>
+                            <p class="card-header-title">Create Comment/Reply</p>
+                        </div>
+                        <div class="card-content">
+                            <form>
+                                <div class="field">
+                                    <label class="label">Comment</label>
+
+                                    <div class="control">
+                                        <textarea class="textarea" placeholder="e.g. Hello World!"></textarea>
+                                    </div>
+                                </div>
+
+                                <button class="button is-primary">Comment</button>
+                            </form>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <button class="modal-close is-large" aria-label="close"></button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', () => {
+          // Functions to open and close a modal
+          function openModal($el) {
+            $el.classList.add('is-active');
+          }
+
+          function closeModal($el) {
+            $el.classList.remove('is-active');
+          }
+
+          function closeAllModals() {
+            (document.querySelectorAll('.modal') || []).forEach(($modal) => {
+              closeModal($modal);
+            });
+          }
+
+          // Add a click event on buttons to open a specific modal
+          (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
+            const modal = $trigger.dataset.target;
+            const $target = document.getElementById(modal);
+            console.log($target);
+
+            $trigger.addEventListener('click', () => {
+              openModal($target);
+            });
+          });
+
+          // Add a click event on various child elements to close the parent modal
+          (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
+            const $target = $close.closest('.modal');
+
+            $close.addEventListener('click', () => {
+              closeModal($target);
+            });
+          });
+
+          // Add a keyboard event to close all modals
+          document.addEventListener('keydown', (event) => {
+            const e = event || window.event;
+
+            if (e.keyCode === 27) { // Escape key
+              closeAllModals();
+            }
+          });
+        });
+
+    </script>
+
+{% endblock %}
