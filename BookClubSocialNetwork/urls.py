@@ -78,7 +78,7 @@ urlpatterns = [
     path('library/books/<int:book_id>/', views.BookDetailView.as_view(), name='book_view'),  # book view
     path('library/books/<int:book_id>/reviews/', views.BookReviewListView.as_view(), name='book_reviews'),
 
-    #'''Review URLs'''
+    # '''Review URLs'''
     path('library/review/<int:book_id>/', views.CreateReviewView.as_view(), name='create_review'), # create review for book represented by id
     # path('library/review/<int:book_id>/edit') # edit review for book represented by id
     # path('library/review/<int:book_id/delete') # delete review for book represented by id
@@ -89,5 +89,7 @@ urlpatterns = [
     path('user/<slug:username>/lists', views.BooklistListView.as_view(), name='booklists_list'),
     path('user/<slug:username>/lists/create', views.CreateBookListView.as_view(), name='create_booklist'),
 
+    # '''Forum URLs'''
     path('forum/', views.GlobalForumView.as_view(), name='global_forum'),
+    path('forum/<int:post_id>/', views.ForumPostView.as_view(), name='forum_post'),
 ]
