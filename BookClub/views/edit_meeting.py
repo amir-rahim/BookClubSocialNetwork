@@ -70,20 +70,53 @@ class EditMeetingView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
             return context
         return context
 
-class RemoveMeetingMember(DetailView):
+class RemoveMeetingMember(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = Meeting
     pk_url_kwarg = 'meeting_id'
     http_method_names = ['post']
+
+    def test_func(self):
+        try:
+            meeting = self.get_object()
+            club = meeting.get_club()
+            organiser = meeting.get_organiser()
+            rank = ClubMembership.objects.get(
+                club=club, user=self.request.user)
+            #The only people who can edit the meeting are the Owner (of the club) or the organiser.
+            if(rank.membership != ClubMembership.UserRoles.OWNER and rank.membership != ClubMembership.UserRoles.MODERATOR and self.request.user != organiser):
+                messages.add_message(
+                    self.request, messages.ERROR, 'Access denied')
+                return False
+            else:
+                return True
+        except:
+            messages.add_message(self.request, messages.ERROR,
+                                 'Meeting not found or you are not a participant of this meeting')
+            return False
+
+    def handle_no_permission(self):
+        if not self.request.user.is_authenticated:
+            return super(LoginRequiredMixin, self).handle_no_permission()
+        else:
+            url = reverse('meeting_list', kwargs={
+                          'club_url_name': self.kwargs['club_url_name']})
+            return redirect(url)
     
     def post(self, request, *args, **kwargs):
         meeting = self.get_object()
         user = self.kwargs.get('member_id')
         if user is not None and meeting is not None:
             user = User.objects.get(pk=user)
-            meeting.members.remove(user)
-            meeting.save()
-            kwargs.pop('member_id')
-            return redirect(reverse('edit_meeting', kwargs=kwargs))
+            if meeting.organiser is not user:
+                meeting.members.remove(user)
+                meeting.save()
+                kwargs.pop('member_id')
+                return redirect(reverse('edit_meeting', kwargs=kwargs))
+            else:
+                kwargs.pop('member_id')
+                messages.error(request, "Cannot kick organiser!")
+                return redirect(reverse('meeting_details', kwargs=kwargs))
+                
         else:
             kwargs.pop('member_id')
             messages.error(request, "User not found!")
