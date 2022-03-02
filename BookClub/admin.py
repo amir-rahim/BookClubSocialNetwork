@@ -1,9 +1,5 @@
 from django.contrib import admin
-from BookClub.models.user import User
-from BookClub.models.club import Club
-from BookClub.models.club_membership import ClubMembership
-from BookClub.models.book import Book
-from BookClub.models.meeting import Meeting
+from BookClub.models import *
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -39,6 +35,13 @@ class BookAdmin(admin.ModelAdmin):
         'title', 'ISBN', 'author', 'publicationYear', 'publisher'
     ]
 
+@admin.register(BookReview)
+class BookReview(admin.ModelAdmin):
+    """Configuration of the admin interface for Books Reviews ."""
+
+    list_display = [
+        'book', 'user', 'rating' , 'review' , 'createdOn'
+    ]
 
 @admin.register(Meeting)
 class ClubMeetingAdmin(admin.ModelAdmin):
