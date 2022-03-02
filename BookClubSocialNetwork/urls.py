@@ -79,8 +79,12 @@ urlpatterns = [
 
     #'''Review URLs'''
     path('library/review/<int:book_id>/', views.CreateReviewView.as_view(), name='create_review'), # create review for book represented by id
-    # path('library/review/<int:book_id>/edit') # edit review for book represented by id
-    # path('library/review/<int:book_id/delete') # delete review for book represented by id
+    #path('library/review/<int:book_id>/edit'), # edit review for book represented by id
+    path('library/review/<int:book_id>/<int:book_review_id>/delete/',views.DeleteReviewView.as_view(),name='delete_review'), # delete review for book represented by id
+
+   
+   
+
 
     # '''BookList URLs'''
     path('user/<slug:username>/lists', views.BooklistListView.as_view(), name='booklists_list'),
