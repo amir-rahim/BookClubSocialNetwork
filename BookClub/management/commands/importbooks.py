@@ -12,7 +12,7 @@ class Command(BaseCommand):
         parser.add_argument('books', type=int, nargs='?', default=5)
         
     def handle(self, *args, **options):
-        file_path = ("RecommenderModule/dataset/BX_Books.csv")
+        file_path = ("static/dataset/BX_Books.csv")
 
         # As we're loading a custom dataset, we need to define a reader. In the
         # movielens-100k dataset, each line has the following format:
