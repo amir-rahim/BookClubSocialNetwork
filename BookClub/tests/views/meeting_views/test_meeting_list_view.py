@@ -55,25 +55,25 @@ class MeetingListTest(TestCase):
 
     def test_owner_can_see_meeting_information(self):
         self.client.login(username=self.owner.username, password="Password123")
+        self.meeting.leave_member(self.owner)
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'club_meetings.html')
         self.assertContains(response,'Book meeting 1')
         self.assertContains(response, 'Feb. 22, 2022, 7 p.m.')
         self.assertContains(response,'johndoe')
-        self.assertContains(response, 'Join Meeting')
         meetings = list(response.context['meetings'])
         self.assertEqual(len(meetings), 5)
 
     def test_moderator_can_see_meeting_information(self):
         self.client.login(username=self.moderator.username, password="Password123")
+        self.meeting.leave_member(self.moderator)
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'club_meetings.html')
         self.assertContains(response,'Book meeting 1')
         self.assertContains(response, 'Feb. 22, 2022, 7 p.m.')
         self.assertContains(response,'johndoe')
-        self.assertContains(response, 'Join Meeting')
         meetings = list(response.context['meetings'])
         self.assertEqual(len(meetings), 5)
 
@@ -85,7 +85,6 @@ class MeetingListTest(TestCase):
         self.assertContains(response,'Book meeting 1')
         self.assertContains(response, 'Feb. 22, 2022, 7 p.m.')
         self.assertContains(response,'johndoe')
-        self.assertContains(response, 'Join Meeting')
         meetings = list(response.context['meetings'])
         self.assertEqual(len(meetings), 5)
 
@@ -109,21 +108,30 @@ class MeetingListTest(TestCase):
         self.assertContains(response,'Book meeting 1')
         self.assertContains(response,'johndoe')
         self.assertContains(response, 'Feb. 22, 2022, 7 p.m.')
-        self.assertContains(response, 'Join Meeting')
 
         self.assertContains(response,'Book meeting 3')
         self.assertContains(response,'jackdoe')
         self.assertContains(response, 'Feb. 22, 2022, 9 p.m.')
-        self.assertContains(response, 'Join Meeting')
 
         meetings = list(response.context['meetings'])
         self.assertEqual(len(meetings), 6)
 
     def test_allowed_user_can_see_join_button(self):
         self.client.login(username=self.owner.username,password = "Password123")
-        response = self.client.get(self.url)
+        club = Club.objects.get(pk=2)
+        ClubMembership.objects.create(user = self.owner, club = club, membership = ClubMembership.UserRoles.MEMBER)
+        response = self.client.get(reverse("meeting_list",kwargs={'club_url_name':club.club_url_name}))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'club_meetings.html')
         self.assertContains(response, 'Join Meeting')
     
-
+    def test_allowed_user_can_see_leave_button(self):
+        self.client.login(username=self.owner.username,password = "Password123")
+        meeting = Meeting.objects.get(pk=3)
+        club = Club.objects.get(pk=2)
+        ClubMembership.objects.create(user = self.owner, club = club, membership = ClubMembership.UserRoles.MEMBER)
+        meeting.join_member(self.owner)
+        response = self.client.get(reverse("meeting_list",kwargs={'club_url_name':club.club_url_name}))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'club_meetings.html')
+        self.assertContains(response, 'Leave Meeting')

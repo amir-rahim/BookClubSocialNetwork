@@ -55,7 +55,7 @@ urlpatterns = [
     # '''Membership URLs'''
     path('club/', views.AvailableClubsView.as_view(), name='available_clubs'),
     path('memberships/', views.MyClubMembershipsView.as_view(), name='my_club_memberships'),
-    path('create/', views.clubs.CreateClubView.as_view(), name='create_club'),
+    path('create/', views.clubs.CreateClubView.as_view(), name = 'create_club'),
 
     path('club/<str:club_url_name>/', views.ClubDashboardView.as_view(), name='club_dashboard'),
     path('club/<str:club_url_name>/members/', views.MembersListView.as_view(), name='member_list'),
@@ -64,13 +64,16 @@ urlpatterns = [
     path('club/<str:club_url_name>/edit/', views.EditClubView.as_view(), name='edit_club'),
 
     # '''Meeting URLs'''
-    path('club/<str:club_url_name>/meetings/', views.MeetingListView.as_view(), name='meeting_list'),
-    path('club/<str:club_url_name>/meetings/<int:meeting_id>/', views.MeetingDetailsView.as_view(),name='meeting_details'),
     path('club/<str:club_url_name>/meetings/<int:meeting_id>/edit',views.EditMeetingView.as_view(), name='edit_meeting'),
     path('club/<str:club_url_name>/meetings/<int:meeting_id>/edit/remove_member/<int:member_id>', views.RemoveMeetingMember.as_view(), name='remove_meeting_member'),
+    path('club/<str:club_url_name>/meetings/',views.MeetingListView.as_view(),name='meeting_list'),
+    path('club/<str:club_url_name>/meetings/<int:meeting_id>/join', views.JoinMeetingView.as_view(), name='join_meeting'),
+    path('club/<str:club_url_name>/meetings/<int:meeting_id>/leave', views.LeaveMeetingView.as_view(), name='leave_meeting'),
+    path('club/<str:club_url_name>/meetings/<int:meeting_id>/', views.MeetingDetailsView.as_view(), name='meeting_details'),
+    path('club/<str:club_url_name>/meetings/<int:meeting_id>/participants/', views.MeetingParticipantsView.as_view(), name='meeting_participants'),
     path('club/<str:club_url_name>/meetings/create/', views.CreateMeetingView.as_view(), name='create_meeting'),
-    path('club/<str:club_url_name>/meetings/<int:meeting_id>/participants/', views.MeetingParticipantsView.as_view(),name='meeting_participants'),
-    path('club/<str:club_url_name>/meetings/<int:meeting_id>/delete/', views.DeleteMeetingView.as_view(),name='delete_meeting'),
+    path('club/<str:club_url_name>/meetings/<int:meeting_id>/delete/', views.DeleteMeetingView.as_view(), name='delete_meeting'),
+
 
     # '''Library URLs'''
     path('library/', views.library_dashboard, name='library_dashboard'),
