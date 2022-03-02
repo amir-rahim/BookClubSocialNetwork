@@ -13,7 +13,7 @@
     "model": "BookClub.option",
     "pk": 2,
     "fields": {
-      "title": "Option 2 for My First Poll",
+      "text": "Option 2 for My First Poll",
       "poll": 1,
       "book": null,
       "voted_by": []
@@ -33,7 +33,7 @@
     "model": "BookClub.option",
     "pk": 4,
     "fields": {
-      "title": "Option 2 for My Second Poll",
+      "text": "Option 2 for My Second Poll",
       "poll": 2,
       "book": 3,
       "voted_by": [3]
@@ -53,7 +53,7 @@
     "model": "BookClub.option",
     "pk": 6,
     "fields": {
-      "title": "Option 4 for My Second Poll",
+      "text": "Option 4 for My Second Poll",
       "poll": 2,
       "book": null,
       "voted_by": [5,6]
