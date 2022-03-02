@@ -13,10 +13,7 @@ class Command(BaseCommand):
         parser.add_argument('books', type=int, nargs='?', default=5)
         
     def handle(self, *args, **options):
-        if '/app' in os.environ['HOME']:
-            file_path = "staticfiles/dataset/BX_Books.csv"
-        else:
-            file_path = "static/dataset/BX_Books.csv"
+        file_path = "static/dataset/BX_Books.csv"
 
         # As we're loading a custom dataset, we need to define a reader. In the
         # movielens-100k dataset, each line has the following format:
@@ -42,8 +39,8 @@ class Command(BaseCommand):
         random_sample = random.sample(model_instances, count)
         try:
             Book.objects.bulk_create(random_sample)
-        except:
-            print('unique error')
+        except Exception as e:
+            print(e)
             
     def cleanYear(self, year):
         string = str(year)
