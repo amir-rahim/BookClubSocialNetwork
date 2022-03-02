@@ -1,18 +1,19 @@
 """Forum Related Views"""
-from sre_constants import SUCCESS
-from django.db.models import Q
-from django.shortcuts import render, redirect
-from django.urls import reverse
-from django.views.generic import ListView, DetailView, CreateView
-from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib import messages
+from django.views.generic import ListView, DetailView, CreateView
+
 from BookClub.forms.forum_forms import CreatePostForm
-from BookClub.models import ForumPost, Forum, User, Club
+from BookClub.models import ForumPost, ForumComment, Forum, User, Club
 
 
-def global_forum_view(request):
-    """This is the library dashboard view."""
-    return render(request, 'global_forum.html')
+class ForumPostView(DetailView):
+    model = ForumPost
+    paginate_by = 10
+    template_name = 'forum_post.html'
+    context_object_name = 'post'
+    pk_url_kwarg = 'post_id'
+    success_url = '/forum/'
+
 
 class GlobalForumView(CreateView, ListView):
     model = ForumPost
@@ -21,12 +22,12 @@ class GlobalForumView(CreateView, ListView):
     paginate_by = 10
     form_class = CreatePostForm
     success_url = "/forum/"
-    
+
     def get_queryset(self):
-        forum = Forum.objects.get(associatedWith = None)
+        forum = Forum.objects.get(associatedWith=None)
         posts = forum.posts.all()
         return posts
-    
+
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
         context['forum'] = Forum.objects.get(associatedWith=None)
@@ -58,5 +59,3 @@ class GlobalForumView(CreateView, ListView):
         messages.add_message(self.request, messages.ERROR,
                              "There was an error making that post, try again!")
         return super().form_invalid(form)
-    
-    
