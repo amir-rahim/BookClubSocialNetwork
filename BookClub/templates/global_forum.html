@@ -18,7 +18,7 @@ This is the Global Forum, you can look at what our members are posting about!
                 <p class="menu-label">Clubs</p>
 
                 <ul class="menu-list">
-                    <li><a class="is-active"><b>Available Clubs</b></a></li>
+                    <li><a href="{% url 'available_clubs' %}">Available Clubs</a></li>
                     <li><a href="{% url 'my_club_memberships' %}">Memberships</a></li>
                     <li><a href="{% url 'create_club' %}">Create Club</a></li>
                 </ul>
@@ -59,7 +59,7 @@ This is the Global Forum, you can look at what our members are posting about!
                         <div class="level-item has-text-centered">
                             <div>
                                 <p class="heading">Posts</p>
-                                <p class="title">{{posts.count}}</p>
+                                <p class="title">{{forum.posts.count}}</p>
                             </div>
                         </div>
                         <div class="level-item has-text-centered">
@@ -94,11 +94,13 @@ This is the Global Forum, you can look at what our members are posting about!
                     </div>
 
                     <div class="card-header-icon">
+
                         <button class="button is-primary is-rounded" aria-label="Upvote">
                             <span class="icon">
                                 <i class="fa-solid fa-arrow-up"></i>
                             </span>
                         </button>
+
                         <button class="button is-danger is-rounded" aria-label="Downvote">
                             <span class="icon">
                                 <i class="fa-solid fa-arrow-down"></i>
@@ -106,6 +108,7 @@ This is the Global Forum, you can look at what our members are posting about!
                         </button>
 
                         <button class="button is-rounded" title="Disabled button" disabled>{{post.rating}}</button>
+
                     </div>
 
                 </header>
@@ -113,7 +116,7 @@ This is the Global Forum, you can look at what our members are posting about!
                 <div class="card-content">
                     <div class="content">
                         <span class="has-text-grey">
-                        {{post.content |truncatechars:240}}    
+                        {{post.content |truncatechars:240}}
                         </span>
                     </div>
                 </div>
@@ -121,10 +124,10 @@ This is the Global Forum, you can look at what our members are posting about!
                 <footer class="card-footer">
                     <p class="card-footer-item"><span class="is-small has-text-grey-light">Posted by: {{post.creator}}</span></p>
                     <p class="card-footer-item has-text-grey-light">{{ post.created_on | timesince }} ago</p>
-                    <a href="#" class="card-footer-item">
-                        {% if post.comments.count > 0 %} 
+                    <a href="{% url 'forum_post' post.id %}" class="card-footer-item">
+                        {% if post.comments.count > 0 %}
                             See {{ post.comments.count }} comments
-                        {% else %} 
+                        {% else %}
                             Be the first to comment!
                         {% endif %}</a>
                 </footer>
@@ -149,16 +152,15 @@ This is the Global Forum, you can look at what our members are posting about!
                             </button>
                             <p class="card-header-title">Create Discussion Post</p>
                         </div>
+                        <form method="post">
                         <div class="card-content">
                             <div class="container">
-                                <form method="post">
                                     {% csrf_token %}
                                     {% include 'partials/bulma_form.html' with form=form %}
-                                    
-                                
                             </div>
                         </div>
                         <footer class="card-footer">
+                            <input type="button" value="Reset" id="resetBtn" onClick="this.form.reset()" class="button is-danger is-fullwidth"/>
                             <input type="submit" value="Make Post" class="button is-link is-fullwidth">
                         </footer>
                         </form>
