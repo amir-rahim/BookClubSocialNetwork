@@ -90,7 +90,7 @@ urlpatterns = [
     path('user/<slug:username>/lists/create', views.CreateBookListView.as_view(), name='create_booklist'),
 
     # '''Forum URLs'''
-    path('forum/', views.GlobalForumView.as_view(), name='global_forum'),
+    path('forum/', views.ForumView.as_view(), name='global_forum'),
     path('forum/create_post/', views.CreatePostView.as_view(), name = 'create_forum_post'),
     path('forum/<int:post_id>/', views.ForumPostView.as_view(), name='forum_post'),
     path('forum/<int:post_id>/comment/', views.CreateCommentView.as_view(), name = 'create_forum_comment'),

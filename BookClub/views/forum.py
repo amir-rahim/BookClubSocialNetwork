@@ -5,6 +5,7 @@ from django.views.generic import ListView, DetailView, CreateView
 from django.views.generic.edit import UpdateView, DeleteView
 from BookClub.forms.forum_forms import CreateForumCommentForm, CreatePostForm
 from BookClub.models import ForumPost, ForumComment, Forum, User, Club
+from BookClub.models.club_membership import ClubMembership
 
 
 class ForumPostView(DetailView):
@@ -16,7 +17,7 @@ class ForumPostView(DetailView):
     success_url = '/forum/'
 
 
-class GlobalForumView(ListView):
+class ForumView(ListView):
     model = ForumPost
     template_name = 'global_forum.html'
     context_object_name = 'posts'
@@ -27,17 +28,35 @@ class GlobalForumView(ListView):
         posts = forum.posts.all()
         return posts
 
+    def get_template_names(self):
+        if self.kwargs.get('club_url_name') is not None:
+            names = ['club_forum.html']
+            return names
+        else:
+            names = ['global_forum.html']
+            return names
+    
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['forum'] = Forum.objects.get(associatedWith=None)
+        
+        if self.kwargs.get('club_url_name') is not None:
+            club = Club.objects.get(club_url_name=self.kwargs.get('club_url_name'))
+            context['forum'] = Forum.objects.get(associatedWith=club)
+            context['usercount'] = ClubMembership.objects.filter(club=club).count()
+        else:
+            context['forum'] = Forum.objects.get(associatedWith=None)
+            context['usercount'] = User.objects.all().count()
+            
         replies = 0
         votes_cast = 0
+        
         for post in context['forum'].posts.all():
             replies += post.comments.all().count()
             votes_cast = post.votes.all().count()
+            
         context['replies'] = replies
         context['votes'] = votes_cast
-        context['usercount'] = User.objects.all().count()
+        
         return context
     
 class CreatePostView(CreateView):
