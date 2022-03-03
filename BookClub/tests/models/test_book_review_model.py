@@ -7,7 +7,7 @@ from BookClub.models import *
 from BookClub.models.review import BookReview,BookReviewComment
 
 
-@tag('review', 'book', 'models')
+@tag('review', 'book', 'models','BookReviewModel')
 class BookReviewModelTestCase(TestCase):
     
     fixtures=[
