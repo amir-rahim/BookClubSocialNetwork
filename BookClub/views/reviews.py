@@ -1,13 +1,14 @@
 '''Review Related Views'''
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
+from django.views import View
+from django.views.generic.edit import CreateView, UpdateView
+
+from BookClub.forms.review import ReviewForm
 from BookClub.helpers import delete_bookreview
 from BookClub.models import *
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.views.generic.edit import CreateView, UpdateView
-from django.shortcuts import render, redirect, reverse
-from django.urls import reverse_lazy
-
-from BookClub.models import *
-from BookClub.forms.review import ReviewForm
 
 
 class CreateReviewView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
@@ -31,7 +32,7 @@ class CreateReviewView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         form.instance.user = user
         form.instance.book = book
         response = super().form_valid(form)
-        messages.success(self.request, (f"Successfully reviewed '{book.title}'!"))
+        messages.success(self.request, f"Successfully reviewed '{book.title}'!")
         return response
 
     def form_invalid(self, form):
@@ -87,7 +88,7 @@ class EditReviewView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return context
 
  
-class DeleteReviewView(LoginRequiredMixin,View):
+class DeleteReviewView(LoginRequiredMixin, View):
     redirect_location = 'home' #Need to change to review list view or somewhere else
     """Checking whether the action is legal"""
     def is_actionable(self,currentUser,review):
