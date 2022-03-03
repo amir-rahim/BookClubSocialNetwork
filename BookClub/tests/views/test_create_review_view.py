@@ -31,7 +31,7 @@ class CreateReviewViewTestcase(TestCase):
         }
 
     def test_create_review_url(self):
-        self.assertEqual(self.url, '/library/review/1/')
+        self.assertEqual(self.url, '/library/books/1/create/')
 
 
     def test_post_create_review_redirects_when_not_logged_in(self):
@@ -78,7 +78,7 @@ class CreateReviewViewTestcase(TestCase):
         self.assertEqual(after_count, before_count)
         self.assertEqual(response.status_code, 403)
 
-    def test_succesful_create_review(self):
+    def test_successful_create_review(self):
         self.client.login(username=self.user.username, password='Password123')
         before_count = BookReview.objects.count()
         saving_date = date.today()
@@ -86,9 +86,9 @@ class CreateReviewViewTestcase(TestCase):
         review = BookReview.objects.get(book = self.book, user = self.user)
         after_count = BookReview.objects.count()
         self.assertEqual(after_count, before_count+1)
-        response_url = reverse('home')
+        response_url = reverse('book_reviews', kwargs={'book_id': self.book.id})
         self.assertRedirects(response, response_url, status_code=302, target_status_code=200)
-        self.assertTemplateUsed(response, 'home.html')
+        self.assertTemplateUsed(response, 'book_reviews.html')
         self.assertEqual(review.rating, self.data['rating'])
         self.assertEqual(review.review, self.data['review'])
         self.assertEqual(review.createdOn.year, saving_date.year)
