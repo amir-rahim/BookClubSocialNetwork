@@ -61,7 +61,16 @@ urlpatterns = [
     path('club/<str:club_url_name>/members/', views.MembersListView.as_view(), name='member_list'),
     path('club/<str:club_url_name>/applicants/', views.ApplicantListView.as_view(), name='applicant_list'),
     path('club/<str:club_url_name>/edit/', views.EditClubView.as_view(), name='edit_club'),
-
+    
+    path('club/<str:club_url_name>/forum/', views.ForumView.as_view(), name='club_forum'),
+    path('club/<str:club_url_name>/forum/post/', views.CreatePostView.as_view(), 'create_forum_comment'),
+    path('club/<str:club_url_name>/forum/<int:post_id>/', views.ForumPostView.as_view(), 'forum_post'),
+    path('club/<str:club_url_name>/forum/<int:post_id>/comment/',
+         views.CreateCommentView.as_view(), name='create_forum_comment'),
+    path('club/<str:club_url_name>/forum/<int:post_id>/edit/',
+         views.EditForumPostView.as_view(), name='edit_forum_post'),
+    path('club/<str:club_url_name>/forum/<int:post_id>/delete/',
+         views.DeleteForumPostView.as_view(), name='delete_forum_post'),
     # '''Meeting URLs'''
     path('club/<str:club_url_name>/meetings/', views.MeetingListView.as_view(), name='meeting_list'),
     path('club/<str:club_url_name>/meetings/<int:meeting_id>/', views.MeetingDetailsView.as_view(),
@@ -91,7 +100,7 @@ urlpatterns = [
 
     # '''Forum URLs'''
     path('forum/', views.ForumView.as_view(), name='global_forum'),
-    path('forum/create_post/', views.CreatePostView.as_view(), name = 'create_forum_post'),
+    path('forum/post/', views.CreatePostView.as_view(), name = 'create_forum_post'),
     path('forum/<int:post_id>/', views.ForumPostView.as_view(), name='forum_post'),
     path('forum/<int:post_id>/comment/', views.CreateCommentView.as_view(), name = 'create_forum_comment'),
     path('forum/<int:post_id>/edit/',views.EditForumPostView.as_view(), name='edit_forum_post'),
