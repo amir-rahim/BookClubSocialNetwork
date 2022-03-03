@@ -42,33 +42,43 @@ class BookReviewModelTestCase(TestCase):
         self.assertInvalid()
         
     def test_rating_cannot_blank(self):
-        self.review1.rating = None
+        self.review1.bookrating = None
         self.assertInvalid()
         
     def test_rating_valid_choices(self):
         for i in range(0,10):
-            self.review1.rating = i
+            self.review1.bookrating = i
             self.assertValid()
         
     def test_rating_cannot_greater_than_10(self):
-        self.review1.rating = 11
+        self.review1.bookrating = 11
         self.assertInvalid()
         
     def test_rating_cannot_less_than_0(self):
-        self.review1.rating =ValidationError
+        self.review1.bookrating =ValidationError
         
     def test_review_can_be_1to1024char(self):
-        self.review1.review = "1"
+        self.review1.content = "1"
         self.assertValid()
-        self.review1.review = "1" * 1024
+        self.review1.content = "1" * 1024
         self.assertValid()
         
-    def test_review_cannot_be_1025_chars(self):
-        self.review1.review = "1" * 1025
+    def test_review_cannot_be_blank(self):
+        self.review1.content = ""
         self.assertInvalid()
         
+    def test_review_cannot_be_1025_chars(self):
+        self.review1.content = "1" * 1025
+        self.assertInvalid()
+
+    def test_title_can_be_1to30char(self):
+        self.review1.title = "1"
+        self.assertValid()
+        self.review1.title = "1"*30
+        self.assertValid()
+        
     def test_user_cannot_be_blank(self):
-        self.review1.user = None
+        self.review1.creator = None
         self.assertInvalid()
         
     def test_user_book_combo_must_be_unique(self):
@@ -80,9 +90,10 @@ class BookReviewModelTestCase(TestCase):
     def test_user_can_have_multiple_reviews_different_books(self):
         review2 = BookReview.objects.create(
             book = self.book3, 
-            rating = 1,
-            review = "",
-            user = self.user1,            
+            bookrating = 1,
+            content = "Amazing book",
+            title="Title",
+            creator = self.user1,            
         )
         try:
             review2.full_clean()
@@ -92,9 +103,10 @@ class BookReviewModelTestCase(TestCase):
     def test_book_can_have_multiple_reviews_by_different_users(self):
         review2 = BookReview.objects.create(
             book = self.book1, 
-            rating = 1,
-            review = "",
-            user = self.user2,            
+            bookrating = 1,
+            content = "Content",
+            title="Title",
+            creator = self.user2,            
         )
         try:
             review2.full_clean()
