@@ -52,7 +52,7 @@ View all book lists you've created
                   <tbody>
 
                   {% for list in booklists %}
-                    <tr>
+                    <tr onclick="window.location='{% url 'user_booklist' user.username list.id %}';" style="cursor:pointer;">
                       <td class="container">
                         {# <div class="box"> #}
                           <p class="is-medium"><strong><a href="#">{{list.title}}</a></strong></p>
@@ -74,7 +74,7 @@ View all book lists you've created
                     </tr>
                   {% empty %}
 
-                  <div class="box">No lists. {% if self %}<a href="#">Create one?</a>{% endif %}</div>
+                  <div class="box">No lists. {% if self %}<a href="{% url 'create_booklist' user.username %}">Create one?</a>{% endif %}</div>
 
                   {% endfor %}
                   </tbody>

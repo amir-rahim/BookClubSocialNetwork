@@ -1,0 +1,101 @@
+{% extends 'base_content.html' %}
+
+{% block page_title %}
+Book List
+{% endblock page_title %}
+
+{% block page_subtitle %}
+View all the books in {{ booklist.title }}
+{% endblock page_subtitle %}
+
+{% block content %}
+<div class="columns">
+
+  	<div class="column is-3">
+
+		<aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+
+			<p class="menu-label">Book List</p>
+
+			<ul class="menu-list">
+				<li><a href="{% url 'booklists_list' user.username %}">My Book Lists</a></li>
+				<li><a href="{% url 'create_booklist' user.username %}">Create Book List</a></li>
+				<li><a>Saved Lists</a></li>
+                <li><a class="is-active" href="{% url 'user_booklist' user.username booklist.id %}"><b>{{ booklist.title }}</b></a></li>
+			</ul>
+
+		</aside>
+
+	</div>
+    <div class="column is-9">
+
+        <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'user_dashboard' %}">{{ user.username }}</a></li>
+                <li><a href="{% url 'booklists_list' user.username %}">Book Lists</a></li>
+                <li><a href="{% url 'user_booklist' user.username booklist.id %}">{{ booklist.title }}</a></li>
+            </ul>
+        </nav>
+
+        <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">{{ booklist.title }}</h1>
+                    <h2 class="subtitle">{{ booklist.description }}</h2>
+                </div>
+            </div>
+        </section>
+
+        {% if number_of_books > 0 %}
+            <div class="table-container is-fullwidth">
+                <table class="table is-hoverable is-fullwidth" id="table-booklist" data-toggle="table" data-pagination="true">
+                    <thead>
+                        <tr>
+                            <th scope="col">Title</th>
+                            <th scope="col">Author</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for book in books %}
+
+                            <tr onclick="window.location='{% url 'book_view' book.id %}';">
+                                <td>
+                                    <div class="media">
+                                        <div class="media-left">
+                                            {% if book.imageS %}
+                                                <img src="{{ book.imageS }}" alt=""/>
+                                            {% else %}
+                                                <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" alt=""/>
+                                            {% endif %}
+                                        </div>
+                                        <div class="media-content">
+                                            <div class="content">
+                                                {{ book.title }}
+                                            </div>
+                                        </div> 
+                                    </div>
+                                </td>
+                                <td> {{ book.author }} </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% else %}
+        <hr class="solid">
+        <p>There are no books in this list.</p>
+    {% endif %}
+
+    <script>
+        const dataTable = new simpleDatatables.DataTable("#table-booklist", {
+            fixedHeight: true,
+            columns: [
+            {select: [1], sortable:false}
+            ]
+        })
+    </script>
+
+</div>
+{% endblock %}

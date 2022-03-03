@@ -7,7 +7,7 @@ class BookList(models.Model):
     title = models.CharField(unique=False, blank=False, max_length=120)
     description = models.CharField(unique=False, blank=True, max_length=240)
     creator = models.ForeignKey(User, blank= False, null = False, on_delete=models.CASCADE)
-    books = models.ManyToManyField(Book)
+    books = models.ManyToManyField(Book, blank=True)
     created_on = models.DateField(auto_now_add=True)
 
     def get_absolute_url(self):
@@ -18,6 +18,6 @@ class BookList(models.Model):
 
     def __str__(self):
         return f"Book List '{self.title}' with {self.books.count()} titles"
-
-    def str(self):
-        return self.__str__()
+      
+    def get_books(self):
+        return self.books.all()

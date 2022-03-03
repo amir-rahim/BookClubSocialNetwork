@@ -66,3 +66,22 @@ class DeleteBookListView(LoginRequiredMixin, View):
         except ObjectDoesNotExist:
             messages.add_message(self.request, messages.ERROR, "Non-existing list was targeted")
             return redirect('booklists_list', username = self.kwargs['username'])
+
+class UserBookListView(ListView):
+    http_method_names = ['get']
+    model = BookList
+    context_object_name = 'books'
+    template_name = 'booklist.html'
+
+    def get_queryset(self):
+        booklist = BookList.objects.get(pk = self.kwargs['booklist_id'])
+        subquery = booklist.get_books()
+        return subquery
+
+    def get_context_data(self, **kwargs):
+        booklist = BookList.objects.get(pk = self.kwargs['booklist_id'])
+        context = super().get_context_data(**kwargs)
+        context['booklist'] = BookList.objects.get(pk = self.kwargs['booklist_id'])
+        context['user'] = self.request.user
+        context['number_of_books'] = len(booklist.get_books())
+        return context

@@ -59,3 +59,11 @@ class ClubMeetingAdmin(admin.ModelAdmin):
     list_display = [
         'organiser', 'club', 'meeting_time', 'created_on', 'location', 'title', 'description', 'type', 'book'
     ]
+
+@admin.register(BookList)
+class BookListAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for user book lists."""
+
+    list_display = [
+        'title', 'description', 'creator'
+    ]
