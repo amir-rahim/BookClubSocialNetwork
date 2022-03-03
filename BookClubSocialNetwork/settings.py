@@ -123,6 +123,8 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"),]
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -134,3 +136,8 @@ LOGIN_URL = 'login'
 REDIRECT_URL_WHEN_LOGGED_IN = 'home'
 
 AUTH_USER_MODEL = 'BookClub.User'
+
+# Activate django_heroku
+if '/app' in os.environ['HOME']:
+    import django_heroku
+    django_heroku.settings(locals())
