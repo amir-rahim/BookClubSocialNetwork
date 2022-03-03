@@ -1,7 +1,8 @@
 from numpy import average
 from BookClub.models import Book, BookReview
 from django.views.generic import DetailView, ListView
-
+from django.contrib import messages
+from django.shortcuts import redirect
 
 class BookDetailView(DetailView):
     model = Book
