@@ -1,10 +1,10 @@
 import datetime
 from django.forms import ValidationError
-from BookClub.models import Book, User, BookReview
 from django.db import IntegrityError, models
 from django.test import TestCase, tag
 
-from BookClub.models.user import User
+from BookClub.models import *
+from BookClub.models.review import BookReview,BookReviewComment
 
 
 @tag('review', 'book', 'models')
@@ -100,3 +100,15 @@ class BookReviewModelTestCase(TestCase):
             review2.full_clean()
         except ValidationError:
             self.fail('Review2 should be valid')
+@tag('review', 'book', 'models','BookReviewComment')
+class BookReviewCommentTestCase(TestCase):
+    fixtures = [
+        'BookClub/tests/fixtures/default_user_created_objects.json',
+        'BookClub/tests/fixtures/default_book_reviews.json',
+        'BookClub/tests/fixtures/default_users.json'
+    ]
+
+    def setUp(self):
+        self.bookReviewComment = BookReviewComment.objects.get(pk=1)
+        self.bookReview = BookReview.objects.get(pk=1)
+        self.originalPoster = self.bookReview.user
