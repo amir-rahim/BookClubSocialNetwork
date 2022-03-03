@@ -1,5 +1,6 @@
 from django.contrib import admin
 from BookClub.models import *
+from BookClub.models.review import *
 from BookClub.models.forum import ForumPost
 
 @admin.register(User)
@@ -41,7 +42,15 @@ class BookReview(admin.ModelAdmin):
     """Configuration of the admin interface for Books Reviews ."""
 
     list_display = [
-        'book', 'user', 'rating' , 'review' , 'createdOn'
+        'book', 'creator', 'rating' , 'content' , 'created_on'
+    ]
+
+@admin.register(BookReviewComment)
+class BookReviewComment(admin.ModelAdmin):
+    """Configuration of the admin interface for Books Review Comments ."""
+
+    list_display = [
+        'bookReview','creator','created_on','content'
     ]
 
 @admin.register(Meeting)

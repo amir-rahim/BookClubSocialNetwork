@@ -1,5 +1,5 @@
 from django.db import models
-from BookClub.models import RatedContent
+from BookClub.models.vote_models import RatedContent
 
 class TextComment(RatedContent):
     class Meta:

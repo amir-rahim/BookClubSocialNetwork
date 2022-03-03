@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
-from BookClub.models import UserCreatedObject
+from BookClub.models.abstract_user_objects import UserCreatedObject
 
 class RatedContent(UserCreatedObject):
     """An abstract class for any of our user created objects that User's can vote on.

@@ -8,10 +8,10 @@ class ReviewForm(ModelForm):
     class Meta:
         model = BookReview
 
-        fields = ['rating', 'review']
+        fields = ['rating', 'content','title']
 
         widgets = {
-            'review': Textarea,
+            'content': Textarea,
         }
 
         labels = {
