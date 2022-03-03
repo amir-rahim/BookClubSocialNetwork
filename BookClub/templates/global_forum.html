@@ -1,9 +1,9 @@
 {% extends 'base_content.html' %}
 {% block page_title %}
-    Global Forum
+    {{ forum.title }}
 {% endblock page_title %}
 {% block page_subtitle %}
-    This is the Global Forum, you can look at what our members are posting about!
+    {{ forum.title }}
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
@@ -110,7 +110,7 @@
             </section>
             <hr class="solid"/>
             {% for post in posts %}
-                <br/>
+                <br />
                 <div class="card">
                     <header class="card-header">
                         <div class="card-header-title">
@@ -154,7 +154,7 @@
                     </footer>
                 </div>
             {% endfor %}
-            <br/>
+            <br />
             {% include 'partials/pagination.html' %}
             <div id="modal-create-post" class="modal">
                 <div class="modal-background"></div>

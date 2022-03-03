@@ -1,4 +1,5 @@
 """Forum Related Views"""
+from attr import assoc
 from django.contrib import messages
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, CreateView
@@ -19,20 +20,23 @@ class ForumPostView(DetailView):
 
 class ForumView(ListView):
     model = ForumPost
-    template_name = 'global_forum.html'
     context_object_name = 'posts'
     paginate_by = 10
 
     def get_queryset(self):
-        forum = Forum.objects.get(associatedWith=None)
+        if self.kwargs.get('club_url_name') is not None:
+            club = Club.objects.get(club_url_name=self.kwargs.get('club_url_name'))
+            forum = Forum.objects.get(associatedWith=club)
+        else:
+            forum = Forum.objects.get(associatedWith=None)
         posts = forum.posts.all()
         return posts
 
     def get_template_names(self):
-        if self.kwargs.get('club_url_name') is not None:
-            names = ['club_forum.html']
-            return names
-        else:
+        #if self.kwargs.get('club_url_name') is not None:
+         #   names = ['club_forum.html']
+         #   return names
+        #else:
             names = ['global_forum.html']
             return names
     
@@ -41,6 +45,7 @@ class ForumView(ListView):
         
         if self.kwargs.get('club_url_name') is not None:
             club = Club.objects.get(club_url_name=self.kwargs.get('club_url_name'))
+            context['club'] = club
             context['forum'] = Forum.objects.get(associatedWith=club)
             context['usercount'] = ClubMembership.objects.filter(club=club).count()
         else:
