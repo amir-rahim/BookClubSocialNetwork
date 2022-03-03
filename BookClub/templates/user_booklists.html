@@ -51,8 +51,8 @@ View all book lists you've created
                 <table class="table is-fullwidth is-hoverable is-striped is-bordered">
                   <tbody>
 
-                  {% for list in booklists%}
-                    <tr>
+                  {% for list in booklists %}
+                    <tr onclick="window.location='{% url 'user_booklist' user.username list.id %}';" style="cursor:pointer;">
                       <td class="container">
                         {# <div class="box"> #}
                           <p class="is-medium"><strong><a href="#">{{list.title}}</a></strong></p>
@@ -68,13 +68,15 @@ View all book lists you've created
                               </button>
                           </form>
 
+                            {% include 'partials/delete_button_and_modal.html' with delete_item=list delete_modal_id=list.pk %}
+
                         </td>
                       {% endif %}
                       {# </td> #}
                     </tr>
                   {% empty %}
 
-                  <div class="box">No lists. {% if self %}<a href="#">Create one?</a>{% endif %}</div>
+                  <div class="box">No lists. {% if self %}<a href="{% url 'create_booklist' user.username %}">Create one?</a>{% endif %}</div>
 
                   {% endfor %}
                   </tbody>

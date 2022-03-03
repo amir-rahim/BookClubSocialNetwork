@@ -24,8 +24,8 @@ class CreateBooklistViewTestcase(TestCase):
             'description': 'Booklist of John',
         }
 
-    def test_create_club_url(self):
-        self.assertEqual(self.url, f'/user/{self.user.username}/lists/create')
+    def test_create_booklist_url(self):
+        self.assertEqual(self.url, f'/user/{self.user.username}/lists/create/')
 
     def test_post_create_booklist_redirects_when_not_logged_in(self):
         booklist_count_before = BookList.objects.count()

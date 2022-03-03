@@ -18,6 +18,8 @@ class BookListTestCase(TestCase):
 
     def setUp(self):
         self.bookList = BookList.objects.get(pk=1)
+        self.book_one = Book.objects.get(pk=1)
+        self.book_two = Book.objects.get(pk=3)
 
     def _assert_booklist_is_valid(self):
         try:
@@ -140,3 +142,18 @@ class BookListTestCase(TestCase):
         first_book_in_the_list.delete()
         self.assertEqual(self.bookList.books.count(), list_book_count_before - 1)
         self.assertNotIn(first_book_in_the_list, self.bookList.books.all())
+
+    # Check helper methods
+    def test_get_delete_url(self):
+        url_from_model = self.bookList.get_delete_url()
+        correct_url = '/user/johndoe/list/1/delete/'
+        self.assertEqual(url_from_model, correct_url)
+
+    def test_string_function_returns_correct_value(self):
+        strings_from_model = [self.bookList.__str__(), self.bookList.__str__(), self.bookList.__str__()]
+        correct_string = f"Book List '{self.bookList.title}' with {self.bookList.books.count()} titles"
+        for model_string in strings_from_model:
+            self.assertEqual(model_string, correct_string)
+
+    def test_get_books(self):
+        self.assertQuerysetEqual(self.bookList.get_books(), [self.book_one, self.book_two], ordered = False)
