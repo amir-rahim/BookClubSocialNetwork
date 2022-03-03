@@ -52,9 +52,8 @@ These are the reviews for {{book.title}}
     
     <div class="column is-9">
         <div class="box">
-            <form method="post" action="{% url 'create_review' book.id %}">
-                {% csrf_token %}
-                <button class="button is-fullwidth is-light">Add Review</button>
+            <form method="get" action="{% url 'create_review' book.id %}">
+                <button class="button is-info is-fullwidth">Add Review</button>
             </form>
         </div>
             
@@ -72,7 +71,7 @@ These are the reviews for {{book.title}}
               </thead>
               <tbody>
                   {% for review in reviews %}
-                      <tr onclick="window.location='{% url 'home' %}';">
+                      <tr>
                           <td>{{review.user}}</td>
                           <td>{{review.rating}}</td>
                           <td>{{review.review}}</td>
@@ -80,13 +79,14 @@ These are the reviews for {{book.title}}
                           {% if review.user == request.user %}
                               <td>
                                   <div class="buttons">
-                                      <form method="get" action="{% url 'edit_review' book_review_id=review.id book_id=book.id %}">
+                                      <form method="get" action="{% url 'edit_review' book.id %}">
                                           <button class="button is-info is-small" style="margin-right: 5px">
                                               <span>Edit</span>
                                           </button>
                                       </form>
 
-                                      <form method="get" action="{% url 'book_reviews' book.id %}">
+                                      <form method="post" action="{% url 'delete_review' book.id %}">
+                                          {% csrf_token %}
                                           <button class="button is-danger is-small" style="margin-right: 5px">
                                               <span>Delete</span>
                                           </button>
