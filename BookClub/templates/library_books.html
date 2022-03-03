@@ -87,7 +87,7 @@ This is our Library, you can look at our books and click and see further details
                     </thead>
                     <tbody>
                         {% for book in page_obj %}
-                            <tr onclick="window.location='{% url 'book_view' book.id %}';">
+                            <tr>
                                 <td>
                                     {% if book.imageM %}
                                     <img src="{{book.imageM}}" alt=""/>
@@ -116,7 +116,7 @@ This is our Library, you can look at our books and click and see further details
                                         </form>
                                     {% endif %}
                                 <td>
-                                    <button class="button is-fullwidth is-link">View</button> 
+                                    <button class="button is-fullwidth is-link" onclick="window.location='{% url 'book_view' book.id %}';">View</button> 
                                 </td>
                             </tr>
                         {% endfor %}
