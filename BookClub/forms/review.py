@@ -9,7 +9,7 @@ class ReviewForm(ModelForm):
     class Meta:
         model = BookReview
 
-        fields = ['rating', 'content','title']
+        fields = ['bookrating', 'content','title']
 
         widgets = {
             'content': Textarea,
@@ -28,4 +28,3 @@ class BookReviewCommentForm(ModelForm):
         widgets = {
             'content': Textarea,
         }
-        
