@@ -59,7 +59,7 @@ class MeetingFormTestCase(TestCase):
         meeting = Meeting.objects.get(title = self.form_input['title'])
         self.assertEqual(meeting.title, self.form_input['title'])
         self.assertEqual(meeting.description, self.form_input['description'])
-        # self.assertEqual(meeting.meeting_time, datetime.strptime(self.form_input['meeting_time'], '%Y-%m-%d %H:%M:%S'))
+        self.assertEqual(meeting.meeting_time.replace(tzinfo=None), datetime.strptime(self.form_input['meeting_time'], '%Y-%m-%d %H:%M:%S'))
         self.assertEqual(meeting.location, self.form_input['location'])
         self.assertEqual(meeting.type, self.form_input['type'])
         self.assertEqual(meeting.book.id, self.form_input['book'])

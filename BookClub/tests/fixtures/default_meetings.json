@@ -1,3 +1,4 @@
+
 [
     {
         "model": "BookClub.meeting",
@@ -74,7 +75,7 @@
             "location": "Franklin Wilkins Library GS04",
             "title": "Social meeting 1",
             "description": "This is a social meeting, helll yeahhhh",
-            "members": [1,2],
+            "members": [1, 2],
             "type": "S",
             "book": null
         }
@@ -90,7 +91,7 @@
             "location": "Franklin Wilkins Library GS04",
             "title": "Club meeting 1",
             "description": "This is a club meeting, helll yeahhhh",
-            "members": [1,2],
+            "members": [1, 2],
             "type": "C",
             "book": null
         }
@@ -106,9 +107,9 @@
             "location": "Franklin Wilkins Library GS04",
             "title": "Other meeting 1",
             "description": "This is an other meeting, helll yeahhhh",
-            "members": [1,2],
             "type": "O",
             "book": null
         }
     }
 ]
+
