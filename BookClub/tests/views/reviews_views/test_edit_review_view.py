@@ -27,10 +27,10 @@ class EditReviewView(TestCase, LogInTester):
             'review': 'VOLT SO FAST OUT OF RAMP ONE TAPPING THE GUY DEFAULT!',
         }
 
-        self.url = reverse('edit_review', kwargs={'book_id': self.book.id, 'book_review_id': self.book_review.id})
+        self.url = reverse('edit_review', kwargs={'book_id': self.book.id})
 
     def test_edit_review_url(self):
-        self.assertEqual(self.url, f'/library/review/{self.book.pk}/edit/{self.book_review.pk}/')
+        self.assertEqual(self.url, f'/library/books/{self.book.pk}/edit/')
 
     def test_post_edit_review_redirects_when_not_logged_in(self):
         redirect_url = reverse_with_next('login', self.url)
@@ -116,11 +116,10 @@ class EditReviewView(TestCase, LogInTester):
     def test_no_review_to_edit(self):
         self.client.login(username=self.user.username, password="Password123")
         self.assertTrue(self._is_logged_in())
-        self.url = reverse('edit_review', kwargs={'book_id': self.book.id, 'book_review_id': self.book_review.id + 9999})
+        self.url = reverse('edit_review', kwargs={'book_id': self.book.id})
         response = self.client.post(self.url, self.data, follow=True)
         redirect_url = reverse('book_reviews', kwargs={'book_id': self.book.id})
         messages_list = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
-        self.assertEqual(messages_list[0].level, messages.ERROR)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200, fetch_redirect_response=True)
         self.assertTemplateUsed(response, 'book_reviews.html')
