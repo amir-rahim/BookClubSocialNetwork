@@ -40,3 +40,22 @@ class CreateBookListView(LoginRequiredMixin, CreateView):
     def form_invalid(self, form):
         messages.add_message(self.request, messages.ERROR, "The data provided was invalid!")
         return super().form_invalid(form)
+
+class UserBookListView(ListView):
+    http_method_names = ['get']
+    model = BookList
+    context_object_name = 'books'
+    template_name = 'booklist.html'
+
+    def get_queryset(self):
+        booklist = BookList.objects.get(pk = self.kwargs['booklist_id'])
+        subquery = booklist.get_books()
+        return subquery
+
+    def get_context_data(self, **kwargs):
+        booklist = BookList.objects.get(pk = self.kwargs['booklist_id'])
+        context = super().get_context_data(**kwargs)
+        context['booklist'] = BookList.objects.get(pk = self.kwargs['booklist_id'])
+        context['user'] = self.request.user
+        context['number_of_books'] = len(booklist.get_books())
+        return context

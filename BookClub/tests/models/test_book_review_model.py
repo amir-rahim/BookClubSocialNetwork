@@ -19,6 +19,7 @@ class BookReviewModelTestCase(TestCase):
     def setUp(self):
         self.book1 = Book.objects.get(pk=1)
         self.book2 = Book.objects.get(pk=2)
+        self.book3 = Book.objects.get(pk=3)
         self.user1 = User.objects.get(pk=1)
         self.user2 = User.objects.get(pk=2)
         self.review1 = BookReview.objects.get(pk=1)
@@ -78,7 +79,7 @@ class BookReviewModelTestCase(TestCase):
             
     def test_user_can_have_multiple_reviews_different_books(self):
         review2 = BookReview.objects.create(
-            book = self.book2, 
+            book = self.book3, 
             rating = 1,
             review = "",
             user = self.user1,            

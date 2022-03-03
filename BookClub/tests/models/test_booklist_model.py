@@ -18,6 +18,8 @@ class BookListTestCase(TestCase):
 
     def setUp(self):
         self.bookList = BookList.objects.get(pk=1)
+        self.book_one = Book.objects.get(pk=1)
+        self.book_two = Book.objects.get(pk=3)
 
     def _assert_booklist_is_valid(self):
         try:
@@ -140,3 +142,6 @@ class BookListTestCase(TestCase):
         first_book_in_the_list.delete()
         self.assertEqual(self.bookList.books.count(), list_book_count_before - 1)
         self.assertNotIn(first_book_in_the_list, self.bookList.books.all())
+
+    def test_get_books(self):
+        self.assertQuerysetEqual(self.bookList.get_books(), [self.book_one, self.book_two], ordered = False)

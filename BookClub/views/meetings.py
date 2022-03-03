@@ -1,13 +1,94 @@
-'''Meetings Related Views'''
+from django.views.generic import View, DetailView, CreateView
+from BookClub.helpers import *
+from BookClub.models import Meeting, Club
+from BookClub.forms import MeetingForm
+from BookClub.helpers import *
+from django.shortcuts import redirect, reverse
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.views.generic import DetailView, View, CreateView
-from django.shortcuts import reverse, redirect
-from BookClub.forms import MeetingForm
-from BookClub.models import User, Club, ClubMembership, Meeting
-from BookClub.helpers import *
+from django.utils import timezone
 
+class JoinMeetingView(LoginRequiredMixin, View):
+    """Users can join meetings"""
 
+    redirect_location = 'meeting_details'
+
+    def get(self, request, *args, **kwargs):
+        return redirect(self.redirect_location, club_url_name=self.kwargs['club_url_name'], meeting_id=self.kwargs['meeting_id'])
+
+    def is_actionable(self, currentUser, meeting):
+        """Check if user can join a meeting"""
+
+        return (not meeting.get_members().filter(username = currentUser.username).exists()) and meeting.get_meeting_time() > timezone.now()
+
+    def is_not_actionable(self):
+        """If user cannot join meeting"""
+
+        return messages.info(self.request, "You cannot join this meeting.")
+
+    def action(self, currentUser, meeting):
+        """User joins the meeting"""
+
+        messages.success(self.request, "You have joined the meeting.")
+        meeting.join_member(currentUser)
+
+    def post(self, request, *args, **kwargs):
+
+        try:
+            meeting = Meeting.objects.get(id=self.kwargs['meeting_id'])
+            currentUser = self.request.user
+        except:
+            messages.error(self.request, "Error, meeting not found.")
+            return redirect(self.redirect_location, club_url_name=self.kwargs['club_url_name'], meeting_id=self.kwargs['meeting_id'])
+
+        if (self.is_actionable(currentUser, meeting)):
+            self.action(currentUser, meeting)
+        else:
+            self.is_not_actionable()
+
+        return redirect(self.redirect_location, club_url_name=self.kwargs['club_url_name'], meeting_id=self.kwargs['meeting_id'])
+
+class LeaveMeetingView(LoginRequiredMixin, View):
+    """Users can leave meetings"""
+
+    redirect_location = 'meeting_details'
+
+    def get(self, request, *args, **kwargs):
+        return redirect(self.redirect_location, club_url_name=self.kwargs['club_url_name'], meeting_id=self.kwargs['meeting_id'])
+
+    def is_actionable(self, currentUser, meeting):
+        """Check if user can leave a meeting"""
+
+        return (meeting.get_members().filter(username = currentUser.username).exists()) and (meeting.get_organiser() != currentUser) and meeting.get_meeting_time() > timezone.now()
+
+    def is_not_actionable(self):
+        """If user cannot leave meeting"""
+
+        return messages.info(self.request, "You cannot leave this meeting.")
+
+    def action(self, currentUser, meeting):
+        """User leave the meeting"""
+
+        messages.success(self.request, "You have left the meeting.")
+        meeting.leave_member(currentUser)
+
+    def post(self, request, *args, **kwargs):
+
+        try:
+            meeting = Meeting.objects.get(id=self.kwargs['meeting_id'])
+            currentUser = self.request.user
+        except:
+            messages.error(self.request, "Error, meeting not found.")
+            return redirect(self.redirect_location, club_url_name=self.kwargs['club_url_name'], meeting_id=self.kwargs['meeting_id'])
+
+        if (self.is_actionable(currentUser, meeting)):
+            self.action(currentUser, meeting)
+        else:
+            self.is_not_actionable()
+
+        return redirect(self.redirect_location, club_url_name=self.kwargs['club_url_name'], meeting_id=self.kwargs['meeting_id'])
+
+'''Meetings Related Views'''
 class CreateMeetingView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     '''Class for club owners and moderators creating meetings for the club'''
 
