@@ -12,7 +12,7 @@ class BookList(models.Model):
 
     def get_absolute_url(self):
         return reverse('booklists_list', kwargs = {'username': self.creator.username})
-
+      
     def get_delete_url(self):
         return reverse('delete_booklist', kwargs = {'username' : self.creator.username, 'list_id' : self.pk})
 
