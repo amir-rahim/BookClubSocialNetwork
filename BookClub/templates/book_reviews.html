@@ -79,7 +79,7 @@ These are the reviews for {{book.title}}
                           <td>{{review.createdOn}}</td>
                           {% if review.user == request.user %}
                               <td>
-                                  <form method="get" action="{% url 'book_reviews' book.id %}">
+                                  <form method="get" action="{% url 'delete_review' book_review_id=review.id book_id=book.id %}">
                                       <button class="button is-danger is-outlined">
                                           <span>Delete</span>
                                       </button>

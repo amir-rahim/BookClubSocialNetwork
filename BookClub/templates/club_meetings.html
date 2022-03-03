@@ -51,6 +51,7 @@ Find the Meeting you are looking for here!
             </ul>
 
         </aside>
+      </aside>
     </div>
 
     <div class="column is-9">
@@ -63,7 +64,6 @@ Find the Meeting you are looking for here!
                 <li><a href="{% url 'meeting_list' club.club_url_name %}">Meeting List</a></li>
             </ul>
         </nav>
-
         <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
             <div class="hero-body">
                 <div class="container">
@@ -72,62 +72,58 @@ Find the Meeting you are looking for here!
                 </div>
             </div>
         </section>
+        {% if meetings %} <!-- If there are meetings available to the logged-in user -->
+            <div class="table-container is-fullwidth">
+                <table class="table is-hoverable is-fullwidth" id="table-clubs" data-toggle="table" data-pagination="true">
+                    <thead>
+                        <tr>
+                            <th scope="col">Meeting Name</th>
+                            <th scope="col">Organiser</th>
+                            <th scope="col">Time</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for meeting in meetings %}
+                          <!-- For each meeting, add a row linked to the corresponding meeeting -->
 
-        <div class="columns">
-            <div class="column is-12">
-                {% if meetings %} <!-- If there are meetings available to the logged-in user -->
-                    <div class="table-container">
-                    <table class="table is-hoverable" id="table-clubs" data-toggle="table" data-pagination="true">
-                        <thead>
-                            <tr>
-                                <th scope="col">Meeting Name</th>
-                                <th scope="col">Organiser</th>
-                                <th scope="col">Time</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for meeting in meetings %}
-                                <!-- For each meeting, add a row linked to the corresponding meeeting -->
+                          <!-- Need to change onclick location to actual meeting dashboard.-->
+                            <tr onclick="window.location='{% url 'meeting_details' club.club_url_name meeting.id %}';">
+                                <td>{{meeting.title}}</td>
+                                <td>{{meeting.organiser.username}}</td>
+                                <td>{{meeting.meeting_time}}</td>
+                                <td>
+                                    {% if meeting.get_is_not_past %}
 
-                                <!-- Need to change onclick location to actual meeting dashboard.-->
-                                {% comment %} <tr onclick="window.location='{% url 'meeting view url' meeting.get_title %}';">  {% endcomment %}
-                                    <td>{{meeting.title}}</td>
-                                    <td>{{meeting.organiser.username}}</td>
-                                    <td>{{meeting.meeting_time}}</td>
-                                    <td>
-                                        <!--Insert URL for join meeting here-->
+                                        {% if user not in meeting.get_members %}
 
-                                            {% comment %} <form method="post" action="{% url 'join meeting url' club_url_name=club.club_url_name %}"> {% endcomment %}
-                                            {% comment %} {% csrf_token %} {% endcomment %}
+                                            <form method="post" action="{% url 'join_meeting' club_url_name=club.club_url_name meeting_id=meeting.id %}"> 
+                                            {% csrf_token %}
                                             <button type="submit" class="button is-info">Join Meeting</button>
-                                            {% comment %} </form> {% endcomment %}
-
-
-
-                                            <form method="post" action="{% url 'delete_meeting' meeting_id=meeting.id club_url_name=club.club_url_name %}">
-                                                {% csrf_token %}
-                                                <button type="submit" class="button is-danger" onclick="return confirm('Confirm you want to delete meeting?');">Delete Meeting</button>
                                             </form>
 
+                                        {% elif user in meeting.get_members %}
 
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                {% else %} <!-- If there is no meetings available to the logged-in user -->
-                    <hr class="solid">
-                    <p>There are no available meetings at the moment.</p>
-                {% endif %}
+                                            <form method="post" action="{% url 'leave_meeting' club_url_name=club.club_url_name meeting_id=meeting.id %}"> 
+                                            {% csrf_token %}
+                                            <button type="submit" class="button is-info">Leave Meeting</button>
+                                            </form>
 
+                                        {% endif %}
+
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
-
-        </div>
-
+        {% else %} <!-- If there is no meetings available to the logged-in user -->
+            <hr class="solid">
+            <p>There are no available meetings at the moment.</p>
+        {% endif %}
+    
     </div>
-
 </div>
 
 {% endblock %}
