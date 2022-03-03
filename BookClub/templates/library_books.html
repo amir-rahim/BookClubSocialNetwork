@@ -104,6 +104,7 @@ This is our Library, you can look at our books and click and see further details
                                     {% else %}
                                         {% csrf_token %}
                                         <form>
+                                            <input type="hidden" id="book_selected" name="book" value="{{ book.id }}"/>
                                             <div class="control">
                                                 <div class="select">
                                                     <select>
