@@ -1,6 +1,7 @@
 from django.contrib import admin
 from BookClub.models import *
 
+
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for users."""
@@ -27,6 +28,7 @@ class ClubMembershipAdmin(admin.ModelAdmin):
         'club', 'user', 'membership', 'joined_on'
     ]
 
+
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for Books ."""
@@ -35,13 +37,24 @@ class BookAdmin(admin.ModelAdmin):
         'title', 'ISBN', 'author', 'publicationYear', 'publisher'
     ]
 
+
 @admin.register(BookReview)
-class BookReview(admin.ModelAdmin):
+class BookReviewAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for Books Reviews ."""
 
     list_display = [
-        'book', 'user', 'rating' , 'review' , 'createdOn'
+        'book', 'user', 'rating', 'review', 'createdOn'
     ]
+
+
+@admin.register(BookList)
+class BookListAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for Books Reviews ."""
+
+    list_display = [
+        'title', 'creator', 'description', 'created_on'
+    ]
+
 
 @admin.register(Meeting)
 class ClubMeetingAdmin(admin.ModelAdmin):
@@ -49,12 +62,4 @@ class ClubMeetingAdmin(admin.ModelAdmin):
 
     list_display = [
         'organiser', 'club', 'meeting_time', 'created_on', 'location', 'title', 'description', 'type', 'book'
-    ]
-
-@admin.register(BookList)
-class BookListAdmin(admin.ModelAdmin):
-    """Configuration of the admin interface for user book lists."""
-
-    list_display = [
-        'title', 'description', 'creator'
     ]

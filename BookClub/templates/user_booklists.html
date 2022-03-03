@@ -66,6 +66,8 @@ View all book lists you've created
                               <span>Edit</span>
                             </a>
 
+                            {% include 'partials/delete_button_and_modal.html' with delete_item=list delete_modal_id=list.pk %}
+
                         </td>
                       {% endif %}
                       {# </td> #}
