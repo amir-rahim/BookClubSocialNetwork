@@ -139,3 +139,25 @@ class BookReviewCommentTestCase(TestCase):
 
     def test_valid(self):
         self.assertValid()
+
+    def test_book_review_comment_can_be_up_to_240_chars(self):
+        self.bookReviewComment.content = "x"
+        self.assertValid()
+        self.bookReviewComment.content = "x"*240
+        self.assertValid()
+    
+    def test_book_review_comment_cant_be_more_than_240(self):
+        self.bookReviewComment.content = "x"*9999
+        self.assertInvalid()
+
+    def test_votes_can_be_empty(self):
+        self.bookReviewComment.votes.clear()
+        self.assertValid()
+
+    def test_rating_can_not_be_blank_or_null(self):
+        self.bookReviewComment.rating = None
+        self.assertInvalid()
+        self.bookReviewComment.rating = ""
+        self.assertInvalid()
+
+        
