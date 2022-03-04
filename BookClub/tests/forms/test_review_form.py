@@ -1,7 +1,8 @@
+import unittest
 from django import forms
 from django.test import TestCase, tag
-from BookClub.models import BookReview
-from BookClub.forms.review import ReviewForm
+from BookClub.models.review import *
+from BookClub.forms.review import BookReviewCommentForm, ReviewForm
 from django.db import IntegrityError
 
 from datetime import date
@@ -39,3 +40,36 @@ class ReviewFormTestCase(TestCase):
         before_count = BookReview.objects.count()
         with self.assertRaises(IntegrityError):
             form.save()
+
+@tag('review','form','reviewform','reviewcommentform','comment')
+class BookReviewCommentFormTestCase(TestCase):
+    def setUp(self):
+        self.form_input = {
+            'content': "New comment"
+        }
+
+    def test_valid_book_review_comment_form(self):
+        form = BookReviewCommentForm(data = self.form_input)
+        self.assertTrue(form.is_valid())
+
+    def test_form_has_necessary_field(self):
+        form = BookReviewCommentForm()
+        self.assertIn("content",form.fields)
+
+    def test_form_uses_model_validation_illegal(self):
+        self.form_input['content'] = 'x' * 241
+        form = BookReviewCommentForm(data = self.form_input)
+        self.assertFalse(form.is_valid())
+
+    def test_form_uses_model_validation_legal(self):
+        self.form_input['content'] = 'x' * 240
+        form = BookReviewCommentForm(data = self.form_input)
+        self.assertTrue(form.is_valid())
+
+    @unittest.expectedFailure
+    def test_form_cannot_save_by_itself(self):
+        form = BookReviewCommentForm(data = self.form_input)
+        form.save()
+        with self.assertRaises(IntegrityError):
+            form.save()
+        
