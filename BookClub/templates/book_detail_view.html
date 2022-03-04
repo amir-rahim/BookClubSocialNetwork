@@ -107,10 +107,10 @@ This is the detail view for {{book.title}}
                             {% for review in reviews %}
                                 <div class="box">
                                     <div class="card-content">
-                                    <p><b>Review by: </b> {{ review.user }}</p>
-                                    <p><b>Created on: </b>{{ review.createdOn }}</p>
-                                    <p><b>Review:</b> {{ review.review }} </p>
-                                    <p><b>Rating: </b>{{ review.rating }}</p>
+                                    <p><b>Review by: </b> {{ review.creator }}</p>
+                                    <p><b>Created on: </b>{{ review.created_on }}</p>
+                                    <p><b>Review:</b> {{ review.content }} </p>
+                                    <p><b>Rating: </b>{{ review.bookrating }}</p>
                                     </div>
                                 </div>
                             {% endfor %}

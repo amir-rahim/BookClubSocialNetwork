@@ -115,12 +115,12 @@ class BookReviewModelTestCase(TestCase):
 @tag('review', 'book', 'models','BookReviewComment')
 class BookReviewCommentTestCase(TestCase):
     fixtures = [
-        'BookClub/tests/fixtures/default_user_created_objects.json',
-        'BookClub/tests/fixtures/default_book_reviews.json',
         'BookClub/tests/fixtures/default_users.json'
+        'BookClub/tests/fixtures/default_book_reviews.json',
+        'BookClub/tests/fixtures/default_book_review_comments.json',
     ]
 
     def setUp(self):
         self.bookReviewComment = BookReviewComment.objects.get(pk=1)
-        self.bookReview = BookReview.objects.get(pk=1)
-        self.originalPoster = self.bookReview.user
+        self.bookReview = self.bookReviewComment.bookReview
+        self.originalPoster = self.bookReview.creator

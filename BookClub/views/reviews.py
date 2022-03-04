@@ -9,6 +9,7 @@ from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 
 from BookClub.models import *
+from BookClub.models.review import *
 from BookClub.forms.review import ReviewForm
 
 class CreateReviewView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
@@ -20,7 +21,7 @@ class CreateReviewView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     def test_func(self):
         try:
             book = Book.objects.get(pk = self.kwargs['book_id'])
-            reviewed = BookReview.objects.filter(book = book, user = self.request.user).exists()
+            reviewed = BookReview.objects.filter(book = book, creator = self.request.user).exists()
             return not reviewed
         except:
             return False
@@ -48,7 +49,7 @@ class DeleteReviewView(LoginRequiredMixin,View):
     redirect_location = 'home' #Need to change to review list view or somewhere else
     """Checking whether the action is legal"""
     def is_actionable(self,currentUser,review):
-        return currentUser == review.user
+        return currentUser == review.creator
 
     """Handles no permssion and Reviews that don't exist"""
     def is_not_actionable(self):
@@ -62,7 +63,7 @@ class DeleteReviewView(LoginRequiredMixin,View):
         try:
             book = Book.objects.get(id = self.kwargs['book_id'])
             currentUser = self.request.user
-            review = BookReview.objects.get(book = book,user = currentUser)
+            review = BookReview.objects.get(book = book,creator = currentUser)
            
             if self.is_actionable(currentUser,review):
                 self.action(currentUser,review)

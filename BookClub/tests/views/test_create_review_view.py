@@ -25,8 +25,9 @@ class CreateReviewViewTestcase(TestCase):
         self.book = Book.objects.get(pk = 1)
         self.url = reverse('create_review', kwargs={'book_id':self.book.pk})
         self.data = {
-            'rating': 7,
-            'review': 'A pretty good book'
+            'bookrating': 7,
+            'title':'Book Title',
+            'content': 'A pretty good book'
             # field created_on is omitted because the model automatically adds the date on save
         }
 
@@ -68,7 +69,7 @@ class CreateReviewViewTestcase(TestCase):
     def test_unsuccesful_create_review(self):
         existing_review = BookReview.objects.all()[0]
         existing_review_book = existing_review.book
-        existing_review_user = existing_review.user
+        existing_review_user = existing_review.creator
         url_to_recreate_existing_review = reverse('create_review', kwargs={'book_id': existing_review_book.pk})
 
         self.client.login(username=existing_review_user.username, password='Password123')
@@ -83,14 +84,15 @@ class CreateReviewViewTestcase(TestCase):
         before_count = BookReview.objects.count()
         saving_date = date.today()
         response = self.client.post(self.url, self.data, follow=True)
-        review = BookReview.objects.get(book = self.book, user = self.user)
+        review = BookReview.objects.get(book = self.book, creator = self.user)
         after_count = BookReview.objects.count()
         self.assertEqual(after_count, before_count+1)
         response_url = reverse('home')
         self.assertRedirects(response, response_url, status_code=302, target_status_code=200)
         self.assertTemplateUsed(response, 'home.html')
-        self.assertEqual(review.rating, self.data['rating'])
-        self.assertEqual(review.review, self.data['review'])
-        self.assertEqual(review.createdOn.year, saving_date.year)
-        self.assertEqual(review.createdOn.month, saving_date.month)
-        self.assertEqual(review.createdOn.day, saving_date.day)
+        self.assertEqual(review.bookrating, self.data['bookrating'])
+        self.assertEqual(review.content, self.data['content'])
+        self.assertEqual(review.title,self.data['title'])
+        self.assertEqual(review.created_on.year, saving_date.year)
+        self.assertEqual(review.created_on.month, saving_date.month)
+        self.assertEqual(review.created_on.day, saving_date.day)

@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
-from BookClub.models import User, Club, ClubMembership, Book, BookReview, Vote, Forum, ForumComment, ForumPost
-
+from BookClub.models import User, Club, ClubMembership, Book, Vote, Forum, ForumComment, ForumPost
+from BookClub.models.review import *
 class Command(BaseCommand):
         """The database unseeder."""
         def __init__(self):

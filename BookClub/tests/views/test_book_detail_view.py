@@ -3,7 +3,8 @@ from datetime import date
 from django.test import TestCase, tag
 from django.urls import reverse
 import random
-from BookClub.models import ClubMembership, Club, User, Book, BookReview
+from BookClub.models import ClubMembership, Club, User, Book
+from BookClub.models.review import *
 
 @tag('book','review','library')
 class BookDetailViewTestCase(TestCase):
@@ -64,10 +65,11 @@ class BookDetailViewTestCase(TestCase):
         
     def test_displays_1_review_message(self):
         review = BookReview.objects.create(
-            user = self.user1,
+            creator = self.user1,
             book = self.book,
-            rating = random.randrange(0, 10),
-            review = "Material Gworl1"               
+            title = "Book Title",
+            bookrating = random.randrange(0, 10),
+            content = "Material Gworl1"               
         )
 
         response = self.client.get(self.url)        
@@ -88,16 +90,18 @@ class BookDetailViewTestCase(TestCase):
         
     def test_displays_2_review_message(self):
         review = BookReview.objects.create(
-            user = self.user1,
+            creator = self.user1,
             book = self.book,
-            rating = random.randrange(0, 10),
-            review = "Material Gworl1"               
+            title = "Book Title",
+            bookrating = random.randrange(0, 10),
+            content = "Material Gworl1"               
         )
         review = BookReview.objects.create(
-            user = self.user2,
+            creator = self.user2,
             book = self.book,
-            rating = random.randrange(0, 10),
-            review = "Material Gworl2"               
+            title = "Book Title",
+            bookrating = random.randrange(0, 10),
+            content = "Material Gworl2"               
         )
         response = self.client.get(self.url)        
         self.assertEqual(response.status_code, 200)
@@ -116,22 +120,25 @@ class BookDetailViewTestCase(TestCase):
         
     def test_displays_3_review_message(self):
         review = BookReview.objects.create(
-            user = self.user1,
+            creator = self.user1,
             book = self.book,
-            rating = random.randrange(0, 10),
-            review = "Material Gworl1"               
+            title = "Book Title",
+            bookrating = random.randrange(0, 10),
+            content = "Material Gworl1"               
         )
         review = BookReview.objects.create(
-            user = self.user2,
+            creator = self.user2,
             book = self.book,
-            rating = random.randrange(0, 10),
-            review = "Material Gworl2"               
+            title = "Book Title",
+            bookrating = random.randrange(0, 10),
+            content = "Material Gworl2"               
         )
         review = BookReview.objects.create(
-            user = self.user3,
+            creator = self.user3,
             book = self.book,
-            rating = random.randrange(0, 10),
-            review = "Material Gworl3"               
+            title = "Book Title",
+            bookrating = random.randrange(0, 10),
+            content = "Material Gworl3"               
         )
         
         response = self.client.get(self.url)        
@@ -151,28 +158,32 @@ class BookDetailViewTestCase(TestCase):
         
     def test_displays_3_review_messages_when_more_than_3_reviews(self):
         review = BookReview.objects.create(
-            user = self.user1,
+            creator = self.user1,
             book = self.book,
-            rating = random.randrange(0, 10),
-            review = "Material Gworl1"               
+            title = "Book Title",
+            bookrating = random.randrange(0, 10),
+            content = "Material Gworl1"               
         )
         review = BookReview.objects.create(
-            user = self.user2,
+            creator = self.user2,
             book = self.book,
-            rating = random.randrange(0, 10),
-            review = "Material Gworl2"               
+            title = "Book Title",
+            bookrating = random.randrange(0, 10),
+            content = "Material Gworl2"               
         )
         review = BookReview.objects.create(
-            user = self.user3,
+            creator = self.user3,
             book = self.book,
-            rating = random.randrange(0, 10),
-            review = "Material Gworl3"               
+            title = "Book Title",
+            bookrating = random.randrange(0, 10),
+            content = "Material Gworl3"               
         )
         review = BookReview.objects.create(
-            user = self.user4,
+            creator = self.user4,
             book = self.book,
-            rating = random.randrange(0, 10),
-            review = "Material Gworl4"               
+            title = "Book Title",
+            bookrating = random.randrange(0, 10),
+            content = "Material Gworl4"               
         )
         response = self.client.get(self.url)        
         self.assertEqual(response.status_code, 200)

@@ -1,7 +1,8 @@
 from django.core.management.base import BaseCommand
 from faker import Faker
 import random
-from BookClub.models import User, Club, ClubMembership, Book, BookReview, ForumPost, Forum, ForumComment
+from BookClub.models import User, Club, ClubMembership, Book, ForumPost, Forum, ForumComment
+from BookClub.models.review import *
 from django.db.utils import IntegrityError
 from django.core.management import call_command
 
@@ -97,17 +98,18 @@ class Command(BaseCommand):
             
         for i in range(1,random.randrange(2,20)):
             user = User.objects.order_by('?')[0]
-            curReviews = BookReview.objects.filter(user=user, book=book)
+            curReviews = BookReview.objects.filter(creator=user, book=book)
             while(curReviews.count() != 0):
                 user = User.objects.order_by('?')[0]
-                curReviews = BookReview.objects.filter(user=user, book=book)
+                curReviews = BookReview.objects.filter(creator=user, book=book)
             
             if(curReviews.count() == 0):
                 review = BookReview.objects.create(
-                    user = user,
+                    creator = user,
                     book = book,
-                    rating = random.randrange(0, 10),
-                    review = "Material Gworl"               
+                    title = "Book Title",
+                    bookrating = random.randrange(0, 10),
+                    content = "Material Gworl"               
                 )
                 
     def create_global_forum(self):

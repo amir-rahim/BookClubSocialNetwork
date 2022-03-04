@@ -24,6 +24,7 @@ class ReviewFormTestCase(TestCase):
         form = ReviewForm()
         self.assertIn('bookrating', form.fields)
         self.assertIn('content', form.fields)
+        self.assertIn('title',form.fields)
         self.assertNotIn('book', form.fields)
         self.assertNotIn('creator', form.fields)
         self.assertNotIn('created_on', form.fields)

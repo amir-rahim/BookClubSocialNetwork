@@ -73,11 +73,11 @@ These are the reviews for {{book.title}}
               <tbody>
                   {% for review in reviews %}
                       <tr onclick="window.location='{% url 'home' %}';">
-                          <td>{{review.user}}</td>
-                          <td>{{review.rating}}</td>
-                          <td>{{review.review}}</td>
-                          <td>{{review.createdOn}}</td>
-                          {% if review.user == request.user %}
+                          <td>{{review.creator}}</td>
+                          <td>{{review.bookrating}}</td>
+                          <td>{{review.content}}</td>
+                          <td>{{review.created_on}}</td>
+                          {% if review.creator == request.user %}
                               <td>
                                   <form method="get" action="{% url 'delete_review' book_review_id=review.id book_id=book.id %}">
                                       <button class="button is-danger is-outlined">

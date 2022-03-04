@@ -1,5 +1,6 @@
 from numpy import average
-from BookClub.models import Book, BookReview
+from BookClub.models import Book
+from BookClub.models.review import *
 from django.views.generic import DetailView, ListView
 
 
@@ -18,7 +19,7 @@ class BookDetailView(DetailView):
                 context['reviews'] = reviews[:3]
                 sum = 0
                 for review in reviews:
-                    sum += review.rating
+                    sum += review.bookrating
                 avg = sum/len(reviews)
                 avg = round(avg, 2)
                 context['average'] = avg
