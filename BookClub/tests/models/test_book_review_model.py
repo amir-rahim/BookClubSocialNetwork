@@ -4,7 +4,7 @@ from django.db import IntegrityError, models
 from django.test import TestCase, tag
 
 from BookClub.models import *
-from BookClub.models.review import BookReview,BookReviewComment
+from BookClub.models.review import *
 
 
 @tag('review', 'book', 'models','BookReviewModel')
@@ -112,10 +112,12 @@ class BookReviewModelTestCase(TestCase):
             review2.full_clean()
         except ValidationError:
             self.fail('Review2 should be valid')
-@tag('review', 'book', 'models','BookReviewComment')
+
+@tag('review', 'book', 'models','bookreviewcomment')
 class BookReviewCommentTestCase(TestCase):
     fixtures = [
-        'BookClub/tests/fixtures/default_users.json'
+        'BookClub/tests/fixtures/default_users.json',
+        'BookClub/tests/fixtures/default_books.json',
         'BookClub/tests/fixtures/default_book_reviews.json',
         'BookClub/tests/fixtures/default_book_review_comments.json',
     ]
@@ -124,3 +126,16 @@ class BookReviewCommentTestCase(TestCase):
         self.bookReviewComment = BookReviewComment.objects.get(pk=1)
         self.bookReview = self.bookReviewComment.bookReview
         self.originalPoster = self.bookReview.creator
+
+    def assertValid(self):
+        try:
+            self.bookReviewComment.full_clean()
+        except(ValidationError):
+            self.fail('Test user created object should be valid')
+
+    def assertInvalid(self):
+        with self.assertRaises(ValidationError):
+            self.bookReviewComment.full_clean()
+
+    def test_valid(self):
+        self.assertValid()
