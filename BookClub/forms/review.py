@@ -16,7 +16,7 @@ class ReviewForm(ModelForm):
         }
 
         labels = {
-            'rating': 'Rating'
+            'bookrating': 'Rating'
         }
 
 class BookReviewCommentForm(ModelForm):
