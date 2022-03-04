@@ -138,6 +138,11 @@ REDIRECT_URL_WHEN_LOGGED_IN = 'home'
 AUTH_USER_MODEL = 'BookClub.User'
 
 # Activate django_heroku
-if '/app' in os.environ['HOME']:
-    import django_heroku
-    django_heroku.settings(locals())
+try:
+    if '/app' in os.environ['HOME']:
+        import django_heroku
+        django_heroku.settings(locals())
+except:
+    if '/app' in os.path.expanduser('~'):
+        import django_heroku
+        django_heroku.settings(locals())
