@@ -50,3 +50,5 @@ class ClubMeetingAdmin(admin.ModelAdmin):
     list_display = [
         'organiser', 'club', 'meeting_time', 'created_on', 'location', 'title', 'description', 'type', 'book'
     ]
+
+admin.site.register(Event)
