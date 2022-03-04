@@ -93,4 +93,5 @@ urlpatterns = [
     path('user/<slug:username>/lists/create', views.CreateBookListView.as_view(), name='create_booklist'),
 
     path('calendar/', views.CalendarView.as_view(), name='calendar'),
+
 ]
