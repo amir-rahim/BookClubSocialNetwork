@@ -1,9 +1,15 @@
 from django.core.management.base import BaseCommand
 import random
+
+from faker import Faker
 from BookClub.models import Book
 import pandas as pd
 from pandas import DataFrame
 import requests
+from BookClub.models import user
+from BookClub.models.review import BookReview
+
+from BookClub.models.user import User
 
 class Command(BaseCommand):
     """The database seeder."""
@@ -41,9 +47,63 @@ class Command(BaseCommand):
         except:
             print('unique error')
             
+        self.importUsers()
+        print(User.objects.all().count())
+        self.importReviews()
+        
     def cleanYear(self, year):
         string = str(year)
         if string == "0":
             return "0001-01-01"
         else:
             return string+"-01-01"
+        
+    def importUsers(self):
+        file_path = ("RecommenderModule/dataset/BX-Users.csv")
+        file = open(file_path, 'rb', 0)
+        
+        data = DataFrame(pd.read_csv(file_path, header=0, encoding= "ISO-8859-1", sep=';'))
+        
+        faker = Faker()
+        
+        df_records = data.to_dict('records')
+        
+        model_instances = [User(
+            username = faker.user_name(),
+            email=faker.email(),
+            password="Password123",
+            pk=record['User-ID'],
+        ) for record in df_records]
+        try:
+            User.objects.bulk_create(model_instances)
+        except:
+            print("user error")
+            print('unique error')
+        
+    def importReviews(self):
+        file_path = ("RecommenderModule/dataset/BX-Book-Ratings.csv")
+        file = open(file_path, 'rb', 0)
+        
+        data = DataFrame(pd.read_csv(file_path, header=0, encoding= "ISO-8859-1", sep=';'))
+        
+        df_records = data.to_dict('records')
+        
+        model_instances = [BookReview(
+            book = self.getBook(record['ISBN']),
+            user = self.getUser(record['User-ID']),
+            rating = record['Book-Rating']
+                           ) for record in df_records]
+        try:
+            for model in model_instances:
+                BookReview.create(model)
+        except model.DoesNotExist as dne:
+            print(dne)
+            User.objects.create(pk=model['User-ID'], name = faker.user_name())
+            
+        
+    def getBook(self, isbn):
+        return Book.objects.get(ISBN = isbn)
+    
+    def getUser(self, userId):
+        print(userId)
+        return User.objects.get(pk=userId)

@@ -1,5 +1,4 @@
 """Forum Related Views"""
-from attr import assoc
 from django.contrib import messages
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, CreateView
