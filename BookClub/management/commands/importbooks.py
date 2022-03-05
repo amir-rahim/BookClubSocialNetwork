@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 import random
 
 from faker import Faker
+from numpy import append
 from BookClub.models import Book
 import pandas as pd
 from pandas import DataFrame
@@ -68,15 +69,23 @@ class Command(BaseCommand):
         
         df_records = data.to_dict('records')
         
-        model_instances = [User(
-            username = faker.user_name(),
-            email=faker.email(),
-            password="Password123",
-            pk=record['User-ID'],
-        ) for record in df_records]
+        model_instances = []
+        i = 0;
+        for record in df_records:
+            i +=1
+            Faker.seed(i)
+            u = User(
+                username=faker.unique.user_name(),
+                email=faker.unique.email(),
+                password="Password123",
+            )
+            model_instances.append(u)
+            
+        
         try:
             User.objects.bulk_create(model_instances)
-        except:
+        except Exception as e:
+            print(e)
             print("user error")
             print('unique error')
         
@@ -87,23 +96,38 @@ class Command(BaseCommand):
         data = DataFrame(pd.read_csv(file_path, header=0, encoding= "ISO-8859-1", sep=';'))
         
         df_records = data.to_dict('records')
-        
-        model_instances = [BookReview(
-            book = self.getBook(record['ISBN']),
-            user = self.getUser(record['User-ID']),
-            rating = record['Book-Rating']
-                           ) for record in df_records]
-        try:
-            for model in model_instances:
-                BookReview.create(model)
-        except model.DoesNotExist as dne:
-            print(dne)
-            User.objects.create(pk=model['User-ID'], name = faker.user_name())
+        u = 0
+        bc = 0
+        i = 0
+        model_instances = [ ]
+        for record in df_records:
+            try:
+                i+=1
+                if i % 10000 == 0:
+                    print(i)
+                if Book.objects.filter(ISBN=record['ISBN']).count() == 0:
+                    bc += 1
+                elif User.objects.filter(pk = record['User-ID']).count() == 0:
+                    u += 1
+                else:
+                    b = BookReview(
+                        book=self.getBook(record['ISBN']),
+                        user=self.getUser(record['User-ID']),
+                        rating=record['Book-Rating']
+                    )
+                    model_instances.append(b)
+            except Exception as e:
+                print(e)
+                continue
             
+        BookReview.objects.bulk_create(model_instances)
+        
+        print(u)
+        print(bc)
+        
         
     def getBook(self, isbn):
         return Book.objects.get(ISBN = isbn)
     
     def getUser(self, userId):
-        print(userId)
         return User.objects.get(pk=userId)
