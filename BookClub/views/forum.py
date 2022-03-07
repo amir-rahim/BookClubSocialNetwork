@@ -4,12 +4,25 @@ from django.contrib import messages
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, CreateView
 from django.views.generic.edit import UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from BookClub.forms.forum_forms import CreateForumCommentForm, CreatePostForm
+from BookClub.helpers import has_membership
 from BookClub.models import ForumPost, ForumComment, Forum, User, Club
 from BookClub.models.club_membership import ClubMembership
+from django.contrib.contenttypes.models import ContentType
 
+class ClubMemberTestMixin(UserPassesTestMixin):
+    
+    def test_func(self):
+        if self.kwargs.get('club_url_name') is not None:
+            club = Club.objects.get(
+                club_url_name=self.kwargs.get('club_url_name'))
+            return has_membership(club=club, user=self.request.user)
+        else:
+            return True
+        
 
-class ForumPostView(DetailView):
+class ForumPostView(ClubMemberTestMixin, DetailView):
     model = ForumPost
     paginate_by = 10
     template_name = 'forum_post.html'
@@ -18,7 +31,7 @@ class ForumPostView(DetailView):
     success_url = '/forum/'
 
 
-class ForumView(ListView):
+class ForumView(ClubMemberTestMixin, ListView):
     model = ForumPost
     context_object_name = 'posts'
     paginate_by = 10
@@ -61,10 +74,11 @@ class ForumView(ListView):
             
         context['replies'] = replies
         context['votes'] = votes_cast
-        
+         
         return context
     
-class CreatePostView(CreateView):
+
+class CreatePostView(LoginRequiredMixin, ClubMemberTestMixin, CreateView):
     form_class = CreatePostForm
     model = ForumPost
     success_url = None
@@ -96,7 +110,8 @@ class CreatePostView(CreateView):
         else:
             return reverse('global_forum')
     
-class CreateCommentView(CreateView):
+
+class CreateCommentView(LoginRequiredMixin, ClubMemberTestMixin, CreateView):
     model = ForumComment
     form_class = CreateForumCommentForm
     http_method_names = ['post']
@@ -123,7 +138,8 @@ class CreateCommentView(CreateView):
         else:
             return reverse('forum_post', kwargs = self.kwargs)
 
-class EditForumPostView(UpdateView):
+
+class EditForumPostView(LoginRequiredMixin, ClubMemberTestMixin, UpdateView):
     model = ForumPost
     form_class = CreateForumCommentForm
     template_name = 'edit_forum_post.html'
@@ -133,7 +149,7 @@ class EditForumPostView(UpdateView):
     def get_success_url(self):
         return reverse('forum_post', kwargs=self.kwargs)
     
-class DeleteForumPostView(DeleteView):
+class DeleteForumPostView(LoginRequiredMixin, ClubMemberTestMixin, DeleteView):
     model = ForumPost
     http_method_names = ['post']
     pk_url_kwarg = 'post_id'
