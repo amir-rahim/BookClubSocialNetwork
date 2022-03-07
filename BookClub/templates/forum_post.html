@@ -141,6 +141,7 @@
                                     <p class="has-text-right">
                                         <i>- by {{ comment.creator }}, {{ comment.created_on | timesince }} ago</i>
                                     </p>
+                                    {% include 'partials/voting.html' with content=comment %}
                                 </div>
                             </article>
                             <br />

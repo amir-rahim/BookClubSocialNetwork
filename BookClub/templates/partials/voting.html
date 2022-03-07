@@ -1,0 +1,36 @@
+{% load getcontenttype %}
+<form id="upvoteform" method="post" action="{% url 'upvote' %}">
+    {% csrf_token %}
+    <input type="hidden" name="type" value="true"/>
+    <input type="hidden" name="creator" value="{{ user.id }}"/>
+    <input type="hidden"
+           name="content_type"
+           value="{% getcontenttype content %}"/>
+    <input type="hidden" name="object_id" value="{{ content.id }}"/>
+    <p class="control" type="submit">
+        <button id="upvote" class="button is-primary is-rounded" aria-label="Upvote">
+            <span class="icon">
+                <i class="fa-solid fa-arrow-up"></i>
+            </span>
+        </button>
+    </p>
+</form>
+<form id="downvoteform" method="post" action="{% url 'downvote' %}">
+    {% csrf_token %}
+    <input type="hidden" name="type" value="false"/>
+    <input type="hidden" name="creator" value="{{ user.id }}"/>
+    <input type="hidden"
+           name="content_type"
+           value="{% getcontenttype content %}"/>
+    <input type="hidden" name="object_id" value="{{ content.id }}"/>
+    <p class="control" type="submit">
+        <button id="downvote"
+                class="button is-danger is-rounded"
+                aria-label="Downvote">
+            <span class="icon">
+                <i class="fa-solid fa-arrow-down"></i>
+            </span>
+        </button>
+    </p>
+</form>
+<button id="votecount" class="button is-rounded" disabled>{{ content.rating }}</button>
