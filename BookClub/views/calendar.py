@@ -7,6 +7,7 @@ from django.shortcuts import reverse, redirect
 from BookClub.forms import MeetingForm
 from BookClub.models import User, Club, ClubMembership, Meeting
 from BookClub.helpers import *
+from django.db.models import Q
 
 
 class CalendarView(LoginRequiredMixin, ListView):
@@ -15,8 +16,10 @@ class CalendarView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         user = User.objects.get(id=self.request.user.id)
-        inner_qs = User.objects.filter(username__contains=Meeting.members.username)
-        subquery = Meeting.objects.filter(members__id=inner_qs)
+        # inner_qs = User.objects.filter(username__contains=Meeting.members.username)
+        # subquery = Meeting.objects.filter(Q(members=user.id))
+        subquery = Meeting.objects.filter(Q(members=user.id))
+
         return subquery
 
     def get_context_data(self, **kwargs):

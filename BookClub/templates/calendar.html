@@ -1,13 +1,43 @@
 {% extends 'base_content.html' %}
 
 {% block page_title %}
-Calendar
+Hello
 {% endblock page_title %}
+
+{% block content %}
+<div>
+   <div class="columns">
+        {% for meeting in meetings %}
+
+        <div class="column is-one-quarter">
+            <div class="card">
+              <header class="card-header">
+                <p class="card-header-title">
+                    {{meeting.title}}
+                </p>
+              </header>
+              <div class="card-content">
+                <div class="content">
+                    {{meeting.description}}
+                  <br>
+                  <time datetime="Time: ">{{meeting.meeting_time}}</time>
+
+                </div>
+              </div>
+              <footer class="card-footer">
+                  <a href="{% url 'meeting_details' meeting.club.club_url_name meeting.id %}" class="card-footer-item">View</a>
+                  <a href="#" class="card-footer-item">Leave</a>
+              </footer>
+            </div>
+        </div>
+        {% endfor %}
+   </div>
+
+
+</div>
+{% endblock %}
+
 
 {% block page_subtitle %}
 Welcome to the calendar!
 {% endblock page_subtitle %}
-
-    {% for meeting in meetings %}
-        {{meeting.title}}
-    {% endfor %}
