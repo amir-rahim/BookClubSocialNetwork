@@ -82,6 +82,7 @@ This is our Library, you can look at our books and click and see further details
                             <th scope="col">Author</th>
                             <th scope="col">Publisher</th>
                             <th scope="col">Add to List</th>
+                            <th scope"col"></th>
                             <th scope="col">View</th>
                         </tr>
                     </thead>
@@ -102,18 +103,24 @@ This is our Library, you can look at our books and click and see further details
                                     {% if user == None %}
                                         <p><a href="{% url 'login' %}">Log in</a></p>
                                     {% else %}
-                                        {% csrf_token %}
-                                        <form>
-                                            <input type="hidden" id="book_selected" name="book" value="{{ book.id }}"/>
+                                        <form action="add_to_book_list" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="books" value="{{ book.id }}"/>
                                             <div class="control">
                                                 <div class="select">
-                                                    <select>
+                                                    <select required name="id">
+                                                        <option value="" selected disabled hidden>Choose here</option>
                                                         {% for list in lists %}
-                                                            <option>{{ list.title }}</option>
+                                                            <option value="{{ list.id }}">{{ list.title }}</option>
                                                         {% endfor %}
                                                     </select>
                                                 </div>
                                             </div>
+                                            <td>
+                                                <div class="control">
+                                                    <input type="submit" value="Add" class="button is-link">
+                                                </div>
+                                            </td>
                                         </form>
                                     {% endif %}
                                 <td>
@@ -143,6 +150,9 @@ const dataTable = new simpleDatatables.DataTable("#table-books", {
       {select: [1], sortable:false}
     ]
 })
+
+
+
 
 </script>
 
