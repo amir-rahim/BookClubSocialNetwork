@@ -16,3 +16,5 @@ class BookList(models.Model):
     def get_books(self):
         return self.books.all()
 
+    def add_book(self, book):
+        self.books.add(book)
