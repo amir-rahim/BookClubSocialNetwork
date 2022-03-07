@@ -1,10 +1,11 @@
 '''Library Related Views'''
 from django.contrib import messages
 from django.shortcuts import redirect, render, reverse
-from django.views.generic import ListView
+from django.views.generic import ListView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from BookClub.models import Book, BookList
 from django.db.models import Exists, Q, OuterRef
+from BookClub.forms import AddBookForm  
 
 
 def library_dashboard(request):
@@ -52,3 +53,29 @@ class BookListView(ListView):
             context['lists'] = None
             context['user'] = None
         return context
+
+class AddToBookListView(LoginRequiredMixin, FormView):
+    model = BookList
+    form_class = AddBookForm
+    http_method_names = ['post']
+
+    def form_valid(self, form):
+        if not self.request.user.is_anonymous:
+            
+            book = Book.objects.get(pk=self.request.POST.get('books'))
+            booklist = BookList.objects.get(pk=self.request.POST.get('id'))
+            booklist.add_book(book)
+            booklist.save()
+            messages.add_message(self.request, messages.SUCCESS,
+                             "The book has been saved to " +  booklist.title)
+            return super().form_valid(form)
+        else:
+            return self.form_invalid(self)
+    
+    def form_invalid(self, form):
+        messages.add_message(self.request, messages.ERROR,
+                             "There was an error adding the book to your book list")
+        return super().form_invalid(form)
+        
+    def get_success_url(self):
+        return reverse('library_books')
