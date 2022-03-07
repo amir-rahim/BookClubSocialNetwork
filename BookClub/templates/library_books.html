@@ -102,6 +102,7 @@ This is our Library, you can look at our books and click and see further details
                                 <td>
                                     {% if user == None %}
                                         <p><a href="{% url 'login' %}">Log in</a></p>
+                                        <td></td>
                                     {% else %}
                                         <form action="add_to_book_list" method="post">
                                             {% csrf_token %}
