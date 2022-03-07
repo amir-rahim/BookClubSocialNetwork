@@ -1,0 +1,10 @@
+[
+  {
+        "model": "BookClub.Forum",
+        "pk": 1,
+        "fields": {
+            "title": "Global Forum",
+            "posts": [1, 2, 3]
+        }
+  }
+]
