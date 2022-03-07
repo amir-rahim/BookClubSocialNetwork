@@ -109,6 +109,9 @@
                 </div>
             </section>
             <hr class="solid"/>
+
+            {% if posts %}
+
             {% for post in posts %}
                 <br />
                 <div class="card">
@@ -120,68 +123,76 @@
                         </div>
                         <div class="card-header-icon">
                             {% include 'partials/voting.html' with content=post %}
-                        </header>
-                        <div class="card-content">
-                            <div class="content">
-                                <span class="has-text-grey">{{ post.content |truncatechars:240 }}</span>
-                            </div>
                         </div>
-                        <footer class="card-footer">
-                            <p class="card-footer-item">
-                                <span class="is-small has-text-grey-light">Posted by: {{ post.creator }}</span>
-                            </p>
-                            <p class="card-footer-item has-text-grey-light">
-                                {{ post.created_on | timesince }} ago
-                            </p>
-                            <a href="{% url 'forum_post' post.id %}" class="card-footer-item">
-                                {% if post.comments.count > 0 %}
-                                    See {{ post.comments.count }} comments
-                                {% else %}
-                                    Be the first to comment!
-                                {% endif %}
-                            </a>
-                        </footer>
-                    </div>
-                {% endfor %}
-                <br />
-                {% include 'partials/pagination.html' %}
-                <div id="modal-create-post" class="modal">
-                    <div class="modal-background"></div>
-                    <div class="modal-content">
-                        <div class="card">
-                            <div class="card-header">
-                                <button class="card-header-icon" aria-label="more options">
-                                    <span class="icon">
-                                        <i class="card-header-icon fa-solid fa-pen-clip"></i>
-                                    </span>
-                                </button>
-                                <p class="card-header-title">
-                                    Create Discussion Post
-                                </p>
-                            </div>
-                            <form method="post" action="{% url 'create_forum_post' %}">
-                                <div class="card-content">
-                                    <div class="container">
-                                        {% csrf_token %}
-                                        {% include 'partials/bulma_form.html' with form=forum_post_form %}
-                                    </div>
-                                </div>
-                                <footer class="card-footer">
-                                    <input type="button"
-                                           value="Reset"
-                                           id="resetBtn"
-                                           onClick="this.form.reset()"
-                                           class="button is-danger is-fullwidth"/>
-                                    <input type="submit" value="Make Post" class="button is-link is-fullwidth"/>
-                                </footer>
-                            </form>
+                    </header>
+                    <div class="card-content">
+                        <div class="content">
+                            <span class="has-text-grey">{{ post.content |truncatechars:240 }}</span>
                         </div>
                     </div>
-                    <button class="modal-close is-large" aria-label="close"></button>
+                    <footer class="card-footer">
+                        <p class="card-footer-item">
+                            <span class="is-small has-text-grey-light">Posted by: {{ post.creator }}</span>
+                        </p>
+                        <p class="card-footer-item has-text-grey-light">
+                            {{ post.created_on | timesince }} ago
+                        </p>
+                        <a href="{% url 'forum_post' post.id %}" class="card-footer-item">
+                            {% if post.comments.count > 0 %}
+                                See {{ post.comments.count }} comments
+                            {% else %}
+                                Be the first to comment!
+                            {% endif %}
+                        </a>
+                    </footer>
                 </div>
+            {% endfor %}
+
+            <br />
+            {% include 'partials/pagination.html' %}
+            {% else %}
+                <p style="text-align: center">There are no posts at the moment. Be first to post!</p>
+            {% endif %}
+
+
+            <div id="modal-create-post" class="modal">
+                <div class="modal-background"></div>
+                <div class="modal-content">
+                    <div class="card">
+                        <div class="card-header">
+                            <button class="card-header-icon" aria-label="more options">
+                                <span class="icon">
+                                    <i class="card-header-icon fa-solid fa-pen-clip"></i>
+                                </span>
+                            </button>
+                            <p class="card-header-title">
+                                Create Discussion Post
+                            </p>
+                        </div>
+                        <form method="post" action="{% url 'create_forum_post' %}">
+                            <div class="card-content">
+                                <div class="container">
+                                    {% csrf_token %}
+                                    {% include 'partials/bulma_form.html' with form=forum_post_form %}
+                                </div>
+                            </div>
+                            <footer class="card-footer">
+                                <input type="button"
+                                       value="Reset"
+                                       id="resetBtn"
+                                       onClick="this.form.reset()"
+                                       class="button is-danger is-fullwidth"/>
+                                <input type="submit" value="Make Post" class="button is-link is-fullwidth"/>
+                            </footer>
+                        </form>
+                    </div>
+                </div>
+                <button class="modal-close is-large" aria-label="close"></button>
             </div>
         </div>
-        <script>
+    </div>
+
+    <script>
         document.addEventListener('DOMContentLoaded', () => {
           // Functions to open and close a modal
           function openModal($el) {
@@ -228,5 +239,6 @@
           });
         });
 
-        </script>
+    </script>
+
     {% endblock content %}
