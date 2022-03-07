@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.shortcuts import redirect, render, reverse
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from BookClub.models import Book
+from BookClub.models import Book, BookList
 from django.db.models import Exists, Q, OuterRef
 
 
@@ -41,3 +41,14 @@ class BookListView(ListView):
         except:
             object_list = Book.objects.all()
         return object_list
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        if not user.is_anonymous:
+            context['lists'] = BookList.objects.filter(creator = user)
+            context['user'] = user
+        else:
+            context['lists'] = None
+            context['user'] = None
+        return context
