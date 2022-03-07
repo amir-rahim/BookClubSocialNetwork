@@ -102,19 +102,9 @@
                             <span>Reply</span>
                         </button>
                     </p>
-                    <p class="card-footer-item">
-                        <button class="button is-primary is-rounded is-small" aria-label="Upvote">
-                            <span class="icon">
-                                <i class="fa-solid fa-arrow-up"></i>
-                            </span>
-                        </button>
-                        <button class="button is-danger is-rounded is-small" aria-label="Downvote">
-                            <span class="icon">
-                                <i class="fa-solid fa-arrow-down"></i>
-                            </span>
-                        </button>
-                        <button class="button is-rounded is-small" title="Disabled button" disabled>{{ post.rating }}</button>
-                    </p>
+                    <div class="card-footer-item">
+                        {% include 'partials/voting.html' with content=post %}
+                    </div>
                 </footer>
             </div>
             <br />
@@ -126,15 +116,23 @@
                     {% if post.comments.count > 0 %}
                         {% for comment in post.comments.all %}
                             <article class="message">
-                                <div class="message-body">
-                                    <p class="has-text-justified">
-                                        "{{ comment.content }}"
-                                    </p>
-                                    <br />
-                                    <p class="has-text-right">
-                                        <i>- by {{ comment.creator }}, {{ comment.created_on | timesince }} ago</i>
-                                    </p>
-                                    {% include 'partials/voting.html' with content=comment %}
+
+                                <div class="columns is-vcentered">
+                                    <div class="column is-1" style="margin-left: 20px;">
+                                        {% include 'partials/voting.html' with content=comment %}
+                                    </div>
+                                    <div class="column is-11">
+                                        <div class="message-body">
+                                            <p class="has-text-justified">
+                                                "{{ comment.content }}"
+                                            </p>
+                                            <br />
+                                            <p class="has-text-right">
+                                                <i>- by {{ comment.creator }}, {{ comment.created_on | timesince }} ago</i>
+                                            </p>
+                                        </div>
+                                    </div>
+
                                 </div>
 
                             </article>
