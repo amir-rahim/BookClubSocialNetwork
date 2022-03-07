@@ -10,3 +10,5 @@ surprise
 pandas
 requests
 joblib
+gunicorn
+django-heroku
