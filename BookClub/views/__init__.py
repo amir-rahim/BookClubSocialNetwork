@@ -14,3 +14,4 @@ from .booklists import *
 from .meetings import *
 from .reviews import *
 from .forum import *
+from .vote import *

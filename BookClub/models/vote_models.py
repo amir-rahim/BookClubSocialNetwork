@@ -58,6 +58,9 @@ class RatedContent(UserCreatedObject):
             self.rating = self.rating + 1
         self.votes.remove(vote)
         self.save(update_fields=['rating'])
+        
+    def get_content_type(self):
+        return self.__class__
 
 
 class Vote(UserCreatedObject):
