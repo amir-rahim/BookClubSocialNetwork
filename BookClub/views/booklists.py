@@ -67,7 +67,7 @@ class RemoveFromBookListView(LoginRequiredMixin, ListView):
     redirect_location = 'user_booklist'
 
     def get(self, request, *args, **kwargs):
-        return redirect(self.redirect_location, username=self.kwargs['username'], booklist_id=self.kwargs['booklist_id'], book_id=self.kwargs['book_id'])
+        return redirect(self.redirect_location, username=self.kwargs['username'], booklist_id=self.kwargs['booklist_id'])
 
     def is_actionable(self, booklist, book):
         """Check if user can remove a book"""
@@ -91,12 +91,12 @@ class RemoveFromBookListView(LoginRequiredMixin, ListView):
             booklist = BookList.objects.get(id=self.kwargs['booklist_id'])
             book = Book.objects.get(id=self.kwargs['book_id'])
         except:
-            messages.error(self.request, "Error, book not found.")
-            return redirect(self.redirect_location, username=self.request.user.username, booklist_id=self.kwargs['booklist_id'])
+            messages.error(self.request, "Error, book or booklist not found.")
+            return redirect(self.redirect_location, username=self.kwargs['username'], booklist_id=self.kwargs['booklist_id'])
 
         if (self.is_actionable(booklist, book)):
             self.action(booklist, book)
         else:
             self.is_not_actionable()
 
-        return redirect(self.redirect_location, username=self.request.user.username, booklist_id=self.kwargs['booklist_id'])
+        return redirect(self.redirect_location, username=self.kwargs['username'], booklist_id=self.kwargs['booklist_id'])
