@@ -1,7 +1,6 @@
 from django.test import TestCase, tag
 from BookClub.models import User, Book, BookReview
 from RecommenderModule import recommendations_provider
-from RecommenderModule.recommenders.resources.data_provider import DataProvider
 
 @tag('recommenders')
 class RecommendersTestCase(TestCase):
