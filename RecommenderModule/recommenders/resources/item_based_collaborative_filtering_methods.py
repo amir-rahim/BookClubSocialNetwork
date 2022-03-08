@@ -14,8 +14,9 @@ class ItemBasedCollaborativeFilteringMethods:
     trainset = None
     similarities_matrix = None
 
-    def __init__(self, filtering_min_ratings_threshold=5, retraining=False, retraining_and_saving=False):
+    def __init__(self, filtering_min_ratings_threshold=15, min_support=5, retraining=False, retraining_and_saving=False):
         self.data_provider = DataProvider(filtering_min_ratings_threshold=filtering_min_ratings_threshold)
+        self.min_support = min_support
         if (retraining or retraining_and_saving):
             self.build_trainset(filtering_min_ratings_threshold)
             self.train_model()
@@ -37,7 +38,7 @@ class ItemBasedCollaborativeFilteringMethods:
         sim_options = {
             'name': 'pearson',
             'user_based': False,
-            'min_support': 2
+            'min_support': self.min_support
             }
         model = KNNBasic(sim_options=sim_options)
         model.fit(self.trainset)

@@ -15,8 +15,8 @@ def get_popularity_recommendations(user):
     return recommended_books
 
 """Retrain the popularity recommender with the current data."""
-def retrain_popularity_recommender():
-    PopularBooksMethods(retraining_and_saving=True)
+def retrain_popularity_recommender(min_ratings_threshold=100):
+    PopularBooksMethods(retraining_and_saving=True, min_ratings_threshold=min_ratings_threshold)
 
 """Get a list of all books that the user has read."""
 def get_user_read_books(user):
@@ -39,5 +39,5 @@ def get_item_based_recommendations(user, positive_ratings_only=True):
     return recommended_books
 
 """Retrain the item-based recommender with the current data"""
-def retrain_item_based_recommender():
-    ItemBasedCollaborativeFilteringMethods(retraining_and_saving=True)
+def retrain_item_based_recommender(min_ratings_threshold=15, min_support=5):
+    ItemBasedCollaborativeFilteringMethods(retraining_and_saving=True, filtering_min_ratings_threshold=min_ratings_threshold, min_support=min_support)
