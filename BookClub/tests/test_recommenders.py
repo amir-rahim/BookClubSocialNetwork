@@ -39,7 +39,6 @@ class RecommendersTestCase(TestCase):
         self.assertFalse(isbn1 in second_recommendations)
         self.assertFalse(isbn2 in second_recommendations)
 
-
     def test_get_books_read_by_user(self):
         book1 = Book.objects.get(pk=1)
         review1 = BookReview.objects.create(book = book1, user = self.user, rating = 4)

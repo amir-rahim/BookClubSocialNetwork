@@ -1,5 +1,6 @@
 from BookClub.recommender_module.recommenders.popular_books_recommender import PopularBooksRecommender
 from BookClub.recommender_module.recommenders.resources.popular_books_recommender_methods import PopularBooksMethods
+from BookClub.recommender_module.recommenders.item_based_recommender import ItemBasedRecommender
 from BookClub.recommender_module.recommenders.resources.item_based_collaborative_filtering_methods import ItemBasedCollaborativeFilteringMethods
 from BookClub.models.review import BookReview
 
@@ -30,7 +31,12 @@ def get_user_read_books(user):
 
 """Get (up to) 10 book recommendations, from books the user has rated."""
 def get_item_based_recommendations(user, positive_ratings_only=True):
-    user_read_books = self.get_user_read_books(user)
+    item_based = ItemBasedRecommender()
+    if positive_ratings_only:
+        recommended_books = item_based.get_recommendations_positive_ratings_only_from_user_id(user.username)
+    else:
+        recommended_books = item_based.get_recommendations_all_ratings_from_user_id(user.username)
+    return recommended_books
 
 """Retrain the item-based recommender with the current data"""
 def retrain_item_based_recommender():

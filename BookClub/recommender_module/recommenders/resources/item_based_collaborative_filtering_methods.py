@@ -13,7 +13,8 @@ class ItemBasedCollaborativeFilteringMethods:
     trainset = None
     similarities_matrix = None
 
-    def __init__(self, filtering_min_ratings_threshold=15, retraining=False, retraining_and_saving=False):
+    def __init__(self, filtering_min_ratings_threshold=5, retraining=False, retraining_and_saving=False):
+        self.data_provider = DataProvider(filtering_min_ratings_threshold=filtering_min_ratings_threshold)
         if (retraining or retraining_and_saving):
             self.build_trainset(filtering_min_ratings_threshold)
             self.train_model()
@@ -28,7 +29,6 @@ class ItemBasedCollaborativeFilteringMethods:
 
     """Build the filtered ratings trainset, with only books having at least {filtering_min_ratings_threshold} ratings"""
     def build_trainset(self, filtering_min_ratings_threshold):
-        self.data_provider = DataProvider(filtering_min_ratings_threshold=filtering_min_ratings_threshold)
         self.trainset = self.data_provider.get_filtered_ratings_trainset()
 
     """Train the KNN model on the defined trainset and compute the associated similarities matrix"""
@@ -36,7 +36,7 @@ class ItemBasedCollaborativeFilteringMethods:
         sim_options = {
             'name': 'pearson',
             'user_based': False,
-            'min_support': 5
+            'min_support': 2
             }
         model = KNNBasic(sim_options=sim_options)
         model.fit(self.trainset)
