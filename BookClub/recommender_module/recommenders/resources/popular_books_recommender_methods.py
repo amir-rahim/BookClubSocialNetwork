@@ -112,7 +112,7 @@ class PopularBooksMethods:
         final_recommendations = []
         for (isbn, score) in popularity_list:
             if (isbn not in user_read_books) and (score > 0):
-                print(f"{isbn}: {score}")
+                #print(f"{isbn}: {score}")
                 final_recommendations.append(isbn)
                 if (len(final_recommendations) >= 10):
                     break
