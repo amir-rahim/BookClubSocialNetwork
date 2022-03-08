@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic.edit import CreateView
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 
 from BookClub.models import User, Book, BookReview
 from BookClub.forms.review import ReviewForm
@@ -13,6 +13,14 @@ class CreateReviewView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = BookReview
     form_class = ReviewForm
     success_url = reverse_lazy('home') # need to remove this attribute and amend 'get_absolute_url' method in BookReview model
+
+    def handle_no_permission(self):
+        if not self.request.user.is_authenticated:
+            return super(LoginRequiredMixin, self).handle_no_permission()
+        else:
+            messages.error(self.request, f"Error attempting to review book.")
+            url = reverse('library_books')
+            return redirect(url)
 
     def test_func(self):
         try:
@@ -28,7 +36,7 @@ class CreateReviewView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         form.instance.user = user
         form.instance.book = book
         response = super().form_valid(form)
-        messages.success(self.request, (f"Successfully reviewed '{book.title}'!"))
+        messages.success(self.request, f"Successfully reviewed '{book.title}'!")
         return response
 
     def form_invalid(self, form):
