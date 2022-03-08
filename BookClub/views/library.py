@@ -60,19 +60,23 @@ class AddToBookListView(LoginRequiredMixin, FormView):
     http_method_names = ['post']
 
     def form_valid(self, form):
-        if not self.request.user.is_anonymous:
+        try:
             book = Book.objects.get(pk=self.request.POST.get('books'))
             booklist = BookList.objects.get(pk=self.request.POST.get('id'))
-            
-            if (booklist.get_books().filter(pk=book.id)):
-                messages.info(self.request, "This book is already in the list")
-            else:
-                booklist.add_book(book)
-                booklist.save()
-                messages.success(self.request, "The book has been saved to "+book.title)
-            return super().form_valid(form)
+        except:
+            book = None
+            booklist = None
+        
+        if booklist is None or book is None:
+            messages.error(self.request, "There was an error finding the book or booklist")
+
+        elif (booklist.get_books().filter(pk=book.id)):
+            messages.info(self.request, "This book is already in the list")
         else:
-            return self.form_invalid(self)
+            booklist.add_book(book)
+            booklist.save()
+            messages.success(self.request, "The book has been saved to "+book.title)
+        return super().form_valid(form)
     
     def form_invalid(self, form):
         messages.error(self.request, "There was an error adding the book")
