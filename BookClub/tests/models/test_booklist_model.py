@@ -8,6 +8,7 @@ from django.test import TestCase, tag
 
 @tag('booklist')
 @tag('book')
+@tag('this')
 class BookListTestCase(TestCase):
 
     fixtures=[
@@ -152,3 +153,9 @@ class BookListTestCase(TestCase):
         self.bookList.add_book(self.book_two)
         after_count = len(self.bookList.get_books())
         self.assertEqual(before_count, after_count - 1)
+
+    def test_remove_book(self):
+        before_count = len(self.bookList.get_books())
+        self.bookList.remove_book(self.book_one)
+        after_count = len(self.bookList.get_books())
+        self.assertEqual(before_count, after_count + 1)
