@@ -1,4 +1,4 @@
-from BookClub.recommender_module.recommenders.resources.data_provider import DataProvider
+from RecommenderModule.recommenders.resources.data_provider import DataProvider
 import math
 import numpy as np
 import joblib
@@ -6,6 +6,7 @@ import joblib
 """This class provides the developer with methods to recommend the most popular books to a user"""
 class PopularBooksMethods:
 
+    path_to_popularity_lists = "RecommenderModule/recommenders/resources/popularity_lists"
     data_provider = None
     filtered_books_list = []
     average_ratings = {}
@@ -29,9 +30,9 @@ class PopularBooksMethods:
 
     """Import all sorted ratings list objects, using the joblib library"""
     def import_trained_lists(self):
-        self.sorted_average_ratings = joblib.load("BookClub/recommender_module/recommenders/resources/popularity_lists/sorted_average_ratings.sav")
-        self.sorted_median_ratings = joblib.load("BookClub/recommender_module/recommenders/resources/popularity_lists/sorted_median_ratings.sav")
-        self.sorted_combination_scores = joblib.load("BookClub/recommender_module/recommenders/resources/popularity_lists/sorted_combination_scores.sav")
+        self.sorted_average_ratings = joblib.load(f"{self.path_to_popularity_lists}/sorted_average_ratings.sav")
+        self.sorted_median_ratings = joblib.load(f"{self.path_to_popularity_lists}/sorted_median_ratings.sav")
+        self.sorted_combination_scores = joblib.load(f"{self.path_to_popularity_lists}/sorted_combination_scores.sav")
 
     """Get all books with at least {self.min_ratings_threshold} user ratings"""
     def load_filtered_books_list(self, min_ratings_threshold):
@@ -46,9 +47,9 @@ class PopularBooksMethods:
 
     """Save all computed popularity lists into .sav files, using the joblib library"""
     def save_all_popularity_lists(self):
-        joblib.dump(self.sorted_average_ratings, "BookClub/recommender_module/recommenders/resources/popularity_lists/sorted_average_ratings.sav")
-        joblib.dump(self.sorted_median_ratings, "BookClub/recommender_module/recommenders/resources/popularity_lists/sorted_median_ratings.sav")
-        joblib.dump(self.sorted_combination_scores, "BookClub/recommender_module/recommenders/resources/popularity_lists/sorted_combination_scores.sav")
+        joblib.dump(self.sorted_average_ratings, f"{self.path_to_popularity_lists}/sorted_average_ratings.sav")
+        joblib.dump(self.sorted_median_ratings, f"{self.path_to_popularity_lists}/sorted_median_ratings.sav")
+        joblib.dump(self.sorted_combination_scores, f"{self.path_to_popularity_lists}/sorted_combination_scores.sav")
 
     """Get the average rating for the book with the given ISBN number"""
     def get_average_rating(self, isbn):

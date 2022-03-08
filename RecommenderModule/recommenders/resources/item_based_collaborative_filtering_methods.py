@@ -1,5 +1,5 @@
-from BookClub.recommender_module.recommenders.resources.data_provider import DataProvider
-from BookClub.recommender_module.recommenders.resources.library import Library
+from RecommenderModule.recommenders.resources.data_provider import DataProvider
+from RecommenderModule.recommenders.resources.library import Library
 from surprise import KNNBasic
 from collections import defaultdict
 from operator import itemgetter
@@ -9,6 +9,7 @@ import joblib
 """This class provides the developer with methods to recommend books to a user, similar to the user's rated books"""
 class ItemBasedCollaborativeFilteringMethods:
 
+    path_to_model = "RecommenderModule/recommenders/resources/item_based_model"
     data_provider = None
     trainset = None
     similarities_matrix = None
@@ -44,13 +45,13 @@ class ItemBasedCollaborativeFilteringMethods:
 
     """Save the trainset and the similarities_matrix as .sav files, using the joblib library."""
     def save_model(self):
-        joblib.dump(self.trainset, "BookClub/recommender_module/recommenders/resources/item_based_model/trainset.sav")
-        joblib.dump(self.similarities_matrix, "BookClub/recommender_module/recommenders/resources/item_based_model/similarities_matrix.sav")
+        joblib.dump(self.trainset, f"{self.path_to_model}/trainset.sav")
+        joblib.dump(self.similarities_matrix, f"{self.path_to_model}/similarities_matrix.sav")
 
     """Import the trainset and the similarities_matrix from .sav files, using the joblib library."""
     def import_model(self):
-        self.trainset = joblib.load("BookClub/recommender_module/recommenders/resources/item_based_model/trainset.sav")
-        self.similarities_matrix = joblib.load("BookClub/recommender_module/recommenders/resources/item_based_model/similarities_matrix.sav")
+        self.trainset = joblib.load(f"{self.path_to_model}/trainset.sav")
+        self.similarities_matrix = joblib.load(f"{self.path_to_model}/similarities_matrix.sav")
 
     """Get the recommended books (up to 10) given a specified user_id, from all of the user's rated books"""
     def get_recommendations_all_ratings_from_user_id(self, user_id):

@@ -1,4 +1,4 @@
-from BookClub.recommender_module.recommenders.resources.item_based_collaborative_filtering_methods import ItemBasedCollaborativeFilteringMethods
+from RecommenderModule.recommenders.resources.item_based_collaborative_filtering_methods import ItemBasedCollaborativeFilteringMethods
 
 """This class allows the developer to recommend books to a user, similar to the user's rated books"""
 class ItemBasedRecommender:

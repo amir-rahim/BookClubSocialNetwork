@@ -1,4 +1,4 @@
-from BookClub.recommender_module.recommenders.resources.popular_books_recommender_methods import PopularBooksMethods
+from RecommenderModule.recommenders.resources.popular_books_recommender_methods import PopularBooksMethods
 
 """This class allows the developer to recommend the most popular books to a user"""
 class PopularBooksRecommender:
