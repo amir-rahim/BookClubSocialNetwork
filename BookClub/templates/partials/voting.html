@@ -2,7 +2,7 @@
 {% getcontenttype content as contenttype %}
 <form id="upvoteform"
       method="post"
-      action="{% url 'upvote' %}">
+      action="{% url 'upvote' %}" class="voteform">
     {% csrf_token %}
     <input type="hidden" name="type" value="true"/>
     <input type="hidden" name="creator" value="{{ user.id }}"/>
@@ -22,7 +22,7 @@
 </form>
 <form id="downvoteform"
       method="post"
-      action="{% url 'downvote' %}">
+      action="{% url 'downvote' %}" class="voteform">
     {% csrf_token %}
     <input type="hidden" name="type" value="false"/>
     <input type="hidden" name="creator" value="{{ user.id }}"/>

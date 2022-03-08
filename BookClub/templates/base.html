@@ -113,9 +113,9 @@
           });
         });
 
-        $('#upvoteform').on('submit', catchVote);
+        $('.voteform').on('submit', catchVote);
             
-        $('#downvoteform').on('submit',catchVote)
+        $('.voteform').on('submit',catchVote)
 
         function catchVote(event){
           event.preventDefault();
@@ -124,12 +124,10 @@
           object_id = form['object_id'].value
           url = form.action
           identifier = content_type+object_id
-          console.log("form submitted!");  // sanity check
           create_vote(url, identifier, form);
         }
 
         function updateRating(identifier, rating){
-          console.log(identifier)
           console.log(rating)
           $('#votecount'+identifier).text(rating)
         }

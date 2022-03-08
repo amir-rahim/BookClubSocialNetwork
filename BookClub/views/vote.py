@@ -15,7 +15,6 @@ class CreateVoteView(LoginRequiredMixin, CreateView):
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if not form.is_valid():
-            print(form.errors)
             if len(form.errors) == 1 and len(form.non_field_errors())== 1:
                 user = self.request.user
                 content_type = form.instance.content_type
@@ -28,20 +27,25 @@ class CreateVoteView(LoginRequiredMixin, CreateView):
                 
                 if(previousVoteType != thisVoteType):
                     previousVote.delete()
+                
+                else:
+                    self.form_invalid(form);
                     
                     
         return super().post(request, *args, **kwargs)
     
-    def form_invalid(self, form):
-        messages.error(self.request, "Error making that vote")
-        return redirect(self.get_failure_url())
-    
-    def form_valid(self, form):
-        super().form_valid(form)
+    def get_response_json(self, form):
         object_type = ContentType.objects.get(pk=form.instance.content_type.id)
         object = object_type.get_object_for_this_type(pk=form.instance.object_id)
         response = JsonResponse(({"rating": object.rating}))
         return response
+    
+    def form_invalid(self, form):
+        return self.get_response_json(form)
+    
+    def form_valid(self, form):
+        super().form_valid(form)
+        return self.get_response_json(form)
     
     def get_failure_url(self):
         referer = self.request.headers['Referer']
