@@ -20,7 +20,7 @@ def retrain_popularity_recommender():
 """Get a list of all books that the user has read."""
 def get_user_read_books(user):
     try:
-        user_reviews = BookReview.objects.get(user=user)
+        user_reviews = BookReview.objects.filter(user=user)
     except:
         user_reviews = []
     isbn_list = []
