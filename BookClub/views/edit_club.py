@@ -41,15 +41,5 @@ class EditClubView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             return redirect(url)
 
     def get_object(self):
-        try:
-            return super().get_object()
-        except:
-            messages.add_message(self.request, messages.ERROR, 'Club not found!')
-            return None
+        return super().get_object()
 
-    # def get_success_url(self):
-    #     messages.add_message(self.request,messages.SUCCESS,'Club updated!')
-    #     print('got to success url')
-    #     return reverse(settings.REDIRECT_URL_WHEN_LOGGED_IN)
-
-    # TODO: more testing
