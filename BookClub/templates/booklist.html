@@ -21,8 +21,13 @@ View all the books in {{ booklist.title }}
 				<li><a href="{% url 'booklists_list' user.username %}">My Book Lists</a></li>
 				<li><a href="{% url 'create_booklist' user.username %}">Create Book List</a></li>
 				<li><a>Saved Lists</a></li>
-                <li><a class="is-active" href="{% url 'user_booklist' user.username booklist.id %}"><b>{{ booklist.title }}</b></a></li>
 			</ul>
+
+            <p class="menu-label">Manage</p>
+
+            <ul class="menu-list">
+                <li><a class="is-active" href="{% url 'user_booklist' user.username booklist.id %}"><b>{{ booklist.title }}</b></a></li>
+            </ul>
 
 		</aside>
 
