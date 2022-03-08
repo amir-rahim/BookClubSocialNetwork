@@ -10,7 +10,7 @@ from django.urls import reverse_lazy
 
 from BookClub.models import *
 from BookClub.models.review import *
-from BookClub.forms.review import ReviewForm
+from BookClub.forms.review import ReviewForm, BookReviewCommentForm
 
 class CreateReviewView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     template_name = 'create_review.html'
@@ -22,14 +22,16 @@ class CreateReviewView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         try:
             book = Book.objects.get(pk = self.kwargs['book_id'])
             reviewed = BookReview.objects.filter(book = book, creator = self.request.user).exists()
-            return not reviewed
+            can_see = not reviewed
+            return can_see
+            # return not reviewed
         except:
             return False
 
     def form_valid(self, form):
         user = self.request.user
         book = Book.objects.get(pk = self.kwargs['book_id'])
-        form.instance.user = user
+        form.instance.creator = user
         form.instance.book = book
         response = super().form_valid(form)
         messages.success(self.request, (f"Successfully reviewed '{book.title}'!"))
@@ -44,7 +46,7 @@ class CreateReviewView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         context['book'] = Book.objects.get(pk = self.kwargs['book_id'])
         return context
 
- 
+
 class DeleteReviewView(LoginRequiredMixin,View):
     redirect_location = 'home' #Need to change to review list view or somewhere else
     """Checking whether the action is legal"""
@@ -64,7 +66,7 @@ class DeleteReviewView(LoginRequiredMixin,View):
             book = Book.objects.get(id = self.kwargs['book_id'])
             currentUser = self.request.user
             review = BookReview.objects.get(book = book,creator = currentUser)
-           
+
             if self.is_actionable(currentUser,review):
                 self.action(currentUser,review)
                 return redirect(self.redirect_location)
@@ -77,3 +79,32 @@ class DeleteReviewView(LoginRequiredMixin,View):
     """Should look the same as post but will not do anything"""
     def get(self, request, *args, **kwargs):
         return redirect(self.redirect_location)
+
+
+class CreateCommentForReviewView(LoginRequiredMixin, View):
+    http_method_names = ['post']
+
+    def http_method_not_allowed(self, request, *args, **kwargs):
+        messages.add_message(self.request, messages.ERROR, "Non-existing page was requested, so we redirected you here...")
+        return redirect('book_view', book_id = self.kwargs['book_id']) # need to redirect to Review Detail view
+
+    def post(self, *args, **kwargs):
+        user = self.request.user
+        form = BookReviewCommentForm(self.request.POST)
+        try:
+            review = BookReview.objects.get(pk = self.kwargs['book_review_id'])
+            form.instance.bookReview = review
+            if form.is_valid():
+                form.save()
+                messages.success(self.request, "You have commented on the review")
+                return redirect('book_view', username = self.kwargs['username'])
+            else:
+                messages.add_message(self.request, messages.ERROR, "Your comment input was invalid...")
+                for field in form.errors:
+                    for error in form.errors[field]:
+                        messages.add_message(self.request, messages.ERROR, form.fields[field].label + ' - ' + error)
+                return redirect('book_view', username = self.kwargs['username'])
+
+        except ObjectDoesNotExist:
+            messages.add_message(self.request, messages.ERROR, "Non-existing list was targeted")
+            return redirect('book_view', username = self.kwargs['username'])
