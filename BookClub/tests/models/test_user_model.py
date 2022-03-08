@@ -1,5 +1,5 @@
 from django.test import TestCase, tag
-from BookClub.models import User
+from BookClub.models import User, BookReview
 from django.core.exceptions import ValidationError  # Create your tests here.
 
 @tag('usermodel','user')
