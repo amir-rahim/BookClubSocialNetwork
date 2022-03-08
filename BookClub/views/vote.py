@@ -1,11 +1,11 @@
-from email.headerregistry import ContentDispositionHeader
+from django.http import JsonResponse
 from django.shortcuts import redirect
-from django.urls import reverse
 from BookClub.forms import VoteForm
-from BookClub.models import Vote, RatedContent
+from BookClub.models import Vote
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView
 from django.contrib import messages
+from django.contrib.contenttypes.models import ContentType
 
 class CreateVoteView(LoginRequiredMixin, CreateView):
     model = Vote
@@ -34,7 +34,18 @@ class CreateVoteView(LoginRequiredMixin, CreateView):
     
     def form_invalid(self, form):
         messages.error(self.request, "Error making that vote")
-        return redirect(self.get_success_url())
+        return redirect(self.get_failure_url())
+    
+    def form_valid(self, form):
+        super().form_valid(form)
+        object_type = ContentType.objects.get(pk=form.instance.content_type.id)
+        object = object_type.get_object_for_this_type(pk=form.instance.object_id)
+        response = JsonResponse(({"rating": object.rating}))
+        return response
+    
+    def get_failure_url(self):
+        referer = self.request.headers['Referer']
+        return referer
     
     def get_success_url(self):
         referer = self.request.headers['Referer']

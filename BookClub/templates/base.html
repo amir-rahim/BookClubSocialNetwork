@@ -113,5 +113,37 @@
           });
         });
 
+        $('#upvoteform').on('submit', catchVote);
+            
+        $('#downvoteform').on('submit',catchVote)
+
+        function catchVote(event){
+          event.preventDefault();
+          form = event.target
+          content_type = form['content_type'].value
+          object_id = form['object_id'].value
+          url = form.action
+          identifier = content_type+object_id
+          console.log("form submitted!");  // sanity check
+          create_vote(url, identifier, form);
+        }
+
+        function updateRating(identifier, rating){
+          console.log(identifier)
+          console.log(rating)
+          $('#votecount'+identifier).text(rating)
+        }
+
+        function create_vote(actionUrl, identifier, form) {
+          $.ajax({
+            type: "POST",
+            url: actionUrl,
+            data: $(form).serializeArray()
+          }).done(function (response){
+            rating = response['rating']
+            updateRating(identifier, rating)
+          });
+        }
+
     </script>
 </html>
