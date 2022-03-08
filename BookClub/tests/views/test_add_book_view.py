@@ -66,3 +66,13 @@ class AddBookViewTestCase(TestCase):
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]), 'This book is already in the list')
+
+    def test_invalid_input(self):
+        self.client.login(username=self.user.username, password="Password123")
+        self.booklist.add_book(self.book)
+        response = self.client.post(reverse('add_to_book_list'), {'book' : 2, 'booklist' : 1000})
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), 'There was an error finding the book or booklist')
