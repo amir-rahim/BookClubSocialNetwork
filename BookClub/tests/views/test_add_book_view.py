@@ -14,8 +14,8 @@ class AddBookViewTestCase(TestCase):
     ]
     
     def setUp(self):
-        self.books = Book.objects.get(pk=2)
-        self.id = BookList.objects.get(pk=1)
+        self.book = Book.objects.get(pk=2)
+        self.booklist = BookList.objects.get(pk=1)
         self.user = User.objects.get(pk=1)
         self.url = reverse('library_books')
         
@@ -48,17 +48,17 @@ class AddBookViewTestCase(TestCase):
 
     def test_adds_book_to_book_list(self):
         self.client.login(username=self.user.username, password="Password123")
-        response = self.client.post(reverse('add_to_book_list'), {'books' : '2', 'id' : '1'})
+        response = self.client.post(reverse('add_to_book_list'), {'books' : 2, 'id' : 1})
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "library_books.html")
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), 'The book has been saved to ' + self.books.title)
+        self.assertEqual(str(messages[0]), 'The book has been saved to ' + self.book.title)
     
     def test_cannot_add_same_book_twice(self):
         self.client.login(username=self.user.username, password="Password123")
-        self.id.add_book(self.books)
+        self.booklist.add_book(self.book)
         response = self.client.post(reverse('add_to_book_list'), {'books' : '2', 'id' : '1'})
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
