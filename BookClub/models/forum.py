@@ -2,34 +2,21 @@ from django.db import models
 from BookClub.models import TextPost, RatedContent, TextComment
 from django.utils.text import slugify
 
+
 class ForumPost(TextPost):
     class Meta:
         ordering = ['-created_on']
 
-    comments = models.ManyToManyField('ForumComment', related_name='Comments', blank=True)
-
-    def add_comment(self, comment):
-        self.comments.add(comment)
-        self.save()
-
-    def remove_comment(self, comment):
-        self.comments.remove(comment)
-        self.save()
-        
+    def get_comments(self):
+        return self.forumcomment_set.all()
 
 
 class ForumComment(TextComment):
-    subComments = models.ManyToManyField('ForumComment', related_name='Replies', blank=True)
+    class Meta:
+        ordering = ['-created_on']
 
-    def add_comment(self, comment):
-        self.subComments.add(comment)
-        self.save()
+    post = models.ForeignKey('ForumPost', on_delete=models.CASCADE)
 
-    def remove_comment(self, comment):
-        self.subComments.remove(comment)
-        self.save()
-        
-    
 
 class Forum(models.Model):
     class Meta:

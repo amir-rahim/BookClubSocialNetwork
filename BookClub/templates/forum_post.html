@@ -113,8 +113,8 @@
                     <div class="card-header-title">Comments to Post:</div>
                 </div>
                 <div class="card-content">
-                    {% if post.comments.count > 0 %}
-                        {% for comment in post.comments.all %}
+                    {% if post.get_comments.count > 0 %}
+                        {% for comment in post.get_comments %}
                             <article class="message">
 
                                 <div class="columns is-vcentered">
@@ -122,7 +122,7 @@
                                         {% include 'partials/voting.html' with content=comment %}
                                     </div>
                                     <div class="column is-11">
-                                        <div class="message-body">
+                                        <div class="message-body" style="margin-right: 20px;">
                                             <p class="has-text-justified">
                                                 "{{ comment.content }}"
                                             </p>

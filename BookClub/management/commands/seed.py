@@ -125,6 +125,6 @@ class Command(BaseCommand):
                 commentUser = User.objects.order_by('?')[0]
                 curComment = ForumComment.objects.create(
                     content=self.faker.text(max_nb_chars=240),
-                    creator=commentUser
+                    creator=commentUser,
+                    post=curPost
                 )
-                curPost.add_comment(curComment)

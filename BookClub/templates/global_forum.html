@@ -138,8 +138,8 @@
                             {{ post.created_on | timesince }} ago
                         </p>
                         <a href="{% url 'forum_post' post.id %}" class="card-footer-item">
-                            {% if post.comments.count > 0 %}
-                                See {{ post.comments.count }} comments
+                            {% if post.get_comments.count > 0 %}
+                                See {{ post.get_comments.count }} comments
                             {% else %}
                                 Be the first to comment!
                             {% endif %}

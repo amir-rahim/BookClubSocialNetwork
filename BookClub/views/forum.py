@@ -1,6 +1,7 @@
 """Forum Related Views"""
 from django.contrib import messages
 from django.urls import reverse
+from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, CreateView
 from django.views.generic.edit import UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -8,6 +9,7 @@ from BookClub.forms.forum_forms import CreateForumCommentForm, CreatePostForm
 from BookClub.helpers import has_membership
 from BookClub.models import ForumPost, ForumComment, Forum, User, Club
 from BookClub.models.club_membership import ClubMembership
+from BookClub.tests.helpers import reverse_with_next
 
 
 class ClubMemberTestMixin(UserPassesTestMixin):
@@ -68,7 +70,7 @@ class ForumView(ClubMemberTestMixin, ListView):
         votes_cast = 0
 
         for post in context['forum'].posts.all():
-            replies += post.comments.all().count()
+            replies += post.forumcomment_set.all().count()
             votes_cast = post.votes.all().count()
 
         context['replies'] = replies
@@ -117,10 +119,10 @@ class CreateCommentView(LoginRequiredMixin, ClubMemberTestMixin, CreateView):
 
     def form_valid(self, form):
         if self.kwargs.get('post_id') is not None:
-            form.instance.creator = self.request.user
-            self.object = form.save()
             post = ForumPost.objects.get(pk=self.kwargs['post_id'])
-            post.add_comment(self.object)
+            form.instance.creator = self.request.user
+            form.instance.post = post
+            self.object = form.save()
             return super().form_valid(form)
         else:
             return self.form_invalid(self)
@@ -145,6 +147,33 @@ class EditForumPostView(LoginRequiredMixin, ClubMemberTestMixin, UpdateView):
     pk_url_kwarg = 'post_id'
     context_object_name = 'post'
 
+    def handle_no_permission(self):
+        if not self.request.user.is_authenticated:
+            return super(LoginRequiredMixin, self).handle_no_permission()
+        elif self.kwargs.get('club_url_name') is not None:
+            club = Club.objects.get(club_url_name=self.kwargs.get('club_url_name'))
+            membership = ClubMembership.objects.filter(user=self.request.user, club=club)
+            if membership.count() != 1:
+                return super(ClubMemberTestMixin, self).handle_no_permission()
+            else:
+                url = reverse('club_dashboard', kwargs={'club_url_name': self.kwargs['club_url_name']})
+                return redirect(url)
+        else:
+            url = reverse('global_forum')
+            return redirect(url)
+
+    def test_func(self):
+        try:
+            post = ForumPost.objects.get(pk=self.kwargs['post_id'])
+            if post.creator != self.request.user:
+                messages.add_message(self.request, messages.ERROR, 'Access denied!')
+                return False
+            else:
+                return True
+        except:
+            messages.add_message(self.request, messages.ERROR, 'The post you tried to edit was not found!')
+            return False
+
     def get_success_url(self):
         return reverse('forum_post', kwargs=self.kwargs)
 
@@ -153,6 +182,33 @@ class DeleteForumPostView(LoginRequiredMixin, ClubMemberTestMixin, DeleteView):
     model = ForumPost
     http_method_names = ['post']
     pk_url_kwarg = 'post_id'
+
+    def handle_no_permission(self):
+        if not self.request.user.is_authenticated:
+            return super(LoginRequiredMixin, self).handle_no_permission()
+        elif self.kwargs.get('club_url_name') is not None:
+            club = Club.objects.get(club_url_name=self.kwargs.get('club_url_name'))
+            membership = ClubMembership.objects.filter(user=self.request.user, club=club)
+            if membership.count() != 1:
+                return super(ClubMemberTestMixin, self).handle_no_permission()
+            else:
+                url = reverse('club_dashboard', kwargs={'club_url_name': self.kwargs['club_url_name']})
+                return redirect(url)
+        else:
+            url = reverse('global_forum')
+            return redirect(url)
+
+    def test_func(self):
+        try:
+            post = ForumPost.objects.get(pk=self.kwargs['post_id'])
+            if post.creator != self.request.user:
+                messages.add_message(self.request, messages.ERROR, 'Access denied!')
+                return False
+            else:
+                return True
+        except:
+            messages.add_message(self.request, messages.ERROR, 'The post you tried to delete was not found!')
+            return False
 
     def get_success_url(self):
         self.kwargs.pop('post_id')

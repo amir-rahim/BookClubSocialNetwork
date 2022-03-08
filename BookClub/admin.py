@@ -80,8 +80,8 @@ class ForumCommentAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for club meetings."""
 
     list_display = [
-        'creator', 'created_on', 'content', 'rating']
-    filter_horizontal = ['subComments']
+        'creator', 'created_on', 'content', 'rating'
+    ]
 
 
 @admin.register(Vote)
