@@ -18,3 +18,6 @@ class BookList(models.Model):
 
     def add_book(self, book):
         self.books.add(book)
+
+    def remove_book(self, book):
+        self.books.remove(book)
