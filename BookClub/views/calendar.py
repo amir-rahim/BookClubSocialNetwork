@@ -8,6 +8,7 @@ from BookClub.forms import MeetingForm
 from BookClub.models import User, Club, ClubMembership, Meeting
 from BookClub.helpers import *
 from django.db.models import Q
+import datetime
 
 
 class CalendarView(LoginRequiredMixin, ListView):
@@ -16,8 +17,6 @@ class CalendarView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         user = User.objects.get(id=self.request.user.id)
-        # inner_qs = User.objects.filter(username__contains=Meeting.members.username)
-        # subquery = Meeting.objects.filter(Q(members=user.id))
         subquery = Meeting.objects.filter(Q(members=user.id))
 
         return subquery
@@ -35,6 +34,8 @@ class CalendarView(LoginRequiredMixin, ListView):
         #     meetings = Meeting.objects.filter(user__in=inner_qs)
         # except:
         #     meetings = None
+
         context['meetings'] = self.get_queryset()
+        context['today'] = datetime.date.today()
 
         return context
