@@ -1,0 +1,27 @@
+
+<button type="button" class="button is-danger js-modal-trigger" data-target="{{delete_modal_id}}-delete-modal" aria-haspopup="true">
+  <span class="icon is-small">
+      <i class="fas fa-trash"></i>
+    </span>
+    <span>Delete</span>
+</button>
+
+<div class="modal" id="{{delete_modal_id}}-delete-modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title" style="text-align:left">Confirm Deletion</p>
+      <button class="delete" aria-label="close"></button>
+    </header>
+    <section class="modal-card-body" style="text-align:left">
+      <p>Are you sure you want to delete <strong>{{delete_item.str}}</strong>?</p>
+    </section>
+    <footer class="modal-card-foot">
+      <form class="" action="{{delete_item.get_delete_url}}" method="post">
+        {% csrf_token %}
+        <button class="button is-danger">Delete</button>
+      </form>
+      <button class="button">Cancel</button>
+    </footer>
+  </div>
+</div>

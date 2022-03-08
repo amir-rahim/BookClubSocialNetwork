@@ -24,7 +24,9 @@ class UserBooklistsViewTestCase(TestCase):
         return reverse('booklists_list', kwargs={'username': username})
 
     def test_url(self):
-        self.assertEqual(self.url,f"/user/{self.user.username}/lists")
+        self.assertEqual(self.url,f"/user/{self.user.username}/lists/")
+
+    # Uncomment the test below if the view should only be available to logged in users
 
     # def test_redirects_when_not_logged_in(self):
     #     redirect_url = reverse_with_next('login', self.url)
@@ -40,6 +42,7 @@ class UserBooklistsViewTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user_booklists.html')
+        self.assertTemplateUsed(response, 'partials/delete_button_and_modal.html')
 
     def test_contains_lists_created_by_user(self):
         self.client.login(username = self.user.username, password = 'Password123')
@@ -47,6 +50,7 @@ class UserBooklistsViewTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user_booklists.html')
+        self.assertTemplateUsed(response, 'partials/delete_button_and_modal.html')
         response_lists = list(response.context['booklists'])
         user_lists = list(BookList.objects.filter(creator = self.user))
 
@@ -59,6 +63,7 @@ class UserBooklistsViewTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user_booklists.html')
+        self.assertTemplateUsed(response, 'partials/delete_button_and_modal.html')
         response_lists = list(response.context['booklists'])
         lists_by_other_users = list(BookList.objects.exclude(creator = self.user))
 
@@ -70,6 +75,7 @@ class UserBooklistsViewTestCase(TestCase):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user_booklists.html')
+        self.assertTemplateUsed(response, 'partials/delete_button_and_modal.html')
         self.assertEqual(response.context['self'], True)
         self.assertContains(response, '<span>Edit</span>')
 
@@ -98,4 +104,6 @@ class UserBooklistsViewTestCase(TestCase):
         self.assertTemplateUsed(response, 'user_booklists.html')
         response_lists = list(response.context['booklists'])
         self.assertEqual(len(response_lists), 0)
-        self.assertContains(response, '<div class="box">No lists. <a href="#">Create one?</a></div>')
+        self.assertContains(response, "No lists.")
+        self.assertContains(response, "Create one?")
+

@@ -1,0 +1,17 @@
+from item_based_recommender import ItemBasedRecommender
+
+# Number of minimum ratings for a book to be kept in the filtered ratings dataset
+filtering_min_ratings_threshold = 15
+# We use item-based collaborative filtering
+item_based = ItemBasedRecommender(filtering_min_ratings_threshold)
+
+# Test
+test_subject = 278188
+
+# Recommendations based on all books the user has rated
+recommendations_all_ratings = item_based.get_recommendations_all_ratings_from_user_id(test_subject)
+print(recommendations_all_ratings)
+
+# Recommendations based on all books the user has rated with a positive value (> 6/10)
+recommendations_positive_ratings = item_based.get_recommendations_positive_ratings_only_from_user_id(test_subject)
+print(recommendations_positive_ratings)

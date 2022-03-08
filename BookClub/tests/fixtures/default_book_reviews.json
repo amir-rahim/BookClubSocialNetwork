@@ -14,9 +14,9 @@
         "pk": 2,
         "fields": {
             "book": 1,
-            "rating": 5,
+            "rating": 1,
             "review": "Lorem Ipsum",
-            "user": 4,
+            "user": 7,
             "createdOn": "2022-02-22T19:00+00:00"
         }
     }

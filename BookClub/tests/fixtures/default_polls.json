@@ -1,0 +1,22 @@
+[
+  {
+    "model": "BookClub.poll",
+    "pk": 1,
+    "fields": {
+      "title": "My First Poll",
+      "created_on": "2022-02-22T19:00+00:00",
+      "deadline": "2023-02-22T19:00+00:00",
+      "active": true
+    }
+  },
+  {
+    "model": "BookClub.poll",
+    "pk": 2,
+    "fields": {
+      "title": "My Second Poll",
+      "created_on": "2022-02-22T19:00+00:00",
+      "deadline": null,
+      "active": false
+    }
+  }
+]

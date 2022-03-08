@@ -2,6 +2,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/django,python,visualstudio,macos,windows,linux,pycharm,sublimetext,xcode,visualstudiocode,venv
 # Edit at https://www.toptal.com/developers/gitignore?templates=django,python,visualstudio,macos,windows,linux,pycharm,sublimetext,xcode,visualstudiocode,venv
 
+# HEROKU
+staticfiles
+
 ### Django ###
 *.log
 *.pot
