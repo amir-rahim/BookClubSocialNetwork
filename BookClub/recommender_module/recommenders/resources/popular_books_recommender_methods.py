@@ -21,7 +21,11 @@ class PopularBooksMethods:
             if (retraining_and_saving):
                 self.save_all_popularity_lists()
         else:
-            self.import_trained_lists()
+            # Import popularity lists if files exist, otherwise train and save popularity lists
+            try:
+                self.import_trained_lists()
+            except:
+                self.__init__(min_ratings_threshold=min_ratings_threshold, retraining_and_saving=True)
 
     """Import all sorted ratings list objects, using the joblib library"""
     def import_trained_lists(self):

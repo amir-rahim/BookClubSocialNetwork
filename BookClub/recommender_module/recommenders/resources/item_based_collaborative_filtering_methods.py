@@ -20,7 +20,10 @@ class ItemBasedCollaborativeFilteringMethods:
             if (retraining_and_saving):
                 self.save_model()
         else:
-            self.import_model()
+            try:
+                self.import_model()
+            except:
+                self.__init__(filtering_min_ratings_threshold=filtering_min_ratings_threshold, retraining_and_saving=True)
 
 
     """Build the filtered ratings trainset, with only books having at least {filtering_min_ratings_threshold} ratings"""
