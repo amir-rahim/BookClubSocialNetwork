@@ -14,7 +14,7 @@ class PopularBooksMethods:
     sorted_median_ratings = []
     sorted_combination_scores = []
 
-    def __init__(self, min_ratings_threshold=100, retraining=False, retraining_and_saving=False):
+    def __init__(self, min_ratings_threshold=10, retraining=False, retraining_and_saving=False):
         if (retraining or retraining_and_saving):
             self.load_filtered_books_list(min_ratings_threshold)
             self.compute_all_popularity_lists()

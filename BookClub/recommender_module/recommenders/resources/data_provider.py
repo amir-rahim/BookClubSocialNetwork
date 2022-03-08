@@ -19,15 +19,22 @@ class DataProvider:
     """Constructor for the DataProvider class
         train_dataset_size_percentage (value between 0 and 1): (unfiltered dataset) percentage of dataset to use in training dataset (rest used in testing dataset)
         filtering_min_ratings_threshold: minimum number of ratings for books to be included in the filtered ratings dataset"""
-    def __init__(self, train_dataset_size_percentage=0.01, filtering_min_ratings_threshold=15):
+    def __init__(self, train_dataset_size_percentage=0.01, filtering_min_ratings_threshold=15, get_data_from_csv=False):
+        print("Getting data...")
         self.train_dataset_size_percentage = train_dataset_size_percentage
-        self.load_ratings_datasets()
+        self.load_ratings_datasets(get_data_from_csv)
         self.filtering_min_ratings_threshold = filtering_min_ratings_threshold
         self.load_filtered_ratings_dataset()
+        print("Getting data done")
 
     """Load the ratings from the csv file, split the data in train and test partitions, and build train set"""
-    def load_ratings_datasets(self):
-        self.get_ratings_from_django_database()
+    def load_ratings_datasets(self, get_data_from_csv=False):
+        if get_data_from_csv:
+            # Get data from csv as pandas DataFrame
+            ratings_df = pd.read_csv(self.ratings_path, sep=';', encoding_errors="ignore")
+            self.ratings_df = ratings_df
+        else:
+            self.get_ratings_from_django_database()
         # Split data into train (70%) and test (30%) DataFrames
         index_split = int(len(self.ratings_df)*self.train_dataset_size_percentage)
         train_df = self.ratings_df.iloc[0:index_split, :]
@@ -43,8 +50,11 @@ class DataProvider:
     def get_ratings_from_django_database(self):
         ratings_query = BookReview.objects.all()
         ratings_df = pd.DataFrame(data=None, columns=["User-ID", "ISBN", "Book-Rating"])
+        ratings_list = []
         for rating in ratings_query:
-            ratings_df = ratings_df.append({"User-ID": user.username, "ISBN": book.ISBN, "Book-Rating": rating}, ignore_index=True)
+            ratings_list.append([rating.user.username, rating.book.ISBN, rating.rating])
+            #ratings_df = ratings_df.append({"User-ID": rating.user.username, "ISBN": rating.book.ISBN, "Book-Rating": rating.rating}, ignore_index=True)
+        ratings_df = pd.DataFrame.from_records(ratings_list, columns=["User-ID", "ISBN", "Book-Rating"])
         self.ratings_df = ratings_df
 
     """Filter the book dataset to keep only books with at least {self.filtering_min_ratings_threshold} ratings"""
