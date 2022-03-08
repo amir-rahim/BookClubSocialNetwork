@@ -1,6 +1,8 @@
 from surprise import Dataset
 from surprise import Reader
 import pandas as pd
+from BookClub.models.review import BookReview
+
 
 """This class loads the ratings dataset from the 'BX-Book-Ratings.csv' file and builds the train sets"""
 class DataProvider:
@@ -25,19 +27,25 @@ class DataProvider:
 
     """Load the ratings from the csv file, split the data in train and test partitions, and build train set"""
     def load_ratings_datasets(self):
-        # Get data from csv as pandas DataFrame
-        ratings_df = pd.read_csv(self.ratings_path, sep=';', encoding_errors="ignore")
-        self.ratings_df = ratings_df
+        self.get_ratings_from_django_database()
         # Split data into train (70%) and test (30%) DataFrames
-        index_split = int(len(ratings_df)*self.train_dataset_size_percentage)
-        train_df = ratings_df.iloc[0:index_split, :]
+        index_split = int(len(self.ratings_df)*self.train_dataset_size_percentage)
+        train_df = self.ratings_df.iloc[0:index_split, :]
         self.train_df = train_df
-        test_df = ratings_df.iloc[index_split:, :]
+        test_df = self.ratings_df.iloc[index_split:, :]
         self.test_df = test_df
         # Create surprise dataset
         reader = Reader(line_format='user item rating', sep=';', skip_lines=0, rating_scale=(0,10))
         ratings_trainset = Dataset.load_from_df(train_df, reader)
         self.ratings_trainset = ratings_trainset.build_full_trainset()
+
+    """Get data from Django database as pandas DataFrame"""
+    def get_ratings_from_django_database(self):
+        ratings_query = BookReview.objects.all()
+        ratings_df = pd.DataFrame(data=None, columns=["User-ID", "ISBN", "Book-Rating"])
+        for rating in ratings_query:
+            ratings_df = ratings_df.append({"User-ID": user.username, "ISBN": book.ISBN, "Book-Rating": rating}, ignore_index=True)
+        self.ratings_df = ratings_df
 
     """Filter the book dataset to keep only books with at least {self.filtering_min_ratings_threshold} ratings"""
     def get_filtered_books_list(self):
