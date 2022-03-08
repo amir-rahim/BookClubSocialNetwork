@@ -54,6 +54,7 @@ View all the books in {{ booklist.title }}
                         <tr>
                             <th scope="col">Title</th>
                             <th scope="col">Author</th>
+                            <th scope="col">Remove</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -77,6 +78,12 @@ View all the books in {{ booklist.title }}
                                     </div>
                                 </td>
                                 <td> {{ book.author }} </td>
+                                <td>
+                                    <form method="post" action="{% url 'remove_book' username=user.username booklist_id=booklist.id book_id=book.id %}"> 
+                                        {% csrf_token %}
+                                        <button type="submit" class="is-danger is-inverted">X</button>
+                                    </form>
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>
