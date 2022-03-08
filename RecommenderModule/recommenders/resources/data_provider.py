@@ -7,7 +7,7 @@ from BookClub.models.review import BookReview
 """This class loads the ratings dataset from the 'BX-Book-Ratings.csv' file and builds the train sets"""
 class DataProvider:
 
-    ratings_path = "BookClub/recommender_module/recommenders/resources/book-review-dataset/BX-Book-Ratings.csv"
+    ratings_path = "static/dataset/BX-Book-Ratings.csv"
     ratings_trainset = None
     ratings_df = None
     train_df = None
