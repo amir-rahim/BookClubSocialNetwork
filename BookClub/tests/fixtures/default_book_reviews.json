@@ -26,7 +26,7 @@
         "model": "BookClub.BookReview",
         "pk": 3,
         "fields": {
-            "book": 1,
+            "book": 2,
             "bookrating": 1,
             "title":"Pretty decent",
             "content": "Lorem Ipsum",
