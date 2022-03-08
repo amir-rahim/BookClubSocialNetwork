@@ -49,28 +49,28 @@ class Command(BaseCommand):
             Book.objects.bulk_create(random_sample)
         except:
             print('unique error')
-            
+
         self.importUsers()
         print(User.objects.all().count())
         self.importReviews()
-        
+
     def cleanYear(self, year):
         string = str(year)
         if string == "0":
             return "0001-01-01"
         else:
             return string+"-01-01"
-        
+
     def importUsers(self):
-        file_path = ("RecommenderModule/dataset/BX-Users.csv")
+        file_path = ("static/dataset/BX-Users.csv")
         file = open(file_path, 'rb', 0)
-        
+
         data = DataFrame(pd.read_csv(file_path, header=0, encoding= "ISO-8859-1", sep=';'))
-        
+
         faker = Faker()
-        
+
         df_records = data.to_dict('records')
-        
+
         model_instances = []
         i = 0;
         for record in df_records:
@@ -82,21 +82,21 @@ class Command(BaseCommand):
                 password="Password123",
             )
             model_instances.append(u)
-            
-        
+
+
         try:
             User.objects.bulk_create(model_instances)
         except Exception as e:
             print(e)
             print("user error")
             print('unique error')
-        
+
     def importReviews(self):
-        file_path = ("RecommenderModule/dataset/BX-Book-Ratings.csv")
+        file_path = ("static/dataset/BX-Book-Ratings.csv")
         file = open(file_path, 'rb', 0)
-        
+
         data = DataFrame(pd.read_csv(file_path, header=0, encoding= "ISO-8859-1", sep=';'))
-        
+
         df_records = data.to_dict('records')
         u = 0
         bc = 0
@@ -121,15 +121,15 @@ class Command(BaseCommand):
             except Exception as e:
                 print(e)
                 continue
-            
+
         BookReview.objects.bulk_create(model_instances)
-        
+
         print(u)
         print(bc)
-        
-        
+
+
     def getBook(self, isbn):
         return Book.objects.get(ISBN = isbn)
-    
+
     def getUser(self, userId):
         return User.objects.get(pk=userId)

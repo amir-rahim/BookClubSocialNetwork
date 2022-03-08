@@ -54,7 +54,7 @@ class BookListAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for Books Reviews ."""
 
     list_display = [
-        'book', 'user', 'rating', 'review', 'createdOn'
+        'title', 'description', 'creator', 'created_on'
     ]
 
 
