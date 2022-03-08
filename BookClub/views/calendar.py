@@ -17,7 +17,8 @@ class CalendarView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         user = User.objects.get(id=self.request.user.id)
-        subquery = Meeting.objects.filter(Q(members=user.id))
+        today = datetime.date.today()
+        subquery = Meeting.objects.filter(Q(members=user.id, meeting_time__gte=today)).order_by('meeting_time')
 
         return subquery
 
@@ -25,16 +26,6 @@ class CalendarView(LoginRequiredMixin, ListView):
         """Generate context data to be shown in the template."""
 
         context = super().get_context_data(**kwargs)
-        # user = User.objects.get(id=self.request.user.id)
-        # try:
-        #     # if beer.salas_set.filter(pk=sala.pk).exists():
-        #     # inner_qs = Blog.objects.filter(name__contains='Cheddar')
-        #     # entries = Entry.objects.filter(blog__in=inner_qs)
-        #     inner_qs = User.objects.filter(id__in=user.id)
-        #     meetings = Meeting.objects.filter(user__in=inner_qs)
-        # except:
-        #     meetings = None
-
         context['meetings'] = self.get_queryset()
         context['today'] = datetime.date.today()
 
