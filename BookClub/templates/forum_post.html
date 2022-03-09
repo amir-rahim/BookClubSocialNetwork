@@ -130,6 +130,22 @@
                                             <p class="has-text-right">
                                                 <i>- by {{ comment.creator }}, {{ comment.created_on | timesince }} ago</i>
                                             </p>
+
+                                            <div class="buttons">
+                                                {% if comment.creator == user %}
+                                                    <form method="post"
+                                                          action="{% url 'delete_forum_comment' post.id comment.id %}">
+                                                        {% csrf_token %}
+                                                        <button class="button is-danger is-rounded"
+                                                                aria-label="Delete Post"
+                                                                type="submit">
+                                                            <span class="icon">
+                                                                <i class="fa-solid fa-x"></i>
+                                                            </span>
+                                                        <span>Delete</span>
+                                                        </button>
+                                                    </form>
+                                                {% endif %}
                                         </div>
                                     </div>
 
