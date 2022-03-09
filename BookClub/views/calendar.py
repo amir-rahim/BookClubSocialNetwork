@@ -26,11 +26,13 @@ class CalendarView(LoginRequiredMixin, ListView):
         """Generate context data to be shown in the template."""
         club_ids = ClubMembership.objects.filter(user=self.request.user).values_list('club', flat=True)
         clubs = Club.objects.filter(id__in=club_ids)
-        not_joined = Meeting.objects.filter(Q(club=clubs))
-
+        not_joined = Meeting.objects.filter(club__in=clubs).exclude(members=self.request.user.id)
+        all_meetings = Meeting.objects.filter(club__in=clubs)
         context = super().get_context_data(**kwargs)
         context['meetings'] = self.get_queryset()
         context['today'] = datetime.date.today()
         context['not_joined'] = not_joined
+        context['all_meetings'] = all_meetings
+        context['current_user'] = self.request.user
 
         return context
