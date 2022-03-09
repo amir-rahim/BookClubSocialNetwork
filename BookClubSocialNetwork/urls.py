@@ -63,10 +63,11 @@ urlpatterns = [
     path('club/<str:club_url_name>/edit/', views.EditClubView.as_view(), name='edit_club'),
     
     path('club/<str:club_url_name>/forum/', views.ForumView.as_view(), name='club_forum'),
-    path('club/<str:club_url_name>/forum/post/', views.CreatePostView.as_view(), 'create_forum_comment'),
+    path('club/<str:club_url_name>/forum/post/', views.CreatePostView.as_view(), 'create_forum_post'),
     path('club/<str:club_url_name>/forum/<int:post_id>/', views.ForumPostView.as_view(), 'forum_post'),
     path('club/<str:club_url_name>/forum/<int:post_id>/comment/',
          views.CreateCommentView.as_view(), name='create_forum_comment'),
+    path('club/<str:club_url_name>/forum/<int:post_id>/comment/<int:comment_id>/delete/', views.DeleteForumCommentView.as_view(), 'delete_forum_comment'),
     path('club/<str:club_url_name>/forum/<int:post_id>/edit/',
          views.EditForumPostView.as_view(), name='edit_forum_post'),
     path('club/<str:club_url_name>/forum/<int:post_id>/delete/',
@@ -105,6 +106,7 @@ urlpatterns = [
     path('forum/<int:post_id>/comment/', views.CreateCommentView.as_view(), name = 'create_forum_comment'),
     path('forum/<int:post_id>/edit/',views.EditForumPostView.as_view(), name='edit_forum_post'),
     path('forum/<int:post_id>/delete/', views.DeleteForumPostView.as_view(), name='delete_forum_post'),
+    path('forum/<int:post_id>/comment/<int:comment_id>/delete/', views.DeleteForumCommentView.as_view(), name='delete_forum_comment'),
     path('forum/upvote/', views.CreateVoteView.as_view(), name = 'upvote'),
-    path('forum/downvote', views.CreateVoteView.as_view(), name='downvote')
+    path('forum/downvote', views.CreateVoteView.as_view(), name='downvote'),
 ]
