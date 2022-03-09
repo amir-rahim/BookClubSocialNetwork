@@ -1,5 +1,5 @@
 from django.db import models
-from BookClub.models import TextPost, RatedContent, TextComment
+from BookClub.models import TextPost, TextComment
 from django.utils.text import slugify
 
 

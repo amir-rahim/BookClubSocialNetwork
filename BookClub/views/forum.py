@@ -106,7 +106,7 @@ class CreatePostView(LoginRequiredMixin, ClubMemberTestMixin, CreateView):
 
     def get_success_url(self):
         if self.kwargs.get('club_url_name') is not None:
-            pass
+            return reverse('club_forum', kwargs=self.kwargs)
             # placeholder till club forums is set up
         else:
             return reverse('global_forum')
@@ -134,7 +134,7 @@ class CreateCommentView(LoginRequiredMixin, ClubMemberTestMixin, CreateView):
 
     def get_success_url(self):
         if self.kwargs.get('club_url_name') is not None:
-            pass
+            return reverse('forum_post', kwargs=self.kwargs)
             # placeholder till club forums is set up
         else:
             return reverse('forum_post', kwargs=self.kwargs)
@@ -213,7 +213,47 @@ class DeleteForumPostView(LoginRequiredMixin, ClubMemberTestMixin, DeleteView):
     def get_success_url(self):
         self.kwargs.pop('post_id')
         if self.kwargs.get('club_url_name') is not None:
-            pass
+            return reverse('club_forum', kwargs=self.kwargs)
             # placeholder till club forums is set up
         else:
             return reverse('global_forum', kwargs=self.kwargs)
+        
+        
+class DeleteForumCommentView(LoginRequiredMixin, ClubMemberTestMixin, DeleteView):
+    model = ForumComment
+    http_method_names = ['post']
+    pk_url_kwarg = 'comment_id'
+    
+    def handle_no_permission(self):
+        if not self.request.user.is_authenticated:
+            return super(LoginRequiredMixin, self).handle_no_permission()
+        elif self.kwargs.get('club_url_name') is not None:
+            club = Club.objects.get(club_url_name=self.kwargs.get('club_url_name'))
+            membership = ClubMembership.objects.filter(user=self.request.user, club=club)
+            if membership.count() != 1:
+                return super(ClubMemberTestMixin, self).handle_no_permission()
+            else:
+                url = reverse('forum_post', kwargs=self.kwargs)
+                return redirect(url)
+        else:
+            url = reverse('forum_post', kwargs=self.kwargs)
+            return redirect(url)
+
+    def test_func(self):
+        try:
+            comment = ForumComment.objects.get(pk=self.kwargs['comment_id'])
+            if comment.creator != self.request.user:
+                messages.add_message(self.request, messages.ERROR, 'Access denied!')
+                return False
+            else:
+                return True
+        except:
+            messages.add_message(self.request, messages.ERROR, 'The comment you tried to delete was not found!')
+            return False
+
+    def get_success_url(self):
+        self.kwargs.pop('comment_id')
+        if self.kwargs.get('club_url_name') is not None:
+            return reverse('forum_post', kwargs=self.kwargs)
+        else:
+            return reverse('forum_post', kwargs=self.kwargs)
