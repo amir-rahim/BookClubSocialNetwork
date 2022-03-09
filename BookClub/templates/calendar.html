@@ -81,7 +81,7 @@ Calendar
                     {% endif %}
                     {% endfor %}
                 </div>
-                <!--UPCOMING MEETINGS-->
+                <!--JOINED UPCOMING MEETINGS-->
 
                 <hr class="solid">
 
@@ -141,7 +141,7 @@ Calendar
 
                     {% for meeting in not_joined %}
 
-                    {% if meeting.meeting_time.date == today%}
+                    {% if meeting.meeting_time.date == today %}
                     <div class="column is-one-third">
 
                         <!--Card Template-->
@@ -176,7 +176,7 @@ Calendar
                     {% endif %}
                     {% endfor %}
                 </div>
-                <!--UPCOMING MEETINGS-->
+                <!--NOT JOINED UPCOMING MEETINGS-->
 
                 <hr class="solid">
 
@@ -186,9 +186,9 @@ Calendar
 
                 <div class="columns is-multiline">
 
-                    {% for meeting in meetings %}
+                    {% for meeting in not_joined %}
 
-                    {% if meeting.meeting_time.date > today%}
+                    {% if meeting.meeting_time.date > today %}
                     <div class="column is-one-third">
 
                         <!--Card Template-->
@@ -226,7 +226,161 @@ Calendar
             </section>
             <!--Both section-->
             <section class="tab-content">
-                Hello both
+                <hr class="solid">
+
+                <p class="title is-3">All Meetings today</p>
+
+                <hr class="solid">
+
+                <div class="columns is-multiline">
+                    {% for meeting in all_meetings %}
+                        {% if meeting.meeting_time.date == today %}
+                                {% if current_user in meeting.members.all %}
+
+                                    <div class="column is-one-third">
+                                        <!--Card Template-->
+                                            <div class="card joined_card">
+                                                <header class="card-header">
+                                                    <p class="card-header-title title is-4" >
+                                                        {{meeting.title}}
+                                                    <span class="tag  is-warning is-right " style="margin-left:70px ">Joined</span>
+                                                    </p>
+
+                                                </header>
+                                                <div class="card-content">
+
+                                                    <div class="content">
+                                                        <p class="subtitle is-4 charlimit">
+                                                            {{meeting.description}}
+                                                            <br>
+                                                        </p>
+                                                        <span class="subtitle is-5">
+                                                                Organised by <i>{{meeting.organiser}}</i> for <i>{{meeting.club}}</i>
+                                                            </span>
+                                                        <br>
+                                                        <i>{{meeting.meeting_time}}</i>
+                                                    </div>
+
+                                                </div>
+                                                <footer class="card-footer">
+                                                    <a href="{% url 'meeting_details' meeting.club.club_url_name meeting.id %}"
+                                                       class="card-footer-item">View</a>
+                                                </footer>
+                                            </div>
+                                    </div>
+                                {% else %}
+                                    <div class="column is-one-third">
+                                        <!--Card Template-->
+                                            <div class="card rest_card">
+                                                <header class="card-header">
+                                                    <p class="card-header-title title is-4">
+                                                        {{meeting.title}}
+                                                    </p>
+                                                </header>
+                                                <div class="card-content">
+
+                                                    <div class="content">
+                                                        <p class="subtitle is-4 charlimit">
+                                                            {{meeting.description}}
+                                                            <br>
+                                                        </p>
+                                                        <span class="subtitle is-5">
+                                                                Organised by <i>{{meeting.organiser}}</i> for <i>{{meeting.club}}</i>
+                                                            </span>
+                                                        <br>
+                                                        <i>{{meeting.meeting_time}}</i>
+                                                    </div>
+
+                                                </div>
+                                                <footer class="card-footer">
+                                                    <a href="{% url 'meeting_details' meeting.club.club_url_name meeting.id %}"
+                                                       class="card-footer-item">View</a>
+                                                </footer>
+                                            </div>
+                                    </div>
+                                {% endif %}
+
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <!--Upcoming meetings for both-->
+
+                <hr class="solid">
+
+                <p class="title is-3">All Upcoming meetings</p>
+
+                <hr class="solid">
+
+                <div class="columns is-multiline">
+                    {% for meeting in all_meetings %}
+                        {% if meeting.meeting_time.date > today %}
+                                {% if current_user in meeting.members.all %}
+
+                                    <div class="column is-one-third">
+                                        <!--Card Template-->
+                                            <div class="card joined_card">
+                                                <header class="card-header">
+                                                    <p class="card-header-title title is-4">
+                                                        {{meeting.title}}
+                                                    <span class="tag  is-warning is-right " style="margin-left:70px ">Joined</span>
+                                                    </p>
+                                                </header>
+                                                <div class="card-content">
+
+                                                    <div class="content">
+                                                        <p class="subtitle is-4 charlimit">
+                                                            {{meeting.description}}
+                                                            <br>
+                                                        </p>
+                                                        <span class="subtitle is-5">
+                                                                Organised by <i>{{meeting.organiser}}</i> for <i>{{meeting.club}}</i>
+                                                            </span>
+                                                        <br>
+                                                        <i>{{meeting.meeting_time}}</i>
+                                                    </div>
+
+                                                </div>
+                                                <footer class="card-footer">
+                                                    <a href="{% url 'meeting_details' meeting.club.club_url_name meeting.id %}"
+                                                       class="card-footer-item">View</a>
+                                                </footer>
+                                            </div>
+                                    </div>
+                                {% else %}
+                                    <div class="column is-one-third">
+                                        <!--Card Template-->
+                                            <div class="card rest_card">
+                                                <header class="card-header">
+                                                    <p class="card-header-title title is-4">
+                                                        {{meeting.title}}
+                                                    </p>
+                                                </header>
+                                                <div class="card-content">
+
+                                                    <div class="content">
+                                                        <p class="subtitle is-4 charlimit">
+                                                            {{meeting.description}}
+                                                            <br>
+                                                        </p>
+                                                        <span class="subtitle is-5">
+                                                                Organised by <i>{{meeting.organiser}}</i> for <i>{{meeting.club}}</i>
+                                                            </span>
+                                                        <br>
+                                                        <i>{{meeting.meeting_time}}</i>
+                                                    </div>
+
+                                                </div>
+                                                <footer class="card-footer">
+                                                    <a href="{% url 'meeting_details' meeting.club.club_url_name meeting.id %}"
+                                                       class="card-footer-item">View</a>
+                                                </footer>
+                                            </div>
+                                    </div>
+                                {% endif %}
+
+                        {% endif %}
+                    {% endfor %}
+                </div>
             </section>
         </div>
     </div>
@@ -244,6 +398,10 @@ Calendar
 
     .rest_card {
         background-color: white;
+    }
+
+    .joined_card {
+        background-color: lightyellow;
     }
 
     .charlimit {
