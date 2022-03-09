@@ -1,5 +1,10 @@
 {% load getcontenttype %}
+{% load votingtags %}
 {% getcontenttype content as contenttype %}
+{% has_user_voted content user as has_user_voted %}
+{% if has_user_voted %}
+    voted
+{% endif %}
 <form id="upvoteform"
       method="post"
       action="{% url 'upvote' %}" class="voteform">

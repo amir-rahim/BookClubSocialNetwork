@@ -1,4 +1,3 @@
-from urllib.parse import urlencode
 from django.template import Library
 from django.contrib.contenttypes.models import ContentType
 register = Library()
