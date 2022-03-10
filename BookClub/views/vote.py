@@ -14,9 +14,10 @@ class CreateVoteView(LoginRequiredMixin, CreateView):
     
     def post(self, request, *args, **kwargs):
         form = self.get_form()
+        
         if not form.is_valid():
             if len(form.errors) == 1 and len(form.non_field_errors())== 1:
-                user = self.request.user
+                user = form.instance.creator
                 content_type = form.instance.content_type
                 object_id = form.instance.object_id
                 thisVoteType = form.instance.type
@@ -35,18 +36,20 @@ class CreateVoteView(LoginRequiredMixin, CreateView):
         return super().post(request, *args, **kwargs)
     
     def get_response_json(self, form, vote):
-        object_type = ContentType.objects.get(pk=form.instance.content_type.id)
-        object = object_type.get_object_for_this_type(pk=form.instance.object_id)
-        vote = object.votes.all().get(creator=self.request.user)
-        upvoteUsable = True
-        downvoteUsable = True
-        if vote is not None:
-            if vote.type:
-                upvoteUsable = False
-            else:
-                downvoteUsable = False
-        response = JsonResponse(({"rating": object.rating, "downvote": downvoteUsable, "upvote" : upvoteUsable}))
-        return response
+        try:
+            object_type = ContentType.objects.get(pk=form.instance.content_type.id)
+            object = object_type.get_object_for_this_type(pk=form.instance.object_id)
+            upvoteUsable = True
+            downvoteUsable = True
+            if vote is not None:
+                if vote.type:
+                    upvoteUsable = False
+                else:
+                    downvoteUsable = False
+            response = JsonResponse(({"rating": object.rating, "downvote": downvoteUsable, "upvote" : upvoteUsable}))
+            return response
+        except Exception:
+            return self.get_failure_url();
     
     def form_invalid(self, form):
         return self.get_response_json(form, None)
