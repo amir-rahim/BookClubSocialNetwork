@@ -126,7 +126,6 @@
         }
 
         function updateRating(identifier, rating){
-          console.log(rating)
           $('#votecount'+identifier).text(rating)
         }
 
@@ -139,8 +138,6 @@
             rating = response['rating']
             upvoteAvailable = response['upvote']
             downvoteAvailable = response['downvote']
-            console.log(upvoteAvailable)
-            console.log(downvoteAvailable)
             if(upvoteAvailable){
               minimise_upvote(identifier)
               highlight_downvote(identifier)
