@@ -108,5 +108,5 @@ urlpatterns = [
     path('forum/<int:post_id>/delete/', views.DeleteForumPostView.as_view(), name='delete_forum_post'),
     path('forum/<int:post_id>/comment/<int:comment_id>/delete/', views.DeleteForumCommentView.as_view(), name='delete_forum_comment'),
     path('forum/upvote/', views.CreateVoteView.as_view(), name = 'upvote'),
-    path('forum/downvote', views.CreateVoteView.as_view(), name='downvote'),
+    path('forum/downvote/', views.CreateVoteView.as_view(), name='downvote'),
 ]
