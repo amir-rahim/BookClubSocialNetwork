@@ -4,7 +4,7 @@
 {% if user.is_authenticated %}
     {% has_user_voted content user as user_has_voted %}
     {% if user_has_voted %}
-        {% get_user_vote_type content user as vote_type %}g
+        {% get_user_vote_type content user as vote_type %}
     {% endif %}
 {% endif %}
 <form id="upvoteform"
