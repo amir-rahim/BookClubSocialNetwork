@@ -1,9 +1,11 @@
 {% load getcontenttype %}
 {% load votingtags %}
 {% getcontenttype content as contenttype %}
-{% has_user_voted content user as has_user_voted %}
-{% if has_user_voted %}
-    voted
+{% if user.is_authenticated %}
+    {% has_user_voted content user as user_has_voted %}
+    {% if user_has_voted %}
+        {% get_user_vote_type content user as vote_type %}g
+    {% endif %}
 {% endif %}
 <form id="upvoteform"
       method="post"
@@ -17,7 +19,7 @@
     <input type="hidden" name="object_id" value="{{ content.id }}"/>
     <p class="control" type="submit">
         <button id="upvote{{ contenttype }}{{ content.id }}"
-                class="button is-primary is-rounded"
+                class="button is-rounded is-white {% if vote_type == True %} is-primary  {% endif %}"
                 aria-label="Upvote">
             <span class="icon">
                 <i class="fa-solid fa-arrow-up"></i>
@@ -37,7 +39,7 @@
     <input type="hidden" name="object_id" value="{{ content.id }}"/>
     <p class="control" type="submit">
         <button id="downvote{{ contenttype }}{{ content.id }}"
-                class="button is-danger is-rounded"
+                class="button is-white is-rounded {% if vote_type == False %} is-danger  {% endif %}"
                 aria-label="Downvote">
             <span class="icon">
                 <i class="fa-solid fa-arrow-down"></i>
