@@ -3,7 +3,7 @@ from django.db import models
 from django.urls import reverse
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.validators import RegexValidator
-from BookClub.models import ClubMembership
+from BookClub.models import ClubMembership, User
 
 from django.db import IntegrityError, models
 from django.apps import apps
