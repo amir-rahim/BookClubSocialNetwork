@@ -114,8 +114,6 @@
         });
 
         $('.voteform').on('submit', catchVote);
-            
-        $('.voteform').on('submit',catchVote)
 
         function catchVote(event){
           event.preventDefault();
@@ -139,9 +137,38 @@
             data: $(form).serializeArray()
           }).done(function (response){
             rating = response['rating']
+            upvoteAvailable = response['upvote']
+            downvoteAvailable = response['downvote']
+            console.log(upvoteAvailable)
+            console.log(downvoteAvailable)
+            if(upvoteAvailable){
+              minimise_upvote(identifier)
+              highlight_downvote(identifier)
+            }
+            if(downvoteAvailable){
+              minimise_downvote(identifier)
+              highlight_upvote(identifier)
+            }
             updateRating(identifier, rating)
           });
         }
+
+        function highlight_upvote(identifier){
+            $('#upvote'+identifier).addClass('is-primary')
+        }
+
+        function minimise_upvote(identifier){
+            $('#upvote'+identifier).removeClass('is-primary')
+        }
+
+        function highlight_downvote(identifier){
+            $('#downvote'+identifier).addClass('is-danger')
+        }
+
+        function minimise_downvote(identifier){
+            $('#downvote'+identifier).removeClass('is-danger')
+        }
+
 
     </script>
 </html>
