@@ -34,18 +34,26 @@ class CreateVoteView(LoginRequiredMixin, CreateView):
                     
         return super().post(request, *args, **kwargs)
     
-    def get_response_json(self, form):
+    def get_response_json(self, form, vote):
         object_type = ContentType.objects.get(pk=form.instance.content_type.id)
         object = object_type.get_object_for_this_type(pk=form.instance.object_id)
-        response = JsonResponse(({"rating": object.rating}))
+        vote = object.votes.all().get(creator=self.request.user)
+        upvoteUsable = True
+        downvoteUsable = True
+        if vote is not None:
+            if vote.type:
+                upvoteUsable = False
+            else:
+                downvoteUsable = False
+        response = JsonResponse(({"rating": object.rating, "downvote": downvoteUsable, "upvote" : upvoteUsable}))
         return response
     
     def form_invalid(self, form):
-        return self.get_response_json(form)
+        return self.get_response_json(form, None)
     
     def form_valid(self, form):
         super().form_valid(form)
-        return self.get_response_json(form)
+        return self.get_response_json(form, self.object)
     
     def get_failure_url(self):
         referer = self.request.headers['Referer']
