@@ -33,7 +33,7 @@ def get_average_reciprocal_hit_rate(recommendations, left_out_test_set):
         # We increment the value of 'hits' if the book has been recommended to the user,
         # with a weighting corresponding to its rank in the recommendations
         rank = 1
-        for recommended_book in recommendations[userID]:
+        for recommended_book in recommendations[user_id]:
             if (book_id == recommended_book):
                 hits += (1/rank)
                 break
