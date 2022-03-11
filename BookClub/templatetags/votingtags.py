@@ -1,6 +1,7 @@
 from urllib.parse import urlencode
 from django.template import Library
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ObjectDoesNotExist
 
 register = Library()
 
@@ -21,6 +22,8 @@ def get_user_vote_type(context, content, user, **kwargs):
         content.__class__)
 
     votes = model.get_object_for_this_type(pk=content.pk).votes.all()
-    
-    vote = votes.all().get(creator=user).type
+    try:
+        vote = votes.all().get(creator=user).type
+    except ObjectDoesNotExist:
+        return None
     return vote
