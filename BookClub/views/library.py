@@ -61,8 +61,8 @@ class AddToBookListView(LoginRequiredMixin, FormView):
 
     def form_valid(self, form):
         try:
-            book = Book.objects.get(pk=self.request.POST.get('books'))
-            booklist = BookList.objects.get(pk=self.request.POST.get('id'))
+            book = Book.objects.get(pk=self.request.POST.get('book'))
+            booklist = BookList.objects.get(pk=self.request.POST.get('booklist'))
         except:
             book = None
             booklist = None

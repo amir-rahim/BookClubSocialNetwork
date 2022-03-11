@@ -43,12 +43,12 @@ class AddBookViewTestCase(TestCase):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "library_books.html")
-        html_code = '<select required name="id">\n <option value="" selected disabled hidden>Choose here</option>\n</select>'
+        html_code = '<select required id="booklist" name="booklist">\n <option value="" selected disabled hidden>Choose here</option>\n</select>'
         self.assertContains(response, html_code, html=True) 
 
     def test_adds_book_to_book_list(self):
         self.client.login(username=self.user.username, password="Password123")
-        response = self.client.post(reverse('add_to_book_list'), {'books' : 2, 'id' : 1})
+        response = self.client.post(reverse('add_to_book_list'), {'book' : 2, 'booklist' : 1})
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "library_books.html")
@@ -59,7 +59,7 @@ class AddBookViewTestCase(TestCase):
     def test_cannot_add_same_book_twice(self):
         self.client.login(username=self.user.username, password="Password123")
         self.booklist.add_book(self.book)
-        response = self.client.post(reverse('add_to_book_list'), {'books' : '2', 'id' : '1'})
+        response = self.client.post(reverse('add_to_book_list'), {'book' : 2, 'booklist' : 1})
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "library_books.html")
