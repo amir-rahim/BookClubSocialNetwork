@@ -29,11 +29,12 @@ class EvaluationDataProvider:
         return (self.loocv_trainset, self.loocv_testset)
     
     
+    """Build the read_books_all_users dictionary, which for every user holds 
+        an array of all books read by that user."""
     def build_read_books_all_users_dict(self):
         self.read_books_all_users = {}
         trainset = self.loocv_trainset
         for inner_user_id, inner_item_id, rating in trainset.all_ratings():
-            print(f"{trainset.to_raw_uid(inner_user_id)} -> {trainset.to_raw_iid(inner_item_id)}")
             raw_user_id = trainset.to_raw_uid(inner_user_id)
             raw_item_id = trainset.to_raw_iid(inner_item_id)
             try:
@@ -41,6 +42,8 @@ class EvaluationDataProvider:
             except:
                 self.read_books_all_users[raw_user_id] = [raw_item_id]
     
+    """Returns the read_books_all_users dictionary containing the books read
+        by every user."""
     def get_read_books_all_users_dict(self):
         if (self.read_books_all_users == {}):
             self.build_read_books_all_users_dict()
