@@ -82,7 +82,7 @@ This is our Library, you can look at our books and click and see further details
                             <th scope="col">Author</th>
                             <th scope="col">Publisher</th>
                             <th scope="col">Add to List</th>
-                            <th scope"col"></th>
+                            <th scope="col"></th>
                             <th scope="col">View</th>
                         </tr>
                     </thead>
@@ -106,10 +106,10 @@ This is our Library, you can look at our books and click and see further details
                                     {% else %}
                                         <form action="add_to_book_list" method="post">
                                             {% csrf_token %}
-                                            <input type="hidden" name="books" value="{{ book.id }}"/>
+                                            <input type="hidden" id="books" name="books" value="{{ book.id }}"/>
                                             <div class="control">
                                                 <div class="select">
-                                                    <select required name="id">
+                                                    <select required id="id" name="id">
                                                         <option value="" selected disabled hidden>Choose here</option>
                                                         {% for list in lists %}
                                                             <option value="{{ list.id }}">{{ list.title }}</option>
