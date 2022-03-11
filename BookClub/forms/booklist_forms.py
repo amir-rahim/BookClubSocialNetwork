@@ -12,7 +12,6 @@ class CreateBookListForm(ModelForm):
             'description': Textarea,
         }
 
-class AddBookForm(ModelForm):
-    class Meta:
-        model = BookList    
-        fields = ['books','id']
+class AddBookForm(Form):
+    class Meta: 
+        fields = ['book','booklist']
