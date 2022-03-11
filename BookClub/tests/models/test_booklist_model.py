@@ -8,7 +8,6 @@ from django.test import TestCase, tag
 
 @tag('booklist')
 @tag('book')
-@tag('this')
 class BookListTestCase(TestCase):
 
     fixtures=[
