@@ -14,6 +14,7 @@ class DataProvider:
     test_df = None
     filtering_min_ratings_threshold = 1
     filtered_ratings_df = None
+    filtered_ratings_dataset = None
     filtered_ratings_trainset = None
 
     """Constructor for the DataProvider class
@@ -82,12 +83,17 @@ class DataProvider:
         self.filtered_ratings_df = filtered_ratings_df
         # Create surprise dataset
         reader = Reader(line_format='user item rating', sep=';', skip_lines=0, rating_scale=(0,10))
-        filtered_ratings_trainset = Dataset.load_from_df(filtered_ratings_df, reader)
-        self.filtered_ratings_trainset = filtered_ratings_trainset.build_full_trainset()
+        filtered_ratings_dataset = Dataset.load_from_df(filtered_ratings_df, reader)
+        self.filtered_ratings_dataset = filtered_ratings_dataset
+        self.filtered_ratings_trainset = filtered_ratings_dataset.build_full_trainset()
 
     """Get the non-filtered ratings train set"""
     def get_ratings_trainset(self):
         return self.ratings_trainset
+
+    """Get the filtered ratings dataset object"""
+    def get_filtered_ratings_dataset(self):
+        return self.filtered_ratings_dataset
 
     """Get the filtered ratings train set"""
     def get_filtered_ratings_trainset(self):
