@@ -131,19 +131,21 @@ class CreateCommentView(LoginRequiredMixin, ClubMemberTestMixin, CreateView):
     http_method_names = ['post']
 
     def form_valid(self, form):
-        if self.kwargs.get('post_id') is not None:
+        try:
             post = ForumPost.objects.get(pk=self.kwargs['post_id'])
             form.instance.creator = self.request.user
             form.instance.post = post
             self.object = form.save()
             return super().form_valid(form)
-        else:
-            return self.form_invalid(self)
+        except:
+            messages.add_message(self.request, messages.ERROR,
+                                 "There was an error making that comment, try again!")
+            return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, form):
         messages.add_message(self.request, messages.ERROR,
                              "There was an error making that comment, try again!")
-        return super().form_invalid(form)
+        return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
         return reverse('forum_post', kwargs=self.kwargs)
@@ -199,11 +201,8 @@ class DeleteForumPostView(LoginRequiredMixin, ClubMemberTestMixin, DeleteView):
         elif self.kwargs.get('club_url_name') is not None:
             club = Club.objects.get(club_url_name=self.kwargs.get('club_url_name'))
             membership = ClubMembership.objects.filter(user=self.request.user, club=club)
-            if membership.count() != 1:
-                return super(ClubMemberTestMixin, self).handle_no_permission()
-            else:
-                url = reverse('club_dashboard', kwargs={'club_url_name': self.kwargs['club_url_name']})
-                return redirect(url)
+            url = reverse('club_dashboard', kwargs={'club_url_name': self.kwargs['club_url_name']})
+            return redirect(url)
         else:
             url = reverse('global_forum')
             return redirect(url)
@@ -241,11 +240,8 @@ class DeleteForumCommentView(LoginRequiredMixin, ClubMemberTestMixin, DeleteView
         elif self.kwargs.get('club_url_name') is not None:
             club = Club.objects.get(club_url_name=self.kwargs.get('club_url_name'))
             membership = ClubMembership.objects.filter(user=self.request.user, club=club)
-            if membership.count() != 1:
-                return super(ClubMemberTestMixin, self).handle_no_permission()
-            else:
-                url = reverse('forum_post', kwargs=self.kwargs)
-                return redirect(url)
+            url = reverse('forum_post', kwargs=self.kwargs)
+            return redirect(url)
         else:
             url = reverse('forum_post', kwargs=self.kwargs)
             return redirect(url)
