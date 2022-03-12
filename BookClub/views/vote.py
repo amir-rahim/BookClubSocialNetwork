@@ -49,7 +49,7 @@ class CreateVoteView(LoginRequiredMixin, CreateView):
             response = JsonResponse(({"rating": object.rating, "downvote": downvoteUsable, "upvote" : upvoteUsable}))
             return response
         except Exception:
-            return self.get_failure_url();
+            return redirect(self.get_success_url());
     
     def form_invalid(self, form):
         return self.get_response_json(form, None)
@@ -57,10 +57,6 @@ class CreateVoteView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         super().form_valid(form)
         return self.get_response_json(form, self.object)
-    
-    def get_failure_url(self):
-        referer = self.request.headers['Referer']
-        return referer
     
     def get_success_url(self):
         referer = self.request.headers['Referer']
