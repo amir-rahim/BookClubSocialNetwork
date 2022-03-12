@@ -8,8 +8,9 @@ from django.urls import reverse_lazy
 
 from django.views.generic import ListView, CreateView, View, UpdateView
 
-from BookClub.models import User, BookList
+from BookClub.models import User, BookList, Book
 from BookClub.forms import CreateBookListForm
+from django.shortcuts import redirect
 
 class BooklistListView(ListView):
     http_method_names = ['get']
@@ -126,3 +127,43 @@ class UserBookListView(ListView):
         context['user'] = self.request.user
         context['number_of_books'] = len(booklist.get_books())
         return context
+
+class RemoveFromBookListView(LoginRequiredMixin, ListView):
+    """Users can leave meetings"""
+
+    redirect_location = 'user_booklist'
+
+    def get(self, request, *args, **kwargs):
+        return redirect(self.redirect_location, username=self.kwargs['username'], booklist_id=self.kwargs['booklist_id'])
+
+    def is_actionable(self, booklist, book):
+        """Check if user can remove a book"""
+
+        return ((booklist.get_books().filter(pk=book.id)) and (self.request.user == booklist.creator))
+
+    def is_not_actionable(self):
+        """If user cannot remove book"""
+
+        return messages.info(self.request, "You cannot remove that book!")
+
+    def action(self, booklist, book):
+        """User removes the book"""
+
+        messages.success(self.request, "You have removed the book.")
+        booklist.remove_book(book)
+
+    def post(self, request, *args, **kwargs):
+
+        try:
+            booklist = BookList.objects.get(id=self.kwargs['booklist_id'])
+            book = Book.objects.get(id=self.kwargs['book_id'])
+        except:
+            messages.error(self.request, "Error, book or booklist not found.")
+            return redirect(self.redirect_location, username=self.kwargs['username'], booklist_id=self.kwargs['booklist_id'])
+
+        if (self.is_actionable(booklist, book)):
+            self.action(booklist, book)
+        else:
+            self.is_not_actionable()
+
+        return redirect(self.redirect_location, username=self.kwargs['username'], booklist_id=self.kwargs['booklist_id'])
