@@ -1,10 +1,11 @@
 '''Library Related Views'''
 from django.contrib import messages
 from django.shortcuts import redirect, render, reverse
-from django.views.generic import ListView
+from django.views.generic import ListView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from BookClub.models import Book
+from BookClub.models import Book, BookList
 from django.db.models import Exists, Q, OuterRef
+from BookClub.forms import AddBookForm  
 
 
 def library_dashboard(request):
@@ -39,3 +40,45 @@ class BookListView(ListView):
         except:
             object_list = Book.objects.all()
         return object_list
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        if not user.is_anonymous:
+            context['lists'] = BookList.objects.filter(creator = user)
+            context['user'] = user
+        else:
+            context['lists'] = None
+            context['user'] = None
+        return context
+
+class AddToBookListView(LoginRequiredMixin, FormView):
+    model = BookList
+    form_class = AddBookForm
+    http_method_names = ['post']
+
+    def form_valid(self, form):
+        try:
+            book = Book.objects.get(pk=self.request.POST.get('book'))
+            booklist = BookList.objects.get(pk=self.request.POST.get('booklist'))
+        except:
+            book = None
+            booklist = None
+        
+        if booklist is None or book is None:
+            messages.error(self.request, "There was an error finding the book or booklist")
+
+        elif (booklist.get_books().filter(pk=book.id)):
+            messages.info(self.request, "This book is already in the list")
+        else:
+            booklist.add_book(book)
+            booklist.save()
+            messages.success(self.request, "The book has been saved to "+book.title)
+        return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        messages.error(self.request, "There was an error adding the book")
+        return super().form_invalid(form)
+        
+    def get_success_url(self):
+        return reverse('library_books')
