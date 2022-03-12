@@ -30,18 +30,6 @@ class ForumPostView(ClubMemberTestMixin, ListView):
     context_object_name = 'comments'
     pk_url_kwarg = 'post_id'
 
-    def post(self, request):
-        if request.POST.get('paginate_by'):
-            request.session['paginate_setting'] = request.POST['paginate_by']
-
-        return redirect(reverse('forum_post', kwargs=self.kwargs))
-
-    def get_paginate_by(self, queryset):
-        if self.request.session.get('paginate_setting'):
-            return self.request.session.get('paginate_setting')
-        else:
-            return self.paginate_by
-
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
         try:
@@ -63,21 +51,6 @@ class ForumView(ClubMemberTestMixin, ListView):
     model = ForumPost
     context_object_name = 'posts'
     paginate_by = 5
-
-    def post(self, request):
-        if request.POST.get('paginate_by'):
-            request.session['paginate_setting'] = request.POST['paginate_by']
-
-        if self.kwargs.get('club_url_name') is not None:
-            return redirect(reverse('club_forum', kwargs=self.kwargs))
-        else:
-            return redirect(reverse('global_forum', kwargs=self.kwargs))
-
-    def get_paginate_by(self, queryset):
-        if self.request.session.get('paginate_setting'):
-            return self.request.session.get('paginate_setting')
-        else:
-            return self.paginate_by
 
     def get_queryset(self):
         if self.kwargs.get('club_url_name') is not None:

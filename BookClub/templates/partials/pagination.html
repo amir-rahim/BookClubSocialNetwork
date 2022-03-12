@@ -6,23 +6,6 @@
 
     <ul class="pagination-list">
         <li>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</li>
-        <li style="padding-left: 30px">
-            Shown Per Page:
-            <form method='POST'>
-                {% csrf_token %}
-                <div class="select">
-                    <select name="paginate_by" id="paginate_by">
-                        <option value="10">10</option>
-                        <option value="20">20</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
-                </div>
-
-                <input class="button" type="submit" value="Submit">
-            </form>
-
-        </li>
     </ul>
 
     {% if page_obj.has_next %}
