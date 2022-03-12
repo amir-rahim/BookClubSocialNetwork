@@ -69,7 +69,7 @@ urlpatterns = [
     path('club/<str:club_url_name>/forum/<int:post_id>/comment/',
          views.CreateCommentView.as_view(), name='create_forum_comment'),
     path('club/<str:club_url_name>/forum/<int:post_id>/comment/<int:comment_id>/delete/',
-         views.DeleteForumCommentView.as_view(), 'delete_forum_comment'),
+         views.DeleteForumCommentView.as_view(), name='delete_forum_comment'),
     path('club/<str:club_url_name>/forum/<int:post_id>/edit/',
          views.EditForumPostView.as_view(), name='edit_forum_post'),
     path('club/<str:club_url_name>/forum/<int:post_id>/delete/',

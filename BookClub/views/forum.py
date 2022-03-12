@@ -262,6 +262,7 @@ class DeleteForumCommentView(LoginRequiredMixin, ClubMemberTestMixin, DeleteView
     pk_url_kwarg = 'comment_id'
 
     def handle_no_permission(self):
+        self.kwargs.pop('comment_id', None)
         if not self.request.user.is_authenticated:
             return super(LoginRequiredMixin, self).handle_no_permission()
         elif self.kwargs.get('club_url_name') is not None:
