@@ -37,5 +37,19 @@
           "content": "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
 
         }
+  },
+
+  {
+        "model": "BookClub.ForumPost",
+        "pk": 4,
+        "fields": {
+          "creator": [
+                "johndoe"
+            ],
+          "created_on": "2022-02-27T22:45:06.275Z",
+          "title": "Latin Quota",
+          "content": "... qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
+
+        }
   }
 ]

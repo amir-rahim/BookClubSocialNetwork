@@ -6,5 +6,14 @@
             "title": "Global Forum",
             "posts": [1, 2, 3]
         }
+  },
+  {
+        "model": "BookClub.Forum",
+        "pk": 2,
+        "fields": {
+            "title": "Johnathan Club Forum",
+            "associatedWith": 1,
+            "posts": [4]
+        }
   }
 ]
