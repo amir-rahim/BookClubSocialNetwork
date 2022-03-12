@@ -92,6 +92,6 @@ urlpatterns = [
     path('user/<slug:username>/lists', views.BooklistListView.as_view(), name='booklists_list'),
     path('user/<slug:username>/lists/create', views.CreateBookListView.as_view(), name='create_booklist'),
 
-    path('calendar/', views.CalendarView.as_view(), name='calendar'),
+    path('agenda/', views.AgendaView.as_view(), name='agenda'),
 
 ]

@@ -1,7 +1,7 @@
 {% extends 'base_content.html' %}
 
 {% block page_title %}
-Calendar
+Agenda
 {% endblock page_title %}
 
 {% block content %}
@@ -55,7 +55,7 @@ Calendar
                                 {{meeting.title}}
                             </p>
                         </header>
-                        {% include 'partials/calendar_card.html' %}
+                        {% include 'partials/agenda_card.html' %}
                     </div>
 
                 </div>
@@ -84,7 +84,7 @@ Calendar
                                 {{meeting.title}}
                             </p>
                         </header>
-                        {% include 'partials/calendar_card.html' %}
+                        {% include 'partials/agenda_card.html' %}
                     </div>
 
                 </div>
@@ -114,7 +114,7 @@ Calendar
                                 {{meeting.title}}
                             </p>
                         </header>
-                        {% include 'partials/calendar_card.html' %}
+                        {% include 'partials/agenda_card.html' %}
                     </div>
 
                 </div>
@@ -143,7 +143,7 @@ Calendar
                                 {{meeting.title}}
                             </p>
                         </header>
-                        {% include 'partials/calendar_card.html' %}
+                        {% include 'partials/agenda_card.html' %}
                     </div>
 
                 </div>
@@ -174,7 +174,7 @@ Calendar
                                                 </p>
 
                                             </header>
-                                            {% include 'partials/calendar_card.html' %}
+                                            {% include 'partials/agenda_card.html' %}
                                         </div>
                                 </div>
                             {% else %}
@@ -186,7 +186,7 @@ Calendar
                                                     {{meeting.title}}
                                                 </p>
                                             </header>
-                                            {% include 'partials/calendar_card.html' %}
+                                            {% include 'partials/agenda_card.html' %}
                                         </div>
                                 </div>
                             {% endif %}
@@ -216,7 +216,7 @@ Calendar
                                                 <span class="tag  is-warning is-right " style="margin-left:70px ">Joined</span>
                                                 </p>
                                             </header>
-                                            {% include 'partials/calendar_card.html' %}
+                                            {% include 'partials/agenda_card.html' %}
                                         </div>
                                 </div>
                             {% else %}
@@ -228,7 +228,7 @@ Calendar
                                                     {{meeting.title}}
                                                 </p>
                                             </header>
-                                           {% include 'partials/calendar_card.html' %}
+                                           {% include 'partials/agenda_card.html' %}
                                         </div>
                                 </div>
                             {% endif %}
@@ -322,5 +322,5 @@ Calendar
 
 
 {% block page_subtitle %}
-Welcome to the calendar!
+Welcome to the Agenda!
 {% endblock page_subtitle %}
