@@ -4,11 +4,13 @@ from BookClub.models import User, Forum, ForumPost
 
 
 @tag('forum', 'forum_post')
-class ForumViewTestCase(TestCase):
+class ForumPostViewTestCase(TestCase):
     """Tests of the Forum view."""
 
     fixtures = [
         'BookClub/tests/fixtures/default_users.json',
+        'BookClub/tests/fixtures/default_clubs.json',
+        'BookClub/tests/fixtures/default_memberships.json',
         'BookClub/tests/fixtures/default_forum.json',
         'BookClub/tests/fixtures/default_posts.json',
         'BookClub/tests/fixtures/default_comments.json',
