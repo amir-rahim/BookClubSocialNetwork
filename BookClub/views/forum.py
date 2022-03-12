@@ -1,15 +1,15 @@
 """Forum Related Views"""
 from django.contrib import messages
-from django.urls import reverse
-from django.shortcuts import redirect
-from django.views.generic import ListView, DetailView, CreateView
-from django.views.generic.edit import UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.shortcuts import redirect
+from django.http import Http404, HttpResponseRedirect
+from django.urls import reverse
+from django.views.generic import ListView, CreateView
+from django.views.generic.edit import UpdateView, DeleteView
+
 from BookClub.forms.forum_forms import CreateForumCommentForm, CreatePostForm
 from BookClub.helpers import has_membership
-from BookClub.models import ForumPost, ForumComment, Forum, User, Club
-from BookClub.models.club_membership import ClubMembership
-from BookClub.tests.helpers import reverse_with_next
+from BookClub.models import ForumPost, ForumComment, Forum, User, Club, ClubMembership
 
 
 class ClubMemberTestMixin(UserPassesTestMixin):
@@ -23,19 +23,61 @@ class ClubMemberTestMixin(UserPassesTestMixin):
             return True
 
 
-class ForumPostView(ClubMemberTestMixin, DetailView):
-    model = ForumPost
+class ForumPostView(ClubMemberTestMixin, ListView):
+    model = ForumComment
     paginate_by = 10
     template_name = 'forum_post.html'
-    context_object_name = 'post'
+    context_object_name = 'comments'
     pk_url_kwarg = 'post_id'
-    success_url = '/forum/'
+
+    def post(self, request):
+        if request.POST.get('paginate_by'):
+            request.session['paginate_setting'] = request.POST['paginate_by']
+
+        return redirect(reverse('forum_post', kwargs=self.kwargs))
+
+    def get_paginate_by(self, queryset):
+        if self.request.session.get('paginate_setting'):
+            return self.request.session.get('paginate_setting')
+        else:
+            return self.paginate_by
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['post'] = ForumPost.objects.get(pk=self.kwargs.get('post_id'))
+        except:
+            raise Http404("Given post id not found....")
+        return context
+
+    def get_queryset(self):
+        try:
+            post = ForumPost.objects.get(pk=self.kwargs.get('post_id'))
+            comments = post.get_comments()
+        except:
+            comments = []
+        return comments
 
 
 class ForumView(ClubMemberTestMixin, ListView):
     model = ForumPost
     context_object_name = 'posts'
-    paginate_by = 10
+    paginate_by = 5
+
+    def post(self, request):
+        if request.POST.get('paginate_by'):
+            request.session['paginate_setting'] = request.POST['paginate_by']
+
+        if self.kwargs.get('club_url_name') is not None:
+            return redirect(reverse('club_forum', kwargs=self.kwargs))
+        else:
+            return redirect(reverse('global_forum', kwargs=self.kwargs))
+
+    def get_paginate_by(self, queryset):
+        if self.request.session.get('paginate_setting'):
+            return self.request.session.get('paginate_setting')
+        else:
+            return self.paginate_by
 
     def get_queryset(self):
         if self.kwargs.get('club_url_name') is not None:
@@ -88,8 +130,7 @@ class CreatePostView(LoginRequiredMixin, ClubMemberTestMixin, CreateView):
     def form_valid(self, form):
         if self.kwargs.get('club_url_name') is not None:
             """insert club code here"""
-            club = Club.objects.get(
-                club_url_name=self.kwargs.get('club_url_name'))
+            club = Club.objects.get(club_url_name=self.kwargs.get('club_url_name'))
             forum = Forum.objects.get(associatedWith=club)
         else:
             forum = Forum.objects.get(associatedWith=None)
@@ -102,12 +143,11 @@ class CreatePostView(LoginRequiredMixin, ClubMemberTestMixin, CreateView):
     def form_invalid(self, form):
         messages.add_message(self.request, messages.ERROR,
                              "There was an error making that post, try again!")
-        return super().form_invalid(form)
+        return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
         if self.kwargs.get('club_url_name') is not None:
             return reverse('club_forum', kwargs=self.kwargs)
-            # placeholder till club forums is set up
         else:
             return reverse('global_forum')
 
@@ -133,11 +173,7 @@ class CreateCommentView(LoginRequiredMixin, ClubMemberTestMixin, CreateView):
         return super().form_invalid(form)
 
     def get_success_url(self):
-        if self.kwargs.get('club_url_name') is not None:
-            return reverse('forum_post', kwargs=self.kwargs)
-            # placeholder till club forums is set up
-        else:
-            return reverse('forum_post', kwargs=self.kwargs)
+        return reverse('forum_post', kwargs=self.kwargs)
 
 
 class EditForumPostView(LoginRequiredMixin, ClubMemberTestMixin, UpdateView):
@@ -156,7 +192,7 @@ class EditForumPostView(LoginRequiredMixin, ClubMemberTestMixin, UpdateView):
             if membership.count() != 1:
                 return super(ClubMemberTestMixin, self).handle_no_permission()
             else:
-                url = reverse('club_dashboard', kwargs={'club_url_name': self.kwargs['club_url_name']})
+                url = reverse('club_forum', kwargs={'club_url_name': self.kwargs['club_url_name']})
                 return redirect(url)
         else:
             url = reverse('global_forum')
@@ -184,6 +220,7 @@ class DeleteForumPostView(LoginRequiredMixin, ClubMemberTestMixin, DeleteView):
     pk_url_kwarg = 'post_id'
 
     def handle_no_permission(self):
+        self.kwargs.pop('comment_id', None)
         if not self.request.user.is_authenticated:
             return super(LoginRequiredMixin, self).handle_no_permission()
         elif self.kwargs.get('club_url_name') is not None:
@@ -217,13 +254,13 @@ class DeleteForumPostView(LoginRequiredMixin, ClubMemberTestMixin, DeleteView):
             # placeholder till club forums is set up
         else:
             return reverse('global_forum', kwargs=self.kwargs)
-        
-        
+
+
 class DeleteForumCommentView(LoginRequiredMixin, ClubMemberTestMixin, DeleteView):
     model = ForumComment
     http_method_names = ['post']
     pk_url_kwarg = 'comment_id'
-    
+
     def handle_no_permission(self):
         if not self.request.user.is_authenticated:
             return super(LoginRequiredMixin, self).handle_no_permission()
