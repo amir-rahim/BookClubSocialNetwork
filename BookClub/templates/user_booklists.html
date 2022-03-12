@@ -36,7 +36,7 @@ View all book lists you've created
             </ul>
         </nav>
 
-        <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
+        <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
             <div class="hero-body">
                 <div class="container">
                     <h1 class="title">Book Lists by {{creator.username}}</h1>
@@ -62,9 +62,13 @@ View all book lists you've created
                       {% if self %}
                         <td style="width:8%; text-align:right;">
 
-                            <a href="#" class="button is-dark">
-                              <span>Edit</span>
-                            </a>
+                          <form method="get" action="{% url 'edit_booklist' booklist_id=list.id username=request.user.username %}">
+                              <button class="button is-dark is-small" style="margin-right: 5px">
+                                  <span>Edit</span>
+                              </button>
+                          </form>
+
+                            {% include 'partials/delete_button_and_modal.html' with delete_item=list delete_modal_id=list.pk %}
 
                         </td>
                       {% endif %}
