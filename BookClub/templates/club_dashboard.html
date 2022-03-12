@@ -40,7 +40,7 @@ This is the Club Dashboard, the main home page for each club!
             <p class="menu-label">Forum & Reviews</p>
 
             <ul class="menu-list">
-                <li><a>Forum</a></li>
+                <li><a href="{% url 'club_forum' current_club.club_url_name %}">Forum</a></li>
                 <li><a>Members Reviews</a></li>
             </ul>
 

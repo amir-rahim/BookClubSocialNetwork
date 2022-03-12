@@ -3,7 +3,7 @@
     {{ forum.title }}
 {% endblock page_title %}
 {% block page_subtitle %}
-    {{ forum.title }}
+    You can view these Forums posts, create posts, vote on them and view them in more detail.
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
@@ -137,7 +137,8 @@
                         <p class="card-footer-item has-text-grey-light">
                             {{ post.created_on | timesince }} ago
                         </p>
-                        <a href="{% url 'forum_post' post.id %}" class="card-footer-item">
+                        <a {% if club %} href="{% url 'forum_post' post_id=post.id club_url_name=club.club_url_name %}"
+                                            {% else %} href="{% url 'forum_post' post.id %}" {% endif %} class="card-footer-item">
                             {% if post.get_comments.count > 0 %}
                                 See {{ post.get_comments.count }} comments
                             {% else %}
