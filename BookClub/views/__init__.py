@@ -15,3 +15,4 @@ from .book import *
 from .booklists import *
 from .meetings import *
 from .reviews import *
+from .agenda import *

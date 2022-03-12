@@ -96,4 +96,6 @@ urlpatterns = [
     path('user/<slug:username>/list/<int:list_id>/delete/', views.DeleteBookListView.as_view(), name='delete_booklist'),
     path('user/<slug:username>/lists/<int:booklist_id>/edit/', views.EditBookListView.as_view(), name='edit_booklist'),
     path('user/<slug:username>/lists/<int:booklist_id>', views.UserBookListView.as_view(), name='user_booklist'),
+
+    path('agenda/', views.AgendaView.as_view(), name='agenda'),
 ]
