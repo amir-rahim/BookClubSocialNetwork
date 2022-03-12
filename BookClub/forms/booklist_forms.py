@@ -1,6 +1,6 @@
 from django.forms import ModelForm, Textarea, ValidationError, Form
+from django import forms
 from django.core.validators import RegexValidator
-from django.test import tag
 from BookClub.models import BookList
 
 class CreateBookListForm(ModelForm):
@@ -13,5 +13,5 @@ class CreateBookListForm(ModelForm):
         }
 
 class AddBookForm(Form):
-    class Meta: 
-        fields = ['book','booklist']
+    book = forms.IntegerField()
+    booklist = forms.IntegerField()
