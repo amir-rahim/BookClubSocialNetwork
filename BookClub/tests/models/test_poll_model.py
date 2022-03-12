@@ -1,5 +1,5 @@
 from django.test import TestCase, tag
-from BookClub.models import Poll
+from BookClub.models import Poll, Club
 from django.core.exceptions import ValidationError
 
 """Test case for Poll model"""
@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 class PollModelTestCase(TestCase):
 
     fixtures = [
+        'BookClub/tests/fixtures/default_clubs.json',
         'BookClub/tests/fixtures/default_polls.json',
     ]
 
@@ -49,7 +50,7 @@ class PollModelTestCase(TestCase):
         self._assert_poll_is_invalid()
 
     def test_active_is_true_by_default(self):
-        poll2 = Poll.objects.create(title="Test poll 2")
+        poll2 = Poll.objects.create(title="Test poll 2", club=Club.objects.get(pk=1))
         self.assertEqual(poll2.active, True)
 
     def test_active_can_be_false(self):

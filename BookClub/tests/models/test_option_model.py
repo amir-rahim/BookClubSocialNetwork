@@ -9,6 +9,7 @@ class OptionModelTestCase(TestCase):
     fixtures = [
         'BookClub/tests/fixtures/default_books.json',
         'BookClub/tests/fixtures/default_users.json',
+        'BookClub/tests/fixtures/default_clubs.json',
         'BookClub/tests/fixtures/default_polls.json',
         'BookClub/tests/fixtures/default_options.json'
     ]
