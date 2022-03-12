@@ -67,7 +67,7 @@
                     </p>
                     <div class="card-header-icon">
                         {% if user == post.creator %}
-                            <a href="{% url 'edit_forum_post' post.id %}">
+                            <a href="{% url 'edit_forum_post' post_id=post.id %}">
                                 <button class="button is-success is-rounded" aria-label="Edit Post">
                                     <span class="icon">
                                         <i class="fa-solid fa-wand-magic-sparkles"></i>
@@ -75,7 +75,7 @@
                                     <span>Edit</span>
                                 </button>
                             </a>
-                            <form method="post" action="{% url 'delete_forum_post' post.id %}">
+                            <form method="post" action="{% url 'delete_forum_post' post_id=post.id %}">
                                 {% csrf_token %}
                                 <button class="button is-danger is-rounded" aria-label="Delete Post" type="submit">
                                     <span class="icon">
@@ -113,8 +113,8 @@
                     <div class="card-header-title">Comments to Post:</div>
                 </div>
                 <div class="card-content">
-                    {% if post.get_comments.count > 0 %}
-                        {% for comment in post.get_comments %}
+                    {% if comments.count > 0 %}
+                        {% for comment in comments %}
                             <article class="message">
 
                                 <div class="columns is-vcentered">
