@@ -169,7 +169,8 @@
                                 Create Discussion Post
                             </p>
                         </div>
-                        <form method="post" action="{% url 'create_forum_post' %}">
+                        <form method="post" {%if club %} action="{% url 'create_forum_post' club.club_url_name %}"
+                                            {% else %} action="{% url 'create_forum_post' %}" {% endif %}>
                             <div class="card-content">
                                 <div class="container">
                                     {% csrf_token %}
