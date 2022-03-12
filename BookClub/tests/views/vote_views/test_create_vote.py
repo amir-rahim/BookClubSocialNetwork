@@ -10,6 +10,8 @@ class CreateVoteViewTestCase(TestCase):
         
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_posts.json',
+        'BookClub/tests/fixtures/default_clubs.json',
+        'BookClub/tests/fixtures/default_forum.json',
     ]
     
     def setUp(self):
@@ -129,3 +131,12 @@ class CreateVoteViewTestCase(TestCase):
         self.assertJSONEqual(response.content,
             {"rating": 0, "downvote": True, "upvote": True}
         )
+        
+    def test_invalid_form_object_missing(self):
+        self.client.login(username=self.user.username,
+                          password="Password123")
+        header = {'HTTP_Referer': '/forum/'}
+        self.form.pop('object_id')
+        response = self.client.post(self.upvoteurl, self.form, **header, follow=False)
+        self.assertEqual(ForumPost.objects.get(pk=1).rating, 0)
+        self.assertRedirects(response,expected_url=reverse('global_forum'), status_code=302, target_status_code=200)
