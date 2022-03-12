@@ -4,3 +4,4 @@ from .meeting import *
 from .user_forms import *
 from .booklist_forms import *
 from .pagination_forms import *
+from .poll import *

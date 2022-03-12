@@ -63,3 +63,19 @@ class ClubMeetingAdmin(admin.ModelAdmin):
     list_display = [
         'organiser', 'club', 'meeting_time', 'created_on', 'location', 'title', 'description', 'type', 'book'
     ]
+
+@admin.register(Poll)
+class PollAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for club polls."""
+
+    list_display = [
+        'club', 'title', 'deadline', 'created_on', 'active'
+    ]
+
+@admin.register(Option)
+class OptionAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for poll options."""
+
+    list_display = [
+        'poll', 'text', 'book'
+    ]
