@@ -49,7 +49,7 @@ class Command(BaseCommand):
                 print("Integrity error was found, attempting again")
                 print(str(e))
         
-        call_command('importbooks',5)
+        call_command('importbooks', 5)
         id1 = Book.objects.all()[0].id
         print(id1)
         self.add_reviews_to(id1)
@@ -109,4 +109,3 @@ class Command(BaseCommand):
                 )
 
 
-            

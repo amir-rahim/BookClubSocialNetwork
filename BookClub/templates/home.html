@@ -28,9 +28,10 @@ Welcome to our homepage for our Book Club Social Network!
                     </div>
                 </div>
                 <div class="card-footer">
-                    <p class="card-footer-item">
-                        <span><a href="#">View</a> Library</span>
-                    </p>
+
+                    <a class="card-footer-item" href="{% url 'library_dashboard' %}">
+                        View Library
+                    </a>
                 </div>
             </div>
         </div>
@@ -49,12 +50,8 @@ Welcome to our homepage for our Book Club Social Network!
                     </div>
                 </div>
                 <div class="card-footer">
-                    <p class="card-footer-item">
-                        <span><a href="{% url 'my_club_memberships' %}">Memberships</a></span>
-                    </p>
-                    <p class="card-footer-item">
-                        <span><a href="{% url 'available_clubs' %}">Join</a></span>
-                    </p>
+                    <a class="card-footer-item" href="{% url 'my_club_memberships' %}">Memberships</a>
+                    <a class="card-footer-item" href="{% url 'available_clubs' %}">Join</a>
                 </div>
             </div>
         </div>
@@ -67,15 +64,15 @@ Welcome to our homepage for our Book Club Social Network!
                     </figure>
                 </div>
                 <div class="card-content">
-                    <p class="title">Calendar</p>
+                    <p class="title">Agenda</p>
                     <div class="content">
-                        View your calendar of your meetings and upcoming events for your clubs.
+                        View your Agenda of your meetings and upcoming events for your clubs.
                     </div>
                 </div>
                 <div class="card-footer">
-                    <p class="card-footer-item">
-                        <span><a href="#">View</a> Calendar</span>
-                    </p>
+                    <a class="card-footer-item" href="{% url 'agenda' %}">
+                        View Agenda
+                    </a>
                 </div>
             </div>
         </div>
@@ -94,9 +91,9 @@ Welcome to our homepage for our Book Club Social Network!
                     </div>
                 </div>
                 <div class="card-footer">
-                    <p class="card-footer-item">
-                        <span><a href="#">View</a> Forum</span>
-                    </p>
+                    <a class="card-footer-item" href="{% url 'home' %}">
+                        View Forum
+                    </a>
                 </div>
             </div>
         </div>
@@ -115,12 +112,12 @@ Welcome to our homepage for our Book Club Social Network!
                     </div>
                 </div>
                 <div class="card-footer">
-                    <p class="card-footer-item">
-                        <span><a href="{% url 'user_dashboard' %}">Dashboard</a></span>
-                    </p>
-                    <p class="card-footer-item">
-                        <span><a href="{% url 'edit_profile' %}">Edit Profile</a></span>
-                    </p>
+                    <a class="card-footer-item" href="{% url 'user_dashboard' %}">
+                        Dashboard
+                    </a>
+                    <a class="card-footer-item" href="{% url 'edit_profile' %}">
+                        Edit Profile
+                    </a>
                 </div>
             </div>
         </div>
@@ -136,9 +133,9 @@ Welcome to our homepage for our Book Club Social Network!
                     <p class="title">Contact Us</p>
                 </div>
                 <div class="card-footer">
-                    <p class="card-footer-item">
-                        <span><a href="#">Contact Form</a></span>
-                    </p>
+                    <a class="card-footer-item" href="{% url 'home' %}">
+                        Contact Form
+                    </a>
                 </div>
             </div>
         </div>

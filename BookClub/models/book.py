@@ -6,11 +6,11 @@ class Book(models.Model):
     class Meta:
         ordering = ['-id']
 
-    title = models.CharField(unique=False, max_length=200, blank=False)
+    title = models.TextField(unique=False, blank=False)
     ISBN = models.CharField(unique=True, max_length=15, blank=False)
-    author = models.CharField(unique=False, blank=False, max_length=100)
+    author = models.TextField(unique=False, blank=False, max_length=100)
     publicationYear = models.DateField(unique=False, blank=False)
-    publisher = models.CharField(unique=False, blank=False, max_length=100)
+    publisher = models.TextField(unique=False, blank=False)
     imageS = models.URLField(unique=False, blank=True)
     imageM = models.URLField(unique=False, blank=True)
     imageL = models.URLField(unique=False, blank=True)

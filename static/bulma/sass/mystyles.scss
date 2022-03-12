@@ -1,0 +1,40 @@
+@charset "utf-8";
+@import "../node_modules/bulma/sass/utilities/initial-variables";
+@import "../node_modules/bulma/sass/utilities/functions";
+
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,300,400,700);
+
+
+$snow: #FFFBFA;
+$seashell: #FCF5ED;
+$peach-puff: #F5D6BA;
+$desert-sand: #DDBEA9;
+$brown: #757763;
+$green: #466153;
+$beige: #F5F5DC;
+$beige-light: #D0D1CD;
+$beige-lighter: #EFF0EB;
+
+$oxford-blue: #0B2545;
+$indigo-blue: #134074;
+$blue-munsell: #3891A6;
+
+$link: $brown;
+$primary: $desert-sand;
+$info: $beige-lighter;
+$warning: $peach-puff;
+$light: $seashell;
+
+$background: $white;
+$body-background-color: $white;
+
+$text: $black;
+
+$table-body-background-color: $white;
+$table-row-hover-background-color: $snow;
+$table-head-background-color: $beige-lighter;
+
+$family-sans-serif: "Open Sans", sans-serif;
+
+// Import Bulma
+@import "../node_modules/bulma/bulma.sass";
