@@ -3,6 +3,7 @@ from BookClub.models import *
 from BookClub.models.forum import ForumPost
 
 
+
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for users."""
@@ -40,11 +41,20 @@ class BookAdmin(admin.ModelAdmin):
 
 
 @admin.register(BookReview)
-class BookReview(admin.ModelAdmin):
+class BookReviewAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for Books Reviews ."""
 
     list_display = [
         'book', 'user', 'rating', 'review', 'createdOn'
+    ]
+
+
+@admin.register(BookList)
+class BookListAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for Books Reviews ."""
+
+    list_display = [
+        'title', 'creator', 'description', 'created_on'
     ]
 
 

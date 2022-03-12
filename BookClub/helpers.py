@@ -109,3 +109,8 @@ def delete_club(club):
    
 def delete_meeting(meeting):
     meeting.delete()
+
+
+def delete_bookreview(review):
+    review.delete()
+

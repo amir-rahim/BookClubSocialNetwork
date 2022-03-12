@@ -51,7 +51,7 @@ Participants of {{ current_meeting.get_title }}
                 </ul>
             </nav>
 
-            <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
+            <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
                 <div class="hero-body">
                     <div class="container">
                         <h1 class="title">Participants</h1>
@@ -72,7 +72,6 @@ Participants of {{ current_meeting.get_title }}
                         <tbody>
                             {% for participant in participants %}
 
-                            <!-- Add onclick to user profile? -->
                                 <tr onclick="window.location='{% url 'user_profile' participant.username %}';">
                                     <td>
                                         <div class="media">

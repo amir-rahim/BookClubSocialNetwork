@@ -51,7 +51,7 @@ class Command(BaseCommand):
             except IntegrityError as e:
                 print("Integrity error was found, attempting again")
                 print(str(e))
-
+        
         call_command('importbooks', 5)
         id1 = Book.objects.all()[0].id
         print(id1)

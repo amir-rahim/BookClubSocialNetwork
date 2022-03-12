@@ -17,13 +17,13 @@ This is the Library, you can look at our books, user-curated lists & reviews and
         <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
 
             <ul class="menu-list">
-                <li><a class="is-active"><b>Dashboard</b></a></li>
+                <li><a href="{% url 'library_dashboard' %}" class="is-active"><b>Dashboard</b></a></li>
             </ul>
 
             <p class="menu-label">Our Book Library</p>
 
             <ul class="menu-list">
-                <li><a>View Library</a></li>
+                <li><a href="{% url 'library_books' %}">View Library</a></li>
             </ul>
 
             <p class="menu-label">Book Lists</p>
@@ -59,7 +59,7 @@ This is the Library, you can look at our books, user-curated lists & reviews and
             </ul>
         </nav>
 
-        <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
+        <section class="hero is-light welcome is-small" style="margin: 10px 0px;">
             <div class="hero-body">
                 <div class="container">
                     <h1 class="title">Our Library</h1>
@@ -77,7 +77,7 @@ This is the Library, you can look at our books, user-curated lists & reviews and
             </div>
         </section>
 
-        <section class="hero is-success welcome is-small" style="margin: 10px 0px;">
+        <section class="hero is-warning welcome is-small" style="margin: 10px 0px;">
             <div class="hero-body">
                 <div class="container">
                     <h1 class="title">Book Lists</h1>
@@ -96,7 +96,7 @@ This is the Library, you can look at our books, user-curated lists & reviews and
             </div>
         </section>
 
-        <section class="hero is-warning welcome is-small" style="margin: 10px 0px;">
+        <section class="hero is-primary welcome is-small" style="margin: 10px 0px;">
             <div class="hero-body">
                 <div class="container">
                     <h1 class="title">Recommender</h1>
@@ -114,7 +114,7 @@ This is the Library, you can look at our books, user-curated lists & reviews and
             </div>
         </section>
 
-        <section class="hero is-danger welcome is-small" style="margin: 10px 0px;">
+        <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
             <div class="hero-body">
                 <div class="container">
                     <h1 class="title">Reviews</h1>
