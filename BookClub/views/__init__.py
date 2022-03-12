@@ -17,4 +17,5 @@ from .meetings import *
 from .reviews import *
 from .forum import *
 from .vote import *
+from .polls import *
 from .agenda import *
