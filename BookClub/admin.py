@@ -100,6 +100,8 @@ class VoteAdmin(admin.ModelAdmin):
 
     list_display = [
         'creator', 'created_on', 'content_type', 'object_id', 'target'
+    ]
+
 @admin.register(Poll)
 class PollAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for club polls."""
