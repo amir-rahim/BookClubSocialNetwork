@@ -61,17 +61,20 @@ urlpatterns = [
     path('club/<str:club_url_name>/members/', views.MembersListView.as_view(), name='member_list'),
     path('club/<str:club_url_name>/applicants/', views.ApplicantListView.as_view(), name='applicant_list'),
     path('club/<str:club_url_name>/edit/', views.EditClubView.as_view(), name='edit_club'),
-    
+
+    # '''Club Forum URLs'''
     path('club/<str:club_url_name>/forum/', views.ForumView.as_view(), name='club_forum'),
-    path('club/<str:club_url_name>/forum/post/', views.CreatePostView.as_view(), 'create_forum_post'),
-    path('club/<str:club_url_name>/forum/<int:post_id>/', views.ForumPostView.as_view(), 'forum_post'),
+    path('club/<str:club_url_name>/forum/post/', views.CreatePostView.as_view(), name='create_forum_post'),
+    path('club/<str:club_url_name>/forum/<int:post_id>/', views.ForumPostView.as_view(), name='forum_post'),
     path('club/<str:club_url_name>/forum/<int:post_id>/comment/',
          views.CreateCommentView.as_view(), name='create_forum_comment'),
-    path('club/<str:club_url_name>/forum/<int:post_id>/comment/<int:comment_id>/delete/', views.DeleteForumCommentView.as_view(), 'delete_forum_comment'),
+    path('club/<str:club_url_name>/forum/<int:post_id>/comment/<int:comment_id>/delete/',
+         views.DeleteForumCommentView.as_view(), 'delete_forum_comment'),
     path('club/<str:club_url_name>/forum/<int:post_id>/edit/',
          views.EditForumPostView.as_view(), name='edit_forum_post'),
     path('club/<str:club_url_name>/forum/<int:post_id>/delete/',
          views.DeleteForumPostView.as_view(), name='delete_forum_post'),
+
     # '''Meeting URLs'''
     path('club/<str:club_url_name>/meetings/', views.MeetingListView.as_view(), name='meeting_list'),
     path('club/<str:club_url_name>/meetings/<int:meeting_id>/', views.MeetingDetailsView.as_view(),
@@ -89,7 +92,8 @@ urlpatterns = [
     path('library/books/<int:book_id>/reviews/', views.BookReviewListView.as_view(), name='book_reviews'),
 
     # '''Review URLs'''
-    path('library/review/<int:book_id>/', views.CreateReviewView.as_view(), name='create_review'), # create review for book represented by id
+    path('library/review/<int:book_id>/', views.CreateReviewView.as_view(), name='create_review'),
+    # create review for book represented by id
     # path('library/review/<int:book_id>/edit') # edit review for book represented by id
     # path('library/review/<int:book_id/delete') # delete review for book represented by id
 
@@ -101,12 +105,12 @@ urlpatterns = [
 
     # '''Forum URLs'''
     path('forum/', views.ForumView.as_view(), name='global_forum'),
-    path('forum/post/', views.CreatePostView.as_view(), name = 'create_forum_post'),
+    path('forum/post/', views.CreatePostView.as_view(), name='create_forum_post'),
     path('forum/<int:post_id>/', views.ForumPostView.as_view(), name='forum_post'),
-    path('forum/<int:post_id>/comment/', views.CreateCommentView.as_view(), name = 'create_forum_comment'),
-    path('forum/<int:post_id>/edit/',views.EditForumPostView.as_view(), name='edit_forum_post'),
+    path('forum/<int:post_id>/comment/', views.CreateCommentView.as_view(), name='create_forum_comment'),
+    path('forum/<int:post_id>/edit/', views.EditForumPostView.as_view(), name='edit_forum_post'),
     path('forum/<int:post_id>/delete/', views.DeleteForumPostView.as_view(), name='delete_forum_post'),
     path('forum/<int:post_id>/comment/<int:comment_id>/delete/', views.DeleteForumCommentView.as_view(), name='delete_forum_comment'),
-    path('forum/upvote/', views.CreateVoteView.as_view(), name = 'upvote'),
+    path('forum/upvote/', views.CreateVoteView.as_view(), name='upvote'),
     path('forum/downvote/', views.CreateVoteView.as_view(), name='downvote'),
 ]
