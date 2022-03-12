@@ -79,7 +79,7 @@ urlpatterns = [
     # '''Library URLs'''
     path('library/', views.library_dashboard, name='library_dashboard'),
     path('library/books/', views.BookListView.as_view(), name='library_books'),  # searching and book table
-    path('library/books/add_to_book_list', views.AddToBookListView.as_view(), name='add_to_book_list'),
+    path('library/books/add_to_book_list/', views.AddToBookListView.as_view(), name='add_to_book_list'),
     path('library/books/<int:book_id>/', views.BookDetailView.as_view(), name='book_view'),  # book view
     path('library/books/<int:book_id>/reviews/', views.BookReviewListView.as_view(), name='book_reviews'),
 
@@ -98,7 +98,7 @@ urlpatterns = [
     path('user/<slug:username>/lists/<int:booklist_id>/edit/', views.EditBookListView.as_view(), name='edit_booklist'),
     path('user/<slug:username>/lists/<int:booklist_id>', views.UserBookListView.as_view(), name='user_booklist'),
     path('user/<slug:username>/lists/<int:booklist_id>/<int:book_id>/delete', views.RemoveFromBookListView.as_view(), name='remove_book'),
-    path('user/<slug:username>/lists/create', views.CreateBookListView.as_view(), name='create_booklist'),
+    path('user/<slug:username>/lists/create/', views.CreateBookListView.as_view(), name='create_booklist'),
 
     path('agenda/', views.AgendaView.as_view(), name='agenda'),
 ]
