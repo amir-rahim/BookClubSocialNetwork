@@ -102,9 +102,9 @@ class CreatePostViewTestCase(TestCase):
         self.assertRedirects(response, redirect_url,
                              status_code=302, target_status_code=200, fetch_redirect_response=True
                              )
-        # messages_list = list(get_messages(response.wsgi_request))
-        # self.assertEqual(len(messages_list), 1)
-        # self.assertEqual(messages_list[0].level, messages.ERROR)
-        # self.assertEqual(messages_list[0], "There was an error making that post, try again!")
+        messages_list = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.ERROR)
+        self.assertEqual(str(messages_list[0]), "There was an error making that post, try again!")
         post_count_after = ForumPost.objects.count()
         self.assertEqual(post_count_after, post_count_before)

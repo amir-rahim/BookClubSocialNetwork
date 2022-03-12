@@ -23,5 +23,18 @@
           "content": "Nice opinion bro! Totally agree with you here.",
           "post": 1
         }
+  },
+
+  {
+        "model": "BookClub.ForumComment",
+        "pk": 3,
+        "fields": {
+          "creator": [
+                "janedoe"
+            ],
+          "created_on": "2022-02-27T22:45:06.275Z",
+          "content": "Wow this topic is so interesting, damn.",
+          "post": 4
+        }
   }
 ]

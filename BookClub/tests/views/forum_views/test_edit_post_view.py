@@ -18,6 +18,7 @@ class EditPostViewTestCase(TestCase):
 
     def setUp(self):
         self.user = User.objects.get(username="johndoe")
+        self.non_user = User.objects.get(pk=6)
         self.club = Club.objects.get(pk=1)
         self.my_post = ForumPost.objects.get(pk=1)
         self.other_post = ForumPost.objects.get(pk=2)
@@ -96,6 +97,12 @@ class EditPostViewTestCase(TestCase):
         self.assertEqual(post.content, "Contrary to popular belief, Lorem Ipsum is not simply random text. It has "
                                        "roots in a piece of classical Latin literature from 45 BC, making it over "
                                        "2000 years old.")
+
+    def test_edit_club_post_when_non_member(self):
+        self.client.login(username=self.non_user.username, password="Password123")
+        response = self.client.post(self.club_url, self.edit, follow=True)
+        post = ForumPost.objects.get(pk=4)
+        self.assertEqual(post.content, "... qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...")
 
     def test_edit_post_when_creator(self):
         self.client.login(username=self.user.username, password="Password123")
