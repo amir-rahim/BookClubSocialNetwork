@@ -1,7 +1,6 @@
-from urllib.parse import urlencode
-from django.template import Library
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
+from django.template import Library
 
 register = Library()
 
