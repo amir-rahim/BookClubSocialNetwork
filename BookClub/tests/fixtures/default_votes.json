@@ -1,0 +1,18 @@
+[{
+        "model": "BookClub.vote",
+        "pk": 1,
+        "fields": {
+            "creator": [
+                "johndoe"
+            ],
+            "created_on": "2022-02-27T22:45:06.275Z",
+            "type": false,
+            "content_type": [
+                "BookClub",
+                "forumpost"
+            ],
+            "object_id": 1
+        }
+    }
+
+]

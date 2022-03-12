@@ -19,18 +19,18 @@ class EditClubView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     slug_url_kwarg = 'club_url_name'
     slug_field = 'club_url_name'
     context_object_name = 'club'
-    
+
     def test_func(self):
         try:
             club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
             rank = ClubMembership.objects.get(club=club, user=self.request.user)
-            if(rank.membership != ClubMembership.UserRoles.OWNER):
-                messages.add_message(self.request, messages.ERROR,'Access denied')
+            if rank.membership != ClubMembership.UserRoles.OWNER:
+                messages.add_message(self.request, messages.ERROR, 'Access denied')
                 return False
             else:
                 return True
         except:
-            messages.add_message(self.request, messages.ERROR,'Club not found or you are not a member of this club')
+            messages.add_message(self.request, messages.ERROR, 'Club not found or you are not a member of this club')
             return False
 
     def handle_no_permission(self):
@@ -39,17 +39,7 @@ class EditClubView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         else:
             url = reverse('club_dashboard', kwargs=self.kwargs)
             return redirect(url)
-    
+
     def get_object(self):
-        try:
-            return super().get_object()
-        except:
-            messages.add_message(self.request,messages.ERROR,'Club not found!')
-            return None
+        return super().get_object()
 
-    # def get_success_url(self):
-    #     messages.add_message(self.request,messages.SUCCESS,'Club updated!')
-    #     print('got to success url')
-    #     return reverse(settings.REDIRECT_URL_WHEN_LOGGED_IN)
-
-    #TODO: more testing

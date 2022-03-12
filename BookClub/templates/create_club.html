@@ -1,13 +1,10 @@
 {% extends 'base_content.html' %}
-
 {% block page_title %}
-Create Club
+    Create Club
 {% endblock page_title %}
-
 {% block page_subtitle %}
-This is a page to create your own club.
+    This is a page to create your own club.
 {% endblock page_subtitle %}
-
 {% block content %}
 
 <div class="columns">
@@ -53,22 +50,6 @@ This is a page to create your own club.
                     <h2 class="subtitle">Enter the details of your brand new club below</h2>
                 </div>
             </div>
-        </section>
-
-        <div class="columns">
-
-            <div class="column is-12">
-                <form class="" action="{% url 'create_club' %}" method="post">
-                  {% csrf_token %}
-                  {% include 'partials/bulma_form.html' with form=form %}
-                  <input type="submit" value="Create Club" class="button is-link">
-                </form>
-            </div>
-
         </div>
-
     </div>
-
-</div>
-
 {% endblock %}

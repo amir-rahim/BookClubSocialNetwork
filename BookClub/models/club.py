@@ -3,12 +3,10 @@ from django.db import models
 from django.urls import reverse
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.validators import RegexValidator
-
-from BookClub.models.user import User
-from BookClub.models import *
+from BookClub.models import ClubMembership, User
 
 from django.db import IntegrityError, models
-from BookClub.models.club_membership import ClubMembership
+from django.apps import apps
 
 
 class Club(models.Model):
@@ -34,6 +32,12 @@ class Club(models.Model):
         url = self.convertNameToUrl(self.name)
         self.club_url_name = url
         super().clean()
+        
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs);
+        forumModel = apps.get_model('BookClub', 'forum')
+        associatedWith = forumModel.objects.get_or_create(title=self.club_url_name + " forum", associatedWith = self)
+        
     def get_absolute_url(self):
         return reverse('club_dashboard', kwargs = {'club_url_name': self.club_url_name})
 

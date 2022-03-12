@@ -1,10 +1,10 @@
 '''Review Related Views'''
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import redirect
-from django.urls import reverse_lazy
-from django.views import View
 from django.views.generic.edit import CreateView, UpdateView
+from django.views import View
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy, reverse
 
 from BookClub.forms.review import ReviewForm
 from BookClub.helpers import delete_bookreview
@@ -16,6 +16,14 @@ class CreateReviewView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = BookReview
     form_class = ReviewForm
     redirect_location = 'book_reviews'  # need to remove this attribute and amend 'get_absolute_url' method in BookReview model
+
+    def handle_no_permission(self):
+        if not self.request.user.is_authenticated:
+            return super(LoginRequiredMixin, self).handle_no_permission()
+        else:
+            messages.error(self.request, f"Error attempting to review book.")
+            url = reverse('library_books')
+            return redirect(url)
 
     def test_func(self):
         try:
@@ -31,6 +39,7 @@ class CreateReviewView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         form.instance.user = user
         form.instance.book = book
         response = super().form_valid(form)
+        messages.success(self.request, f"Successfully reviewed '{book.title}'!")
         return response
 
     def form_invalid(self, form):

@@ -15,5 +15,7 @@ from .book import *
 from .booklists import *
 from .meetings import *
 from .reviews import *
+from .forum import *
+from .vote import *
 from .polls import *
 from .agenda import *

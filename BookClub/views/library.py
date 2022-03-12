@@ -20,8 +20,6 @@ class BookListView(ListView):
     paginate_by = 20
     
     def post(self, request):
-        if request.POST.get('paginate_by'):
-            request.session['paginate_setting'] = request.POST['paginate_by']
         if request.POST.get('q'):
             request.session['query'] = request.POST['q']
 

@@ -94,7 +94,10 @@ def can_kick(club, user, targetUser):
 
 
 def has_membership(club, user):
-    return ClubMembership.objects.filter(user=user, club=club)
+    try:
+        return ClubMembership.objects.filter(user=user, club=club)
+    except:
+        return None
 
 
 def create_membership(club, user, membership):

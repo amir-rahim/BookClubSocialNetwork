@@ -1,34 +1,15 @@
-{% load pagination_tags %}
-
 <nav class="pagination is-rounded is-left" role="navigation" aria-label="pagination">
     {% if page_obj.has_previous %}
-        <a class="pagination-previous" href="?{% url_replace page=1 %}">&#60;&#60; First</a>
-        <a class="pagination-previous" href="?{% url_replace page=page_obj.previous_page_number %}">&#60; Previous</a>
+        <a class="pagination-previous" href="?page=1">&#60;&#60; First</a>
+        <a class="pagination-previous" href="?page={{ page_obj.previous_page_number }}">&#60; Previous</a>
     {% endif %}
 
     <ul class="pagination-list">
         <li>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</li>
-        <li style="padding-left: 30px">
-            Shown Per Page:
-            <form method='POST'>
-                {% csrf_token %}
-                <div class="select">
-                    <select name="paginate_by" id="paginate_by">
-                        <option value="10">10</option>
-                        <option value="20">20</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
-                </div>
-
-                <input class="button" type="submit" value="Submit">
-            </form>
-
-        </li>
     </ul>
 
     {% if page_obj.has_next %}
-        <a class="pagination-next" href="?{% url_replace page=page_obj.next_page_number %}">Next &#62;</a>
-        <a class="pagination-next" href="?{% url_replace page=page_obj.paginator.num_pages %}">Last &#62;&#62;</a>
+        <a class="pagination-next" href="?page={{ page_obj.next_page_number }}">Next &#62;</a>
+        <a class="pagination-next" href="?page={{ page_obj.paginator.num_pages }}">Last &#62;&#62;</a>
     {% endif %}
 </nav>

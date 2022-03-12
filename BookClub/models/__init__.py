@@ -5,5 +5,9 @@ from .book import *
 from .booklist import *
 from .meeting import *
 from .review import *
+from .abstract_user_objects import *
+from .vote_models import *
+from .rated_content import *
+from .forum import *
 from .option import *
 from .poll import *
