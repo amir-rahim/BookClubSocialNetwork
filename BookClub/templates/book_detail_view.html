@@ -116,20 +116,23 @@ This is the detail view for {{book.title}}
                             {% endfor %}
 
                             <div class="box">
-                                <form method="post" action="{% url 'home' %}">
-                                    {% csrf_token %}
+                                <form method="get" action="{% url 'create_review' book.id %}">
                                     <button class="button is-info is-fullwidth">Add Review</button>
                                 </form>
 
-                                {% if more %}
-                                    <form method="get" action="{% url 'book_reviews' book.id %}">
-                                        <button class="button is-link is-fullwidth">See more</button>
-                                    </form>
-                                {% endif %}
+                                <form method="get" action="{% url 'book_reviews' book.id %}">
+                                    <button class="button is-link is-fullwidth">See more</button>
+                                </form>
                             </div>
                         {% else %}
                             <div class="box">
                                 <p>No reviews as of yet</p>
+                            </div>
+
+                            <div class="box">
+                                <form method="get" action="{% url 'create_review' book.id %}">
+                                    <button class="button is-info is-fullwidth">Add Review</button>
+                                </form>
                             </div>
                         {% endif %}
                     </section>
