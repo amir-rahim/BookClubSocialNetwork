@@ -1,10 +1,10 @@
-from django import forms
 from django.test import TestCase, tag
-from BookClub.models import Book, BookList
+
 from BookClub.forms import AddBookForm
+from BookClub.models import Book, BookList
 
 
-@tag('booklist', 'book', 'addbook')
+@tag('forms', 'book', 'add_book')
 class AddBookFormTestCase(TestCase):
     fixtures = [
         "BookClub/tests/fixtures/default_users.json",

@@ -1,9 +1,12 @@
 """Tests of the update user details form."""
 from django import forms
 from django.test import TestCase, tag
+
 from BookClub.forms.user_forms import EditProfileForm
 from BookClub.models import User
-@tag('editprofileform','user')
+
+
+@tag('forms', 'user')
 class ProfileFormTestCase(TestCase):
     """Unit tests of the update user details form."""
 
@@ -14,7 +17,7 @@ class ProfileFormTestCase(TestCase):
             'username': 'johndoe2',
             'email': 'johndoe2@example.org',
             'public_bio': 'My bio',
-        }        
+        }
 
     def test_form_has_necessary_fields(self):
         form = EditProfileForm()

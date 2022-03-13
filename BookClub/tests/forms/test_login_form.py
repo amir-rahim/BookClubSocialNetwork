@@ -1,11 +1,14 @@
 """Unit tests of the log in form."""
 from django import forms
 from django.test import TestCase, tag
+
 from BookClub.forms import LogInForm
 
-@tag('auth','user')
+
+@tag('forms', 'user')
 class LogInFormTestCase(TestCase):
     """Unit tests of the log in form."""
+
     def setUp(self):
         self.form_input = {'username': 'janedoe', 'password': 'Password123'}
 
@@ -16,7 +19,7 @@ class LogInFormTestCase(TestCase):
         self.assertIn('username', form.fields)
         self.assertIn('password', form.fields)
 
-        self.assertTrue(isinstance(password_field.widget,forms.PasswordInput))
+        self.assertTrue(isinstance(password_field.widget, forms.PasswordInput))
 
     def test_form_accepts_valid_input(self):
         form = LogInForm(data=self.form_input)
@@ -45,5 +48,5 @@ class LogInFormTestCase(TestCase):
     def test_form_accepts_incorrect_password(self):
         self.form_input['password'] = 'pwd'
         form = LogInForm(data=self.form_input)
-        
+
         self.assertTrue(form.is_valid())

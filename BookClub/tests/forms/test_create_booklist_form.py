@@ -1,11 +1,12 @@
-from django import forms
-from django.test import TestCase, tag
-from BookClub.models import BookList, User
-from BookClub.forms.booklist_forms import CreateBookListForm
-
 from datetime import date
 
-@tag('createbooklistform','booklist')
+from django.test import TestCase, tag
+
+from BookClub.forms.booklist_forms import CreateBookListForm
+from BookClub.models import BookList, User
+
+
+@tag('forms', 'booklist')
 class BookListFormTestCase(TestCase):
     """Unit tests for Book List Form"""
 

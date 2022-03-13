@@ -1,16 +1,14 @@
 from datetime import datetime, timedelta
-import pytz
 
-from django import forms
+import pytz
 from django.test import TestCase, tag
-from django.core.exceptions import ValidationError
 
 from BookClub.forms import PollForm, ISBNField
 from BookClub.models import Poll, Option, Club, Book
 
-@tag('poll', 'option', 'pollform', 'optionform')
-class PollFormTestcase(TestCase):
 
+@tag('forms', 'poll', 'option')
+class PollFormTestcase(TestCase):
     fixtures = [
         'BookClub/tests/fixtures/default_books.json',
         'BookClub/tests/fixtures/default_clubs.json'
@@ -53,7 +51,7 @@ class PollFormTestcase(TestCase):
 
     def test_form_uses_custom_validation(self):
         self.form_input['option_3_isbn'] = ('1' * 9) + 'A'
-        form = PollForm(data = self.form_input)
+        form = PollForm(data=self.form_input)
         self.assertFalse(form.is_valid())
 
     def test_valid_poll_form(self):
