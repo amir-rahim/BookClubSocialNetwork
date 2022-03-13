@@ -68,13 +68,9 @@ class EditReviewView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         try:
             book = Book.objects.get(pk=self.kwargs['book_id'])
             book_review = BookReview.objects.get(book=book, user=self.request.user)
-            if book_review.user == self.request.user:
-                return True
-            else:
-                messages.error(self.request, 'You cannot edit this review!')
-                return False
+            return True
         except:
-            messages.error(self.request, 'Book or review not found!')
+            messages.error(self.request, "Book or review not found!")
             return False
 
     def handle_no_permission(self):
