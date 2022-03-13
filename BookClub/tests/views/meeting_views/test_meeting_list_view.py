@@ -134,3 +134,8 @@ class MeetingListTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'club_meetings.html')
         self.assertContains(response, 'Leave Meeting')
+
+    def test_invalid_club(self):
+        self.client.login(username=self.member.username, password="Password123")
+        response = self.client.get(reverse("meeting_list", kwargs={"club_url_name": 'fakeclub'}))
+        self.assertRedirects(response, expected_url=reverse("club_dashboard", kwargs={"club_url_name": 'fakeclub'}), status_code=302, target_status_code=302)
