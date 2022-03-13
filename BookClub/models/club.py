@@ -51,16 +51,16 @@ class Club(models.Model):
         return ClubMembership.objects.filter(club=self, membership__gte=ClubMembership.UserRoles.MEMBER).count()
 
     def is_applicant(self, user):
-        return ClubMembership.objects.filter(club=self, user=user, membership__gte=ClubMembership.UserRoles.APPLICANT)
+        return ClubMembership.objects.filter(club=self, user=user, membership__gte=ClubMembership.UserRoles.APPLICANT).exists()
 
     def is_member(self, user):
-        return ClubMembership.objects.filter(club=self, user=user, membership__gte=ClubMembership.UserRoles.MEMBER)
+        return ClubMembership.objects.filter(club=self, user=user, membership__gte=ClubMembership.UserRoles.MEMBER).exists()
 
     def is_moderator(self, user):
-        return ClubMembership.objects.get(club=self, user=user, membership__gte=ClubMembership.UserRoles.MODERATOR)
+        return ClubMembership.objects.filter(club=self, user=user, membership__gte=ClubMembership.UserRoles.MODERATOR).exists()
 
     def is_owner(self, user):
-        return ClubMembership.objects.get(club=self, user=user, membership__gte=ClubMembership.UserRoles.OWNER)
+        return ClubMembership.objects.filter(club=self, user=user, membership__gte=ClubMembership.UserRoles.OWNER).exists()
 
     def convertNameToUrl(self, name):
         updated = re.sub(" +", "_", name)
