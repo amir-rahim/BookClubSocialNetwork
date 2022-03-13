@@ -1,8 +1,6 @@
-from django.forms import ModelForm, Textarea, ValidationError
-from django.core.validators import RegexValidator
-from django.test import tag
-from BookClub.models.club import Club
-from BookClub.models.user import User
+from django.forms import ModelForm, Textarea
+
+from BookClub.models import Club
 
 
 class ClubForm(ModelForm):

@@ -1,7 +1,6 @@
-from django.forms import ModelForm, Textarea, ValidationError
-from django.core.validators import RegexValidator
-from django.test import tag
-from BookClub.models import User, Book, BookReview
+from django.forms import ModelForm, Textarea
+
+from BookClub.models import BookReview
 
 
 class ReviewForm(ModelForm):
