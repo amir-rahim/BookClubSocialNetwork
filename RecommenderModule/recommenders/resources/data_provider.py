@@ -2,6 +2,7 @@ from surprise import Dataset
 from surprise import Reader
 import pandas as pd
 from BookClub.models.review import BookReview
+from RecommenderModule.recommenders.resources.library import Library
 
 
 """This class loads the ratings dataset from the 'BX-Book-Ratings.csv' file and builds the train sets"""
@@ -109,3 +110,8 @@ class DataProvider:
         user_ratings = self.ratings_df.loc[self.ratings_df["User-ID"] == user_id]
         rating = (user_ratings.loc[user_ratings["ISBN"] == book_isbn])["Book-Rating"].values[0]
         return rating
+
+    """Get all the ratings values for the specified book"""
+    def get_all_ratings_for_isbn(self, isbn):
+        library = Library(trainset=self.filtered_ratings_trainset)
+        return library.get_all_ratings_for_isbn(isbn)
