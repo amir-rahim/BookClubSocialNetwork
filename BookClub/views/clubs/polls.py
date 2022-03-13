@@ -1,14 +1,12 @@
-'''Polls Related Views'''
+"""Polls Related Views"""
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-# from django.views.generic.edit import CreateView, DeleteView, UpdateView
-from django.views.generic import FormView
-from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
+from django.views.generic import FormView
 
-from BookClub.models import Club, User, ClubMembership, Poll, Option
 from BookClub.forms import PollForm
+from BookClub.models import Club, ClubMembership
 
 
 class CreateClubPollView(LoginRequiredMixin, UserPassesTestMixin, FormView):
@@ -18,12 +16,10 @@ class CreateClubPollView(LoginRequiredMixin, UserPassesTestMixin, FormView):
     def test_func(self):
         user = self.request.user
         club = get_object_or_404(Club, club_url_name=self.kwargs['club_url_name'])
-        # club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
-        # membership = get_object_or_404(ClubMembership, club=club, user=user)
         try:
             membership = ClubMembership.objects.get(club=club, user=user)
         except Exception as e:
-            return False        
+            return False
 
         return membership.membership > ClubMembership.UserRoles.MEMBER
 
