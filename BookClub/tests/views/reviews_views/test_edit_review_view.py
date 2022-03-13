@@ -132,11 +132,10 @@ class EditReviewView(TestCase, LogInTester):
         response = self.client.post(self.url, self.data, follow=True)
         self.book_review.refresh_from_db()
         self.assertTemplateNotUsed('edit_review.html')
-
         messages_list = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
         self.assertTrue(messages_list[0].level,messages.ERROR)
-        
+        self.assertEqual(str(messages_list[0]),"Book or review not found!")
         self.assertNotEqual(self.book_review.user.id, self.another_user.id)
         self.assertEqual(self.book_review.rating, book_rating_before)
         self.assertEqual(self.book_review.review, book_review_before)
@@ -150,11 +149,10 @@ class EditReviewView(TestCase, LogInTester):
         response = self.client.post(self.url, self.data, follow=True)
         self.book_review.refresh_from_db()
         self.assertTemplateNotUsed('edit_review.html')
-
         messages_list = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
         self.assertTrue(messages_list[0].level,messages.ERROR)
-        
+        self.assertEqual(str(messages_list[0]),"Book or review not found!")
         self.assertNotEqual(self.book_review.user.id, self.another_user.id)
         self.assertEqual(self.book_review.rating, book_rating_before)
         self.assertEqual(self.book_review.review, book_review_before)
@@ -168,7 +166,6 @@ class EditReviewView(TestCase, LogInTester):
         response = self.client.post(self.url, self.data, follow=True)
         self.book_review.refresh_from_db()
         self.assertTemplateNotUsed('edit_review.html')
-
         messages_list = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
         self.assertTrue(messages_list[0].level,messages.ERROR)
@@ -176,3 +173,4 @@ class EditReviewView(TestCase, LogInTester):
         self.assertNotEqual(self.book_review.user.id, self.another_user.id)
         self.assertEqual(self.book_review.rating, book_rating_before)
         self.assertEqual(self.book_review.review, book_review_before)
+        
