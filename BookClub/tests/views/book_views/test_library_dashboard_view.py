@@ -2,7 +2,7 @@ from django.test import TestCase, tag
 from django.urls import reverse
 
 
-@tag('library')
+@tag("views", "books", "library_dashboard")
 class LibraryDashboardViewTestCase(TestCase):
     """Tests of the Library Dashboard view"""
 

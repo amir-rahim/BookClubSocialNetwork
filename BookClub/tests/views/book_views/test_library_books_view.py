@@ -3,7 +3,7 @@ from django.urls import reverse
 from BookClub.models import User, Book
 
 
-@tag('library')
+@tag("views", "books", "library_books")
 class LibraryBooksViewTestCase(TestCase):
     """Tests of the Library Books view."""
 
