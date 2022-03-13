@@ -1,7 +1,7 @@
 from RecommenderModule.recommenders.resources.data_provider import DataProvider
-from RecommenderModule.evaluation_data_provider import EvaluationDataProvider
+from RecommenderModule.evaluation.resources.evaluation_data_provider import EvaluationDataProvider
 from RecommenderModule.recommenders.resources.item_based_collaborative_filtering_methods import ItemBasedCollaborativeFilteringMethods
-from RecommenderModule import evaluator
+from RecommenderModule.evaluation.resources import evaluator
 
 """This class evaluates item-based collaborative filtering recommenders with
     different parameters, in order for the developer to pick the best parameters

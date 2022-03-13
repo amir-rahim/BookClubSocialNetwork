@@ -1,7 +1,7 @@
 from RecommenderModule.recommenders.resources.data_provider import DataProvider
-from RecommenderModule.evaluation_data_provider import EvaluationDataProvider
+from RecommenderModule.evaluation.resources.evaluation_data_provider import EvaluationDataProvider
 from RecommenderModule.recommenders.resources.popular_books_recommender_methods import PopularBooksMethods
-from RecommenderModule import evaluator
+from RecommenderModule.evaluation.resources import evaluator
 
 """This file evaluates popularity-based recommenders according to the different
     metrics (average, median, both), in order for the developer to pick the best
