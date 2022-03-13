@@ -18,7 +18,7 @@ class MembersListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
         try:
             current_club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
             if current_club.is_private and not current_club.is_member(self.request.user):
-                messages.add_message(self.request, messages.ERROR, 'This club is private and you are not a member.')
+                messages.add_message(self.request, messages.ERROR, 'This club is private and you are not a member.') 
                 return False
             else:
                 return True
@@ -59,7 +59,7 @@ class ApplicantListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
     def test_func(self):
         try:
             current_club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
-            if not current_club.is_moderator(self.request.user) and not current_club.is_owner(self.request.user):
+            if (not current_club.is_moderator(self.request.user)) and (not current_club.is_owner(self.request.user)):
                 messages.add_message(self.request, messages.ERROR, 'Only Owners and Moderators can view this.')
                 return False
             else:
@@ -80,10 +80,7 @@ class ApplicantListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
         user = User.objects.get(id=self.request.user.id)
-        try:
-            rank = ClubMembership.objects.get(user=user, club=club)
-        except:
-            rank = None
+        rank = ClubMembership.objects.get(user=user, club=club)
         context['club'] = club
         context['applicants'] = club.get_applicants()
         context['moderators'] = club.get_moderators()
