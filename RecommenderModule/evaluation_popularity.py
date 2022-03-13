@@ -1,12 +1,11 @@
-"""This file evaluates item-based collaborative filtering recommenders with
-    different parameters, in order for the developer to pick the best parameters
-    for the app's item-based recommender."""
-
 from RecommenderModule.recommenders.resources.data_provider import DataProvider
 from RecommenderModule.evaluation_data_provider import EvaluationDataProvider
 from RecommenderModule.recommenders.resources.popular_books_recommender_methods import PopularBooksMethods
 from RecommenderModule import evaluator
 
+"""This file evaluates popularity-based recommenders according to the different
+    metrics (average, median, both), in order for the developer to pick the best
+    parameters for the app's popularity-based recommender."""
 class EvaluationPopularity:
 
     trainset = None
@@ -15,6 +14,7 @@ class EvaluationPopularity:
     evaluation_data_provider = None
     read_books_all_users = None
 
+    """Evaluate the possible popularity-based recommenders and print the insights."""
     def run_evaluations(self):
 
         self.trainset, self.testset = self.get_train_test_datasets()
@@ -22,12 +22,15 @@ class EvaluationPopularity:
         self.evaluate_recommenders()
 
 
+    """Get the LeaveOneOut train and test datasets."""
     def get_train_test_datasets(self):
         data_provider = DataProvider(get_data_from_csv=True)
         dataset = data_provider.get_filtered_ratings_dataset()
         self.evaluation_data_provider = EvaluationDataProvider(dataset)
         return self.evaluation_data_provider.get_loocv_datasets()
 
+    """Evaluate the popularity-based recommender using the 3 possible metrics:
+        average, median and both."""
     def evaluate_recommenders(self):
         self.read_books_all_users = self.evaluation_data_provider.get_read_books_all_users_dict()
 
@@ -48,6 +51,8 @@ class EvaluationPopularity:
             print(f" -> average_reciprocal_hit_rate:{average_reciprocal_hit_rate}")
             print()
 
+    """Get the recommendations for all users from the train set, using the
+        average metric."""
     def get_average_recommendations(self):
         trainset = self.trainset
         recommendations = {}
@@ -58,6 +63,8 @@ class EvaluationPopularity:
             recommendations[user_id] = user_recommendations
         return recommendations
 
+    """Get the recommendations for all users from the train set, using the
+        median metric."""
     def get_median_recommendations(self):
         trainset = self.trainset
         recommendations = {}
@@ -68,6 +75,8 @@ class EvaluationPopularity:
             recommendations[user_id] = user_recommendations
         return recommendations
 
+    """Get the recommendations for all users from the train set, using a
+        combination of the average and median metrics."""
     def get_combination_recommendations(self):
         trainset = self.trainset
         recommendations = {}

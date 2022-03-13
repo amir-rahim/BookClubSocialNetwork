@@ -1,17 +1,17 @@
-"""This file evaluates item-based collaborative filtering recommenders with
-    different parameters, in order for the developer to pick the best parameters
-    for the app's item-based recommender."""
-
 from RecommenderModule.recommenders.resources.data_provider import DataProvider
 from RecommenderModule.evaluation_data_provider import EvaluationDataProvider
 from RecommenderModule.recommenders.resources.item_based_collaborative_filtering_methods import ItemBasedCollaborativeFilteringMethods
 from RecommenderModule import evaluator
 
+"""This class evaluates item-based collaborative filtering recommenders with
+    different parameters, in order for the developer to pick the best parameters
+    for the app's item-based recommender."""
 class EvaluationItemBased:
 
     trainset = None
     testset = None
 
+    """Evaluate the possible item-based recommenders and print the insights."""
     def run_evaluations(self):
 
         self.trainset, self.testset = self.get_train_test_datasets()
@@ -23,16 +23,19 @@ class EvaluationItemBased:
         self.evaluate_all_combinations(parameters_to_evaluate)
 
 
+    """Get the LeaveOneOut train and test datasets."""
     def get_train_test_datasets(self):
         data_provider = DataProvider(get_data_from_csv=True)
         dataset = data_provider.get_filtered_ratings_dataset()
         evaluation_data_provider = EvaluationDataProvider(dataset)
         return evaluation_data_provider.get_loocv_datasets()
 
+    """Evaluate the item-based recommender with all possible combinations of
+        passed parameters."""
     def evaluate_all_combinations(self, parameters_to_evaluate):
         for min_support in parameters_to_evaluate['min_support']:
             for model_function_name in parameters_to_evaluate['model_function_name']:
-                recommendations = self.get_predictions_for_combination(min_support, model_function_name)
+                recommendations = self.get_recommendations_for_combination(min_support, model_function_name)
                 hit_rate = evaluator.get_hit_rate(recommendations, self.testset)
                 average_reciprocal_hit_rate = evaluator.get_average_reciprocal_hit_rate(recommendations, self.testset)
                 novelty = evaluator.get_novelty(recommendations, self.trainset)
@@ -42,7 +45,9 @@ class EvaluationItemBased:
                 print(f" -> novelty:{novelty}")
                 print()
 
-    def get_predictions_for_combination(self, min_support, model_function_name):
+    """Get the recommendations for all users from the train set, for the given
+        parameters combination."""
+    def get_recommendations_for_combination(self, min_support, model_function_name):
         item_based_recommender = ItemBasedCollaborativeFilteringMethods(trainset=self.trainset, min_support=min_support, model_function_name=model_function_name)
         recommendations = {}
         for user_inner_id in self.trainset.all_users():
