@@ -37,14 +37,10 @@ class BookReviewListView(ListView):
     
     def get_queryset(self):
         bookPk = self.kwargs.get('book_id')
-        if bookPk is not None:
-            book = Book.objects.get(pk=bookPk)
-            queryset = BookReview.objects.filter(book = book).order_by('-id')
-            return queryset
-        else:
-            return None
-        
-        
+        book = Book.objects.get(pk=bookPk)
+        queryset = BookReview.objects.filter(book = book).order_by('-id')
+        return queryset
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         bookPk = self.kwargs.get('book_id')
