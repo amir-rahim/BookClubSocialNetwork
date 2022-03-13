@@ -25,12 +25,6 @@ class BookListView(ListView):
 
         return redirect(reverse('library_books', kwargs=self.kwargs))
 
-    def get_paginate_by(self, queryset):
-        if self.request.session.get('paginate_setting'):
-            return self.request.session.get('paginate_setting')
-        else:
-            return self.paginate_by
-
     def get_queryset(self):  # new
         query = self.request.session.get('query')
         try:
@@ -75,10 +69,6 @@ class AddToBookListView(LoginRequiredMixin, FormView):
             booklist.save()
             messages.success(self.request, "The book has been saved to "+book.title)
         return super().form_valid(form)
-    
-    def form_invalid(self, form):
-        messages.error(self.request, "There was an error adding the book")
-        return super().form_invalid(form)
-        
+
     def get_success_url(self):
         return reverse('library_books')
