@@ -32,7 +32,7 @@ class ProfileFormTestCase(TestCase):
         self.assertTrue(form.is_valid())
 
     def test_form_uses_model_validation(self):
-        self.form_input['username'] = 'badusername!'
+        self.form_input['username'] = '.badusername.'
         form = EditProfileForm(data=self.form_input)
         self.assertFalse(form.is_valid())
 

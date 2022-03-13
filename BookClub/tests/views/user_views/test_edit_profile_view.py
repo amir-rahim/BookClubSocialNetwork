@@ -46,7 +46,7 @@ class EditProfileTestCase(TestCase):
 
     def test_unsuccessful_profile_update(self):
         self.client.login(username=self.user.username, password='Password123')
-        self.form_input['username'] = 'BAD_USERNAME!'
+        self.form_input['username'] = 'BAD_USERNAME!.'
         before_count = User.objects.count()
         response = self.client.post(self.url, self.form_input)
         after_count = User.objects.count()

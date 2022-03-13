@@ -45,7 +45,7 @@ class SignUpFormTestCase(TestCase):
         self.assertTrue(isinstance(password_confirmation_widget, forms.PasswordInput))
 
     def test_form_uses_model_validation(self):
-        self.form_input['username'] = '.badusername.'
+        self.form_input['username'] = '.badusername¬'
         form = SignUpForm(data=self.form_input)
 
         self.assertFalse(form.is_valid())

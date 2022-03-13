@@ -49,7 +49,7 @@ class SignUpViewTestCase(TestCase, LogInTester):
         self.assertTemplateUsed(response, 'home.html')
 
     def test_unsuccessful_sign_up(self):
-        self.form_input['username'] = '-BAD_USERNAME'
+        self.form_input['username'] = '.BAD_USERNAME.'
         before_count = User.objects.count()
         response = self.client.post(self.url, self.form_input)
         after_count = User.objects.count()
