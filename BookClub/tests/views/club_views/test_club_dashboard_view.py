@@ -1,9 +1,9 @@
 """Unit tests of the club dashboard view."""
 from django.test import TestCase, tag
-from BookClub.models import Club, User, ClubMembership
 from django.urls import reverse
+
+from BookClub.models import Club, User
 from BookClub.tests.helpers import reverse_with_next
-from django.test import Client
 
 
 @tag('club', 'club_dashboard')

@@ -1,8 +1,11 @@
 """Tests of the my_club_memberships view."""
-from django.test import TestCase
+from django.test import TestCase, tag
 from django.urls import reverse
+
 from BookClub.models import User, Club, ClubMembership
 
+
+@tag('club', 'membership_list')
 class MyClubsMembershipsViewTestCase(TestCase):
     """Tests of the my_club_memberships view."""
 
@@ -17,7 +20,7 @@ class MyClubsMembershipsViewTestCase(TestCase):
         self.user = User.objects.get(username="johndoe")
 
     def test_url(self):
-        self.assertEqual(self.url,'/memberships/')
+        self.assertEqual(self.url, '/memberships/')
 
     def test_get_template_logged_in(self):
         self.client.login(username=self.user.username, password="Password123")
@@ -40,7 +43,8 @@ class MyClubsMembershipsViewTestCase(TestCase):
         self.assertTemplateUsed(response, 'my_club_memberships.html')
         clubs = list(response.context['clubs'])
         self.assertEqual(len(clubs), 0)
-        self.assertContains(response, "<p style=\"text-align: center\">You are not a member of any club, you can find clubs <a href=\"/club/\">here</a>.</p>")
+        self.assertContains(response,
+                            "<p style=\"text-align: center\">You are not a member of any club, you can find clubs <a href=\"/club/\">here</a>.</p>")
 
     def test_not_contains_club_not_member_of(self):
         self.client.login(username=self.user.username, password='Password123')
@@ -64,7 +68,8 @@ class MyClubsMembershipsViewTestCase(TestCase):
 
     def test_not_contains_club_is_applicant(self):
         self.client.login(username=self.user.username, password='Password123')
-        new_membership = ClubMembership.objects.create(user=self.user, club=Club.objects.get(name="Jeannette Club"), membership=ClubMembership.UserRoles.APPLICANT)
+        new_membership = ClubMembership.objects.create(user=self.user, club=Club.objects.get(name="Jeannette Club"),
+                                                       membership=ClubMembership.UserRoles.APPLICANT)
         new_membership.save()
         response = self.client.get(self.url)
 
@@ -76,7 +81,8 @@ class MyClubsMembershipsViewTestCase(TestCase):
 
     def test_can_contain_multiple_clubs(self):
         self.client.login(username=self.user.username, password='Password123')
-        new_membership = ClubMembership.objects.create(user=self.user, club=Club.objects.get(name="Jeannette Club"), membership=ClubMembership.UserRoles.MEMBER)
+        new_membership = ClubMembership.objects.create(user=self.user, club=Club.objects.get(name="Jeannette Club"),
+                                                       membership=ClubMembership.UserRoles.MEMBER)
         new_membership.save()
         response = self.client.get(self.url)
 

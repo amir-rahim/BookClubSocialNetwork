@@ -1,14 +1,9 @@
-from datetime import date
-from django.forms import PasswordInput
-
+from django.contrib.messages import get_messages
 from django.test import TestCase, tag
 from django.urls import reverse
 
-from BookClub.models.user import User
 from BookClub.models.club import Club
-from BookClub.models.club_membership import ClubMembership
-from django.contrib.messages import get_messages
-
+from BookClub.models.user import User
 from BookClub.tests.helpers import reverse_with_next
 
 """
@@ -17,7 +12,7 @@ from BookClub.tests.helpers import reverse_with_next
 """
 
 
-@tag('edit_club', 'club')
+@tag('club', 'edit_club')
 class EditClubViewTestCase(TestCase):
     fixtures = [
         "BookClub/tests/fixtures/default_users.json",

@@ -1,14 +1,11 @@
 """Tests of the Applicant List view."""
-from ast import Pass
-from email.mime import application
 from django.test import TestCase, tag
 from django.urls import reverse
-from django.contrib import messages
-from django.core.exceptions import ObjectDoesNotExist
-from BookClub.models import User, Club, ClubMembership
+
+from BookClub.models import User, Club
 
 
-@tag('applicantlist')
+@tag('club', 'applicant_list')
 class ApplicantListTestCase(TestCase):
     """Tests of the Applicant List view."""
 
