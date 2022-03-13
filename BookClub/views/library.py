@@ -1,4 +1,4 @@
-'''Library Related Views'''
+"""Library Related Views"""
 from django.contrib import messages
 from django.shortcuts import redirect, render, reverse
 from django.views.generic import ListView, FormView
@@ -24,12 +24,6 @@ class BookListView(ListView):
             request.session['query'] = request.POST['q']
 
         return redirect(reverse('library_books', kwargs=self.kwargs))
-
-    def get_paginate_by(self, queryset):
-        if self.request.session.get('paginate_setting'):
-            return self.request.session.get('paginate_setting')
-        else:
-            return self.paginate_by
 
     def get_queryset(self):  # new
         query = self.request.session.get('query')
