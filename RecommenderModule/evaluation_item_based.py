@@ -34,6 +34,7 @@ def evaluate_all_combinations(trainset, testset, parameters_to_evaluate):
             print(f"min_support:{min_support}, model_function_name:{model_function_name}")
             print(f" -> hit_rate:{hit_rate}")
             print(f" -> average_reciprocal_hit_rate:{average_reciprocal_hit_rate}")
+            print()
 
 def get_predictions_for_combination(trainset, min_support, model_function_name):
     item_based_recommender = ItemBasedCollaborativeFilteringMethods(trainset=trainset, min_support=min_support, model_function_name=model_function_name)
