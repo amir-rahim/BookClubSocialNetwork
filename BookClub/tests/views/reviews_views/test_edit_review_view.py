@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.messages import get_messages
 
 
-@tag('book', 'editreview')
+@tag('book', 'editreview','review')
 class EditReviewView(TestCase, LogInTester):
     """Tests for editing review and rating"""
 
@@ -173,4 +173,3 @@ class EditReviewView(TestCase, LogInTester):
         self.assertNotEqual(self.book_review.user.id, self.another_user.id)
         self.assertEqual(self.book_review.rating, book_rating_before)
         self.assertEqual(self.book_review.review, book_review_before)
-        

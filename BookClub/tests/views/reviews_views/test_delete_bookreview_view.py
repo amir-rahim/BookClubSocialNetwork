@@ -6,7 +6,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from BookClub.tests.helpers import LogInTester, reverse_with_next
 
 
-@tag('delete', 'delete_book_review', 'book_review', 'bookreview')
+@tag('delete', 'delete_book_review', 'book_review', 'bookreview','review')
 class DeleteBookReview(TestCase, LogInTester):
     """Testing done by Raymond"""
     fixtures = [
