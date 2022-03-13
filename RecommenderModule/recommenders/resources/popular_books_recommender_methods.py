@@ -1,4 +1,5 @@
 from RecommenderModule.recommenders.resources.data_provider import DataProvider
+from RecommenderModule.recommenders.resources.library import Library
 import math
 import numpy as np
 import joblib
@@ -9,6 +10,7 @@ class PopularBooksMethods:
     path_to_popularity_lists = "RecommenderModule/recommenders/resources/popularity_lists"
     data_provider = None
     trainset = None
+    library = None
     filtered_books_list = []
     average_ratings = {}
     sorted_average_ratings = []
@@ -31,6 +33,8 @@ class PopularBooksMethods:
                     self.__init__(min_ratings_threshold=min_ratings_threshold, retraining_and_saving=True)
         else:
             self.trainset = trainset
+            self.load_filtered_books_list(None)
+        self.library = Library(trainset=self.trainset)
 
 
     """Import all sorted ratings list objects, using the joblib library"""
@@ -41,13 +45,14 @@ class PopularBooksMethods:
 
     """Get all books with at least {self.min_ratings_threshold} user ratings"""
     def load_filtered_books_list(self, min_ratings_threshold):
-        if (trainset == None):
-            self.data_provider = DataProvider(filtering_min_ratings_threshold=min_ratings_threshold, get_data_from_csv=True)
+        if (self.trainset == None):
+            self.data_provider = DataProvider(filtering_min_ratings_threshold=min_ratings_threshold)
             self.filtered_books_list = self.data_provider.get_filtered_books_list()
+            self.trainset = self.data_provider.filtered_ratings_trainset
         else:
             books_list = []
-            for item_inner_id in trainset.all_items():
-                books_list.append(trainset.to_raw_iid(item_inner_id))
+            for item_inner_id in self.trainset.all_items():
+                books_list.append(self.trainset.to_raw_iid(item_inner_id))
             self.filtered_books_list = books_list
 
     """Calculate popularity lists for all books according to the different metrics"""
@@ -64,7 +69,7 @@ class PopularBooksMethods:
 
     """Get the average rating for the book with the given ISBN number"""
     def get_average_rating(self, isbn):
-        ratings_arr = self.data_provider.get_all_ratings_for_isbn(isbn)
+        ratings_arr = self.library.get_all_ratings_for_isbn(isbn)
         sum = 0
         for rating in ratings_arr:
             sum += rating
@@ -85,7 +90,7 @@ class PopularBooksMethods:
 
     """Get the median rating for the book with the given ISBN number"""
     def get_median_rating(self, isbn):
-        ratings_sorted_arr = np.sort(self.data_provider.get_all_ratings_for_isbn(isbn))
+        ratings_sorted_arr = np.sort(self.library.get_all_ratings_for_isbn(isbn))
         if (len(ratings_sorted_arr) % 2 == 0): # even number of ratings
             index = len(ratings_sorted_arr) // 2
             median = (ratings_sorted_arr[index] + ratings_sorted_arr[index+1]) / 2
