@@ -1,13 +1,14 @@
-"""Tests of the profile view."""
-
+"""Tests of the user dashboard view."""
 from django.test import TestCase, tag
 from django.urls import reverse
+
 from BookClub.models import User
 from BookClub.tests.helpers import reverse_with_query
-@tag('editprofile','user')
 
+
+@tag('user', 'edit_profile')
 class UserDashboardViewTest(TestCase):
-    """Unit tests of the profile view."""
+    """Unit tests of the user dashboard view."""
 
     fixtures = [
         'BookClub/tests/fixtures/default_users.json',
@@ -27,11 +28,9 @@ class UserDashboardViewTest(TestCase):
         self.assertTemplateUsed(response, 'user_dashboard.html')
 
     def test_get_profile_redirects_when_not_logged_in(self):
-        redirect_url = reverse_with_query('login',query_kwargs={'next':reverse('user_dashboard')})
+        redirect_url = reverse_with_query('login', query_kwargs={'next': reverse('user_dashboard')})
         response = self.client.get(self.url)
         self.assertRedirects(response,
                              redirect_url,
                              status_code=302,
                              target_status_code=200)
-
-    
