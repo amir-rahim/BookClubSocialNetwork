@@ -1,103 +1,112 @@
 {% extends 'base_content.html' %}
-
 {% block page_title %}
-User Profile
+    User Profile
 {% endblock page_title %}
-
 {% block page_subtitle %}
-This is the User Profile, this is where you can view other profiles!
+    This is the User Profile, this is where you can view other profiles!
 {% endblock page_subtitle %}
-
 {% block content %}
-
-<div class="columns">
-
-    <div class="column is-3">
-
-        <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
-            
-            <p class="menu-label">Profile</p>
-
-            <ul class="menu-list">
-                <li><a href="{% url 'user_profile' username %}">Profile Dashboard</a></li>
-                <li><a href="{% url 'user_following' username %}">Following</a></li>
-            </ul>
-
-            <p class="menu-label">Clubs</p>
-
-            <ul class="menu-list">
-                <li><a class="is-active"><b>Club Memberships</b></a></li>
-            </ul>
-
-            <p class="menu-label">Books</p>
-
-            <ul class="menu-list">
-                <li><a href="{% url 'booklists_list' username=username %}">Book Lists</a></li>
-            </ul>
-
-        </aside>
-
-    </div>
-
-    <div class="column is-9">
-
-        <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
-            <ul>
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'user_dashboard' %}">Profile</a></li>
-                <li><a href="{% url 'user_profile' username %}">{{ username }}</a></li>
-                <li><a href="{% url 'my_club_memberships' %}">Club Memberships</a></li>
-            </ul>
-        </nav>
-
-        <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
-            <div class="hero-body">
-                <div class="container">
-                    <h1 class="title">{{ username }}'s Memberships</h1>
-                    <h2 class="subtitle">This is the clubs that this user is apart of.</h2>
+    <div class="columns">
+        <div class="column is-3">
+            <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+                <p class="menu-label">
+                    Profile
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'user_profile' username %}">Profile Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'user_following' username %}">Following</a>
+                    </li>
+                </ul>
+                <p class="menu-label">
+                    Clubs
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a class="is-active"><b>Club Memberships</b></a>
+                    </li>
+                </ul>
+                <p class="menu-label">
+                    Books
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'booklists_list' username=username %}">Book Lists</a>
+                    </li>
+                </ul>
+            </aside>
+        </div>
+        <div class="column is-9">
+            <nav class="breadcrumb"
+                 aria-label="breadcrumbs"
+                 style="padding-left: 5px;">
+                <ul>
+                    <li>
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'user_dashboard' %}">Profile</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'user_profile' username %}">{{ username }}</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'my_club_memberships' %}">Club Memberships</a>
+                    </li>
+                </ul>
+            </nav>
+            <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
+                <div class="hero-body">
+                    <div class="container">
+                        <h1 class="title">{{ username }}'s Memberships</h1>
+                        <h2 class="subtitle">This is the clubs that this user is apart of.</h2>
+                    </div>
                 </div>
+            </section>
+            {% if clubs %}
+                <!-- If there are clubs available to the logged-in user -->
+                <table class="table is-hoverable is-fullwidth"
+                       id="table-clubs"
+                       data-toggle="table"
+                       data-pagination="true">
+                    <thead>
+                        <tr>
+                            <th scope="col">Club Name</th>
+                            <th scope="col">Tagline</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">View</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for club in clubs %}
+                            <!-- For each available club, add a row linked to the corresponding club dashboard page -->
+                            <tr onclick="window.location='{% url 'club_dashboard' club.club_url_name %}';">
+                                <td>{{ club.name }}</td>
+                                <td>{{ club.tagline }}</td>
+                                <td>{{ club.description }}</td>
+                                <td>
+                                    <button class="button is-fullwidth is-success">View</button>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <hr>
+                    <p style="text-align: center">
+                        This user is not a member of any club, you can find clubs <a href="{% url 'available_clubs' %}">here</a>.
+                    </p>
+                    <hr>
+                {% endif %}
             </div>
-        </section>
-
-        {% if clubs %} <!-- If there are clubs available to the logged-in user -->
-        <table class="table is-hoverable is-fullwidth" id="table-clubs" data-toggle="table" data-pagination="true">
-            <thead>
-                <tr>
-                    <th scope="col">Club Name</th>
-                    <th scope="col">Tagline</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">View</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for club in clubs %}
-                    <!-- For each available club, add a row linked to the corresponding club dashboard page -->
-                    <tr onclick="window.location='{% url 'club_dashboard' club.club_url_name %}';">
-                        <td>{{club.name}}</td>
-                        <td>{{club.tagline}}</td>
-                        <td>{{club.description}}</td>
-                        <td><button class="button is-fullwidth is-success">View</button>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-            <hr>
-                <p style="text-align: center">This user is not a member of any club, you can find clubs <a href="{% url 'available_clubs' %}">here</a>.</p>
-            <hr>
-        {% endif %}
-
-    </div>
-
-</div>
-
-<script>
+        </div>
+        <script>
     const dataTable = new simpleDatatables.DataTable("#table-clubs", {
         fixedHeight: true,
         columns: [
           {select: [1], sortable:false}
         ]
     })
-</script>
-
-{% endblock %}
+        </script>
+    {% endblock %}

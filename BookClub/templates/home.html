@@ -1,134 +1,128 @@
 {% extends 'base_content.html' %}
-
 {% block page_title %}
-Home
+    Home
 {% endblock page_title %}
-
 {% block page_subtitle %}
-Welcome to our homepage for our Book Club Social Network!
+    Welcome to our homepage for our Book Club Social Network!
 {% endblock page_subtitle %}
-
 {% block content %}
-
-<div class="section">
-
-    <div class="row columns is-multiline">
-
-        <div class="column is-4">
-            <div class="card large card-equal-height">
-                <div class="card-image">
-                    <figure class="image is-16by9">
-                        <img src="https://i.pinimg.com/originals/04/14/50/041450d28a4236a0a666901b191cc609.png" alt="Image">
-                    </figure>
-                </div>
-                <div class="card-content">
-                    <p class="title">Library</p>
-                    <div class="content">
-                        "Our collection of books!"
+    <div class="section">
+        <div class="row columns is-multiline">
+            <div class="column is-4">
+                <div class="card large card-equal-height">
+                    <div class="card-image">
+                        <figure class="image is-16by9">
+                            <img src="https://i.pinimg.com/originals/04/14/50/041450d28a4236a0a666901b191cc609.png"
+                                 alt="Image">
+                        </figure>
+                    </div>
+                    <div class="card-content">
+                        <p class="title">
+                            Library
+                        </p>
+                        <div class="content">"Our collection of books!"</div>
+                    </div>
+                    <div class="card-footer">
+                        <a class="card-footer-item" href="{% url 'library_dashboard' %}">View Library</a>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <a class="card-footer-item" href="{% url 'library_dashboard' %}">View Library</a>
-                </div>
             </div>
-        </div>
-
-        <div class="column is-4">
-            <div class="card large card-equal-height">
-                <div class="card-image">
-                    <figure class="image is-16by9">
-                        <img src="https://images.unsplash.com/photo-1615791287388-6f1bd87ace4e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=876&q=80" alt="Image">
-                    </figure>
-                </div>
-                <div class="card-content">
-                    <p class="title">Clubs</p>
-                    <div class="content">
-                        View our collections of book clubs.
+            <div class="column is-4">
+                <div class="card large card-equal-height">
+                    <div class="card-image">
+                        <figure class="image is-16by9">
+                            <img src="https://images.unsplash.com/photo-1615791287388-6f1bd87ace4e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=876&q=80"
+                                 alt="Image">
+                        </figure>
+                    </div>
+                    <div class="card-content">
+                        <p class="title">
+                            Clubs
+                        </p>
+                        <div class="content">View our collections of book clubs.</div>
+                    </div>
+                    <div class="card-footer">
+                        <a class="card-footer-item" href="{% url 'my_club_memberships' %}">Memberships</a>
+                        <a class="card-footer-item" href="{% url 'available_clubs' %}">Join</a>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <a class="card-footer-item" href="{% url 'my_club_memberships' %}">Memberships</a>
-                    <a class="card-footer-item" href="{% url 'available_clubs' %}">Join</a>
-                </div>
             </div>
-        </div>
-
-        <div class="column is-4">
-            <div class="card large card-equal-height">
-                <div class="card-image">
-                    <figure class="image is-16by9">
-                        <img src="https://images.unsplash.com/photo-1435527173128-983b87201f4d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=867&q=80" alt="Image">
-                    </figure>
-                </div>
-                <div class="card-content">
-                    <p class="title">Agenda</p>
-                    <div class="content">
-                        View your Agenda of your meetings and upcoming events for your clubs.
+            <div class="column is-4">
+                <div class="card large card-equal-height">
+                    <div class="card-image">
+                        <figure class="image is-16by9">
+                            <img src="https://images.unsplash.com/photo-1435527173128-983b87201f4d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=867&q=80"
+                                 alt="Image">
+                        </figure>
+                    </div>
+                    <div class="card-content">
+                        <p class="title">
+                            Agenda
+                        </p>
+                        <div class="content">View your Agenda of your meetings and upcoming events for your clubs.</div>
+                    </div>
+                    <div class="card-footer">
+                        <a class="card-footer-item" href="#">View Calendar</a>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <a class="card-footer-item" href="#">View Calendar</a>
-                </div>
             </div>
-        </div>
-
-        <div class="column is-4">
-            <div class="card large">
-                <div class="card-image">
-                    <figure class="image is-16by9">
-                        <img src="https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=773&q=80" alt="Image">
-                    </figure>
-                </div>
-                <div class="card-content">
-                    <p class="title">Forum</p>
-                    <div class="content">
-                        Add to our public forum, giving your thoughts.
+            <div class="column is-4">
+                <div class="card large">
+                    <div class="card-image">
+                        <figure class="image is-16by9">
+                            <img src="https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=773&q=80"
+                                 alt="Image">
+                        </figure>
+                    </div>
+                    <div class="card-content">
+                        <p class="title">
+                            Forum
+                        </p>
+                        <div class="content">Add to our public forum, giving your thoughts.</div>
+                    </div>
+                    <div class="card-footer">
+                        <a class="card-footer-item" href="{% url 'global_forum' %}">View Forum</a>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <a class="card-footer-item" href="{% url 'global_forum' %}">View Forum</a>
-                </div>
             </div>
-        </div>
-
-        <div class="column is-4">
-            <div class="card large card-equal-height">
-                <div class="card-image">
-                    <figure class="image is-16by9">
-                        <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1031&q=80t" alt="Image">
-                    </figure>
-                </div>
-                <div class="card-content">
-                    <p class="title">User Profile</p>
-                    <div class="content">
-                        View your user profile.
+            <div class="column is-4">
+                <div class="card large card-equal-height">
+                    <div class="card-image">
+                        <figure class="image is-16by9">
+                            <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1031&q=80t"
+                                 alt="Image">
+                        </figure>
+                    </div>
+                    <div class="card-content">
+                        <p class="title">
+                            User Profile
+                        </p>
+                        <div class="content">View your user profile.</div>
+                    </div>
+                    <div class="card-footer">
+                        <a class="card-footer-item"  href="{% url 'user_dashboard' %}">Dashboard</a>
+                        <a class="card-footer-item" href="{% url 'edit_profile' %}">Edit Profile</a>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <a class="card-footer-item"  href="{% url 'user_dashboard' %}">Dashboard</a>
-                    <a class="card-footer-item" href="{% url 'edit_profile' %}">Edit Profile</a>
+            </div>
+            <div class="column is-4">
+                <div class="card large card-equal-height">
+                    <div class="card-image">
+                        <figure class="image is-16by9">
+                            <img src="https://images.unsplash.com/photo-1588064643233-49210b27b82e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
+                                 alt="Image">
+                        </figure>
+                    </div>
+                    <div class="card-content">
+                        <p class="title">
+                            Contact Us
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <a class="card-footer-item" href="#">Contact Form</a>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <div class="column is-4">
-            <div class="card large card-equal-height">
-                <div class="card-image">
-                    <figure class="image is-16by9">
-                        <img src="https://images.unsplash.com/photo-1588064643233-49210b27b82e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" alt="Image">
-                    </figure>
-                </div>
-                <div class="card-content">
-                    <p class="title">Contact Us</p>
-                </div>
-                <div class="card-footer">
-                    <a class="card-footer-item" href="#">Contact Form</a>
-                </div>
-            </div>
-        </div>
-
     </div>
-
-</div>
-
 {% endblock %}
