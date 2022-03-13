@@ -90,13 +90,6 @@ class EditProfileView(LoginRequiredMixin, UpdateView):
     model = User
     form_class = EditProfileForm
     template_name = 'edit_profile.html'
-
-    def get(self, request, **kwargs):
-        self.object = User.objects.get(username=self.request.user)
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-        context = self.get_context_data(object=self.object, form=form)
-        return self.render_to_response(context)
         
     def get_object(self):
         """Return the object (user) to be updated."""
@@ -107,10 +100,6 @@ class EditProfileView(LoginRequiredMixin, UpdateView):
         """Return redirect URL after successful update."""
         messages.add_message(self.request, messages.SUCCESS, "Profile updated!")
         return reverse('user_dashboard')
-
-    def form_valid(self, form):
-        self.object = form.save()
-        return super().form_valid(form)
 
     def form_invalid(self, form):
         messages.add_message(self.request, messages.ERROR, "The data provided was invalid!")
