@@ -29,8 +29,6 @@ class MeetingListTest(TestCase):
         ClubMembership.objects.create(user = self.moderator, club = self.club, membership = ClubMembership.UserRoles.MODERATOR)
         ClubMembership.objects.create(user = self.member, club = self.club, membership = ClubMembership.UserRoles.MEMBER)
         ClubMembership.objects.create(user = self.applicant, club = self.club, membership = ClubMembership.UserRoles.APPLICANT)
-        #need to make more club membership tings. 
-        #Then test that each one can see the tings. 
 
     def test_url(self):
         url = f'/club/{self.club.club_url_name}/meetings/'
@@ -51,7 +49,8 @@ class MeetingListTest(TestCase):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 302)
         self.assertTemplateNotUsed(response, 'club_meetings.html')
-    #Testing to see what information is displayed
+        
+    """Testing to see what information is displayed"""
 
     def test_owner_can_see_meeting_information(self):
         self.client.login(username=self.owner.username, password="Password123")
