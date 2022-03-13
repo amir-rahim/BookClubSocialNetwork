@@ -27,7 +27,7 @@ class LeaveMeetingViewTestCase(TestCase, LogInTester):
         self.url = reverse('leave_meeting', kwargs={'club_url_name' : self.club.club_url_name, 'meeting_id': self.future_meeting.id})
 
     def test_url(self):
-        self.assertEqual(self.url,f'/club/{self.club.club_url_name}/meetings/{self.future_meeting.id}/leave')
+        self.assertEqual(self.url,f'/club/{self.club.club_url_name}/meetings/{self.future_meeting.id}/leave/')
 
     def test_redirect_when_not_logged_in(self):
         self.assertFalse(self._is_logged_in())

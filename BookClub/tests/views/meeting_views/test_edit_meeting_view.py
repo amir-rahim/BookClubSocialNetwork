@@ -40,7 +40,7 @@ class EditMeetingTestCase(TestCase):
 
 
     def test_url(self):
-        self.assertEqual('/club/'+self.club.club_url_name+'/meetings/'+str(self.meeting.id)+'/edit', self.url)
+        self.assertEqual('/club/'+self.club.club_url_name+'/meetings/'+str(self.meeting.id)+'/edit/', self.url)
         
     def test_redirects_if_just_member_and_not_organiser_moderator_or_owner(self):
         self.client.login(username=self.member.username,
