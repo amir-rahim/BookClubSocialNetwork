@@ -1,8 +1,8 @@
 """Forum Related Views"""
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import redirect
 from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import ListView, CreateView
 from django.views.generic.edit import UpdateView, DeleteView
@@ -30,7 +30,7 @@ class ForumPostView(ClubMemberTestMixin, ListView):
     context_object_name = 'comments'
     pk_url_kwarg = 'post_id'
 
-    def get_context_data(self, *args, **kwargs):
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         try:
             context['post'] = ForumPost.objects.get(pk=self.kwargs.get('post_id'))
@@ -69,7 +69,7 @@ class ForumView(ClubMemberTestMixin, ListView):
         names = ['global_forum.html']
         return names
 
-    def get_context_data(self, *args, **kwargs):
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         if self.kwargs.get('club_url_name') is not None:
@@ -102,7 +102,6 @@ class CreatePostView(LoginRequiredMixin, ClubMemberTestMixin, CreateView):
 
     def form_valid(self, form):
         if self.kwargs.get('club_url_name') is not None:
-            """insert club code here"""
             club = Club.objects.get(club_url_name=self.kwargs.get('club_url_name'))
             forum = Forum.objects.get(associatedWith=club)
         else:
@@ -121,8 +120,8 @@ class CreatePostView(LoginRequiredMixin, ClubMemberTestMixin, CreateView):
     def get_success_url(self):
         if self.kwargs.get('club_url_name') is not None:
             return reverse('club_forum', kwargs=self.kwargs)
-        else:
-            return reverse('global_forum')
+
+        return reverse('global_forum')
 
 
 class CreateCommentView(LoginRequiredMixin, ClubMemberTestMixin, CreateView):
@@ -213,8 +212,8 @@ class DeleteForumPostView(LoginRequiredMixin, ClubMemberTestMixin, DeleteView):
             if post.creator != self.request.user:
                 messages.add_message(self.request, messages.ERROR, 'Access denied!')
                 return False
-            else:
-                return True
+
+            return True
         except:
             messages.add_message(self.request, messages.ERROR, 'The post you tried to delete was not found!')
             return False
@@ -252,8 +251,8 @@ class DeleteForumCommentView(LoginRequiredMixin, ClubMemberTestMixin, DeleteView
             if comment.creator != self.request.user:
                 messages.add_message(self.request, messages.ERROR, 'Access denied!')
                 return False
-            else:
-                return True
+
+            return True
         except:
             messages.add_message(self.request, messages.ERROR, 'The comment you tried to delete was not found!')
             return False
