@@ -1,11 +1,14 @@
 """Tests of the log in view."""
 from django.contrib import messages
-from django.test import TestCase
+from django.test import TestCase, tag
 from django.urls import reverse
+
 from BookClub.forms import LogInForm
 from BookClub.models import User
 from BookClub.tests.helpers import LogInTester, reverse_with_query
 
+
+@tag("views", "authentication", "log_in")
 class LogInViewTestCase(TestCase, LogInTester):
     """Tests of the log in view."""
 

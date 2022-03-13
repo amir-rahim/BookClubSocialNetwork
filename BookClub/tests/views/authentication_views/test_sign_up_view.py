@@ -1,16 +1,18 @@
 """Tests of the sign up view."""
-from django.contrib.auth.hashers import check_password
 from django.test import TestCase, tag
 from django.urls import reverse
+
 from BookClub.forms import SignUpForm
 from BookClub.models import User
 from BookClub.tests.helpers import LogInTester
-@tag('auth','user')
+
+
+@tag("views", "authentication", "sign_up")
 class SignUpViewTestCase(TestCase, LogInTester):
     """Tests of the sign up view."""
 
     fixtures = [
-            'BookClub/tests/fixtures/default_users.json'
+        'BookClub/tests/fixtures/default_users.json'
     ]
 
     def setUp(self):
@@ -25,7 +27,7 @@ class SignUpViewTestCase(TestCase, LogInTester):
         self.user = User.objects.get(username='johndoe')
 
     def test_sign_up_url(self):
-        self.assertEqual(self.url,'/sign_up/')
+        self.assertEqual(self.url, '/sign_up/')
 
     def test_get_sign_up(self):
         response = self.client.get(self.url)
@@ -67,7 +69,7 @@ class SignUpViewTestCase(TestCase, LogInTester):
         response = self.client.post(self.url, self.form_input, follow=True)
         after_count = User.objects.count()
 
-        self.assertEqual(after_count, before_count+1)
+        self.assertEqual(after_count, before_count + 1)
 
         response_url = reverse('home')
 
@@ -77,7 +79,7 @@ class SignUpViewTestCase(TestCase, LogInTester):
         test_user = User.objects.get(username='janetdoe')
 
         self.assertEqual(test_user.email, 'janetdoe@example.org')
-        
+
         self.assertTrue(self._is_logged_in())
 
     def test_post_sign_up_redirects_when_logged_in(self):

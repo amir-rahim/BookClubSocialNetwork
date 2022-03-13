@@ -1,14 +1,14 @@
 """Tests for the password change view."""
-
-from distutils.log import Log
 from django.contrib.auth.hashers import check_password
 from django.test import TestCase, tag
 from django.urls import reverse
+
 from BookClub.forms.user_forms import ChangePasswordForm
 from BookClub.models import User
 from BookClub.tests.helpers import reverse_with_query, LogInTester
 
-@tag('passwordchange','auth','user')
+
+@tag("views", "authentication", "password_change")
 class PasswordViewTest(TestCase, LogInTester):
     """Unit tests for the password change view."""
 
@@ -35,7 +35,7 @@ class PasswordViewTest(TestCase, LogInTester):
         self.assertTrue(isinstance(form, ChangePasswordForm))
 
     def test_get_password_redirects_when_not_logged_in(self):
-        redirect_url = reverse_with_query('login',query_kwargs={'next':reverse('password_change')})
+        redirect_url = reverse_with_query('login', query_kwargs={'next': reverse('password_change')})
         response = self.client.get(self.url)
         self.assertRedirects(response,
                              redirect_url,
@@ -96,7 +96,7 @@ class PasswordViewTest(TestCase, LogInTester):
         self.assertTrue(is_password_correct)
 
     def test_post_profile_redirects_when_not_logged_in(self):
-        redirect_url = reverse_with_query('login',query_kwargs={'next':reverse('password_change')})
+        redirect_url = reverse_with_query('login', query_kwargs={'next': reverse('password_change')})
         response = self.client.post(self.url, self.form_input)
         self.assertRedirects(response,
                              redirect_url,
