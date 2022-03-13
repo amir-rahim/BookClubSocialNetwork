@@ -99,10 +99,6 @@ class EditReviewView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class DeleteReviewView(LoginRequiredMixin, View):
     redirect_location = 'library_books'  # Need to change to review list view or somewhere else
-    """Checking whether the action is legal"""
-
-    def is_actionable(self, currentUser, review):
-        return currentUser == review.user
 
     """Handles no permssion and Reviews that don't exist"""
 
@@ -118,12 +114,9 @@ class DeleteReviewView(LoginRequiredMixin, View):
             book = Book.objects.get(id=self.kwargs['book_id'])
             currentUser = self.request.user
             review = BookReview.objects.get(book=book, user=currentUser)
-
-            if self.is_actionable(currentUser, review):
-                self.action(review)
-                return redirect(self.redirect_location)
-            else:
-                self.is_not_actionable()
+            self.action(review)
+            return redirect(self.redirect_location)
+            
         except:
             self.is_not_actionable()
             return redirect(self.redirect_location)
