@@ -1,11 +1,12 @@
-from django.test import TestCase, tag
-from BookClub.models import Poll, Club
-from django.core.exceptions import ValidationError
-
 """Test case for Poll model"""
-@tag('poll', 'models')
-class PollModelTestCase(TestCase):
+from django.core.exceptions import ValidationError
+from django.test import TestCase, tag
 
+from BookClub.models import Poll, Club
+
+
+@tag('models', 'poll')
+class PollModelTestCase(TestCase):
     fixtures = [
         'BookClub/tests/fixtures/default_clubs.json',
         'BookClub/tests/fixtures/default_polls.json',
@@ -17,15 +18,14 @@ class PollModelTestCase(TestCase):
     def _assert_poll_is_valid(self):
         try:
             self.poll.full_clean()
-        except(ValidationError):
+        except ValidationError:
             self.fail('Test poll should be valid')
 
     def _assert_poll_is_invalid(self):
         with self.assertRaises(ValidationError):
             self.poll.full_clean()
 
-
-# Fields testing
+    # Fields testing
 
     # Tests of title attribute
 

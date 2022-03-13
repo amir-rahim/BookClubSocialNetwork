@@ -1,9 +1,10 @@
 from django.forms import ValidationError
 from django.test import TestCase, tag
+
 from BookClub.models import ForumPost, ForumComment, Forum, User, Club
 
 
-@tag('post', 'text', 'usercreated')
+@tag('models', 'post')
 class ForumPostTestCase(TestCase):
     fixtures = [
         'BookClub/tests/fixtures/default_user_created_objects.json',
@@ -18,7 +19,7 @@ class ForumPostTestCase(TestCase):
     def assertValid(self):
         try:
             self.forumPost.full_clean()
-        except(ValidationError):
+        except ValidationError:
             self.fail('Test user created object should be valid')
 
     def assertInvalid(self):
@@ -57,7 +58,7 @@ class ForumPostTestCase(TestCase):
         self.assertGreater(commentsBefore, commentsAfter)
 
 
-@tag('post', 'text', 'comment', 'usercreate')
+@tag('models', 'comment')
 class ForumCommentTestCase(TestCase):
     fixtures = [
         'BookClub/tests/fixtures/default_user_created_objects.json',
@@ -84,7 +85,7 @@ class ForumCommentTestCase(TestCase):
         self.assertValid()
 
 
-@tag('text', 'post', 'forum')
+@tag('models', 'forum')
 class ForumTestCase(TestCase):
     fixtures = [
         'BookClub/tests/fixtures/default_user_created_objects.json',
