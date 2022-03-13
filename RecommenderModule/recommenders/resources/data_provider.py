@@ -109,7 +109,3 @@ class DataProvider:
         user_ratings = self.ratings_df.loc[self.ratings_df["User-ID"] == user_id]
         rating = (user_ratings.loc[user_ratings["ISBN"] == book_isbn])["Book-Rating"].values[0]
         return rating
-
-    """Get all the ratings values for the specified book"""
-    def get_all_ratings_for_isbn(self, isbn):
-        return (self.ratings_df.loc[self.ratings_df["ISBN"] == isbn])["Book-Rating"].values
