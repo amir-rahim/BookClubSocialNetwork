@@ -93,7 +93,7 @@ class UserBooklistsViewTestCase(TestCase):
         self.assertTemplateUsed(response, 'user_booklists.html')
         response_lists = list(response.context['booklists'])
         self.assertEqual(len(response_lists), 0)
-        self.assertContains(response, '<div class="box">No lists. </div>')
+        self.assertContains(response, 'No lists.')
 
     def test_user_without_lists_viewing_own_lists(self):
         self.client.login(username='sebdoe', password='Password123')

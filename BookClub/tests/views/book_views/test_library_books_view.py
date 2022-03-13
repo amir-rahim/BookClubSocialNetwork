@@ -37,7 +37,7 @@ class LibraryBooksViewTestCase(TestCase):
         self.assertTemplateUsed(response, 'library_books.html')
         books = list(response.context['books'])
         self.assertEqual(len(books), 0)
-        self.assertContains(response, "<p style=\"text-align: center\">There are no available books at the moment.</p>")
+        self.assertContains(response, "There are no available books at the moment.")
 
     def test_books_show(self):
         response = self.client.get(self.url)

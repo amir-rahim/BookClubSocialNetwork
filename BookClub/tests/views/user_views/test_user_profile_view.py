@@ -32,6 +32,5 @@ class UserProfileViewTest(TestCase):
         response = self.client.get(self.url)
         self.assertContains(response, "<h1 class=\"title\">jackdoe's Dashboard</h1>")
         self.assertContains(response, "<h2 class=\"subtitle\">Welcome to jackdoe's profile page!</h2>")
-        self.assertContains(response, "<p class=\"subtitle is-5\"><b>Username: </b> jackdoe</p>")
-        self.assertContains(response,
-                            "<p class=\"subtitle is-5\"><b>Public Bio: </b> " + self.view_user.public_bio + "</p>")
+        self.assertContains(response, "<b>Username: </b> jackdoe")
+        self.assertContains(response, "<b>Public Bio: </b> " + self.view_user.public_bio)
