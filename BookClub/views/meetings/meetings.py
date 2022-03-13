@@ -8,18 +8,21 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.utils import timezone
 
+
 class JoinMeetingView(LoginRequiredMixin, View):
     """Users can join meetings"""
 
     redirect_location = 'meeting_details'
 
     def get(self, request, *args, **kwargs):
-        return redirect(self.redirect_location, club_url_name=self.kwargs['club_url_name'], meeting_id=self.kwargs['meeting_id'])
+        return redirect(self.redirect_location, club_url_name=self.kwargs['club_url_name'],
+                        meeting_id=self.kwargs['meeting_id'])
 
     def is_actionable(self, currentUser, meeting):
         """Check if user can join a meeting"""
 
-        return (not meeting.get_members().filter(username = currentUser.username).exists()) and meeting.get_meeting_time() > timezone.now()
+        return (not meeting.get_members().filter(
+            username=currentUser.username).exists()) and meeting.get_meeting_time() > timezone.now()
 
     def is_not_actionable(self):
         """If user cannot join meeting"""
@@ -39,14 +42,17 @@ class JoinMeetingView(LoginRequiredMixin, View):
             currentUser = self.request.user
         except:
             messages.error(self.request, "Error, meeting not found.")
-            return redirect(self.redirect_location, club_url_name=self.kwargs['club_url_name'], meeting_id=self.kwargs['meeting_id'])
+            return redirect(self.redirect_location, club_url_name=self.kwargs['club_url_name'],
+                            meeting_id=self.kwargs['meeting_id'])
 
         if (self.is_actionable(currentUser, meeting)):
             self.action(currentUser, meeting)
         else:
             self.is_not_actionable()
 
-        return redirect(self.redirect_location, club_url_name=self.kwargs['club_url_name'], meeting_id=self.kwargs['meeting_id'])
+        return redirect(self.redirect_location, club_url_name=self.kwargs['club_url_name'],
+                        meeting_id=self.kwargs['meeting_id'])
+
 
 class LeaveMeetingView(LoginRequiredMixin, View):
     """Users can leave meetings"""
@@ -54,12 +60,14 @@ class LeaveMeetingView(LoginRequiredMixin, View):
     redirect_location = 'meeting_details'
 
     def get(self, request, *args, **kwargs):
-        return redirect(self.redirect_location, club_url_name=self.kwargs['club_url_name'], meeting_id=self.kwargs['meeting_id'])
+        return redirect(self.redirect_location, club_url_name=self.kwargs['club_url_name'],
+                        meeting_id=self.kwargs['meeting_id'])
 
     def is_actionable(self, currentUser, meeting):
         """Check if user can leave a meeting"""
 
-        return (meeting.get_members().filter(username = currentUser.username).exists()) and (meeting.get_organiser() != currentUser) and meeting.get_meeting_time() > timezone.now()
+        return (meeting.get_members().filter(username=currentUser.username).exists()) and (
+                    meeting.get_organiser() != currentUser) and meeting.get_meeting_time() > timezone.now()
 
     def is_not_actionable(self):
         """If user cannot leave meeting"""
@@ -79,18 +87,20 @@ class LeaveMeetingView(LoginRequiredMixin, View):
             currentUser = self.request.user
         except:
             messages.error(self.request, "Error, meeting not found.")
-            return redirect(self.redirect_location, club_url_name=self.kwargs['club_url_name'], meeting_id=self.kwargs['meeting_id'])
+            return redirect(self.redirect_location, club_url_name=self.kwargs['club_url_name'],
+                            meeting_id=self.kwargs['meeting_id'])
 
         if (self.is_actionable(currentUser, meeting)):
             self.action(currentUser, meeting)
         else:
             self.is_not_actionable()
 
-        return redirect(self.redirect_location, club_url_name=self.kwargs['club_url_name'], meeting_id=self.kwargs['meeting_id'])
+        return redirect(self.redirect_location, club_url_name=self.kwargs['club_url_name'],
+                        meeting_id=self.kwargs['meeting_id'])
 
-'''Meetings Related Views'''
+
 class CreateMeetingView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
-    '''Class for club owners and moderators creating meetings for the club'''
+    """Class for club owners and moderators creating meetings for the club"""
 
     model = Meeting
     form_class = MeetingForm
@@ -175,19 +185,20 @@ class DeleteMeetingView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         return redirect(self.redirect_location, kwargs['club_url_name'])
-    
+
+
 class MeetingDetailsView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     """View to display meeting details"""
     template_name = 'meeting_details.html'
     model = Meeting
     pk_url_kwarg = 'meeting_id'
     context_object_name = 'meeting'
-    redirect_location='home' # should be meeting list
-    
+    redirect_location = 'home'  # should be meeting list
+
     # Redirect if club is private and user is not a member
     def test_func(self):
         try:
-            current_club = Club.objects.get(club_url_name = self.kwargs['club_url_name'])
+            current_club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
             if current_club.is_private and not current_club.is_member(self.request.user):
                 messages.add_message(self.request, messages.ERROR, 'This club is private')
                 return False
@@ -195,7 +206,7 @@ class MeetingDetailsView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
                 return True
         except:
             return False
-        
+
     def handle_no_permission(self):
         if not self.request.user.is_authenticated:
             return super(LoginRequiredMixin, self).handle_no_permission()
@@ -206,6 +217,6 @@ class MeetingDetailsView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         """Generate context data to be shown in the template."""
         # Overrides get_context_data for context other than meetings
         context = super().get_context_data(**kwargs)
-        context['club'] = Club.objects.get(club_url_name = self.kwargs['club_url_name'])
+        context['club'] = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
         context['user'] = self.request.user
         return context
