@@ -4,6 +4,7 @@ from email.mime import application
 from django.test import TestCase, tag
 from django.urls import reverse
 from django.contrib import messages
+from django.contrib.messages import get_messages
 from django.core.exceptions import ObjectDoesNotExist
 from BookClub.models import User, Club, ClubMembership
 
@@ -33,6 +34,11 @@ class ApplicantListTestCase(TestCase):
         url = reverse('applicant_list', kwargs={'club_url_name': self.club.club_url_name})
         self.assertEqual(url, '/club/' + self.club.club_url_name + '/applicants/')
 
+    def test_invalid_club(self):
+        self.client.login(username=self.jack.username, password="Password123")
+        response = self.client.get(reverse("applicant_list", kwargs={"club_url_name": 'fakeclub'}))
+        self.assertRedirects(response, expected_url=reverse("club_dashboard", kwargs={"club_url_name": 'fakeclub'}), status_code=302, target_status_code=302)
+
     def test_get_template_logged_in(self):
         self.client.login(username=self.user.username, password="Password123")
         url = reverse('applicant_list', kwargs={'club_url_name': self.club.club_url_name})
@@ -44,6 +50,13 @@ class ApplicantListTestCase(TestCase):
         url = reverse('applicant_list', kwargs={'club_url_name': self.club.club_url_name})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
+
+    def test_non_member_can_not_view_applicant_list(self):
+        non_member = User.objects.get(pk=6)
+        self.client.login(username=non_member.username, password="Password123")
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'applicant_list.html')
 
     def test_can_see_club_name(self):
         self.client.login(username=self.user.username, password="Password123")
