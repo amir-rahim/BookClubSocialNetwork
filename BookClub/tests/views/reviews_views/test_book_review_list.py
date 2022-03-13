@@ -1,11 +1,12 @@
-from datetime import date
+import random
 
 from django.test import TestCase, tag
 from django.urls import reverse
-import random
-from BookClub.models import ClubMembership, Club, User, Book, BookReview
 
-@tag('book','review','library')
+from BookClub.models import User, Book, BookReview
+
+
+@tag('book_review', 'review_list')
 class BookReviewListView(TestCase):
     
     fixtures = [

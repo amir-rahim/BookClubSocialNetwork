@@ -1,12 +1,13 @@
 from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase, tag
 from django.urls import reverse
-from BookClub.models import *
-from django.core.exceptions import ObjectDoesNotExist
+
+from BookClub.models import BookReview, User
 from BookClub.tests.helpers import LogInTester, reverse_with_next
 
 
-@tag('delete', 'delete_book_review', 'book_review', 'bookreview')
+@tag('book_review', 'delete_book_review')
 class DeleteBookReview(TestCase, LogInTester):
     """Testing done by Raymond"""
     fixtures = [
