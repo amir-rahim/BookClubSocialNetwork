@@ -1,49 +1,34 @@
-<nav class="navbar is-family-primary is-fixed-top" role="navigation" aria-label="main navigation">
+<nav class="navbar is-family-primary is-fixed-top"
+     role="navigation"
+     aria-label="main navigation">
     <div class="navbar-brand">
-
         <a class="navbar-item" href="{% url 'home' %}">
             <b>Novella: The Book Club Social Network</b>
         </a>
-
         <a class="navbar-burger" id="burger">
             <span></span>
             <span></span>
             <span></span>
         </a>
-
     </div>
-
     <div id="nav-right" class="navbar-menu">
         <div class="navbar-end">
-
             <div class="navbar-item has-dropdown is-hoverable">
-
-                <a class="navbar-link" href="{% url 'available_clubs' %}">
-                    Clubs
-                </a>
-
+                <a class="navbar-link" href="{% url 'available_clubs' %}">Clubs</a>
                 <div class="navbar-dropdown is-boxed is-right">
                     <a class="navbar-item" href="{% url 'create_club' %}">Create Club</a>
-
                     <a class="navbar-item" href="{% url 'available_clubs' %}">Join Clubs</a>
-
                     <a class="navbar-item" href="{% url 'my_club_memberships' %}">Memberships</a>
                 </div>
-
             </div>
-
             <a class="navbar-item" href="{% url 'agenda' %}">Agenda</a>
-
             <a class="navbar-item" href="{% url 'library_dashboard' %}">Library</a>
-
             <a class="navbar-item" href="{% url 'global_forum' %}">Global Forum</a>
-
             {% if user.is_authenticated %}
                 {% include 'partials/dropdown_authenticated.html' %}
             {% else %}
                 {% include 'partials/dropdown.html' %}
             {% endif %}
-
         </div>
     </div>
 </nav>
