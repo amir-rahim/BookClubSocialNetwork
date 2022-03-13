@@ -1,13 +1,14 @@
-from django.test import TestCase, tag
-from django.urls import reverse
 from django.contrib.messages import get_messages
 from django.core.exceptions import ObjectDoesNotExist
-from BookClub.models import User, Meeting, Club, ClubMembership
+from django.test import TestCase, tag
+from django.urls import reverse
 from django.utils import timezone
+
+from BookClub.models import User, Meeting, Club, ClubMembership
 from BookClub.tests.helpers import LogInTester
 
 
-@tag("meeting","joinmeetingview")
+@tag("meeting", "join_meeting")
 class JoinMeetingViewTestCase(TestCase, LogInTester):
     """Tests of the Join Meeting view."""
 
