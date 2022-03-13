@@ -1,10 +1,12 @@
+from django.contrib.messages import get_messages
 from django.test import TestCase, tag
 from django.urls import reverse
-from django.contrib.messages import get_messages
-from BookClub.tests.helpers import LogInTester
-from BookClub.models import User, BookList, Book
 
-@tag("removebook")
+from BookClub.models import User, BookList, Book
+from BookClub.tests.helpers import LogInTester
+
+
+@tag("booklist", "remove_book")
 class RemoveBookViewTestCase(TestCase, LogInTester):
     """Tests of the Join Meeting view."""
 
@@ -19,10 +21,11 @@ class RemoveBookViewTestCase(TestCase, LogInTester):
         self.booklist = BookList.objects.get(pk=1)
         self.user = User.objects.get(pk=1)
 
-        self.url = reverse('remove_book', kwargs={'username' : self.user.username, 'booklist_id': self.booklist.id, 'book_id' : self.book.id})
+        self.url = reverse('remove_book', kwargs={'username': self.user.username, 'booklist_id': self.booklist.id,
+                                                  'book_id': self.book.id})
 
     def test_url(self):
-        self.assertEqual(self.url,f'/user/{self.user.username}/lists/{self.booklist.id}/{self.book.id}/delete')
+        self.assertEqual(self.url, f'/user/{self.user.username}/lists/{self.booklist.id}/{self.book.id}/delete')
 
     def test_redirect_when_not_logged_in(self):
         self.assertFalse(self._is_logged_in())
@@ -34,8 +37,11 @@ class RemoveBookViewTestCase(TestCase, LogInTester):
 
         self.client.login(username=self.user.username, password='Password123')
         self.assertTrue(self._is_logged_in())
-        response = self.client.get(reverse('remove_book', kwargs={'username' : self.user.username, 'booklist_id': self.booklist.id, 'book_id' : self.book.id}))
-        redirect_url = reverse('user_booklist', kwargs={'username' : self.user.username,'booklist_id' : self.booklist.id})
+        response = self.client.get(reverse('remove_book',
+                                           kwargs={'username': self.user.username, 'booklist_id': self.booklist.id,
+                                                   'book_id': self.book.id}))
+        redirect_url = reverse('user_booklist',
+                               kwargs={'username': self.user.username, 'booklist_id': self.booklist.id})
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_successful_remove_book(self):
@@ -43,12 +49,12 @@ class RemoveBookViewTestCase(TestCase, LogInTester):
         self.assertTrue(self._is_logged_in())
         before_count = len(self.booklist.get_books())
         response = self.client.post(reverse('remove_book', kwargs={
-                                                                'username' : self.user.username,
-                                                                'booklist_id' : self.booklist.id,
-                                                                'book_id' : self.book.id
-                                                            }))     
+            'username': self.user.username,
+            'booklist_id': self.booklist.id,
+            'book_id': self.book.id
+        }))
         after_count = self.booklist.get_books().count()
-        self.assertEqual(before_count, after_count + 1)                                                     
+        self.assertEqual(before_count, after_count + 1)
         self.assertFalse(self.booklist.get_books().filter(pk=self.book.id).exists())
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
@@ -60,13 +66,13 @@ class RemoveBookViewTestCase(TestCase, LogInTester):
         self.assertTrue(self._is_logged_in())
         before_count = len(self.booklist.get_books())
         response = self.client.post(reverse('remove_book', kwargs={
-                                                                'username' : self.user.username,
-                                                                'booklist_id' : self.booklist.id,
-                                                                'book_id' :  self.book.id
-                                                            }))     
+            'username': self.user.username,
+            'booklist_id': self.booklist.id,
+            'book_id': self.book.id
+        }))
         after_count = self.booklist.get_books().count()
-        self.assertEqual(before_count, after_count)                                                     
-        self.assertTrue(self.booklist.get_books().filter(pk = self.book.id).exists())
+        self.assertEqual(before_count, after_count)
+        self.assertTrue(self.booklist.get_books().filter(pk=self.book.id).exists())
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]), 'You cannot remove that book!')
@@ -76,12 +82,12 @@ class RemoveBookViewTestCase(TestCase, LogInTester):
         self.assertTrue(self._is_logged_in())
         before_count = len(self.booklist.get_books())
         response = self.client.post(reverse('remove_book', kwargs={
-                                                                'username' : self.user.username,
-                                                                'booklist_id' : self.booklist.id,
-                                                                'book_id' : 100
-                                                            }))     
+            'username': self.user.username,
+            'booklist_id': self.booklist.id,
+            'book_id': 100
+        }))
         after_count = self.booklist.get_books().count()
-        self.assertEqual(before_count, after_count)                                                     
+        self.assertEqual(before_count, after_count)
         self.assertFalse(self.booklist.get_books().filter(pk=100).exists())
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
@@ -92,10 +98,10 @@ class RemoveBookViewTestCase(TestCase, LogInTester):
         self.assertTrue(self._is_logged_in())
         before_count = len(self.booklist.get_books())
         response = self.client.post(reverse('remove_book', kwargs={
-                                                                'username' : self.user.username,
-                                                                'booklist_id' : 10000,
-                                                                'book_id' : self.book.id
-                                                            }))     
+            'username': self.user.username,
+            'booklist_id': 10000,
+            'book_id': self.book.id
+        }))
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]), 'Error, book or booklist not found.')

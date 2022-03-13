@@ -1,12 +1,11 @@
 """Tests of the booklists_list view."""
 from django.test import TestCase, tag
 from django.urls import reverse
-from BookClub.models import User, Club, ClubMembership, Book, BookList
 
-from BookClub.tests.helpers import reverse_with_next
+from BookClub.models import User, BookList
 
-@tag('booklist', 'book', 'user')
-@tag('booklist_view')
+
+@tag("booklist", "list")
 class UserBooklistsViewTestCase(TestCase):
     """Tests of the booklists_list view."""
 
@@ -24,7 +23,7 @@ class UserBooklistsViewTestCase(TestCase):
         return reverse('booklists_list', kwargs={'username': username})
 
     def test_url(self):
-        self.assertEqual(self.url,f"/user/{self.user.username}/lists/")
+        self.assertEqual(self.url, f"/user/{self.user.username}/lists/")
 
     # Uncomment the test below if the view should only be available to logged in users
 
@@ -45,33 +44,33 @@ class UserBooklistsViewTestCase(TestCase):
         self.assertTemplateUsed(response, 'partials/delete_button_and_modal.html')
 
     def test_contains_lists_created_by_user(self):
-        self.client.login(username = self.user.username, password = 'Password123')
+        self.client.login(username=self.user.username, password='Password123')
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user_booklists.html')
         self.assertTemplateUsed(response, 'partials/delete_button_and_modal.html')
         response_lists = list(response.context['booklists'])
-        user_lists = list(BookList.objects.filter(creator = self.user))
+        user_lists = list(BookList.objects.filter(creator=self.user))
 
         for userlist in user_lists:
             self.assertIn(userlist, response_lists)
 
     def test_does_not_contain_lists_created_by_other_users(self):
-        self.client.login(username = self.user.username, password = 'Password123')
+        self.client.login(username=self.user.username, password='Password123')
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user_booklists.html')
         self.assertTemplateUsed(response, 'partials/delete_button_and_modal.html')
         response_lists = list(response.context['booklists'])
-        lists_by_other_users = list(BookList.objects.exclude(creator = self.user))
+        lists_by_other_users = list(BookList.objects.exclude(creator=self.user))
 
         for userlist in lists_by_other_users:
             self.assertNotIn(lists_by_other_users, response_lists)
 
     def test_user_viewing_own_lists_is_recognized(self):
-        self.client.login(username = self.user.username, password = 'Password123')
+        self.client.login(username=self.user.username, password='Password123')
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user_booklists.html')
@@ -80,14 +79,14 @@ class UserBooklistsViewTestCase(TestCase):
         self.assertContains(response, '<span>Edit</span>')
 
     def test_user_viewing_not_own_lists_is_recognized(self):
-        self.client.login(username = self.user.username, password = 'Password123')
+        self.client.login(username=self.user.username, password='Password123')
         response = self.client.get(self._get_url_for_user('janedoe'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user_booklists.html')
         self.assertEqual(response.context['self'], False)
 
     def test_view_lists_of_another_user_without_lists(self):
-        self.client.login(username = self.user.username, password = 'Password123')
+        self.client.login(username=self.user.username, password='Password123')
         response = self.client.get(self._get_url_for_user('sebdoe'))
 
         self.assertEqual(response.status_code, 200)
@@ -97,7 +96,7 @@ class UserBooklistsViewTestCase(TestCase):
         self.assertContains(response, '<div class="box">No lists. </div>')
 
     def test_user_without_lists_viewing_own_lists(self):
-        self.client.login(username = 'sebdoe', password = 'Password123')
+        self.client.login(username='sebdoe', password='Password123')
         response = self.client.get(self._get_url_for_user('sebdoe'))
 
         self.assertEqual(response.status_code, 200)
@@ -106,4 +105,3 @@ class UserBooklistsViewTestCase(TestCase):
         self.assertEqual(len(response_lists), 0)
         self.assertContains(response, "No lists.")
         self.assertContains(response, "Create one?")
-

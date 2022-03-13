@@ -1,13 +1,14 @@
 """Tests for Meeting Participants List View"""
 from django.test import TestCase, tag
-from BookClub.models import User, BookList
 from django.urls import reverse
-from BookClub.tests.helpers import LogInTester
 from django.utils import timezone
 
-@tag('userbooklist')
+from BookClub.models import User, BookList
+from BookClub.tests.helpers import LogInTester
+
+
+@tag("booklist", "user_list")
 class UserBookListViewTestCase(TestCase, LogInTester):
-    
     fixtures = [
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_books.json',
@@ -19,7 +20,7 @@ class UserBookListViewTestCase(TestCase, LogInTester):
         self.other_user = User.objects.get(pk=2)
         self.booklist = BookList.objects.get(pk=1)
 
-        self.url = reverse('user_booklist', kwargs={'username' : self.user.username, 'booklist_id' : self.booklist.id})
+        self.url = reverse('user_booklist', kwargs={'username': self.user.username, 'booklist_id': self.booklist.id})
 
     def test_url(self):
         self.assertEqual(self.url, f'/user/{self.user.username}/lists/{self.booklist.id}')
@@ -52,13 +53,13 @@ class UserBookListViewTestCase(TestCase, LogInTester):
 
     def test_empty_book_list(self):
         self.client.login(username=self.user.username, password='Password123')
-        booklist = BookList.objects.create(title = 'Booklist 1',
-                                            description = 'Description 1',
-                                            creator = self.user,
-                                            created_on = timezone.now()
-                                        )                                    
-        response = self.client.get(reverse('user_booklist', kwargs={'username' : self.user.username, 'booklist_id' : booklist.id}))
+        booklist = BookList.objects.create(title='Booklist 1',
+                                           description='Description 1',
+                                           creator=self.user,
+                                           created_on=timezone.now()
+                                           )
+        response = self.client.get(
+            reverse('user_booklist', kwargs={'username': self.user.username, 'booklist_id': booklist.id}))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'booklist.html')
         self.assertContains(response, "There are no books in this list.")
-        
