@@ -32,7 +32,7 @@ This is the User Profile, this is where you can view other profiles!
             <p class="menu-label">Books</p>
 
             <ul class="menu-list">
-                <li><a>Book Lists</a></li>
+                <li><a href="{% url 'booklists_list' username=username %}">Book Lists</a></li>
             </ul>
 
         </aside>
@@ -44,9 +44,9 @@ This is the User Profile, this is where you can view other profiles!
         <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
             <ul>
                 <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a {% url 'user_dashboard' %}>Profile</a></li>
+                <li><a href="{% url 'user_dashboard' %}">Profile</a></li>
                 <li><a href="{% url 'user_profile' username %}">{{ username }}</a></li>
-                <li><a>Club Memberships</a></li>
+                <li><a href="{% url 'my_club_memberships' %}">Club Memberships</a></li>
             </ul>
         </nav>
 

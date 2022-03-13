@@ -15,15 +15,40 @@ View all book lists you've created
 
 		<aside class="menu is-hidden-mobile" style="padding-left: 15px;">
 
-			<p class="menu-label">Book List</p>
+            <ul class="menu-list">
+                <li><a href="{% url 'library_dashboard' %}">Dashboard</a></li>
+            </ul>
 
-			<ul class="menu-list">
-				<li><a class="is-active" href="{% url 'booklists_list' user.username %}"><b>My Book Lists</b></a></li>
-				<li><a href="{% url 'create_booklist' user.username %}">Create Book List</a></li>
-				<li><a>Saved Lists</a></li>
-			</ul>
+            <p class="menu-label">Our Book Library</p>
 
-		</aside>
+            <ul class="menu-list">
+                <li><a href="{% url 'library_books' %}">View Library</a></li>
+            </ul>
+
+            {% if user.is_authenticated %}
+            <p class="menu-label">Book Lists</p>
+
+            <ul class="menu-list">
+                <li><a href="{% url 'booklists_list' username=user.username %}" class="is-active"><b>{{ user.get_username }} Book Lists</b></a></li>
+                <li><a href="{% url 'create_booklist' username=user.username %}">Create Book Lists</a></li>
+            </ul>
+            {% endif %}
+
+            <p class="menu-label">Recommender</p>
+
+            <ul class="menu-list">
+                <li><a href="#">AI Recommended Books</a></li>
+            </ul>
+
+            {% if user.is_authenticated %}
+            <p class="menu-label">Reviews</p>
+
+            <ul class="menu-list">
+                <li><a href="{% url 'library_books' %}">View Personal Reviews</a></li>
+            </ul>
+            {% endif %}
+
+        </aside>
 
 	</div>
     <div class="column is-9">

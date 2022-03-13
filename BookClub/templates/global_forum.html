@@ -9,33 +9,21 @@
     <div class="columns">
         <div class="column is-3">
             <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
-                <p class="menu-label">
-                    Clubs
-                </p>
                 <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'available_clubs' %}">Available Clubs</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'my_club_memberships' %}">Memberships</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'create_club' %}">Create Club</a>
-                    </li>
+                    <li><a href="{% url 'global_forum' %}" class="is-active"><b>Global Forum</b></a></li>
+                </ul>
+                <p class="menu-label">Clubs</p>
+                <ul class="menu-list">
+                    <li><a href="{% url 'available_clubs' %}">Available Clubs</a></li>
+                    <li><a href="{% url 'my_club_memberships' %}">Memberships</a></li>
+                    <li><a href="{% url 'create_club' %}">Create Club</a></li>
                 </ul>
                 <p class="menu-label">
                     Useful Links
                 </p>
                 <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'user_dashboard' %}">User Profile</a>
-                    </li>
-                    <li>
-                        <a>Library</a>
-                    </li>
-                    <li>
-                        <a>Forum</a>
-                    </li>
+                    <li><a href="{% url 'user_dashboard' %}">User Profile</a></li>
+                    <li><a href="{% url 'library_dashboard' %}">Library</a></li>
                 </ul>
             </aside>
         </div>

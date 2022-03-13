@@ -41,7 +41,7 @@ This is the Club Dashboard, the main home page for each club!
 
             <ul class="menu-list">
                 <li><a href="{% url 'club_forum' current_club.club_url_name %}">Forum</a></li>
-                <li><a>Members Reviews</a></li>
+                <li><a href="#">Members Reviews</a></li>
             </ul>
 
             <p class="menu-label">Meetings</p>
@@ -49,8 +49,8 @@ This is the Club Dashboard, the main home page for each club!
             <ul class="menu-list">
                 <li><a href="{% url 'meeting_list' current_club.club_url_name %}">All Meetings</a></li>
                 <li><a href="{% url 'create_meeting' current_club.club_url_name %}">Create a Meeting</a></li>
-                <li><a>Joined Upcoming Meetings</a></li>
-                <li><a>Prior Meetings</a></li>
+                <li><a href="#">Joined Upcoming Meetings</a></li>
+                <li><a href="#">Prior Meetings</a></li>
             </ul>
 
         </aside>
@@ -81,7 +81,7 @@ This is the Club Dashboard, the main home page for each club!
 
             <div class="column is-6">
 
-                <div class="card card-equal-height">
+                <div class="box card-equal-height">
 
                     <div class="card-content">
                         <p class="title">Club Details</p>
@@ -105,7 +105,7 @@ This is the Club Dashboard, the main home page for each club!
             </div>
 
             <div class="column is-6">
-                <div class="card card-equal-height">
+                <div class="box card-equal-height">
 
                     <div class="card-content">
                         <p class="title">Club Details</p>

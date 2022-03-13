@@ -26,25 +26,28 @@ This is our Library, you can look at our books and click and see further details
                 <li><a href="{% url 'library_books' %}" class="is-active"><b>View Library</b></a></li>
             </ul>
 
+            {% if user.is_authenticated %}
             <p class="menu-label">Book Lists</p>
 
             <ul class="menu-list">
-                <li><a>View Book Lists</a></li>
-                <li><a>Create Book Lists</a></li>
+                <li><a href="{% url 'booklists_list' username=user.username %}">{{ user.get_username }} Book Lists</a></li>
+                <li><a href="{% url 'create_booklist' username=user.username %}">Create Book Lists</a></li>
             </ul>
+            {% endif %}
 
             <p class="menu-label">Recommender</p>
 
             <ul class="menu-list">
-                <li><a>AI Recommended Books</a></li>
+                <li><a href="#">AI Recommended Books</a></li>
             </ul>
 
+            {% if user.is_authenticated %}
             <p class="menu-label">Reviews</p>
 
             <ul class="menu-list">
-                <li><a>Make Review</a></li>
-                <li><a>View Personal Reviews</a></li>
+                <li><a href="{% url 'library_books' %}">View Personal Reviews</a></li>
             </ul>
+            {% endif %}
 
         </aside>
 
@@ -103,7 +106,7 @@ This is our Library, you can look at our books and click and see further details
                                         <p><a href="{% url 'login' %}">Log in</a></p>
                                         <td></td>
                                     {% else %}
-                                        <form action="add_to_book_list" method="post">
+                                        <form action="{% url 'add_to_book_list' %}" method="post">
                                             {% csrf_token %}
                                             <input type="hidden" id="book" name="book" value="{{ book.id }}"/>
                                             <div class="control">

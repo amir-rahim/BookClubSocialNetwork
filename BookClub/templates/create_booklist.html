@@ -16,13 +16,38 @@ Create your own book lists here!
 
         <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
 
-            <p class="menu-label">Book List</p>
+            <ul class="menu-list">
+                <li><a href="{% url 'library_dashboard' %}">Dashboard</a></li>
+            </ul>
+
+            <p class="menu-label">Our Book Library</p>
 
             <ul class="menu-list">
-                <li><a href="{% url 'booklists_list' user.username %}">My Book Lists</a></li>
-                <li><a class="is-active"><b>Create Book List</b></a></li>
-                <li><a>Saved Lists</a></li>
+                <li><a href="{% url 'library_books' %}">View Library</a></li>
             </ul>
+
+            {% if user.is_authenticated %}
+            <p class="menu-label">Book Lists</p>
+
+            <ul class="menu-list">
+                <li><a href="{% url 'booklists_list' username=user.username %}">{{ user.get_username }} Book Lists</a></li>
+                <li><a href="{% url 'create_booklist' username=user.username %}" class="is-active"><b>Create Book Lists</b></a></li>
+            </ul>
+            {% endif %}
+
+            <p class="menu-label">Recommender</p>
+
+            <ul class="menu-list">
+                <li><a href="#">AI Recommended Books</a></li>
+            </ul>
+
+            {% if user.is_authenticated %}
+            <p class="menu-label">Reviews</p>
+
+            <ul class="menu-list">
+                <li><a href="{% url 'library_books' %}">View Personal Reviews</a></li>
+            </ul>
+            {% endif %}
 
         </aside>
 
@@ -48,9 +73,9 @@ Create your own book lists here!
             </div>
         </section>
 
-        <div class="columns">
+        <div class="box">
 
-            <div class="column is-12">
+            <div class="card-content">
                 <form class="" action="{% url 'create_booklist' user.username %}" method="post">
                   {% csrf_token %}
                   {% include 'partials/bulma_form.html' with form=form %}

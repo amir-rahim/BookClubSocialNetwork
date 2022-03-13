@@ -20,9 +20,9 @@ This is the Edit Profile page, you can change your profile details!
 
             <ul class="menu-list">
                 <li><a href="{% url 'user_dashboard' %}">Profile Dashboard</a></li>
-                <li><a class="is-active"><b>Edit Profile</b></a></li>
+                <li><a href="{% url 'edit_profile' %}" class="is-active"><b>Edit Profile</b></a></li>
                 <li><a href="{% url 'password_change' %}">Change Password</a></li>
-                <li><a>Profile Settings</a></li>
+                <li><a href="#">Profile Settings</a></li>
             </ul>
 
             <p class="menu-label">Clubs</p>
@@ -33,10 +33,16 @@ This is the Edit Profile page, you can change your profile details!
                 <li><a href="{% url 'my_club_memberships' %}">Memberships</a></li>
             </ul>
 
-            <p class="menu-label">Calendar</p>
+            <p class="menu-label">Book Lists</p>
 
             <ul class="menu-list">
-                <li><a>View Calendar</a></li>
+                <li><a href="{% url 'booklists_list' user.username %}">My Book Lists</a></li>
+            </ul>
+
+            <p class="menu-label">Agenda</p>
+
+            <ul class="menu-list">
+                <li><a href="{% url 'agenda' %}">View Agenda</a></li>
             </ul>
 
         </aside>

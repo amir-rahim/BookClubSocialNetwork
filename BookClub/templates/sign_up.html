@@ -3,15 +3,22 @@
 {% block body %}
 
 <section class="hero is-fullheight">
+
     <div class="hero-body is-link">
+
         <div class="container has-text-centered">
+
             <div class="column is-4 is-offset-4">
+
                 <h3 class="title has-text-black">Sign Up</h3>
+
                 <hr class="login-hr">
+
                 <p class="subtitle has-text-black">Please sign up to access member-only features.</p>
+
                 <div class="box">
                     <figure class="avatar" style="padding-bottom: 20px;">
-                        <img class="is-rounded" src="https://via.placeholder.com/128x128">
+                        <img class="is-rounded" src="https://www.gravatar.com/avatar/45209b754e699e7d18337a3ddbb08ff7?size=120&default=mp" alt="profile picture">
                     </figure>
                     
                     {% if messages %}
@@ -67,13 +74,16 @@
                     </form>
 
                 </div>
+
                 <p class="has-text-grey">
                     <a href="{% url 'login' %}">Login</a> &nbsp;·&nbsp;
                     <a href="#">Need Help?</a>
                 </p>
+
             </div>
         </div>
     </div>
+
 </section>
 
 {% endblock %}

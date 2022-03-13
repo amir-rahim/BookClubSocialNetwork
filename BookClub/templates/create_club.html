@@ -25,15 +25,15 @@
 
             <ul class="menu-list">
                 <li><a href="{% url 'user_dashboard' %}">User Profile</a></li>
-                <li><a>Library</a></li>
-                <li><a>Forum</a></li>
+                <li><a href="{% url 'library_dashboard' %}">Library</a></li>
+                <li><a href="{% url 'global_forum' %}">Global Forum</a></li>
             </ul>
 
         </aside>
 
     </div>
 
-    <div class="column is-9">
+    <section class="column is-9">
 
         <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
             <ul>
@@ -50,6 +50,19 @@
                     <h2 class="subtitle">Enter the details of your brand new club below</h2>
                 </div>
             </div>
+        </section>
+
+        <div class="box">
+
+            <div class="card-content">
+                <form class="" action="{% url 'create_club' %}" method="post">
+                  {% csrf_token %}
+                  {% include 'partials/bulma_form.html' with form=form %}
+                  <input type="submit" value="Create Club" class="button is-link">
+                </form>
+            </div>
+
         </div>
+
     </div>
 {% endblock %}

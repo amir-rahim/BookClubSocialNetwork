@@ -19,10 +19,10 @@ This is the User Dashboard, the main home page for your user profile!
             <p class="menu-label">Profile</p>
 
             <ul class="menu-list">
-                <li><a class="is-active"><b>Profile Dashboard</b></a></li>
+                <li><a href="{% url 'user_dashboard' %}" class="is-active"><b>Profile Dashboard</b></a></li>
                 <li><a href="{% url 'edit_profile' %}"> Edit Profile</a></li>
                 <li><a href="{% url 'password_change' %}">Change Password</a></li>
-                <li><a>Profile Settings</a></li>
+                <li><a href="#">Profile Settings</a></li>
             </ul>
 
             <p class="menu-label">Clubs</p>
@@ -39,10 +39,10 @@ This is the User Dashboard, the main home page for your user profile!
                 <li><a href="{% url 'booklists_list' user.username %}">My Book Lists</a></li>
             </ul>
 
-            <p class="menu-label">Calendar</p>
+            <p class="menu-label">Agenda</p>
 
             <ul class="menu-list">
-                <li><a>View Calendar</a></li>
+                <li><a href="{% url 'agenda' %}">View Agenda</a></li>
             </ul>
 
         </aside>
@@ -104,12 +104,9 @@ This is the User Dashboard, the main home page for your user profile!
                 <div class="card">
                     <div class="card-content">
                         <p class="title">Following</p>
-                        
                     </div>
                     <div class="card-footer">
-                        <p class="card-footer-item">
-                            <span><a href="#">View All</a></span>
-                        </p>
+                        <a class="card-footer-item" href="{% url 'user_following' username %}">View All</a>
                     </div>
                 </div>
 
@@ -120,12 +117,9 @@ This is the User Dashboard, the main home page for your user profile!
                 <div class="card">
                     <div class="card-content">
                         <p class="title">Clubs</p>
-                        
                     </div>
                     <div class="card-footer">
-                        <p class="card-footer-item">
-                            <span><a href="{% url 'my_club_memberships' %}">View All</a></span>
-                        </p>
+                        <a class="card-footer-item" href="{% url 'my_club_memberships' %}">View All</a>
                     </div>
                 </div>
 
@@ -170,12 +164,8 @@ This is the User Dashboard, the main home page for your user profile!
                         
                     </div>
                     <div class="card-footer">
-                        <p class="card-footer-item">
-                            <span><a href="#">Read List</a></span>
-                        </p>
-                        <p class="card-footer-item" onclick="window.location='{% url 'booklists_list' user.username %}';" style="cursor:pointer;">
-                            <span><a href="#">View All</a></span>
-                        </p>
+                        <a class="card-footer-item" href="#">Read List</a>
+                        <a class="card-footer-item" href="{% url 'booklists_list' user.username %}">View All</a>
                     </div>
                 </div>
 
@@ -186,12 +176,9 @@ This is the User Dashboard, the main home page for your user profile!
                 <div class="card">
                     <div class="card-content">
                         <p class="title">Reviews</p>
-                        
                     </div>
                     <div class="card-footer">
-                        <p class="card-footer-item">
-                            <span><a href="#">View All</a></span>
-                        </p>
+                        <a class="card-footer-item" href="#">View All</a>
                     </div>
                 </div>
 

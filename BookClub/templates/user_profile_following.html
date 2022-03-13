@@ -20,7 +20,7 @@ This is the User Profile, this is where you can view other profiles!
 
             <ul class="menu-list">
                 <li><a href="{% url 'user_profile' username %}">Profile Dashboard</a></li>
-                <li><a class="is-active"><b>Following</b></a></li>
+                <li><a href="{% url 'user_following' username %}" class="is-active"><b>Following</b></a></li>
             </ul>
 
             <p class="menu-label">Clubs</p>
@@ -32,7 +32,7 @@ This is the User Profile, this is where you can view other profiles!
             <p class="menu-label">Books</p>
 
             <ul class="menu-list">
-                <li><a>Book Lists</a></li>
+                <li><a href="{% url 'user_memberships' username %}">Book Lists</a></li>
             </ul>
 
         </aside>
