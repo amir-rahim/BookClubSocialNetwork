@@ -114,13 +114,19 @@ urlpatterns = [
     path('forum/downvote/', views.CreateVoteView.as_view(), name='downvote'),
 
     # '''Book List URLs'''
-    path('user/<slug:username>/lists/', views.BooklistListView.as_view(), name='booklists_list'),
-    path('user/<slug:username>/lists/create/', views.CreateBookListView.as_view(), name='create_booklist'),
-    path('user/<slug:username>/list/<int:list_id>/delete/', views.DeleteBookListView.as_view(), name='delete_booklist'),
-    path('user/<slug:username>/lists/<int:booklist_id>/edit/', views.EditBookListView.as_view(), name='edit_booklist'),
-    path('user/<slug:username>/lists/<int:booklist_id>', views.UserBookListView.as_view(), name='user_booklist'),
-    path('user/<slug:username>/lists/<int:booklist_id>/<int:book_id>/delete', views.RemoveFromBookListView.as_view(), name='remove_book'),
-    path('user/<slug:username>/lists/create/', views.CreateBookListView.as_view(), name='create_booklist'),
+    path('user/<str:username>/lists/',
+         views.BooklistListView.as_view(), name='booklists_list'),
+    path('user/<str:username>/lists/create/',
+         views.CreateBookListView.as_view(), name='create_booklist'),
+    path('user/<str:username>/list/<int:list_id>/delete/',
+         views.DeleteBookListView.as_view(), name='delete_booklist'),
+    path('user/<str:username>/lists/<int:booklist_id>/edit/',
+         views.EditBookListView.as_view(), name='edit_booklist'),
+    path('user/<str:username>/lists/<int:booklist_id>',
+         views.UserBookListView.as_view(), name='user_booklist'),
+    path('user/<str:username>/lists/<int:booklist_id>/<int:book_id>/delete', views.RemoveFromBookListView.as_view(), name='remove_book'),
+    path('user/<str:username>/lists/create/',
+         views.CreateBookListView.as_view(), name='create_booklist'),
 
     # '''Agenda URLs'''
     path('agenda/', views.AgendaView.as_view(), name='agenda'),
