@@ -11,7 +11,7 @@ def get_popularity_recommendations(user):
     user_read_books = get_user_read_books(user)
     # Import Popular Books recommender
     popular_books = PopularBooksRecommender()
-    recommended_books = popular_books.get_recommendations_from_average_and_median(user_read_books=user_read_books)
+    recommended_books = popular_books.get_recommendations_from_median(user_read_books=user_read_books)
     return recommended_books
 
 """Retrain the popularity recommender with the current data."""
