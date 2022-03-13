@@ -32,7 +32,7 @@ def evaluate_all_combinations(trainset, testset, parameters_to_evaluate):
             print(f" -> average_reciprocal_hit_rate:{average_reciprocal_hit_rate}")
 
 def get_predictions_for_combination(trainset, min_support, model_function_name):
-    item_based_recommender = ItemBasedCollaborativeFilteringMethods(trainset=trainset, min_support=min_support, model_function_name)
+    item_based_recommender = ItemBasedCollaborativeFilteringMethods(trainset=trainset, min_support=min_support, model_function_name=model_function_name)
     recommendations = {}
     for user_inner_id in trainset.all_users():
         user_id = trainset.to_raw_uid(user_inner_id)
