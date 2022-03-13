@@ -98,7 +98,7 @@ class DeleteBookListView(LoginRequiredMixin, View):
                              "Non-existing page was requested, so we redirected you here...")
         return redirect('booklists_list', username=self.kwargs['username'])
 
-    def post(self):
+    def post(self, *args, **kwargs):
         user = self.request.user
         try:
             booklist = BookList.objects.get(pk=self.kwargs['list_id'])
@@ -158,7 +158,7 @@ class RemoveFromBookListView(LoginRequiredMixin, ListView):
         messages.success(self.request, "You have removed the book.")
         booklist.remove_book(book)
 
-    def post(self):
+    def post(self, *args, **kwargs):
 
         try:
             booklist = BookList.objects.get(id=self.kwargs['booklist_id'])

@@ -115,7 +115,7 @@ class DeleteReviewView(LoginRequiredMixin, View):
         delete_bookreview(review)
         messages.success(self.request, "You have deleted the review")
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         try:
             book = Book.objects.get(id=self.kwargs['book_id'])
             current_user = request.user

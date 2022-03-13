@@ -14,7 +14,7 @@ class JoinMeetingView(LoginRequiredMixin, View):
 
     redirect_location = 'meeting_details'
 
-    def get(self):
+    def get(self, *args, **kwargs):
         return redirect(self.redirect_location, club_url_name=self.kwargs['club_url_name'],
                         meeting_id=self.kwargs['meeting_id'])
 
@@ -59,7 +59,7 @@ class LeaveMeetingView(LoginRequiredMixin, View):
 
     redirect_location = 'meeting_details'
 
-    def get(self):
+    def get(self, *args, **kwargs):
         return redirect(self.redirect_location, club_url_name=self.kwargs['club_url_name'],
                         meeting_id=self.kwargs['meeting_id'])
 
