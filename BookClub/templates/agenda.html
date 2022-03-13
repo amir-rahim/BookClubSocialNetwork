@@ -41,7 +41,6 @@ Agenda
 
             <hr class="solid">
 
-            {% if meetings %}
             <div class="columns is-multiline">
 
                 {% for meeting in meetings %}
@@ -63,9 +62,6 @@ Agenda
                 {% endif %}
                 {% endfor %}
             </div>
-            {% else %}
-                <p class="has-text-grey has-text-centered"><i>No meetings available.</i></p>
-            {% endif %}
             <!--JOINED UPCOMING MEETINGS-->
 
             <hr class="solid">
@@ -74,7 +70,6 @@ Agenda
 
             <hr class="solid">
 
-            {% if meetings %}
             <div class="columns is-multiline">
 
                 {% for meeting in meetings %}
@@ -96,9 +91,6 @@ Agenda
                 {% endif %}
                 {% endfor %}
             </div>
-            {% else %}
-                <p class="has-text-grey has-text-centered"><i>No meetings available.</i></p>
-            {% endif %}
         </section>
         <!--Not Joined section-->
         <section class="tab-content">
@@ -108,8 +100,6 @@ Agenda
 
             <hr class="solid">
 
-
-            {% if meetings %}
             <div class="columns is-multiline">
 
                 {% for meeting in not_joined %}
@@ -131,9 +121,6 @@ Agenda
                 {% endif %}
                 {% endfor %}
             </div>
-            {% else %}
-                <p class="has-text-grey has-text-centered"><i>No meetings available.</i></p>
-            {% endif %}
 
             <!--NOT JOINED UPCOMING MEETINGS-->
 
@@ -143,7 +130,6 @@ Agenda
 
             <hr class="solid">
 
-            {% if meetings %}
             <div class="columns is-multiline">
 
                 {% for meeting in not_joined %}
@@ -165,9 +151,6 @@ Agenda
                 {% endif %}
                 {% endfor %}
             </div>
-            {% else %}
-                <p class="has-text-grey has-text-centered"><i>No meetings available.</i></p>
-            {% endif %}
         </section>
         <!--Both section-->
         <section class="tab-content">
@@ -177,7 +160,6 @@ Agenda
 
             <hr class="solid">
 
-            {% if meetings %}
             <div class="columns is-multiline">
                 {% for meeting in all_meetings %}
                     {% if meeting.meeting_time.date == today %}
@@ -213,9 +195,6 @@ Agenda
                     {% endif %}
                 {% endfor %}
             </div>
-            {% else %}
-                <p class="has-text-grey has-text-centered"><i>No meetings available.</i></p>
-            {% endif %}
             <!--Upcoming meetings for both-->
 
             <hr class="solid">
@@ -224,7 +203,6 @@ Agenda
 
             <hr class="solid">
 
-            {% if meetings %}
             <div class="columns is-multiline">
                 {% for meeting in all_meetings %}
                     {% if meeting.meeting_time.date > today %}
@@ -259,9 +237,6 @@ Agenda
                     {% endif %}
                 {% endfor %}
             </div>
-            {% else %}
-                <p class="has-text-grey has-text-centered"><i>No meetings available.</i></p>
-            {% endif %}
         </section>
     </div>
 
