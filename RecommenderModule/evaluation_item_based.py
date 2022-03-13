@@ -7,13 +7,17 @@ from RecommenderModule.evaluation_data_provider import EvaluationDataProvider
 from RecommenderModule.recommenders.resources.item_based_collaborative_filtering_methods import ItemBasedCollaborativeFilteringMethods
 from RecommenderModule import evaluator
 
-trainset, testset = get_train_test_datasets()
-parameters_to_evaluate = {
-    'min_support': [2, 5, 10],
-    'model_function_name': ['cosine', 'msd', 'pearson', 'pearson_baseline']
-}
 
-evaluate_all_combinations(trainset, testset, parameters_to_evaluate)
+def run_evaluations():
+
+    trainset, testset = get_train_test_datasets()
+    parameters_to_evaluate = {
+        'min_support': [2, 5, 10],
+        'model_function_name': ['cosine', 'msd', 'pearson', 'pearson_baseline']
+    }
+
+    evaluate_all_combinations(trainset, testset, parameters_to_evaluate)
+
 
 def get_train_test_datasets():
     data_provider = DataProvider(get_data_from_csv=True)
