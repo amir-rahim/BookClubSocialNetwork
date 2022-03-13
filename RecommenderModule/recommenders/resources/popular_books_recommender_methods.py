@@ -34,6 +34,7 @@ class PopularBooksMethods:
         else:
             self.trainset = trainset
             self.load_filtered_books_list(None)
+            self.compute_all_popularity_lists()
         self.library = Library(trainset=self.trainset)
 
 
