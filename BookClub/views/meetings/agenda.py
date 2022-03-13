@@ -1,14 +1,13 @@
-"""Agenda"""
-
-from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.views.generic import ListView
-from django.shortcuts import reverse, redirect
-from BookClub.forms import MeetingForm
-from BookClub.models import User, Club, ClubMembership, Meeting
-from BookClub.helpers import *
-from django.db.models import Q
+"""Agenda Related Views"""
 import datetime
+
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
+from django.views.generic import ListView
+
+from BookClub.helpers import *
+from BookClub.models import Meeting
+
 
 class AgendaView(LoginRequiredMixin, ListView):
     """View to display agenda"""

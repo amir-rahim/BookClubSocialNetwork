@@ -23,12 +23,10 @@ class EditMeetingView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             organiser = meeting.get_organiser()
             rank = ClubMembership.objects.get(club=club, user=self.request.user)
             # The only people who can edit the meeting are the Owner (of the club) or the organiser.
-            if (
-                    rank.membership != ClubMembership.UserRoles.OWNER and rank.membership != ClubMembership.UserRoles.MODERATOR and self.request.user != organiser):
+            if rank.membership != ClubMembership.UserRoles.OWNER and rank.membership != ClubMembership.UserRoles.MODERATOR and self.request.user != organiser:
                 messages.add_message(self.request, messages.ERROR, 'Access denied')
                 return False
-            else:
-                return True
+            return True
         except:
             messages.add_message(self.request, messages.ERROR,
                                  'Meeting not found or you are not a participant of this meeting')
@@ -80,13 +78,12 @@ class RemoveMeetingMember(LoginRequiredMixin, UserPassesTestMixin, DetailView):
             rank = ClubMembership.objects.get(
                 club=club, user=self.request.user)
             # The only people who can edit the meeting are the Owner (of the club) or the organiser.
-            if (
-                    rank.membership != ClubMembership.UserRoles.OWNER and rank.membership != ClubMembership.UserRoles.MODERATOR and self.request.user != organiser):
+            if rank.membership != ClubMembership.UserRoles.OWNER and rank.membership != ClubMembership.UserRoles.MODERATOR and self.request.user != organiser:
                 messages.add_message(
                     self.request, messages.ERROR, 'Access denied')
                 return False
-            else:
-                return True
+
+            return True
         except:
             messages.add_message(self.request, messages.ERROR,
                                  'Meeting not found or you are not a participant of this meeting')
@@ -95,10 +92,9 @@ class RemoveMeetingMember(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     def handle_no_permission(self):
         if not self.request.user.is_authenticated:
             return super(LoginRequiredMixin, self).handle_no_permission()
-        else:
-            url = reverse('meeting_list', kwargs={
-                'club_url_name': self.kwargs['club_url_name']})
-            return redirect(url)
+
+        url = reverse('meeting_list', kwargs={'club_url_name': self.kwargs['club_url_name']})
+        return redirect(url)
 
     def post(self, request, *args, **kwargs):
         meeting = self.get_object()
