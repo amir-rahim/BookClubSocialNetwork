@@ -1,23 +1,20 @@
-'''Authentication Related Views'''
+"""Authentication Related Views"""
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.views.generic import FormView, View
-from django.shortcuts import redirect, render, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
-from BookClub.helpers import LoginProhibitedMixin
+from django.shortcuts import redirect, render, reverse
+from django.views.generic import FormView, View
+
 from BookClub.forms import LogInForm, SignUpForm
+from BookClub.helpers import LoginProhibitedMixin
+
 
 class SignUpView(LoginProhibitedMixin, FormView):
-    """
-
-        View class for handling user sign ups
-
-    """
+    """View class for handling user sign-ups"""
     form_class = SignUpForm
     template_name = 'sign_up.html'
     redirect_when_logged_in_url = 'home'
-    
 
     def form_valid(self, form):
         self.object = form.save()
@@ -28,10 +25,11 @@ class SignUpView(LoginProhibitedMixin, FormView):
     def form_invalid(self, form):
         messages.add_message(self.request, messages.ERROR, "The credentials provided were invalid!")
         return super().form_invalid(form)
-    
+
     def get_success_url(self):
         return reverse(self.redirect_when_logged_in_url)
-  
+
+
 class LogInView(LoginProhibitedMixin, FormView):
     """
         View class for handling logging the user in and setting the club_id session key
@@ -53,7 +51,7 @@ class LogInView(LoginProhibitedMixin, FormView):
         else:
             messages.add_message(self.request, messages.ERROR, "The credentials provided were invalid!")
             return render(self.request, 'login.html')
-        
+
     def form_invalid(self, form):
         messages.add_message(self.request, messages.ERROR, "The credentials provided were incomplete!")
         return super().form_invalid(form);
@@ -65,6 +63,7 @@ class LogOutView(LoginRequiredMixin, View):
         Class that handles logging a user out.
 
     """
+
     def get(self, request):
         logout(request)
         return redirect('home')

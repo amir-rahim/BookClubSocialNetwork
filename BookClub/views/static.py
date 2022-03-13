@@ -1,4 +1,4 @@
-'''Static Related Views'''
+"""Static Related Views"""
 from django.shortcuts import render
 
 def home(request):
