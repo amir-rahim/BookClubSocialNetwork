@@ -1,18 +1,18 @@
 """Test the Create Club Poll view."""
-from datetime import date, datetime, timedelta
-from django.test import TestCase, tag
-from django.urls import reverse
-from django.contrib import messages
-from django.contrib.messages import get_messages
-from BookClub.models import User, Club, ClubMembership, Poll, Option, Book
-from BookClub.forms import PollForm
-from BookClub.tests.helpers import reverse_with_next
+from datetime import datetime, timedelta
 
 import pytz
+from django.contrib import messages
+from django.contrib.messages import get_messages
+from django.test import TestCase, tag
+from django.urls import reverse
+
+from BookClub.forms import PollForm
+from BookClub.models import Club, ClubMembership, Poll, Option, Book
+from BookClub.tests.helpers import reverse_with_next
 
 
-
-@tag('createclubpoll', 'club', 'poll', 'option', 'user', 'pollform', 'pollview')
+@tag('poll', 'create_poll')
 class CreateClubPollViewTestCase(TestCase):
     """Test the Create Club Poll view."""
 
@@ -26,7 +26,8 @@ class CreateClubPollViewTestCase(TestCase):
     def setUp(self):
         self.club = Club.objects.get(pk=1)
         self.member = ClubMembership.objects.filter(club=self.club, membership=ClubMembership.UserRoles.MEMBER)[0].user
-        self.moderator = ClubMembership.objects.filter(club=self.club, membership=ClubMembership.UserRoles.MODERATOR)[0].user
+        self.moderator = ClubMembership.objects.filter(club=self.club, membership=ClubMembership.UserRoles.MODERATOR)[
+            0].user
         self.owner = ClubMembership.objects.filter(club=self.club, membership=ClubMembership.UserRoles.OWNER)[0].user
 
         self.private_club = Club.objects.get(pk=3)
@@ -66,7 +67,8 @@ class CreateClubPollViewTestCase(TestCase):
         options_count_before = Option.objects.count()
         redirect_url = reverse_with_next('login', self.url)
         response = self.client.post(self.url, self.data, follow=True)
-        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200, fetch_redirect_response=True)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200,
+                             fetch_redirect_response=True)
         self.assertTemplateUsed(response, 'login.html')
         polls_count_after = Poll.objects.count()
         options_count_after = Option.objects.count()
@@ -78,7 +80,8 @@ class CreateClubPollViewTestCase(TestCase):
         options_count_before = Option.objects.count()
         redirect_url = reverse_with_next('login', self.url)
         response = self.client.get(self.url, follow=True)
-        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200, fetch_redirect_response=True)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200,
+                             fetch_redirect_response=True)
         self.assertTemplateUsed(response, 'login.html')
         polls_count_after = Poll.objects.count()
         options_count_after = Option.objects.count()
@@ -118,7 +121,8 @@ class CreateClubPollViewTestCase(TestCase):
         saving_datetime = pytz.utc.localize(datetime.now())
         response = self.client.post(self.url, self.data, follow=True)
         redirect_url = reverse('club_dashboard', kwargs={'club_url_name': self.club.club_url_name})
-        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200, fetch_redirect_response=True)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200,
+                             fetch_redirect_response=True)
 
         messages_list = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
@@ -199,12 +203,10 @@ class CreateClubPollViewTestCase(TestCase):
         response = self.client.post(self.url_private_club, self.data, follow=True)
         self.assertEqual(response.status_code, 403)
 
-
     def test_member_of_club_cannot_create_meetings_for_another_private_club(self):
         self.client.login(username=self.member.username, password='Password123')
         response = self.client.post(self.url_private_club, self.data, follow=True)
         self.assertEqual(response.status_code, 403)
-
 
     '''Tests for users creating meetings for invalid club'''
 
@@ -212,7 +214,8 @@ class CreateClubPollViewTestCase(TestCase):
         self.client.login(username=self.owner.username, password='Password123')
         polls_before_count = Poll.objects.count()
         options_before_count = Option.objects.count()
-        response = self.client.post(reverse('create_club_poll', kwargs={'club_url_name': 'wrong'}), self.data, follow=True)
+        response = self.client.post(reverse('create_club_poll', kwargs={'club_url_name': 'wrong'}), self.data,
+                                    follow=True)
         # messages_list = list(get_messages(response.wsgi_request))
         # self.assertEqual(len(messages_list), 1)
         # self.assertEqual(messages_list[0].level, messages.ERROR)
