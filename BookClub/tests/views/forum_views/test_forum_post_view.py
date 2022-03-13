@@ -1,6 +1,7 @@
 from django.test import TestCase, tag
 from django.urls import reverse
-from BookClub.models import User, Forum, ForumPost
+
+from BookClub.models import User, ForumPost
 
 
 @tag('forum', 'forum_post')

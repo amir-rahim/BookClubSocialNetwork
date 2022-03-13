@@ -1,10 +1,11 @@
 from django.test import TestCase, tag
 from django.urls import reverse
-from BookClub.models import User, Forum, ForumPost, Club
+
+from BookClub.models import User, ForumPost, Club
 from BookClub.tests.helpers import reverse_with_next
 
 
-@tag('forum', 'forumview')
+@tag('forum', 'forum_view')
 class ForumViewTestCase(TestCase):
     """Tests of the Forum view."""
 

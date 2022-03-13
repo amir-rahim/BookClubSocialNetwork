@@ -2,7 +2,8 @@ from django.contrib import messages
 from django.contrib.messages import get_messages
 from django.test import TestCase, tag
 from django.urls import reverse
-from BookClub.models import User, Forum, ForumPost, Club, ForumComment
+
+from BookClub.models import User, ForumPost, Club, ForumComment
 from BookClub.tests.helpers import reverse_with_next
 
 
