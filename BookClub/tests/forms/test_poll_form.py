@@ -3,10 +3,11 @@ import pytz
 
 from django import forms
 from django.test import TestCase, tag
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 
 from BookClub.forms import PollForm, ISBNField
 from BookClub.models import Poll, Option, Club, Book
+
 
 @tag('poll', 'option', 'pollform', 'optionform')
 class PollFormTestcase(TestCase):
@@ -94,3 +95,24 @@ class PollFormTestcase(TestCase):
 
         self.assertEqual(options[2].text, self.form_input['option_3_text'])
         self.assertEqual(options[2].book, self.selfhelp_book)
+
+    def test_invalid_isbn_does_not_save(self):
+        self.form_input['option_3_isbn'] = 'asdasdssss'
+        form = PollForm(data=self.form_input)
+        with self.assertRaises(ValidationError):
+            (poll, options) = form.save(club=self.club)
+
+    def test_invalid_club_does_not_save(self):
+        form = PollForm(data=self.form_input)
+        with self.assertRaises(ObjectDoesNotExist):
+            (poll, options) = form.save(club=9999999)
+
+    def test_poll_is_inactive(self):
+        self.form_input['deadline'] = "2021-02-22T19:00+00:00"
+        form = PollForm(data=self.form_input)
+        (poll, options) = form.save(club=self.club)
+        self.assertFalse(poll.active)
+
+
+
+
