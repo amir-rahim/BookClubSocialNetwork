@@ -8,6 +8,7 @@ class PopularBooksMethods:
 
     path_to_popularity_lists = "RecommenderModule/recommenders/resources/popularity_lists"
     data_provider = None
+    trainset = None
     filtered_books_list = []
     average_ratings = {}
     sorted_average_ratings = []
@@ -15,18 +16,22 @@ class PopularBooksMethods:
     sorted_median_ratings = []
     sorted_combination_scores = []
 
-    def __init__(self, min_ratings_threshold=100, retraining=False, retraining_and_saving=False):
-        if (retraining or retraining_and_saving):
-            self.load_filtered_books_list(min_ratings_threshold)
-            self.compute_all_popularity_lists()
-            if (retraining_and_saving):
-                self.save_all_popularity_lists()
+    def __init__(self, min_ratings_threshold=100, retraining=False, retraining_and_saving=False, trainset=None):
+        if (trainset == None):
+            if (retraining or retraining_and_saving):
+                self.load_filtered_books_list(min_ratings_threshold)
+                self.compute_all_popularity_lists()
+                if (retraining_and_saving):
+                    self.save_all_popularity_lists()
+            else:
+                # Import popularity lists if files exist, otherwise train and save popularity lists
+                try:
+                    self.import_trained_lists()
+                except:
+                    self.__init__(min_ratings_threshold=min_ratings_threshold, retraining_and_saving=True)
         else:
-            # Import popularity lists if files exist, otherwise train and save popularity lists
-            try:
-                self.import_trained_lists()
-            except:
-                self.__init__(min_ratings_threshold=min_ratings_threshold, retraining_and_saving=True)
+            self.trainset = trainset
+
 
     """Import all sorted ratings list objects, using the joblib library"""
     def import_trained_lists(self):
@@ -36,8 +41,14 @@ class PopularBooksMethods:
 
     """Get all books with at least {self.min_ratings_threshold} user ratings"""
     def load_filtered_books_list(self, min_ratings_threshold):
-        self.data_provider = DataProvider(filtering_min_ratings_threshold=min_ratings_threshold)
-        self.filtered_books_list = self.data_provider.get_filtered_books_list()
+        if (trainset == None):
+            self.data_provider = DataProvider(filtering_min_ratings_threshold=min_ratings_threshold, get_data_from_csv=True)
+            self.filtered_books_list = self.data_provider.get_filtered_books_list()
+        else:
+            books_list = []
+            for item_inner_id in trainset.all_items():
+                books_list.append(trainset.to_raw_iid(item_inner_id))
+            self.filtered_books_list = books_list
 
     """Calculate popularity lists for all books according to the different metrics"""
     def compute_all_popularity_lists(self):
