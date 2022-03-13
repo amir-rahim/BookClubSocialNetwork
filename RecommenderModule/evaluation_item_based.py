@@ -33,11 +33,13 @@ class EvaluationItemBased:
         for min_support in parameters_to_evaluate['min_support']:
             for model_function_name in parameters_to_evaluate['model_function_name']:
                 recommendations = self.get_predictions_for_combination(min_support, model_function_name)
-                hit_rate = evaluator.get_hit_rate(recommendations, testset)
-                average_reciprocal_hit_rate = evaluator.get_average_reciprocal_hit_rate(recommendations, testset)
+                hit_rate = evaluator.get_hit_rate(recommendations, self.testset)
+                average_reciprocal_hit_rate = evaluator.get_average_reciprocal_hit_rate(recommendations, self.testset)
+                novelty = evaluator.get_novelty(recommendations, self.trainset)
                 print(f"min_support:{min_support}, model_function_name:{model_function_name}")
                 print(f" -> hit_rate:{hit_rate}")
                 print(f" -> average_reciprocal_hit_rate:{average_reciprocal_hit_rate}")
+                print(f" -> novelty:{novelty}")
                 print()
 
     def get_predictions_for_combination(self, min_support, model_function_name):
