@@ -163,7 +163,7 @@ class DeleteMeetingView(LoginRequiredMixin, View):
         messages.error(self.request, f"You are not allowed to delete the meeting!")
 
     def action(self, current_user, club, meeting):
-        delete_meeting(meeting)
+        meeting.delete()
         messages.success(self.request, "You have deleted the meeting.")
 
     def post(self, request, *args, **kwargs):
