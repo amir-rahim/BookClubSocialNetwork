@@ -26,8 +26,7 @@ class ISBNField(forms.CharField):
 
         if not self.required and not cleaned_field_data:
             return cleaned_field_data
-
-        if Book.objects.filter(ISBN=cleaned_field_data).exists():
+        if(len(cleaned_field_data) == 10 or len(cleaned_field_data) == 13) and Book.objects.filter(ISBN=cleaned_field_data).exists():
             return cleaned_field_data
         else:
             raise ValidationError(
