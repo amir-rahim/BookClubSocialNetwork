@@ -1,6 +1,7 @@
 """Forum Related Views"""
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -8,7 +9,7 @@ from django.views.generic import ListView, CreateView
 from django.views.generic.edit import UpdateView, DeleteView
 
 from BookClub.forms.forum_forms import CreateForumCommentForm, CreatePostForm
-from BookClub.helpers import has_membership
+from BookClub.helpers import get_club_from_url_name, has_membership
 from BookClub.models import ForumPost, ForumComment, Forum, User, Club, ClubMembership
 from BookClub.authentication_mixins import ClubMemberTestMixin
 
@@ -26,7 +27,7 @@ class ForumPostView(ClubMemberTestMixin, ListView):
         context = super().get_context_data(**kwargs)
         try:
             context['post'] = ForumPost.objects.get(pk=self.kwargs.get('post_id'))
-        except:
+        except ObjectDoesNotExist:
             raise Http404("Given post id not found....")
         return context
 
@@ -34,7 +35,7 @@ class ForumPostView(ClubMemberTestMixin, ListView):
         try:
             post = ForumPost.objects.get(pk=self.kwargs.get('post_id'))
             comments = post.get_comments()
-        except:
+        except ObjectDoesNotExist:
             comments = []
         return comments
 
@@ -43,29 +44,22 @@ class ForumView(ClubMemberTestMixin, ListView):
     model = ForumPost
     context_object_name = 'posts'
     paginate_by = 5
+    template_name = 'global_forum.html'
 
     def get_queryset(self):
         if self.kwargs.get('club_url_name') is not None:
-            club = Club.objects.get(club_url_name=self.kwargs.get('club_url_name'))
+            club = get_club_from_url_name(self.kwargs.get('club_url_name'))
             forum = Forum.objects.get(associatedWith=club)
         else:
             forum = Forum.objects.get(associatedWith=None)
         posts = forum.posts.all()
         return posts
 
-    def get_template_names(self):
-        # if self.kwargs.get('club_url_name') is not None:
-        #   names = ['club_forum.html']
-        #   return names
-        # else:
-        names = ['global_forum.html']
-        return names
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         if self.kwargs.get('club_url_name') is not None:
-            club = Club.objects.get(club_url_name=self.kwargs.get('club_url_name'))
+            club = get_club_from_url_name(self.kwargs.get('club_url_name'))
             context['club'] = club
             context['forum'] = Forum.objects.get(associatedWith=club)
             context['usercount'] = ClubMembership.objects.filter(club=club).count()
@@ -94,7 +88,7 @@ class CreatePostView(LoginRequiredMixin, ClubMemberTestMixin, CreateView):
 
     def form_valid(self, form):
         if self.kwargs.get('club_url_name') is not None:
-            club = Club.objects.get(club_url_name=self.kwargs.get('club_url_name'))
+            club = get_club_from_url_name(self.kwargs.get('club_url_name'))
             forum = Forum.objects.get(associatedWith=club)
         else:
             forum = Forum.objects.get(associatedWith=None)
@@ -153,7 +147,7 @@ class EditForumPostView(LoginRequiredMixin, ClubMemberTestMixin, UpdateView):
         if not self.request.user.is_authenticated:
             return super(LoginRequiredMixin, self).handle_no_permission()
         elif self.kwargs.get('club_url_name') is not None:
-            club = Club.objects.get(club_url_name=self.kwargs.get('club_url_name'))
+            club = get_club_from_url_name(self.kwargs.get('club_url_name'))
             membership = ClubMembership.objects.filter(user=self.request.user, club=club)
             if membership.count() != 1:
                 return super(ClubMemberTestMixin, self).handle_no_permission()
