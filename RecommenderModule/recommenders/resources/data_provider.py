@@ -17,6 +17,7 @@ class DataProvider:
     filtered_ratings_df = None
     filtered_ratings_dataset = None
     filtered_ratings_trainset = None
+    library = None
 
     """Constructor for the DataProvider class
         train_dataset_size_percentage (value between 0 and 1): (unfiltered dataset) percentage of dataset to use in training dataset (rest used in testing dataset)
@@ -102,8 +103,9 @@ class DataProvider:
 
     """Get the ISBN value of all books the specified user has rated"""
     def get_all_books_rated_by_user(self, user_id):
-        books = (self.ratings_df.loc[self.ratings_df["User-ID"] == user_id])["ISBN"].values
-        return books
+        if (self.library == None):
+            self.import_library()
+        return self.library.get_all_books_rated_by_user(user_id)
 
     """Get the rating the specified user made for the specified book"""
     def get_rating_from_user_and_book(self, user_id, book_isbn):
@@ -113,5 +115,10 @@ class DataProvider:
 
     """Get all the ratings values for the specified book"""
     def get_all_ratings_for_isbn(self, isbn):
-        library = Library(trainset=self.filtered_ratings_trainset)
-        return library.get_all_ratings_for_isbn(isbn)
+        if (self.library == None):
+            self.import_library()
+        return self.library.get_all_ratings_for_isbn(isbn)
+
+    """Import library object, using local trainset"""
+    def import_library(self):
+        self.library = Library(trainset=self.filtered_ratings_trainset)

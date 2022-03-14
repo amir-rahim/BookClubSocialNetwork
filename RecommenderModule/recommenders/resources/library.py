@@ -26,3 +26,16 @@ class Library:
             for user_inner_id, rating in ratings_tuples:
                 ratings.append(rating)
             return ratings
+
+    """Get the ISBN value of all books the specified user has rated"""
+    def get_all_books_rated_by_user(self, user_id):
+        if (self.trainset == None):
+            print("No trainset provided")
+            return []
+        else:
+            user_inner_id = self.trainset.to_inner_uid(user_id)
+            ratings_tuples = self.trainset.ur[user_inner_id]
+            books = []
+            for item_inner_id, rating in ratings_tuples:
+                books.append(self.trainset.to_raw_iid(item_inner_id))
+            return books
