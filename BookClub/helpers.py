@@ -74,14 +74,14 @@ def is_club_private(club):
     return club.is_private
 
 
-def can_kick(club, user, targetUser):
-    userRank = get_rank(user, club)
-    targetUserRank = get_rank(targetUser, club)
+def can_kick(club, user, target_user):
+    user_rank = get_rank(user, club)
+    target_user_rank = get_rank(target_user, club)
 
-    if userRank == ClubMembership.UserRoles.OWNER and (
-            targetUserRank == ClubMembership.UserRoles.MODERATOR or targetUserRank == ClubMembership.UserRoles.MEMBER):
+    if user_rank == ClubMembership.UserRoles.OWNER and (
+            target_user_rank == ClubMembership.UserRoles.MODERATOR or target_user_rank == ClubMembership.UserRoles.MEMBER):
         return True
-    if userRank == ClubMembership.UserRoles.MODERATOR and targetUserRank == ClubMembership.UserRoles.MEMBER:
+    if user_rank == ClubMembership.UserRoles.MODERATOR and target_user_rank == ClubMembership.UserRoles.MEMBER:
         return True
     return False
 
