@@ -7,7 +7,7 @@ from django.shortcuts import redirect, render, reverse
 from django.views.generic import FormView, View
 
 from BookClub.forms import LogInForm, SignUpForm
-from BookClub.helpers import LoginProhibitedMixin
+from BookClub.authentication_mixins import LoginProhibitedMixin
 
 
 class SignUpView(LoginProhibitedMixin, FormView):
