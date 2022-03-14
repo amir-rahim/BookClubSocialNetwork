@@ -72,8 +72,6 @@ class PollForm(forms.Form):
             raise ObjectDoesNotExist('Supplied club object for creator is invalid')
 
         poll_active = True
-        # print(self.cleaned_data['deadline'])
-        # print(datetime.now())
         if self.cleaned_data['deadline'] and (self.cleaned_data['deadline'] < pytz.utc.localize(datetime.now())):
             poll_active = False
 
