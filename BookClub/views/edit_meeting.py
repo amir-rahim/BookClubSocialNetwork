@@ -60,14 +60,11 @@ class EditMeetingView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        try:
-            meeting = self.get_object()
-            context['meeting'] = meeting
-            context['id'] = meeting.id
-            context['club'] = meeting.get_club()
-            context['members'] = meeting.members.all()
-        except:
-            return context
+        meeting = self.get_object()
+        context['meeting'] = meeting
+        context['id'] = meeting.id
+        context['club'] = meeting.get_club()
+        context['members'] = meeting.members.all()
         return context
 
 class RemoveMeetingMember(LoginRequiredMixin, UserPassesTestMixin, DetailView):
