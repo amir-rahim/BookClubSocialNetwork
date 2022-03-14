@@ -70,10 +70,6 @@ def remove_from_club(user, club):
 """Helper for checking whether a club is public or private"""
 
 
-def is_club_private(club):
-    return club.is_private
-
-
 def can_kick(club, user, target_user):
     user_rank = get_rank(user, club)
     target_user_rank = get_rank(target_user, club)
