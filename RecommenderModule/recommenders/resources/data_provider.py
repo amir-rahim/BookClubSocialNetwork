@@ -109,9 +109,9 @@ class DataProvider:
 
     """Get the rating the specified user made for the specified book"""
     def get_rating_from_user_and_book(self, user_id, book_isbn):
-        user_ratings = self.ratings_df.loc[self.ratings_df["User-ID"] == user_id]
-        rating = (user_ratings.loc[user_ratings["ISBN"] == book_isbn])["Book-Rating"].values[0]
-        return rating
+        if (self.library == None):
+            self.import_library()
+        return self.library.get_rating_from_user_and_book(user_id, book_isbn)
 
     """Get all the ratings values for the specified book"""
     def get_all_ratings_for_isbn(self, isbn):

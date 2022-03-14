@@ -5,8 +5,8 @@ class Command(BaseCommand):
         """Train and save item-based collaborative filtering model for item-based recommender."""
 
         def add_arguments(self, parser):
-            parser.add_argument('min_ratings_threshold', type=int, nargs='?', default=5)
-            parser.add_argument('min_support', type=int, nargs='?', default=3)
+            parser.add_argument('min_ratings_threshold', type=int, nargs='?', default=15)
+            parser.add_argument('min_support', type=int, nargs='?', default=5)
 
         def __init__(self):
             super().__init__()

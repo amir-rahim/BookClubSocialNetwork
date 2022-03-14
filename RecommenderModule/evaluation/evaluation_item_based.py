@@ -39,6 +39,7 @@ class EvaluationItemBased:
                 hit_rate = evaluator.get_hit_rate(recommendations, self.testset)
                 average_reciprocal_hit_rate = evaluator.get_average_reciprocal_hit_rate(recommendations, self.testset)
                 novelty = evaluator.get_novelty(recommendations, self.trainset)
+                print()
                 print(f"min_support:{min_support}, model_function_name:{model_function_name}")
                 print(f" -> hit_rate:{hit_rate}")
                 print(f" -> average_reciprocal_hit_rate:{average_reciprocal_hit_rate}")
@@ -48,10 +49,15 @@ class EvaluationItemBased:
     """Get the recommendations for all users from the train set, for the given
         parameters combination."""
     def get_recommendations_for_combination(self, min_support, model_function_name):
+        print("Getting recommendations...")
         item_based_recommender = ItemBasedCollaborativeFilteringMethods(trainset=self.trainset, min_support=min_support, model_function_name=model_function_name)
         recommendations = {}
+        nb_users = self.trainset.n_users
         for user_inner_id in self.trainset.all_users():
+            if (user_inner_id % 1000 == 0):
+                print(f"{user_inner_id} / {nb_users}")
             user_id = self.trainset.to_raw_uid(user_inner_id)
             user_recommendations = item_based_recommender.get_recommendations_positive_ratings_only_from_user_id(user_id)
             recommendations[user_id] = user_recommendations
+        print("Getting recommendations done")
         return recommendations

@@ -13,6 +13,7 @@ class ItemBasedCollaborativeFilteringMethods:
     data_provider = None
     trainset = None
     similarities_matrix = None
+    library = None
 
     def __init__(self, filtering_min_ratings_threshold=15, min_support=5, model_function_name='pearson', retraining=False, retraining_and_saving=False, trainset=None):
         self.min_support = min_support
@@ -32,6 +33,7 @@ class ItemBasedCollaborativeFilteringMethods:
         else: # trainset != None
             self.trainset = trainset
             self.train_model()
+        self.import_library()
 
 
     """Build the filtered ratings trainset, with only books having at least {filtering_min_ratings_threshold} ratings"""
@@ -59,6 +61,10 @@ class ItemBasedCollaborativeFilteringMethods:
         self.trainset = joblib.load(f"{self.path_to_model}/trainset.sav")
         self.similarities_matrix = joblib.load(f"{self.path_to_model}/similarities_matrix.sav")
 
+    """Import library object, using local trainset"""
+    def import_library(self):
+        self.library = Library(trainset=self.trainset)
+
     """Get the recommended books (up to 10) given a specified user_id, from all of the user's rated books"""
     def get_recommendations_all_ratings_from_user_id(self, user_id):
         user_ratings = self.get_trainset_user_book_ratings(user_id)
@@ -68,18 +74,18 @@ class ItemBasedCollaborativeFilteringMethods:
     """Get the recommended books (up to 10) given a specified user_id, from all of the user's positively (> 6/10) rated books"""
     def get_recommendations_positive_ratings_only_from_user_id(self, user_id, min_rating=6):
         user_ratings = self.get_trainset_user_book_ratings(user_id)
-        positive_user_ratings = self.get_trainset_user_book_ratings(user_id, min_rating=min_rating)
+        positive_user_ratings = self.library.get_trainset_user_book_ratings(user_id, min_rating=min_rating)
         recommendations = self.get_recommendations_from_user_inner_ratings(positive_user_ratings, all_books_rated=user_ratings)
         return recommendations
 
     """Get all the ratings from the specified user, of books that are in the trainset, with a minimum rating value of {min_rating}"""
     def get_trainset_user_book_ratings(self, user_id, min_rating=0):
-        items = self.data_provider.get_all_books_rated_by_user(user_id)
+        items = self.library.get_all_books_rated_by_user(user_id)
         inner_items = []
         for item in items:
             try:
                 inner_item = self.trainset.to_inner_iid(item)
-                rating = self.data_provider.get_rating_from_user_and_book(user_id, item)
+                rating = self.library.get_rating_from_user_and_book(user_id, item)
                 if (rating >= min_rating):
                     inner_items.append((inner_item, rating))
             except:
@@ -109,8 +115,7 @@ class ItemBasedCollaborativeFilteringMethods:
             if (not item_id in all_books_rated) and (not math.isnan(rating_sum)) and rating_sum != 0:
                 try:
                     book_isbn = self.trainset.to_raw_iid(item_id)
-                    book_title = library.get_book_title(book_isbn)
-                    print(book_title, rating_sum)
+                    #print(book_isbn, rating_sum)
                     final_recommendations.append(book_isbn)
                     if (len(final_recommendations) >= 10): # Get the top 10 recommendations
                         break
