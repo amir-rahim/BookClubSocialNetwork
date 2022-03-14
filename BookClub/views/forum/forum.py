@@ -120,8 +120,8 @@ class CreatePostView(LoginRequiredMixin, ClubMemberTestMixin, CreateView):
     def get_success_url(self):
         if self.kwargs.get('club_url_name') is not None:
             return reverse('club_forum', kwargs=self.kwargs)
-
-        return reverse('global_forum')
+        else:
+            return reverse('global_forum', kwargs=self.kwargs)
 
 
 class CreateCommentView(LoginRequiredMixin, ClubMemberTestMixin, CreateView):
