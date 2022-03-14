@@ -21,11 +21,11 @@ class ForumComment(TextComment):
 
 class Forum(models.Model):
     class Meta:
-        unique_together = [['title', 'associatedWith']]
+        unique_together = [['title', 'associated_with']]
 
     title = models.CharField(max_length=30, blank=False, null=False)
     posts = models.ManyToManyField('ForumPost', related_name='Posts', blank=True)
-    associatedWith = models.OneToOneField(
+    associated_with = models.OneToOneField(
         'Club', on_delete=models.CASCADE, blank=True, null=True)
     slug = models.SlugField(max_length=30)
 
