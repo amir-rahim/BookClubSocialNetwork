@@ -1,4 +1,5 @@
-from datetime import date
+from datetime import datetime
+import pytz
 
 from django.test import TestCase, tag
 from django.urls import reverse
@@ -75,15 +76,15 @@ class CreateBooklistViewTestcase(TestCase):
     def test_successful_create_booklist(self):
         self.client.login(username=self.user.username, password='Password123')
         before_count = BookList.objects.count()
-        saving_date = date.today()
+        saving_date = pytz.utc.localize(datetime.today()).date()
         response = self.client.post(self.url, self.data, follow=True)
         booklist = BookList.objects.get(title=self.data['title'])
         after_count = BookList.objects.count()
         self.assertEqual(after_count, before_count + 1)
-        response_url = reverse('booklists_list', kwargs={'username': self.user.username})
+        response_url = reverse('user_booklist', kwargs={'username': self.user.username, 'booklist_id': booklist.pk})
         self.assertRedirects(response, response_url, status_code=302, target_status_code=200)
-        self.assertTemplateUsed(response, 'user_booklists.html')
+        self.assertTemplateUsed(response, 'booklist.html')
         self.assertEqual(booklist.title, self.data['title'])
         self.assertEqual(booklist.description, self.data['description'])
         self.assertEqual(booklist.creator, self.user)
-        self.assertEqual(booklist.created_on, saving_date)
+        self.assertEqual(booklist.created_on.date(), saving_date)
