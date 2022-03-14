@@ -35,8 +35,8 @@ class Club(models.Model):
         
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs);
-        forumModel = apps.get_model('BookClub', 'forum')
-        associatedWith = forumModel.objects.get_or_create(title=self.club_url_name + " forum", associatedWith = self)
+        forum_model = apps.get_model('BookClub', 'forum')
+        associated_with = forum_model.objects.get_or_create(title=self.club_url_name + " forum", associated_with = self)
         
     def get_absolute_url(self):
         return reverse('club_dashboard', kwargs = {'club_url_name': self.club_url_name})
@@ -82,11 +82,11 @@ class Club(models.Model):
     def get_users(self, search_role):
         """Get all the users from the given club with the given authorization."""
 
-        filterBy = (ClubMembership.objects
+        filter_by = (ClubMembership.objects
                     .filter(club=self)
                     .filter(membership=search_role)
                     .values_list('user__id', flat=True))
-        return User.objects.filter(id__in=filterBy)
+        return User.objects.filter(id__in=filter_by)
     
     def get_applicants(self):
         """Get all the applicants from the  given club."""

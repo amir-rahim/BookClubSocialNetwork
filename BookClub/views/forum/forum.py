@@ -49,9 +49,9 @@ class ForumView(ClubMemberTestMixin, ListView):
     def get_queryset(self):
         if self.kwargs.get('club_url_name') is not None:
             club = get_club_from_url_name(self.kwargs.get('club_url_name'))
-            forum = Forum.objects.get(associatedWith=club)
+            forum = Forum.objects.get(associated_with=club)
         else:
-            forum = Forum.objects.get(associatedWith=None)
+            forum = Forum.objects.get(associated_with=None)
         posts = forum.posts.all()
         return posts
 
@@ -61,10 +61,10 @@ class ForumView(ClubMemberTestMixin, ListView):
         if self.kwargs.get('club_url_name') is not None:
             club = get_club_from_url_name(self.kwargs.get('club_url_name'))
             context['club'] = club
-            context['forum'] = Forum.objects.get(associatedWith=club)
+            context['forum'] = Forum.objects.get(associated_with=club)
             context['usercount'] = ClubMembership.objects.filter(club=club).count()
         else:
-            context['forum'] = Forum.objects.get(associatedWith=None)
+            context['forum'] = Forum.objects.get(associated_with=None)
             context['usercount'] = User.objects.all().count()
 
         replies = 0
@@ -89,9 +89,9 @@ class CreatePostView(LoginRequiredMixin, ClubMemberTestMixin, CreateView):
     def form_valid(self, form):
         if self.kwargs.get('club_url_name') is not None:
             club = get_club_from_url_name(self.kwargs.get('club_url_name'))
-            forum = Forum.objects.get(associatedWith=club)
+            forum = Forum.objects.get(associated_with=club)
         else:
-            forum = Forum.objects.get(associatedWith=None)
+            forum = Forum.objects.get(associated_with=None)
 
         form.instance.creator = self.request.user
         self.object = form.save()

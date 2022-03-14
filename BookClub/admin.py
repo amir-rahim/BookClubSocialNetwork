@@ -80,7 +80,7 @@ class ForumAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for club meetings."""
     prepopulated_fields = {"slug": ("title",)}
     list_display = [
-        'title', 'associatedWith', 'slug'
+        'title', 'associated_with', 'slug'
     ]
     filter_horizontal = ['posts']
 
