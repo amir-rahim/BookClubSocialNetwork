@@ -35,39 +35,31 @@ def get_rank(user, club):
 
 
 def set_rank(user, club, rank):
-    membership = ClubMembership.objects.filter(user=user, club=club).update(membership=rank)
+    ClubMembership.objects.filter(user=user, club=club).update(membership=rank)
+
+
+def is_rank(user, club, desired_rank):
+    rank = get_rank(user, club)
+    if rank is not None:
+        return rank == desired_rank
+    else:
+        return False
 
 
 def has_owner_rank(user, club):
-    rank = get_rank(user, club)
-    if rank is not None:
-        return rank == ClubMembership.UserRoles.OWNER
-    else:
-        return False
+    return is_rank(user, club, ClubMembership.UserRoles.OWNER)
 
 
 def has_member_rank(user, club):
-    rank = get_rank(user, club)
-    if rank is not None:
-        return rank == ClubMembership.UserRoles.MEMBER
-    else:
-        return False
+    return is_rank(user, club, ClubMembership.UserRoles.MEMBER)
 
 
 def has_moderator_rank(user, club):
-    rank = get_rank(user, club)
-    if rank is not None:
-        return rank == ClubMembership.UserRoles.MODERATOR
-    else:
-        return False
+    return is_rank(user, club, ClubMembership.UserRoles.MODERATOR)
 
 
 def has_applicant_rank(user, club):
-    rank = get_rank(user, club)
-    if rank is not None:
-        return rank == ClubMembership.UserRoles.APPLICANT
-    else:
-        return False
+    return is_rank(user, club, ClubMembership.UserRoles.APPLICANT)
 
 
 def remove_from_club(user, club):
@@ -102,7 +94,8 @@ def has_membership(club, user):
 
 
 def create_membership(club, user, membership):
-    new_membership = ClubMembership(user=user, club=club, membership=membership)
+    new_membership = ClubMembership(
+        user=user, club=club, membership=membership)
     new_membership.save()
 
 
