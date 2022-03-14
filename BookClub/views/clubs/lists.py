@@ -2,35 +2,20 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse
 from django.views.generic import TemplateView, ListView
+from BookClub.authentication_mixins import PrivateClubMixin
 
 from BookClub.helpers import *
 from BookClub.models import User, Club, ClubMembership, Meeting
 
 
-class MembersListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
+class MembersListView(LoginRequiredMixin, PrivateClubMixin, TemplateView):
     """View to display member list"""
 
     template_name = 'club_members.html'
 
-    # Redirect if club is private and user is not a member
-
-    def test_func(self):
-        try:
-            current_club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
-            if current_club.is_private and not current_club.is_member(self.request.user):
-                messages.add_message(self.request, messages.ERROR, 'This club is private and you are not a member.') 
-                return False
-            else:
-                return True
-        except:
-            return False
-
     def handle_no_permission(self):
-        if not self.request.user.is_authenticated:
-            return super(LoginRequiredMixin, self).handle_no_permission()
-        else:
-            url = reverse('club_dashboard', kwargs=self.kwargs)
-            return redirect(url)
+        url = reverse('club_dashboard', kwargs=self.kwargs)
+        return redirect(url)
 
     def get_context_data(self, **kwargs):
         """Generate context data to be shown in the template."""
