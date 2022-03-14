@@ -10,17 +10,9 @@ from django.views.generic.edit import UpdateView, DeleteView
 from BookClub.forms.forum_forms import CreateForumCommentForm, CreatePostForm
 from BookClub.helpers import has_membership
 from BookClub.models import ForumPost, ForumComment, Forum, User, Club, ClubMembership
+from BookClub.authentication_mixins import ClubMemberTestMixin
 
 
-class ClubMemberTestMixin(UserPassesTestMixin):
-
-    def test_func(self):
-        if self.kwargs.get('club_url_name') is not None:
-            club = Club.objects.get(
-                club_url_name=self.kwargs.get('club_url_name'))
-            return has_membership(club=club, user=self.request.user)
-        else:
-            return True
 
 
 class ForumPostView(ClubMemberTestMixin, ListView):
