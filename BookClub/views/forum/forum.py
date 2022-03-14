@@ -222,7 +222,6 @@ class DeleteForumPostView(LoginRequiredMixin, ClubMemberTestMixin, DeleteView):
         self.kwargs.pop('post_id')
         if self.kwargs.get('club_url_name') is not None:
             return reverse('club_forum', kwargs=self.kwargs)
-            # placeholder till club forums is set up
         else:
             return reverse('global_forum', kwargs=self.kwargs)
 
@@ -259,7 +258,4 @@ class DeleteForumCommentView(LoginRequiredMixin, ClubMemberTestMixin, DeleteView
 
     def get_success_url(self):
         self.kwargs.pop('comment_id')
-        if self.kwargs.get('club_url_name') is not None:
-            return reverse('forum_post', kwargs=self.kwargs)
-        else:
-            return reverse('forum_post', kwargs=self.kwargs)
+        return reverse('forum_post', kwargs=self.kwargs)
