@@ -2,6 +2,7 @@
 from venv import create
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import DetailView
@@ -9,7 +10,7 @@ from django.views.generic.edit import CreateView
 from django.views.generic.edit import UpdateView
 
 from BookClub.forms import ClubForm
-from BookClub.helpers import create_membership
+from BookClub.helpers import create_membership, get_club_from_url_name, has_membership_with_access, has_owner_rank
 from BookClub.models import Club, ClubMembership
 
 
@@ -40,13 +41,14 @@ class ClubDashboardView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     # Redirect if club is private and user is not a member
     def test_func(self):
         try:
-            current_club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
-            if current_club.is_private and not current_club.is_member(self.request.user):
+            url_name = self.kwargs.get('club_url_name')
+            current_club = get_club_from_url_name(url_name)
+            if current_club.is_private and not has_membership_with_access(current_club, self.request.user):
                 messages.add_message(self.request, messages.ERROR, 'This club is private')
                 return False
             else:
                 return True
-        except:
+        except ObjectDoesNotExist:
             return False
 
     def handle_no_permission(self):
@@ -72,9 +74,9 @@ class EditClubView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def test_func(self):
         try:
-            club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
-            rank = ClubMembership.objects.get(club=club, user=self.request.user)
-            if rank.membership != ClubMembership.UserRoles.OWNER:
+            url_name = self.kwargs.get('club_url_name')
+            club = get_club_from_url_name(url_name)
+            if not has_owner_rank(self.request.user, club):
                 messages.add_message(self.request, messages.ERROR, 'Access denied')
                 return False
             else:
@@ -89,6 +91,3 @@ class EditClubView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         else:
             url = reverse('club_dashboard', kwargs=self.kwargs)
             return redirect(url)
-
-    def get_object(self):
-        return super().get_object()
