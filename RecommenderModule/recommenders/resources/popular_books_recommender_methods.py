@@ -35,7 +35,6 @@ class PopularBooksMethods:
             self.trainset = trainset
             self.load_filtered_books_list(None)
             self.compute_all_popularity_lists()
-        self.library = Library(trainset=self.trainset)
 
 
     """Import all sorted ratings list objects, using the joblib library"""
@@ -55,6 +54,7 @@ class PopularBooksMethods:
             for item_inner_id in self.trainset.all_items():
                 books_list.append(self.trainset.to_raw_iid(item_inner_id))
             self.filtered_books_list = books_list
+        self.library = Library(trainset=self.trainset)
 
     """Calculate popularity lists for all books according to the different metrics"""
     def compute_all_popularity_lists(self):

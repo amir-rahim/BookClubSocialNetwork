@@ -20,7 +20,7 @@ class ItemBasedCollaborativeFilteringMethods:
         self.data_provider = DataProvider(filtering_min_ratings_threshold=filtering_min_ratings_threshold)
         if (trainset == None):
             if (retraining or retraining_and_saving):
-                self.build_trainset(filtering_min_ratings_threshold)
+                self.build_trainset()
                 self.train_model()
                 if (retraining_and_saving):
                     self.save_model()
@@ -35,7 +35,7 @@ class ItemBasedCollaborativeFilteringMethods:
 
 
     """Build the filtered ratings trainset, with only books having at least {filtering_min_ratings_threshold} ratings"""
-    def build_trainset(self, filtering_min_ratings_threshold):
+    def build_trainset(self):
         self.trainset = self.data_provider.get_filtered_ratings_trainset()
 
     """Train the KNN model on the defined trainset and compute the associated similarities matrix"""
