@@ -69,3 +69,8 @@ class BookTestCase(TestCase):
     def test_str_returns_title(self):
         title = str(self.book)
         self.assertEqual(self.book.title, title)
+
+    def test_get_absolute_url(self):
+        url = self.book.get_absolute_url()
+        correct_url = '/library/books/1/'
+        self.assertEqual(url, correct_url)
