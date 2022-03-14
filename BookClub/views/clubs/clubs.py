@@ -1,4 +1,5 @@
 """Club Related Views"""
+from venv import create
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect
@@ -8,6 +9,7 @@ from django.views.generic.edit import CreateView
 from django.views.generic.edit import UpdateView
 
 from BookClub.forms import ClubForm
+from BookClub.helpers import create_membership
 from BookClub.models import Club, ClubMembership
 
 
@@ -19,9 +21,7 @@ class CreateClubView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         response = super().form_valid(form)
         created_club = self.object
-        owner_membership = ClubMembership(user=self.request.user, club=created_club,
-                                          membership=ClubMembership.UserRoles.OWNER)
-        owner_membership.save()
+        create_membership(created_club, self.request.user, ClubMembership.UserRoles.OWNER)
         messages.success(self.request, 'Successfully created a new club!')
         return response
 
