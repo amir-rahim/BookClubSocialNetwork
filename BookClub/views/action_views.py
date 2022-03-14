@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.views.generic import TemplateView, View
+from django.core.exceptions import ObjectDoesNotExist
 
 from BookClub.helpers import *
 from BookClub.models import Club, User, ClubMembership
@@ -26,7 +27,7 @@ class ActionView(TemplateView):
             club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
             current_user = self.request.user
             target_user = User.objects.get(username=self.request.POST.get('user'))
-        except:
+        except ObjectDoesNotExist:
             messages.error(self.request, "Error, user or club not found.")
 
         if self.is_actionable(current_user, target_user, club):
