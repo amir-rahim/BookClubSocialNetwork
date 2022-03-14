@@ -59,7 +59,7 @@ class UserModelTestCase(TestCase):
 
     def test_str_function(self):
         return_str = str(self.user)
-        correct_str = f'User johndoe'
+        correct_str = 'johndoe'
         self.assertEqual(return_str, correct_str)
 
     def test_get_absolute_url(self):
