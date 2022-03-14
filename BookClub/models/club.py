@@ -67,13 +67,11 @@ class Club(models.Model):
         updated = re.sub("[^0-9a-zA-Z_]+", "", updated)
         return updated
 
-    # Has unimplemented dependencies
     def get_number_of_meetings(self):
-        pass
-
-    # Has unimplemented dependencies
+        return self.meeting_set.all().count()
+    
     def get_number_of_posts(self):
-        pass
+        return self.forum.posts.count()
 
     # Has unimplemented dependencies
     def get_review_score(self):

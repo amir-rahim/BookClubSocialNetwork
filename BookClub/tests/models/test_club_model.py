@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase, tag
 
 from BookClub.models import Club, ClubMembership, User
+from BookClub.models.forum import ForumPost
 
 
 @tag('models', 'club')
@@ -10,6 +11,7 @@ class ClubModelTestCase(TestCase):
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_clubs.json',
         'BookClub/tests/fixtures/default_club_owners.json',
+        'BookClub/tests/fixtures/default_forums_posts_and_meetings_club.json'
     ]
 
     def setUp(self):
@@ -217,3 +219,14 @@ class ClubModelTestCase(TestCase):
     def test_get_owner(self):
         self.assertQuerysetEqual(self.club1.get_owner(),[self.owner], ordered = False)
     
+    def test_get_posts_no_posts(self):
+        self.assertEqual(self.club1.get_number_of_posts(), 0)
+        
+    def test_get_posts_some_posts(self):
+        self.assertEqual(self.club2.get_number_of_posts(), 1)
+        
+    def test_get_number_meetings_no_meetings(self):
+        self.assertEqual(self.club1.get_number_of_meetings(), 0)
+    
+    def test_get_number_meetings_some_meetings(self):
+        self.assertEqual(self.club2.get_number_of_meetings(), 1)

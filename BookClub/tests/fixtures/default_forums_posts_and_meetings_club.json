@@ -1,0 +1,46 @@
+[{
+        "model": "BookClub.Forum",
+        "pk": 2,
+        "fields": {
+            "title": "Johnathan Club Forum",
+            "associated_with": 1,
+            "posts": []
+        }
+    },
+    {
+        "model": "BookClub.Forum",
+        "pk": 3,
+        "fields": {
+            "title": "Jeannette Club Forum",
+            "associated_with": 2,
+            "posts": [1]
+        }
+    },
+    {
+        "model": "BookClub.ForumPost",
+        "pk": 1,
+        "fields": {
+            "creator": [
+                "johndoe"
+            ],
+            "created_on": "2022-02-27T22:45:06.275Z",
+            "title": "Lorem Ipsum",
+            "content": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrial standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+        }
+    },
+    {
+        "model": "BookClub.meeting",
+        "pk": 1,
+        "fields": {
+            "organiser": 1,
+            "club": 2,
+            "meeting_time": "2022-02-22T19:00+00:00",
+            "created_on": "2022-02-10",
+            "location": "Franklin Wilkins Library GS04",
+            "title": "Book meeting 1",
+            "description": "This is a book meeting, helll yeahhhh",
+            "members": [1, 2],
+            "type": "O"
+        }
+    }
+]
