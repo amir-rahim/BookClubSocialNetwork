@@ -45,7 +45,7 @@ class AddBookViewTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "library_books.html")
         html_code = '<select required id="booklist" name="booklist">\n <option value="" selected disabled hidden>Choose here</option>\n</select>'
-        self.assertContains(response, html_code, html=True)
+        self.assertNotContains(response, html_code, html=True)
 
     def test_adds_book_to_book_list(self):
         self.client.login(username=self.user.username, password="Password123")

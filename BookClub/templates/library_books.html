@@ -92,7 +92,9 @@
                                 <th scope="col">Title</th>
                                 <th scope="col">Author</th>
                                 <th scope="col">Publisher</th>
+                                {% if user.is_authenticated and user.booklist_set.count > 0 %}
                                 <th scope="col">Add to List</th>
+                                {% endif %}
                                 <th scope="col"></th>
                                 <th scope="col">View</th>
                             </tr>
@@ -117,7 +119,7 @@
                                                 <a href="{% url 'login' %}">Log in</a>
                                             </p>
                                             <td></td>
-                                        {% else %}
+                                        {% elif user.is_authenticated and user.booklist_set.count > 0 %}
                                             <form action="{% url 'add_to_book_list' %}" method="post">
                                                 {% csrf_token %}
                                                 <input type="hidden" id="book" name="book" value="{{ book.id }}"/>
