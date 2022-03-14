@@ -13,22 +13,21 @@ class EvaluationPopularity:
     recommender = None
     evaluation_data_provider = None
     read_books_all_users = None
-    min_ratings_threshold = 100
 
-    def __init__(self, min_ratings_threshold=100):
+    def __init__(self, min_ratings_threshold=300):
         self.min_ratings_threshold = min_ratings_threshold
 
     """Evaluate the possible popularity-based recommenders and print the insights."""
     def run_evaluations(self):
 
         self.trainset, self.testset = self.get_train_test_datasets()
-        self.recommender = PopularBooksMethods(trainset=self.trainset, min_ratings_threshold=self.min_ratings_threshold)
+        self.recommender = PopularBooksMethods(trainset=self.trainset)
         self.evaluate_recommenders()
 
 
     """Get the LeaveOneOut train and test datasets."""
     def get_train_test_datasets(self):
-        data_provider = DataProvider(get_data_from_csv=True)
+        data_provider = DataProvider(get_data_from_csv=True, filtering_min_ratings_threshold=self.min_ratings_threshold)
         dataset = data_provider.get_filtered_ratings_dataset()
         self.evaluation_data_provider = EvaluationDataProvider(dataset)
         return self.evaluation_data_provider.get_loocv_datasets()

@@ -50,7 +50,7 @@ def get_average_reciprocal_hit_rate(recommendations, left_out_test_set):
 def get_novelty(recommendations, trainset):
 
     popular_books = PopularBooksMethods(trainset=trainset)
-    popularity_list = popular_books.sorted_median_ratings
+    popularity_list = popular_books.sorted_average_ratings
 
     sum = 0
     total = 0

@@ -11,11 +11,11 @@ def get_popularity_recommendations(user):
     user_read_books = get_user_read_books(user)
     # Import Popular Books recommender
     popular_books = PopularBooksRecommender()
-    recommended_books = popular_books.get_recommendations_from_median(user_read_books=user_read_books)
+    recommended_books = popular_books.get_recommendations_from_average(user_read_books=user_read_books)
     return recommended_books
 
 """Retrain the popularity recommender with the current data."""
-def retrain_popularity_recommender(min_ratings_threshold=100):
+def retrain_popularity_recommender(min_ratings_threshold=300):
     PopularBooksMethods(retraining_and_saving=True, min_ratings_threshold=min_ratings_threshold)
 
 """Get a list of all books that the user has read."""
