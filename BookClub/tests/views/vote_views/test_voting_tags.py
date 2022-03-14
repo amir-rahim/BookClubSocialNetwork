@@ -18,9 +18,11 @@ class HasUserVotedTagTestCase(TestCase):
         self.post = ForumPost.objects.get(pk=1)
         self.forummpostcontenttypepk = ContentType.objects.get_for_model(
             self.post.__class__).pk
+        
 
     def test_user_has_voted_has_not_voted(self):
-        self.assertFalse(has_user_voted(None, self.post, self.user))
+        self.votes = self.post.votes.all()
+        self.assertFalse(has_user_voted(None, self.votes, self.user))
         
     def test_user_has_voted_has_down_voted(self):
         Vote.objects.create(
@@ -30,7 +32,8 @@ class HasUserVotedTagTestCase(TestCase):
             object_id=self.post.pk,
             type=False
         )
-        self.assertTrue(has_user_voted(None, self.post, self.user))
+        self.votes = self.post.votes.all()
+        self.assertTrue(has_user_voted(None, self.votes, self.user))
         
     def test_user_has_voted_has_up_voted(self):
         Vote.objects.create(
@@ -40,7 +43,8 @@ class HasUserVotedTagTestCase(TestCase):
             object_id=self.post.pk,
             type=True
         )
-        self.assertTrue(has_user_voted(None, self.post, self.user))
+        self.votes = self.post.votes.all()
+        self.assertTrue(has_user_voted(None, self.votes, self.user))
         
 @tag('tag')
 class GetUserVoteTagTestCase(TestCase):
@@ -60,7 +64,8 @@ class GetUserVoteTagTestCase(TestCase):
             self.post.__class__).pk
         
     def test_get_vote_has_not_voted(self):
-        self.assertIsNone(get_user_vote_type(None,self.post, self.user))
+        self.votes = self.post.votes.all()
+        self.assertIsNone(get_user_vote_type(None, self.votes, self.user))
 
     def test_get_vote_has_upvoted(self):
         vote = Vote.objects.create(
@@ -70,7 +75,8 @@ class GetUserVoteTagTestCase(TestCase):
             object_id=self.post.pk,
             type=True
         )
-        self.assertEqual(get_user_vote_type(None, self.post, self.user), vote.type)
+        self.votes = self.post.votes.all()
+        self.assertEqual(get_user_vote_type(None, self.votes, self.user), vote.type)
         
     def test_get_vote_has_downvoted(self):
         vote = Vote.objects.create(
@@ -80,6 +86,6 @@ class GetUserVoteTagTestCase(TestCase):
             object_id=self.post.pk,
             type=False
         )
+        self.votes = self.post.votes.all()
         self.assertEqual(get_user_vote_type(
-            None, self.post, self.user), vote.type)
-
+            None, self.votes, self.user), vote.type)
