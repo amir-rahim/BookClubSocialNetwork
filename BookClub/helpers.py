@@ -19,7 +19,8 @@ def get_club_from_url_name(url_name):
     if club.exists():
         return club[0]
     else:
-        return None
+        raise ObjectDoesNotExist()
+
 
 
 # Used to get the actual rank of the user (if they have a membership in that club)
@@ -82,6 +83,12 @@ def can_kick(club, user, target_user):
 def has_membership(club, user):
     if user.is_authenticated:
         return ClubMembership.objects.filter(user=user, club=club).exists()
+    else:
+        return False
+    
+def has_membership_with_access(club, user):
+    if user.is_authenticated:
+        return ClubMembership.objects.exclude(membership=ClubMembership.UserRoles.APPLICANT).filter(user=user, club=club).exists()
     else:
         return False
 
