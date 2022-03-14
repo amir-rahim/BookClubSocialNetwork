@@ -1,28 +1,25 @@
 from django.conf import settings
+from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 from django.shortcuts import redirect
+
 from BookClub.models.club import Club
 from BookClub.models.club_membership import ClubMembership
-from django.contrib import messages
-from django.db.models import Q
-from django.core.exceptions import ObjectDoesNotExist
-
 from BookClub.models.user import User
 
 
-class LoginProhibitedMixin:
-    """
-        If user trying to access this view is authenticated, they are redirected to the 'home' page
-    """
-
-    def dispatch(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated:
-            return redirect('home')
-        return super().dispatch(request, *args, **kwargs)
 
 
 """
 Helpers for checking the authentication level of the user.
 """
+def get_club_from_url_name(url_name):
+    club = Club.objects.filter(club_url_name=url_name)
+    if club.exists():
+        return club[0]
+    else:
+        return None
 
 
 # Used to get the actual rank of the user (if they have a membership in that club)
