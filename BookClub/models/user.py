@@ -32,7 +32,7 @@ class User(AbstractUser):
         return gravatar_url
 
     def __str__(self):
-        return self.username
+        return f'{self.username}'
 
     def get_absolute_url(self):
         return reverse('user_profile', kwargs={'username': self.username})

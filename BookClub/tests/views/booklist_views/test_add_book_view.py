@@ -55,7 +55,7 @@ class AddBookViewTestCase(TestCase):
         self.assertTemplateUsed(response, "library_books.html")
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), 'The book has been saved to ' + self.book.title)
+        self.assertEqual(str(messages[0]), 'The book has been saved to ' + self.booklist.title)
 
     def test_cannot_add_same_book_twice(self):
         self.client.login(username=self.user.username, password="Password123")
