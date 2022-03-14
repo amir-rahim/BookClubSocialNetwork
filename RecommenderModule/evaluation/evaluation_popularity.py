@@ -13,12 +13,16 @@ class EvaluationPopularity:
     recommender = None
     evaluation_data_provider = None
     read_books_all_users = None
+    min_ratings_threshold = 100
+
+    def __init__(self, min_ratings_threshold=100):
+        self.min_ratings_threshold = min_ratings_threshold
 
     """Evaluate the possible popularity-based recommenders and print the insights."""
     def run_evaluations(self):
 
         self.trainset, self.testset = self.get_train_test_datasets()
-        self.recommender = PopularBooksMethods(self.trainset)
+        self.recommender = PopularBooksMethods(trainset=self.trainset, min_ratings_threshold=self.min_ratings_threshold)
         self.evaluate_recommenders()
 
 

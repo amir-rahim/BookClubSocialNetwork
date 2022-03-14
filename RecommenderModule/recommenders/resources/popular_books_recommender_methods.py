@@ -93,10 +93,10 @@ class PopularBooksMethods:
     def get_median_rating(self, isbn):
         ratings_sorted_arr = np.sort(self.library.get_all_ratings_for_isbn(isbn))
         if (len(ratings_sorted_arr) % 2 == 0): # even number of ratings
-            index = len(ratings_sorted_arr) // 2
+            index = (len(ratings_sorted_arr) // 2) - 1
             median = (ratings_sorted_arr[index] + ratings_sorted_arr[index+1]) / 2
         else: # odd number of ratings
-            index = (len(ratings_sorted_arr) // 2) + 1
+            index = (len(ratings_sorted_arr) // 2)
             median = ratings_sorted_arr[index]
         return median
 
