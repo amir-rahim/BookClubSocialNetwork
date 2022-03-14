@@ -118,7 +118,7 @@ class CreateMeetingView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
                     return False
             else:
                 return True
-        except:
+        except ObjectDoesNotExist:
             messages.error(self.request, 'Club not found or you are not a member of this club')
             return False
 
