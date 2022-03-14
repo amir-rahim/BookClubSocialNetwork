@@ -3,7 +3,7 @@ from django.db import IntegrityError
 from django.forms import ValidationError
 from django.test import TestCase, tag
 
-from BookClub.models import ForumPost, Vote, User
+from BookClub.models import Vote, ForumPost, ForumComment, User
 
 
 @tag('models', 'vote')
@@ -16,11 +16,12 @@ class VoteModelTestCase(TestCase):
 
     def setUp(self):
         self.vote = Vote.objects.get(pk=1)
-        self.forumPost = ForumPost.objects.get(pk=1)
+        self.forum_post = ForumPost.objects.get(pk=1)
         self.user = User.objects.get(pk=1)
-        self.forumPost.add_vote(self.vote)
+        self.forum_post.add_vote(self.vote)
         self.user2 = User.objects.get(pk=2)
-        self.forumPost.update_rating()
+        self.forum_post.update_rating()
+        self.forum_comment = ForumComment.objects.get(pk=1)
 
     def assertValid(self):
         try:
@@ -55,57 +56,78 @@ class VoteModelTestCase(TestCase):
                 creator=self.user,
                 created_on="2022-02-27T22:45:06.275Z",
                 type=True,
-                content_type=ContentType.objects.get_for_model(self.forumPost),
+                content_type=ContentType.objects.get_for_model(self.forum_post),
                 object_id=1
             )
 
     def test_save_correctly_adds_vote_and_updates_rating_for_content_up_vote(self):
-        ratingBefore = self.forumPost.get_rating()
+        ratingBefore = self.forum_post.get_rating()
         vote2 = Vote.objects.create(
             creator=self.user2,
             created_on="2022-02-27T22:45:06.275Z",
             type=True,
-            content_type=ContentType.objects.get_for_model(self.forumPost),
+            content_type=ContentType.objects.get_for_model(self.forum_post),
             object_id=1
         )
-        self.forumPost = ForumPost.objects.get(pk=1)
-        ratingAfter = self.forumPost.get_rating()
+        self.forum_post = ForumPost.objects.get(pk=1)
+        self.forum_post.update_rating()
+        ratingAfter = self.forum_post.get_rating()
         self.assertLess(ratingBefore, ratingAfter)
 
     def test_save_correctly_adds_vote_and_updates_rating_for_content_down_vote(self):
-        ratingBefore = self.forumPost.get_rating()
+        ratingBefore = self.forum_post.get_rating()
         vote2 = Vote.objects.create(
             creator=self.user2,
             created_on="2022-02-27T22:45:06.275Z",
             type=False,
-            content_type=ContentType.objects.get_for_model(self.forumPost),
+            content_type=ContentType.objects.get_for_model(self.forum_post),
             object_id=1
         )
-        self.forumPost = ForumPost.objects.get(pk=1)
-        ratingAfter = self.forumPost.get_rating()
+        self.forum_post = ForumPost.objects.get(pk=1)
+        ratingAfter = self.forum_post.get_rating()
         self.assertGreater(ratingBefore, ratingAfter)
 
     def test_save_target_does_not_exist(self):
-        self.forumPost.delete()
+        self.forum_post.delete()
         with self.assertRaises(Exception):
             vote2 = Vote.objects.create(
                 creator=self.user2,
                 created_on="2022-02-27T22:45:06.275Z",
                 type=False,
-                content_type=ContentType.objects.get_for_model(self.forumPost),
+                content_type=ContentType.objects.get_for_model(self.forum_post),
                 object_id=1
             )
 
+    def test_remove_upvote(self):
+        self.vote2 = Vote.objects.create(
+            creator=self.user2,
+            created_on="2022-02-27T22:45:06.275Z",
+            type=True,
+            content_type=ContentType.objects.get_for_model(self.forum_post),
+            object_id=1
+        )
+        self.forum_post.add_vote(self.vote2)
+        ratingBefore = self.forum_post.get_rating()
+        self.vote2.delete()
+        self.forum_post = ForumPost.objects.get(pk=1)
+        ratingAfter = self.forum_post.get_rating()
+        self.assertLess(ratingAfter, ratingBefore)
+
     def test_delete_target_exists(self):
-        ratingBefore = self.forumPost.get_rating()
-        votesBefore = self.forumPost.votes.all().count()
+        ratingBefore = self.forum_post.get_rating()
+        votesBefore = self.forum_post.votes.all().count()
         self.vote.delete()
-        self.forumPost = ForumPost.objects.get(pk=1)
-        ratingAfter = self.forumPost.get_rating()
-        votesAfter = self.forumPost.votes.all().count()
+        self.forum_post = ForumPost.objects.get(pk=1)
+        ratingAfter = self.forum_post.get_rating()
+        votesAfter = self.forum_post.votes.all().count()
         self.assertGreater(ratingAfter, ratingBefore)
         self.assertGreater(votesBefore, votesAfter)
 
     def test_delete_target_does_not_exist(self):
-        self.forumPost.delete()
+        self.forum_post.delete()
         self.vote.delete()
+
+    def test_content_type(self):
+        self.assertEqual(self.forum_post.get_content_type(), ForumPost)
+        self.assertEqual(self.forum_comment.get_content_type(), ForumComment)
+

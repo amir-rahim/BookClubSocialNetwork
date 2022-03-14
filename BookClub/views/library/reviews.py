@@ -68,13 +68,9 @@ class EditReviewView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         try:
             book = Book.objects.get(pk=self.kwargs['book_id'])
             book_review = BookReview.objects.get(book=book, user=self.request.user)
-            if book_review.user == self.request.user:
-                return True
-            else:
-                messages.error(self.request, 'You cannot edit this review!')
-                return False
+            return True
         except:
-            messages.error(self.request, 'Book or review not found!')
+            messages.error(self.request, "Book or review not found!")
             return False
 
     def handle_no_permission(self):
@@ -108,6 +104,8 @@ class DeleteReviewView(LoginRequiredMixin, View):
     def is_actionable(self, current_user, review):
         return current_user == review.user
 
+    """Handles no permssion and Reviews that don't exist"""
+
     def is_not_actionable(self):
         messages.error(self.request, "You are not allowed to delete this review or Review doesn\'t exist")
 
@@ -118,14 +116,11 @@ class DeleteReviewView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         try:
             book = Book.objects.get(id=self.kwargs['book_id'])
-            current_user = request.user
+            current_user = self.request.user
             review = BookReview.objects.get(book=book, user=current_user)
-
-            if self.is_actionable(current_user, review):
-                self.action(review)
-                return redirect(self.redirect_location)
-            else:
-                self.is_not_actionable()
+            self.action(review)
+            return redirect(self.redirect_location)
+            
         except:
             self.is_not_actionable()
             return redirect(self.redirect_location)

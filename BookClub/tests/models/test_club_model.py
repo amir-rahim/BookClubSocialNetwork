@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase, tag
 
-from BookClub.models import Club, ClubMembership
+from BookClub.models import Club, ClubMembership, User
 
 
 @tag('models', 'club')
@@ -13,11 +13,19 @@ class ClubModelTestCase(TestCase):
     ]
 
     def setUp(self):
-        self.club1 = Club.objects.get(pk=1)
-        self.club2 = Club.objects.get(pk=2)
-
+        self.club1 = Club.objects.get(pk = 1)
+        self.club2 = Club.objects.get(pk = 2)
+        self.owner = User.objects.get(pk = 1)
+        self.applicant = User.objects.get(pk = 5)
+        self.moderator = User.objects.get(pk = 3)
+        self.member = User.objects.get(pk = 6)
+        
+        ClubMembership.objects.create(user = self.applicant,club=self.club1, membership = ClubMembership.UserRoles.APPLICANT)
+        ClubMembership.objects.create(user = self.moderator,club=self.club1, membership = ClubMembership.UserRoles.MODERATOR)
+        ClubMembership.objects.create(user = self.member,club=self.club1, membership = ClubMembership.UserRoles.MEMBER)
+        
     def _assert_club_is_valid(self):
-        try:
+        try:    
             self.club1.full_clean()
         except ValidationError:
             self.fail('Test club should be valid')
@@ -29,7 +37,15 @@ class ClubModelTestCase(TestCase):
     def test_valid_club(self):
         self._assert_club_is_valid()
 
-    # Name testing
+    def test_get_absolute_url(self):
+        self.assertEqual(self.club1.get_absolute_url(),f"/club/{self.club1.club_url_name}/")
+
+
+# Name testing
+
+    def test_str_returns_name(self):
+        self.assertEqual(str(self.club1), self.club1.name)
+
     def test_name_cannot_be_blank(self):
         self.club1.name = ''
         self._assert_club_is_invalid()
@@ -124,10 +140,10 @@ class ClubModelTestCase(TestCase):
         self.club1.is_private = False
         self._assert_club_is_valid()
 
-    # Getters testing
-    def test_get_number_of_members(self):
-        owner1 = ClubMembership.objects.get(club=self.club1, membership=ClubMembership.UserRoles.OWNER)
-        self.assertEqual(self.club1.get_club_owner(), owner1, 'Club object returned a wrong owner')
+# Getters testing
+    def test_get_club_owner(self):
+        owner1 = ClubMembership.objects.get(club = self.club1, membership = ClubMembership.UserRoles.OWNER)
+        self.assertEqual(self.club1.get_club_owner(), owner1.user, 'Club object returned a wrong owner')
 
     def test_get_number_of_members(self):
         number_of_members = ClubMembership.objects.filter(club=self.club1,
@@ -152,3 +168,52 @@ class ClubModelTestCase(TestCase):
         expectedUrl = "Daves_Club_Of_Spaces"
         resultUrl = Club.convertNameToUrl(None, testName)
         self.assertEqual(expectedUrl, resultUrl)
+    
+    def test_is_applicant(self):
+        self.assertTrue(self.club1.is_applicant(self.applicant))
+        
+    def test_is_member(self):
+        self.assertTrue(self.club1.is_member(self.member))
+
+    def test_is_moderator(self):
+        self.assertTrue(self.club1.is_moderator(self.moderator))
+
+    def test_is_owner(self):
+        self.assertTrue(self.club1.is_owner(self.owner))
+         
+    # unimplemented
+    def test_get_number_of_meetings(self):
+        pass
+
+    # unimplemented
+    def test_get_number_of_posts(self):
+        pass
+
+    # unimplemented
+    def test_get_review_score(self):
+        pass
+
+    def test_get_users_with_applicants(self):
+        self.assertQuerysetEqual(self.club1.get_users(ClubMembership.UserRoles.APPLICANT), [self.applicant], ordered = False)
+
+    def test_get_users_with_members(self):
+        self.assertQuerysetEqual(self.club1.get_users(ClubMembership.UserRoles.MEMBER), [self.member], ordered = False)
+        
+    def test_get_users_with_moderators(self):
+        self.assertQuerysetEqual(self.club1.get_users(ClubMembership.UserRoles.MODERATOR), [self.moderator], ordered = False)
+
+    def test_get_users_with_owner(self):
+        self.assertQuerysetEqual(self.club1.get_users(ClubMembership.UserRoles.OWNER), [self.owner], ordered = False)
+
+    def test_get_applicants(self):
+        self.assertQuerysetEqual(self.club1.get_applicants(), [self.applicant], ordered = False)
+
+    def test_get_members(self):
+        self.assertQuerysetEqual(self.club1.get_members(), [self.member], ordered = False)
+
+    def test_get_moderators(self):
+        self.assertQuerysetEqual(self.club1.get_moderators(), [self.moderator], ordered = False)
+    
+    def test_get_owner(self):
+        self.assertQuerysetEqual(self.club1.get_owner(),[self.owner], ordered = False)
+    

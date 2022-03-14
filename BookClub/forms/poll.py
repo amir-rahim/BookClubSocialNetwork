@@ -28,13 +28,7 @@ class ISBNField(forms.CharField):
             return cleaned_field_data
 
         if Book.objects.filter(ISBN=cleaned_field_data).exists():
-            if len(cleaned_field_data) == 10 or len(cleaned_field_data) == 13:
-                return cleaned_field_data
-            else:
-                raise ValidationError(
-                    'Invalid value: ISBN value should only consist of 10 or 13 digits with final digit possibly ending in character X',
-                    code='invalid'
-                )
+            return cleaned_field_data
         else:
             raise ValidationError(
                 'Invalid value: non-existing ISBN was entered',

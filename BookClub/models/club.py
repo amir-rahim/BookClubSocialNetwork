@@ -51,26 +51,22 @@ class Club(models.Model):
         return ClubMembership.objects.filter(club=self, membership__gte=ClubMembership.UserRoles.MEMBER).count()
 
     def is_applicant(self, user):
-        return ClubMembership.objects.filter(club=self, user=user, membership__gte=ClubMembership.UserRoles.APPLICANT)
+        return ClubMembership.objects.filter(club=self, user=user, membership__gte=ClubMembership.UserRoles.APPLICANT).exists()
 
     def is_member(self, user):
-        return ClubMembership.objects.filter(club=self, user=user, membership__gte=ClubMembership.UserRoles.MEMBER)
+        return ClubMembership.objects.filter(club=self, user=user, membership__gte=ClubMembership.UserRoles.MEMBER).exists()
 
     def is_moderator(self, user):
-        return ClubMembership.objects.get(club=self, user=user, membership__gte=ClubMembership.UserRoles.MODERATOR)
+        return ClubMembership.objects.filter(club=self, user=user, membership__gte=ClubMembership.UserRoles.MODERATOR).exists()
 
     def is_owner(self, user):
-        return ClubMembership.objects.get(club=self, user=user, membership__gte=ClubMembership.UserRoles.OWNER)
+        return ClubMembership.objects.filter(club=self, user=user, membership__gte=ClubMembership.UserRoles.OWNER).exists()
 
     def convertNameToUrl(self, name):
         updated = re.sub(" +", "_", name)
         updated = re.sub("[^0-9a-zA-Z_]+", "", updated)
         return updated
 
-    def convertNameToUrl(self, name):
-        updated = re.sub(" +", "_", name)
-        updated = re.sub("[^0-9a-zA-Z_]+", "", updated)
-        return updated
     # Has unimplemented dependencies
     def get_number_of_meetings(self):
         pass
@@ -83,14 +79,6 @@ class Club(models.Model):
     def get_review_score(self):
         pass
 
-    def get_my_clubs(self):
-        try:
-            club_ids = ClubMembership.objects.filter(self=self).values_list('Club', flat=True)
-            clubs = Club.objects.filter(id__in=club_ids)
-        except ObjectDoesNotExist:
-            return None
-        return clubs
-
     def get_users(self, search_role):
         """Get all the users from the given club with the given authorization."""
 
@@ -100,11 +88,6 @@ class Club(models.Model):
                     .values_list('user__id', flat=True))
         return User.objects.filter(id__in=filterBy)
     
-    def get_applicants(self):
-        """Get all the applicants from the  given club."""
-
-        return self.get_users(ClubMembership.UserRoles.APPLICANT)
-
     def get_applicants(self):
         """Get all the applicants from the  given club."""
 

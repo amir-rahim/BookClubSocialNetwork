@@ -1,6 +1,9 @@
 """Tests of the Member List view."""
 from django.test import TestCase, tag
 from django.urls import reverse
+from django.contrib import messages
+from django.contrib.messages import get_messages
+from django.core.exceptions import ObjectDoesNotExist
 
 from BookClub.models import User, Club, ClubMembership
 
@@ -17,6 +20,7 @@ class MemberListTestCase(TestCase):
 
     def setUp(self):
         self.club = Club.objects.get(pk=1)
+        self.private_club = Club.objects.get(pk=3)
         self.url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
         self.user = User.objects.get(username="johndoe")
         self.jack = User.objects.get(username="jackdoe")
@@ -41,6 +45,29 @@ class MemberListTestCase(TestCase):
         url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
+
+    def test_non_member_can_view_member_list(self):
+        non_member = User.objects.get(pk=6)
+        self.client.login(username=non_member.username, password="Password123")
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'club_members.html')
+
+    def test_redirect_if_not_member_of_club_private(self):
+        self.client.login(username=self.user.username, password="Password123")
+        response = self.client.get(reverse("member_list", kwargs={"club_url_name": self.private_club.club_url_name}))
+        self.assertRedirects(response, expected_url=reverse("club_dashboard", kwargs={"club_url_name": self.private_club.club_url_name}), status_code=302, target_status_code=302)
+        messages_list = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.ERROR)
+        self.assertEqual(str(messages_list[0]),"This club is private and you are not a member.")
+    
+    def test_invalid_club(self):
+        self.client.login(username=self.jack.username, password="Password123")
+        response = self.client.get(reverse("member_list", kwargs={"club_url_name": 'fakeclub'}))
+        self.assertRedirects(response, expected_url=reverse("club_dashboard", kwargs={"club_url_name": 'fakeclub'}), status_code=302, target_status_code=302)
+
+    """ Tests to see what information is displayed """
 
     def test_can_see_club_name(self):
         self.client.login(username=self.user.username, password="Password123")

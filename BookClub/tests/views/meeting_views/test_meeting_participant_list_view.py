@@ -41,11 +41,8 @@ class MeetingParticipantListTestCase(TestCase, LogInTester):
         self.assertEqual(response.status_code, 302)
 
     def test_redirect_if_not_member_of_club_private(self):
-        # johndoe is not in the private club
-        self.client.login(username=self.organiser.username, password="Password123")
-        response = self.client.get(reverse("meeting_participants",
-                                           kwargs={"club_url_name": self.private_club.club_url_name,
-                                                   'meeting_id': self.private_meeting.id}))
+        self.client.login(username=self.organiser.username, password="Password123") 
+        response = self.client.get(reverse("meeting_participants", kwargs={"club_url_name": self.private_club.club_url_name, 'meeting_id': self.private_meeting.id}))
         self.assertRedirects(response, expected_url=reverse("available_clubs"), status_code=302, target_status_code=200)
 
     def test_redirect_applicant(self):
