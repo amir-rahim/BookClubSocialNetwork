@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.views.generic import DetailView
 from django.views.generic.edit import UpdateView
 
-from BookClub.forms.meeting_form import MeetingForm
+from BookClub.forms.meeting import MeetingForm
 from BookClub.models import Meeting, User
 from BookClub.models.club_membership import ClubMembership
 
