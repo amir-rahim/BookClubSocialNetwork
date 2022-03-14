@@ -1,12 +1,12 @@
 import re
-from django.db import models
-from django.urls import reverse
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
-from django.core.validators import RegexValidator
-from BookClub.models import ClubMembership, User
 
-from django.db import IntegrityError, models
 from django.apps import apps
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.validators import RegexValidator
+from django.db import IntegrityError, models
+from django.urls import reverse
+
+from BookClub.models import ClubMembership, User
 
 
 class Club(models.Model):
@@ -142,7 +142,7 @@ class Club(models.Model):
         self.add_user(user, ClubMembership.UserRoles.MODERATOR)
         
     def add_owner(self, user):
-        if not (ClubMembership.objects.filter(club=self, membership=ClubMembership.UserRoles.OWNER).exists()):
+        if not ClubMembership.objects.filter(club=self, membership=ClubMembership.UserRoles.OWNER).exists():
             self.add_user(user, ClubMembership.UserRoles.OWNER)
         else:
             # print("Owner already set")

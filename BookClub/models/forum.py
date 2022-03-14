@@ -1,6 +1,7 @@
 from django.db import models
-from BookClub.models import TextPost, TextComment
 from django.utils.text import slugify
+
+from BookClub.models import TextPost, TextComment
 
 
 class ForumPost(TextPost):
