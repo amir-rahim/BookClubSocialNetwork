@@ -87,7 +87,10 @@ def can_kick(club, user, targetUser):
 
 
 def has_membership(club, user):
-    return ClubMembership.objects.filter(user=user, club=club).exists()
+    if user.is_authenticated:
+        return ClubMembership.objects.filter(user=user, club=club).exists()
+    else:
+        return False
 
 
 def create_membership(club, user, membership):
