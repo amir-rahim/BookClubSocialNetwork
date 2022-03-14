@@ -1,9 +1,12 @@
 """Tests of the log out view."""
-from django.test import TestCase
+from django.test import TestCase, tag
 from django.urls import reverse
+
 from BookClub.models import User
 from BookClub.tests.helpers import LogInTester
 
+
+@tag("views", "authentication", "log_out")
 class LogOutViewTestCase(TestCase, LogInTester):
     """Tests of the log out view."""
 
@@ -14,7 +17,7 @@ class LogOutViewTestCase(TestCase, LogInTester):
         self.user = User.objects.get(username="johndoe")
 
     def test_log_out_url(self):
-        self.assertEqual(self.url,'/log_out/')
+        self.assertEqual(self.url, '/log_out/')
 
     def test_get_log_out(self):
         self.client.login(username='johndoe', password='Password123')

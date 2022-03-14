@@ -1,13 +1,13 @@
-from django.db import models
-from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+from django.db import models
+
 from BookClub.models import UserCreatedObject
 
 
 class RatedContent(UserCreatedObject):
     """An abstract class for any of our user created objects that User's can vote on.
         All rated content will be ordered by descending rating.
-
     """
 
     class Meta:
@@ -19,8 +19,7 @@ class RatedContent(UserCreatedObject):
     votes = models.ManyToManyField('Vote', blank=True)
 
     def update_rating(self):
-        """Force our rating to be updated, by counting the positive and negative votes and resettting our rating.
-    """
+        """Force our rating to be updated, by counting the positive and negative votes and resetting our rating."""
         count = 0
         for vote in self.votes.all():
             if vote.type:
@@ -38,9 +37,7 @@ class RatedContent(UserCreatedObject):
         return self.rating
 
     def add_vote(self, vote):
-        """Add the vote provided to our many-to-many-relationship of votes, and update our rating based on the type of vote this is.
-        
-        """
+        """Add the vote provided to our many-to-many-relationship of votes, and update our rating based on the type of vote this is."""
         if vote.type:
             self.rating = self.rating + 1
         else:

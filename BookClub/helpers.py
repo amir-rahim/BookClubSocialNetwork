@@ -1,4 +1,3 @@
-
 from django.conf import settings
 from django.shortcuts import redirect
 from BookClub.models.club import Club
@@ -19,6 +18,7 @@ class LoginProhibitedMixin:
         if self.request.user.is_authenticated:
             return redirect('home')
         return super().dispatch(request, *args, **kwargs)
+
 
 """
 Helpers for checking the authentication level of the user.
@@ -86,7 +86,8 @@ def can_kick(club, user, targetUser):
     userRank = get_rank(user, club)
     targetUserRank = get_rank(targetUser, club)
 
-    if userRank == ClubMembership.UserRoles.OWNER and (targetUserRank == ClubMembership.UserRoles.MODERATOR or targetUserRank == ClubMembership.UserRoles.MEMBER):
+    if userRank == ClubMembership.UserRoles.OWNER and (
+            targetUserRank == ClubMembership.UserRoles.MODERATOR or targetUserRank == ClubMembership.UserRoles.MEMBER):
         return True
     if userRank == ClubMembership.UserRoles.MODERATOR and targetUserRank == ClubMembership.UserRoles.MEMBER:
         return True
@@ -104,13 +105,14 @@ def create_membership(club, user, membership):
     new_membership = ClubMembership(user=user, club=club, membership=membership)
     new_membership.save()
 
+
 def delete_club(club):
     club.delete()
-   
+
+
 def delete_meeting(meeting):
     meeting.delete()
 
 
 def delete_bookreview(review):
     review.delete()
-

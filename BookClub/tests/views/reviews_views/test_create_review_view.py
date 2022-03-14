@@ -3,16 +3,12 @@ from datetime import date
 from django.test import TestCase, tag
 from django.urls import reverse
 
-from BookClub.models.user import User
-from BookClub.models.book import Book
-from BookClub.models.review import BookReview
-
 from BookClub.forms.review import ReviewForm
-
+from BookClub.models import Book, BookReview, User
 from BookClub.tests.helpers import reverse_with_next
 
 
-@tag('create_review', 'review', 'reviewform', 'book', 'user')
+@tag('book_review', 'create_review')
 class CreateReviewViewTestcase(TestCase):
     fixtures = [
         "BookClub/tests/fixtures/default_users.json",

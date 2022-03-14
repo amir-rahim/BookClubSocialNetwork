@@ -1,11 +1,12 @@
-from django.test import TestCase, tag
-from BookClub.models import Option, Poll, Book
-from django.core.exceptions import ValidationError
-
 """Test case for Option model"""
-@tag('option', 'poll', 'models')
-class OptionModelTestCase(TestCase):
+from django.core.exceptions import ValidationError
+from django.test import TestCase, tag
 
+from BookClub.models import Option, Poll, Book
+
+
+@tag('models', 'options')
+class OptionModelTestCase(TestCase):
     fixtures = [
         'BookClub/tests/fixtures/default_books.json',
         'BookClub/tests/fixtures/default_users.json',
@@ -22,15 +23,14 @@ class OptionModelTestCase(TestCase):
     def _assert_option_is_valid(self):
         try:
             self.option.full_clean()
-        except(ValidationError):
+        except ValidationError:
             self.fail('Test option should be valid')
 
     def _assert_option_is_invalid(self):
         with self.assertRaises(ValidationError):
             self.option.full_clean()
 
-
-# Fields testing
+    # Fields testing
 
     # Tests of text attribute
 

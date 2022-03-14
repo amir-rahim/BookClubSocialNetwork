@@ -1,13 +1,14 @@
-from django.test import TestCase, tag
-from django.urls import reverse
-from BookClub.models import User, BookList
-from BookClub.forms.booklist_forms import CreateBookListForm
-from BookClub.tests.helpers import reverse_with_next
-
 from datetime import date
 
-@tag('createbooklist')
-@tag('booklist')
+from django.test import TestCase, tag
+from django.urls import reverse
+
+from BookClub.forms.booklist_forms import CreateBookListForm
+from BookClub.models import User, BookList
+from BookClub.tests.helpers import reverse_with_next
+
+
+@tag("booklist", "create_list")
 class CreateBooklistViewTestcase(TestCase):
     fixtures = [
         "BookClub/tests/fixtures/default_users.json",
@@ -18,7 +19,7 @@ class CreateBooklistViewTestcase(TestCase):
     def setUp(self):
         super(TestCase, self).setUp()
         self.user = User.objects.get(username='johndoe')
-        self.url = reverse('create_booklist', kwargs={'username':self.user.username})
+        self.url = reverse('create_booklist', kwargs={'username': self.user.username})
         self.data = {
             'title': 'Booklist 1',
             'description': 'Booklist of John',
@@ -32,8 +33,8 @@ class CreateBooklistViewTestcase(TestCase):
         redirect_url = reverse_with_next('login', self.url)
         response = self.client.post(self.url, self.data, follow=True)
         self.assertRedirects(response, redirect_url,
-            status_code=302, target_status_code=200, fetch_redirect_response=True
-        )
+                             status_code=302, target_status_code=200, fetch_redirect_response=True
+                             )
         self.assertTemplateUsed(response, 'login.html')
         booklist_count_after = BookList.objects.count()
         self.assertEqual(booklist_count_after, booklist_count_before)
@@ -43,8 +44,8 @@ class CreateBooklistViewTestcase(TestCase):
         redirect_url = reverse_with_next('login', self.url)
         response = self.client.get(self.url, follow=True)
         self.assertRedirects(response, redirect_url,
-            status_code=302, target_status_code=200, fetch_redirect_response=True
-        )
+                             status_code=302, target_status_code=200, fetch_redirect_response=True
+                             )
         self.assertTemplateUsed(response, 'login.html')
         booklist_count_after = BookList.objects.count()
         self.assertEqual(booklist_count_after, booklist_count_before)
@@ -76,9 +77,9 @@ class CreateBooklistViewTestcase(TestCase):
         before_count = BookList.objects.count()
         saving_date = date.today()
         response = self.client.post(self.url, self.data, follow=True)
-        booklist = BookList.objects.get(title = self.data['title'])
+        booklist = BookList.objects.get(title=self.data['title'])
         after_count = BookList.objects.count()
-        self.assertEqual(after_count, before_count+1)
+        self.assertEqual(after_count, before_count + 1)
         response_url = reverse('booklists_list', kwargs={'username': self.user.username})
         self.assertRedirects(response, response_url, status_code=302, target_status_code=200)
         self.assertTemplateUsed(response, 'user_booklists.html')

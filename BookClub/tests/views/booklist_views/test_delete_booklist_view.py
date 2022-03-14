@@ -1,12 +1,12 @@
+from django.contrib import messages
 from django.test import TestCase, tag
 from django.urls import reverse
-from django.contrib import messages
 
-from BookClub.models import User, Book, BookList
+from BookClub.models import User, BookList
 from BookClub.tests.helpers import LogInTester, reverse_with_next
 
 
-@tag('booklist', 'book', 'user', 'booklist_view', 'deletebooklist')
+@tag("booklist", "delete_list")
 class DeleteBookListView(TestCase, LogInTester):
     fixtures = [
         'BookClub/tests/fixtures/default_users.json',

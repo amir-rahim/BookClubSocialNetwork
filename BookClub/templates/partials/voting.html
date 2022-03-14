@@ -9,7 +9,8 @@
 {% endif %}
 <form id="upvoteform"
       method="post"
-      action="{% url 'upvote' %}" class="voteform">
+      action="{% url 'upvote' %}"
+      class="voteform">
     {% csrf_token %}
     <input type="hidden" name="type" value="true"/>
     <input type="hidden" name="creator" value="{{ user.id }}"/>
@@ -19,7 +20,7 @@
     <input type="hidden" name="object_id" value="{{ content.id }}"/>
     <p class="control" type="submit">
         <button id="upvote{{ contenttype }}{{ content.id }}"
-                class="button is-rounded is-white {% if vote_type == True %} is-primary  {% endif %}"
+                class="button is-rounded is-white {% if vote_type == True %} is-primary{% endif %}"
                 aria-label="Upvote">
             <span class="icon">
                 <i class="fa-solid fa-arrow-up"></i>
@@ -29,7 +30,8 @@
 </form>
 <form id="downvoteform"
       method="post"
-      action="{% url 'downvote' %}" class="voteform">
+      action="{% url 'downvote' %}"
+      class="voteform">
     {% csrf_token %}
     <input type="hidden" name="type" value="false"/>
     <input type="hidden" name="creator" value="{{ user.id }}"/>
@@ -39,7 +41,7 @@
     <input type="hidden" name="object_id" value="{{ content.id }}"/>
     <p class="control" type="submit">
         <button id="downvote{{ contenttype }}{{ content.id }}"
-                class="button is-white is-rounded {% if vote_type == False %} is-danger  {% endif %}"
+                class="button is-white is-rounded {% if vote_type == False %} is-danger{% endif %}"
                 aria-label="Downvote">
             <span class="icon">
                 <i class="fa-solid fa-arrow-down"></i>
@@ -47,4 +49,8 @@
         </button>
     </p>
 </form>
-<button id="votecount{{ contenttype }}{{ content.id }}" class="button is-rounded" disabled>{{ content.rating }}</button>
+<button id="votecount{{ contenttype }}{{ content.id }}"
+        class="button is-rounded"
+        disabled>
+    {{ content.rating }}
+</button>

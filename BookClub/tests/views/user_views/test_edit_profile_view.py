@@ -1,10 +1,13 @@
 from django.contrib import messages
-from django.test import TestCase
+from django.test import TestCase, tag
 from django.urls import reverse
+
 from BookClub.forms.user_forms import EditProfileForm
 from BookClub.models import User
 from BookClub.tests.helpers import reverse_with_query
 
+
+@tag('user', 'edit_profile')
 class EditProfileTestCase(TestCase):
     """ Unit tests for the edit profile view """
 
@@ -34,7 +37,7 @@ class EditProfileTestCase(TestCase):
         self.assertEqual(form.instance, self.user)
 
     def test_get_profile_redirects_when_not_logged_in(self):
-        redirect_url = reverse_with_query('login',query_kwargs={'next':reverse('edit_profile')})
+        redirect_url = reverse_with_query('login', query_kwargs={'next': reverse('edit_profile')})
         response = self.client.get(self.url)
         self.assertRedirects(response,
                              redirect_url,
@@ -43,7 +46,7 @@ class EditProfileTestCase(TestCase):
 
     def test_unsuccessful_profile_update(self):
         self.client.login(username=self.user.username, password='Password123')
-        self.form_input['username'] = 'BAD_USERNAME!'
+        self.form_input['username'] = 'BAD_USERNAME!.'
         before_count = User.objects.count()
         response = self.client.post(self.url, self.form_input)
         after_count = User.objects.count()
@@ -96,7 +99,7 @@ class EditProfileTestCase(TestCase):
         self.assertEqual(self.user.public_bio, 'Hello World!')
 
     def test_post_profile_redirects_when_not_logged_in(self):
-        redirect_url = reverse_with_query('login',query_kwargs={'next':reverse('edit_profile')})
+        redirect_url = reverse_with_query('login', query_kwargs={'next': reverse('edit_profile')})
         response = self.client.post(self.url, self.form_input)
         self.assertRedirects(response,
                              redirect_url,

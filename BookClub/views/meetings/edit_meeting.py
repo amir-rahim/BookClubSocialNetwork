@@ -1,20 +1,16 @@
-from django.conf import settings
 from django.contrib import messages
-from django.shortcuts import redirect
-from django.views import View
-from django.views.generic.edit import UpdateView
-from django.views.generic import DetailView
-from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from BookClub.forms.meeting_form import MeetingForm
-from BookClub.models.club import Club
-from BookClub.forms.club import ClubForm
-from BookClub.forms.meeting_form import MeetingForm
-from BookClub.models.club_membership import ClubMembership
-from BookClub.models.meeting import Meeting
-from BookClub.models.user import User
+from django.shortcuts import redirect
+from django.urls import reverse
+from django.views.generic import DetailView
+from django.views.generic.edit import UpdateView
 
-class EditMeetingView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
+from BookClub.forms.meeting_form import MeetingForm
+from BookClub.models import Meeting, User
+from BookClub.models.club_membership import ClubMembership
+
+
+class EditMeetingView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Meeting
     form_class = MeetingForm
     template_name = 'edit_meeting.html'
@@ -26,49 +22,45 @@ class EditMeetingView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
             club = meeting.get_club()
             organiser = meeting.get_organiser()
             rank = ClubMembership.objects.get(club=club, user=self.request.user)
-            #The only people who can edit the meeting are the Owner (of the club) or the organiser.
-            if(rank.membership != ClubMembership.UserRoles.OWNER and rank.membership != ClubMembership.UserRoles.MODERATOR and self.request.user != organiser):
-                messages.add_message(self.request, messages.ERROR,'Access denied')
+            # The only people who can edit the meeting are the Owner (of the club) or the organiser.
+            if rank.membership != ClubMembership.UserRoles.OWNER and rank.membership != ClubMembership.UserRoles.MODERATOR and self.request.user != organiser:
+                messages.add_message(self.request, messages.ERROR, 'Access denied')
                 return False
-            else:
-                return True
+            return True
         except:
-            messages.add_message(self.request, messages.ERROR,'Meeting not found or you are not a participant of this meeting')
+            messages.add_message(self.request, messages.ERROR,
+                                 'Meeting not found or you are not a participant of this meeting')
             return False
-
 
     def get_success_url(self):
         """Return redirect URL after successful update."""
         messages.add_message(self.request, messages.SUCCESS, "Meeting updated!")
-        #Need to change to whatever the meeting page is called 
+        # Need to change to whatever the meeting page is called
         return reverse('meeting_details', kwargs=self.kwargs)
 
     def handle_no_permission(self):
         if not self.request.user.is_authenticated:
             return super(LoginRequiredMixin, self).handle_no_permission()
         else:
-            url = reverse('meeting_list', kwargs = {'club_url_name' : self.kwargs['club_url_name']})
+            url = reverse('meeting_list', kwargs={'club_url_name': self.kwargs['club_url_name']})
             return redirect(url)
-        
 
     def get_object(self):
         try:
             return super().get_object()
         except:
-            messages.add_message(self.request,messages.ERROR,'Meeting not found!')
+            messages.add_message(self.request, messages.ERROR, 'Meeting not found!')
             return None
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        try:
-            meeting = self.get_object()
-            context['meeting'] = meeting
-            context['id'] = meeting.id
-            context['club'] = meeting.get_club()
-            context['members'] = meeting.members.all()
-        except:
-            return context
+        meeting = self.get_object()
+        context['meeting'] = meeting
+        context['id'] = meeting.id
+        context['club'] = meeting.get_club()
+        context['members'] = meeting.members.all()
         return context
+
 
 class RemoveMeetingMember(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = Meeting
@@ -82,13 +74,13 @@ class RemoveMeetingMember(LoginRequiredMixin, UserPassesTestMixin, DetailView):
             organiser = meeting.get_organiser()
             rank = ClubMembership.objects.get(
                 club=club, user=self.request.user)
-            #The only people who can edit the meeting are the Owner (of the club) or the organiser.
-            if(rank.membership != ClubMembership.UserRoles.OWNER and rank.membership != ClubMembership.UserRoles.MODERATOR and self.request.user != organiser):
+            # The only people who can edit the meeting are the Owner (of the club) or the organiser.
+            if rank.membership != ClubMembership.UserRoles.OWNER and rank.membership != ClubMembership.UserRoles.MODERATOR and self.request.user != organiser:
                 messages.add_message(
                     self.request, messages.ERROR, 'Access denied')
                 return False
-            else:
-                return True
+
+            return True
         except:
             messages.add_message(self.request, messages.ERROR,
                                  'Meeting not found or you are not a participant of this meeting')
@@ -97,11 +89,10 @@ class RemoveMeetingMember(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     def handle_no_permission(self):
         if not self.request.user.is_authenticated:
             return super(LoginRequiredMixin, self).handle_no_permission()
-        else:
-            url = reverse('meeting_list', kwargs={
-                          'club_url_name': self.kwargs['club_url_name']})
-            return redirect(url)
-    
+
+        url = reverse('meeting_list', kwargs={'club_url_name': self.kwargs['club_url_name']})
+        return redirect(url)
+
     def post(self, request, *args, **kwargs):
         meeting = self.get_object()
         user = self.kwargs.get('member_id')
@@ -116,14 +107,8 @@ class RemoveMeetingMember(LoginRequiredMixin, UserPassesTestMixin, DetailView):
                 kwargs.pop('member_id')
                 messages.error(request, "Cannot kick organiser!")
                 return redirect(reverse('meeting_details', kwargs=kwargs))
-                
+
         else:
             kwargs.pop('member_id')
             messages.error(request, "User not found!")
             return redirect(reverse('meeting_details', kwargs=kwargs))
-        
-    
-    
-    
-    
-    

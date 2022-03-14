@@ -1,13 +1,14 @@
-from django.test import TestCase, tag
-from django.urls import reverse
 from django.contrib.messages import get_messages
 from django.core.exceptions import ObjectDoesNotExist
-from BookClub.models import User, Meeting, Club, ClubMembership
+from django.test import TestCase, tag
+from django.urls import reverse
 from django.utils import timezone
+
+from BookClub.models import User, Meeting, Club, ClubMembership
 from BookClub.tests.helpers import LogInTester
 
 
-@tag("meeting","joinmeetingview")
+@tag("meeting", "join_meeting")
 class JoinMeetingViewTestCase(TestCase, LogInTester):
     """Tests of the Join Meeting view."""
 
@@ -28,7 +29,7 @@ class JoinMeetingViewTestCase(TestCase, LogInTester):
         self.url = reverse('join_meeting', kwargs={'club_url_name' : self.club.club_url_name, 'meeting_id': self.future_meeting.id})
 
     def test_url(self):
-        self.assertEqual(self.url,f'/club/{self.club.club_url_name}/meetings/{self.future_meeting.id}/join')
+        self.assertEqual(self.url,f'/club/{self.club.club_url_name}/meetings/{self.future_meeting.id}/join/')
 
     def test_redirect_when_not_logged_in(self):
         self.assertFalse(self._is_logged_in())

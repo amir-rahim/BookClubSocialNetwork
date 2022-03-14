@@ -1,11 +1,11 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.contenttypes.models import ContentType
 from django.http import JsonResponse
 from django.shortcuts import redirect
+from django.views.generic import CreateView
+
 from BookClub.forms import VoteForm
 from BookClub.models import Vote
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView
-from django.contrib import messages
-from django.contrib.contenttypes.models import ContentType
 
 
 class CreateVoteView(LoginRequiredMixin, CreateView):
@@ -21,14 +21,14 @@ class CreateVoteView(LoginRequiredMixin, CreateView):
                 user = form.instance.creator
                 content_type = form.instance.content_type
                 object_id = form.instance.object_id
-                thisVoteType = form.instance.type
+                this_vote_type = form.instance.type
 
-                previousVote = Vote.objects.get(
+                previous_vote = Vote.objects.get(
                     creator=user, content_type=content_type, object_id=object_id)
-                previousVoteType = previousVote.type
+                previous_vote_type = previous_vote.type
 
-                if previousVoteType != thisVoteType:
-                    previousVote.delete()
+                if previous_vote_type != this_vote_type:
+                    previous_vote.delete()
 
                 else:
                     self.form_invalid(form)
@@ -38,15 +38,15 @@ class CreateVoteView(LoginRequiredMixin, CreateView):
     def get_response_json(self, form, vote):
         try:
             object_type = ContentType.objects.get(pk=form.instance.content_type.id)
-            object = object_type.get_object_for_this_type(pk=form.instance.object_id)
-            upvoteUsable = True
-            downvoteUsable = True
+            target = object_type.get_object_for_this_type(pk=form.instance.object_id)
+            upvote_usable = True
+            downvote_usable = True
             if vote is not None:
                 if vote.type:
-                    upvoteUsable = False
+                    upvote_usable = False
                 else:
-                    downvoteUsable = False
-            response = JsonResponse(({"rating": object.rating, "downvote": downvoteUsable, "upvote": upvoteUsable}))
+                    downvote_usable = False
+            response = JsonResponse(({"rating": target.rating, "downvote": downvote_usable, "upvote": upvote_usable}))
             return response
         except Exception:
             return redirect(self.get_success_url());

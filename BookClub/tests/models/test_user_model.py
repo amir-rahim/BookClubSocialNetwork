@@ -1,8 +1,10 @@
+from django.core.exceptions import ValidationError
 from django.test import TestCase, tag
-from BookClub.models import User
-from django.core.exceptions import ValidationError  # Create your tests here.
 
-@tag('usermodel','user')
+from BookClub.models import User
+
+
+@tag('models', 'user')
 class UserModelTestCase(TestCase):
 
     fixtures = ['BookClub/tests/fixtures/default_users.json']
@@ -16,7 +18,7 @@ class UserModelTestCase(TestCase):
     def _assert_user_is_valid(self):
         try:
             self.user.full_clean()
-        except (ValidationError):
+        except ValidationError:
             self.fail('Test user should be valid')
 
     def _assert_user_is_invalid(self):

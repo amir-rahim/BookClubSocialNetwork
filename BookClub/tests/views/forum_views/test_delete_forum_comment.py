@@ -1,6 +1,7 @@
 from django.test import TestCase, tag
 from django.urls import reverse
-from BookClub.models import User, Forum, ForumPost, ForumComment, Club
+
+from BookClub.models import User, ForumPost, ForumComment, Club
 from BookClub.tests.helpers import reverse_with_next
 
 

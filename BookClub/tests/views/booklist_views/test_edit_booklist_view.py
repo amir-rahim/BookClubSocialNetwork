@@ -1,13 +1,14 @@
 """Tests for editing book list details"""
-from django.test import TestCase, tag
-from django.urls import reverse
-from BookClub.models import User, Book, BookList
-from BookClub.tests.helpers import LogInTester, reverse_with_next
 from django.contrib import messages
 from django.contrib.messages import get_messages
+from django.test import TestCase, tag
+from django.urls import reverse
+
+from BookClub.models import User, BookList
+from BookClub.tests.helpers import LogInTester, reverse_with_next
 
 
-@tag('booklist', 'editbooklist')
+@tag("booklist", "edit_list")
 class EditBookListViewTestCase(TestCase, LogInTester):
     """Tests for editing book list details"""
 

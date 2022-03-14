@@ -1,9 +1,11 @@
 """Tests of the available_clubs view."""
-from django.test import TestCase
+from django.test import TestCase, tag
 from django.urls import reverse
+
 from BookClub.models import User, Club, ClubMembership
 
 
+@tag('club', 'available_clubs')
 class AvailableClubsViewTestCase(TestCase):
     """Tests of the available_clubs view."""
 
@@ -43,7 +45,7 @@ class AvailableClubsViewTestCase(TestCase):
         self.assertTemplateUsed(response, 'available_clubs.html')
         clubs = list(response.context['clubs'])
         self.assertEqual(len(clubs), 0)
-        self.assertContains(response, "<p style=\"text-align: center\">There are no available clubs at the moment.</p>")
+        self.assertContains(response, "There are no available clubs at the moment.")
 
     def test_contains_club_not_member_of(self):
         self.client.login(username=self.user.username, password='Password123')

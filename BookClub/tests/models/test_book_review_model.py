@@ -7,7 +7,7 @@ from django.test import TestCase, tag
 from BookClub.models.user import User
 
 
-@tag('review', 'book', 'models')
+@tag('models', 'reviews')
 class BookReviewModelTestCase(TestCase):
     
     fixtures=[

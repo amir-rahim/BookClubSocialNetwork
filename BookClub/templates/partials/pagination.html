@@ -1,15 +1,17 @@
-<nav class="pagination is-rounded is-left" role="navigation" aria-label="pagination">
+<nav class="pagination is-rounded is-left"
+     role="navigation"
+     aria-label="pagination">
     {% if page_obj.has_previous %}
         <a class="pagination-previous" href="?page=1">&#60;&#60; First</a>
-        <a class="pagination-previous" href="?page={{ page_obj.previous_page_number }}">&#60; Previous</a>
+        <a class="pagination-previous"
+           href="?page={{ page_obj.previous_page_number }}">&#60; Previous</a>
     {% endif %}
-
     <ul class="pagination-list">
         <li>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</li>
     </ul>
-
     {% if page_obj.has_next %}
         <a class="pagination-next" href="?page={{ page_obj.next_page_number }}">Next &#62;</a>
-        <a class="pagination-next" href="?page={{ page_obj.paginator.num_pages }}">Last &#62;&#62;</a>
+        <a class="pagination-next"
+           href="?page={{ page_obj.paginator.num_pages }}">Last &#62;&#62;</a>
     {% endif %}
 </nav>

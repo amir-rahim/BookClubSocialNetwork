@@ -1,12 +1,15 @@
-from django import forms
-from django.test import TestCase, tag
-from BookClub.models.club import Club
-from BookClub.forms.club import ClubForm
-
 from datetime import date
-@tag('clubform','club')
+
+from django.test import TestCase, tag
+
+from BookClub.forms.club import ClubForm
+from BookClub.models.club import Club
+
+
+@tag('forms', 'club')
 class ClubFormTestCase(TestCase):
     """Unit tests for Club Form"""
+
     def setUp(self):
         self.form_input = {
             'name': 'Johnathan\'s Club',
@@ -19,7 +22,7 @@ class ClubFormTestCase(TestCase):
         }
 
     def test_valid_club_form(self):
-        form = ClubForm(data = self.form_input)
+        form = ClubForm(data=self.form_input)
         self.assertTrue(form.is_valid())
 
     def test_form_has_necessary_fields(self):
@@ -33,17 +36,17 @@ class ClubFormTestCase(TestCase):
 
     def test_form_uses_model_validation(self):
         self.form_input['description'] = 'x' * 251
-        form = ClubForm(data = self.form_input)
+        form = ClubForm(data=self.form_input)
         self.assertFalse(form.is_valid())
 
     def test_form_must_save_correctly(self):
-        form = ClubForm(data = self.form_input)
+        form = ClubForm(data=self.form_input)
         before_count = Club.objects.count()
         saving_date = date.today()
         form.save()
         after_count = Club.objects.count()
         self.assertEqual(after_count, before_count + 1)
-        club = Club.objects.get(name = self.form_input['name'])
+        club = Club.objects.get(name=self.form_input['name'])
         self.assertEqual(club.name, self.form_input['name'])
         self.assertEqual(club.club_url_name, self.form_input['club_url_name'])
         self.assertEqual(club.description, self.form_input['description'])

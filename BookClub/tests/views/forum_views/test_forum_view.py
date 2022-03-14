@@ -1,10 +1,11 @@
 from django.test import TestCase, tag
 from django.urls import reverse
-from BookClub.models import User, Forum, ForumPost, Club
+
+from BookClub.models import User, ForumPost, Club
 from BookClub.tests.helpers import reverse_with_next
 
 
-@tag('forum', 'forumview')
+@tag('forum', 'forum_view')
 class ForumViewTestCase(TestCase):
     """Tests of the Forum view."""
 
@@ -74,8 +75,7 @@ class ForumViewTestCase(TestCase):
         self.assertTemplateUsed(response, 'global_forum.html')
         posts = list(response.context['posts'])
         self.assertEqual(len(posts), 0)
-        self.assertContains(response, "<p style=\"text-align: center\">There are no posts at the moment. Be first to "
-                                      "post!</p>")
+        self.assertContains(response, "There are no posts at the moment. Be first to post!")
 
     def test_no_club_posts(self):
         self.client.login(username=self.user.username, password="Password123")
@@ -85,8 +85,7 @@ class ForumViewTestCase(TestCase):
         self.assertTemplateUsed(response, 'global_forum.html')
         posts = list(response.context['posts'])
         self.assertEqual(len(posts), 0)
-        self.assertContains(response, "<p style=\"text-align: center\">There are no posts at the moment. Be first to "
-                                      "post!</p>")
+        self.assertContains(response, "There are no posts at the moment. Be first to post!")
 
     def test_post_details_show(self):
         response = self.client.get(self.url)

@@ -1,15 +1,15 @@
 """Test the Create Meeting view."""
-from datetime import date, datetime
-from django.test import TestCase, tag
-from django.urls import reverse
 from django.contrib import messages
 from django.contrib.messages import get_messages
-from BookClub.models import User, Club, ClubMembership, Meeting, Book
+from django.test import TestCase, tag
+from django.urls import reverse
+
 from BookClub.forms.meeting import MeetingForm
+from BookClub.models import User, Club, ClubMembership, Meeting, Book
 from BookClub.tests.helpers import reverse_with_next
 
 
-@tag('createmeeting', 'club')
+@tag('meeting', 'create_meeting')
 class CreateMeetingViewTestCase(TestCase):
     """Test the Create Meeting view."""
 

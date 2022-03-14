@@ -1,17 +1,18 @@
 from datetime import datetime
-import pytz
 
+import pytz
 from django import forms
-from django.core.validators import RegexValidator
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.validators import RegexValidator
 
 from BookClub.models import Club, Book, Poll, Option
+
 
 class ISBNField(forms.CharField):
     default_validators = [
         RegexValidator(
-            regex = r'^([\d]+)(X)?$',
-            message = 'ISBN value should only consist of 10 or 13 digits with final digit possibly ending in character X'
+            regex=r'^([\d]+)(X)?$',
+            message='ISBN value should only consist of 10 or 13 digits with final digit possibly ending in character X'
         )
     ]
 
@@ -27,13 +28,7 @@ class ISBNField(forms.CharField):
             return cleaned_field_data
 
         if Book.objects.filter(ISBN=cleaned_field_data).exists():
-            if len(cleaned_field_data) == 10 or len(cleaned_field_data) == 13:
-                return cleaned_field_data
-            else:
-                raise ValidationError(
-                    'Invalid value: ISBN value should only consist of 10 or 13 digits with final digit possibly ending in character X',
-                    code='invalid'
-                )
+            return cleaned_field_data
         else:
             raise ValidationError(
                 'Invalid value: non-existing ISBN was entered',
@@ -41,25 +36,33 @@ class ISBNField(forms.CharField):
             )
 
 
-
 class PollForm(forms.Form):
     poll_title = forms.CharField(max_length=120)
-    deadline = forms.DateTimeField(required=False, label='Voting deadline [YYYY-MM-DD hh:mm:ss]', widget=forms.TextInput(attrs={'placeholder': 'Optional'}))
+    deadline = forms.DateTimeField(required=False, label='Voting deadline [YYYY-MM-DD hh:mm:ss]',
+                                   widget=forms.TextInput(attrs={'placeholder': 'Optional'}))
 
     option_1_text = forms.CharField(max_length=120)
-    option_1_isbn = ISBNField(required=False, label='Attach book (enter ISBN) to option 1', widget=forms.TextInput(attrs={'placeholder': 'Optional'}))
+    option_1_isbn = ISBNField(required=False, label='Attach book (enter ISBN) to option 1',
+                              widget=forms.TextInput(attrs={'placeholder': 'Optional'}))
 
     option_2_text = forms.CharField(max_length=120)
-    option_2_isbn = ISBNField(required=False, label='Attach book (enter ISBN) to option 2', widget=forms.TextInput(attrs={'placeholder': 'Optional'}))
+    option_2_isbn = ISBNField(required=False, label='Attach book (enter ISBN) to option 2',
+                              widget=forms.TextInput(attrs={'placeholder': 'Optional'}))
 
-    option_3_text = forms.CharField(max_length=120, required=False, widget=forms.TextInput(attrs={'placeholder': 'Optional'}))
-    option_3_isbn = ISBNField(required=False, label='Attach book (enter ISBN) to option 3', widget=forms.TextInput(attrs={'placeholder': 'Optional'}))
+    option_3_text = forms.CharField(max_length=120, required=False,
+                                    widget=forms.TextInput(attrs={'placeholder': 'Optional'}))
+    option_3_isbn = ISBNField(required=False, label='Attach book (enter ISBN) to option 3',
+                              widget=forms.TextInput(attrs={'placeholder': 'Optional'}))
 
-    option_4_text = forms.CharField(max_length=120, required=False, widget=forms.TextInput(attrs={'placeholder': 'Optional'}))
-    option_4_isbn = ISBNField(required=False, label='Attach book (enter ISBN) to option 4', widget=forms.TextInput(attrs={'placeholder': 'Optional'}))
+    option_4_text = forms.CharField(max_length=120, required=False,
+                                    widget=forms.TextInput(attrs={'placeholder': 'Optional'}))
+    option_4_isbn = ISBNField(required=False, label='Attach book (enter ISBN) to option 4',
+                              widget=forms.TextInput(attrs={'placeholder': 'Optional'}))
 
-    option_5_text = forms.CharField(max_length=120, required=False, widget=forms.TextInput(attrs={'placeholder': 'Optional'}))
-    option_5_isbn = ISBNField(required=False, label='Attach book (enter ISBN) to option 5', widget=forms.TextInput(attrs={'placeholder': 'Optional'}))
+    option_5_text = forms.CharField(max_length=120, required=False,
+                                    widget=forms.TextInput(attrs={'placeholder': 'Optional'}))
+    option_5_isbn = ISBNField(required=False, label='Attach book (enter ISBN) to option 5',
+                              widget=forms.TextInput(attrs={'placeholder': 'Optional'}))
 
     def save(self, club):
         if not self.is_valid():
@@ -75,10 +78,10 @@ class PollForm(forms.Form):
             poll_active = False
 
         new_poll = Poll(
-            title = self.cleaned_data['poll_title'],
-            club = club,
-            deadline = self.cleaned_data['deadline'],
-            active = poll_active
+            title=self.cleaned_data['poll_title'],
+            club=club,
+            deadline=self.cleaned_data['deadline'],
+            active=poll_active
         )
         new_poll.full_clean()
         new_poll.save()
@@ -86,7 +89,7 @@ class PollForm(forms.Form):
         saved_options = []
 
         # Saving required options
-        for i in range(1,3):
+        for i in range(1, 3):
             text_key = 'option_' + str(i) + '_text'
             isbn_key = 'option_' + str(i) + '_isbn'
             option_n_input = self.cleaned_data[text_key]
@@ -102,7 +105,7 @@ class PollForm(forms.Form):
             saved_options.append(option_n)
 
         # saving optional options
-        for i in range(3,6):
+        for i in range(3, 6):
             text_key = 'option_' + str(i) + '_text'
             option_n_input = self.cleaned_data[text_key]
 
@@ -118,4 +121,4 @@ class PollForm(forms.Form):
                 option_n.save()
                 saved_options.append(option_n)
 
-        return (new_poll, saved_options)
+        return new_poll, saved_options

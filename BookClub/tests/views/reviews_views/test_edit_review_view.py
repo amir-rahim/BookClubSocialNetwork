@@ -1,13 +1,14 @@
 """Tests for editing review and rating"""
-from django.test import TestCase, tag
-from django.urls import reverse
-from BookClub.models import User, Book, BookReview
-from BookClub.tests.helpers import LogInTester, reverse_with_next
 from django.contrib import messages
 from django.contrib.messages import get_messages
+from django.test import TestCase, tag
+from django.urls import reverse
+
+from BookClub.models import User, Book, BookReview
+from BookClub.tests.helpers import LogInTester, reverse_with_next
 
 
-@tag('book', 'editreview')
+@tag('book_review', 'edit_review')
 class EditReviewView(TestCase, LogInTester):
     """Tests for editing review and rating"""
 
@@ -35,7 +36,8 @@ class EditReviewView(TestCase, LogInTester):
     def test_post_edit_review_redirects_when_not_logged_in(self):
         redirect_url = reverse_with_next('login', self.url)
         response = self.client.post(self.url, self.data, follow=True)
-        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200, fetch_redirect_response=True)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200,
+                             fetch_redirect_response=True)
         self.assertTemplateUsed(response, 'login.html')
 
     def test_edit_review_redirects_when_different_user(self):
@@ -46,7 +48,8 @@ class EditReviewView(TestCase, LogInTester):
         messages_list = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.ERROR)
-        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200, fetch_redirect_response=True)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200,
+                             fetch_redirect_response=True)
         self.assertTemplateUsed(response, 'book_reviews.html')
 
     '''Tests for user successfully editing the review and rating'''
@@ -121,5 +124,56 @@ class EditReviewView(TestCase, LogInTester):
         redirect_url = reverse('book_reviews', kwargs={'book_id': self.book.id})
         messages_list = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
-        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200, fetch_redirect_response=True)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200,
+                             fetch_redirect_response=True)
         self.assertTemplateUsed(response, 'book_reviews.html')
+
+    def test_cannot_edit_other_users_rating_and_review(self):
+        self.client.login(username=self.another_user.username, password="Password123")
+        self.assertTrue(self._is_logged_in())
+        book_rating_before = self.book_review.rating
+        book_review_before = self.book_review.review
+        response = self.client.post(self.url, self.data, follow=True)
+        self.book_review.refresh_from_db()
+        self.assertTemplateNotUsed('edit_review.html')
+        messages_list = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list), 1)
+        self.assertTrue(messages_list[0].level,messages.ERROR)
+        self.assertEqual(str(messages_list[0]),"Book or review not found!")
+        self.assertNotEqual(self.book_review.user.id, self.another_user.id)
+        self.assertEqual(self.book_review.rating, book_rating_before)
+        self.assertEqual(self.book_review.review, book_review_before)
+
+    def test_cannot_edit_other_users_rating(self):
+        self.client.login(username=self.another_user.username, password="Password123")
+        self.assertTrue(self._is_logged_in())
+        self.data['review'] = 'Lorem Ipsum'
+        book_rating_before = self.book_review.rating
+        book_review_before = self.book_review.review
+        response = self.client.post(self.url, self.data, follow=True)
+        self.book_review.refresh_from_db()
+        self.assertTemplateNotUsed('edit_review.html')
+        messages_list = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list), 1)
+        self.assertTrue(messages_list[0].level,messages.ERROR)
+        self.assertEqual(str(messages_list[0]),"Book or review not found!")
+        self.assertNotEqual(self.book_review.user.id, self.another_user.id)
+        self.assertEqual(self.book_review.rating, book_rating_before)
+        self.assertEqual(self.book_review.review, book_review_before)
+
+    def test_cannot_edit_other_users_review(self):
+        self.client.login(username=self.another_user.username, password="Password123")
+        self.assertTrue(self._is_logged_in())
+        self.data['rating'] = 1
+        book_rating_before = self.book_review.rating
+        book_review_before = self.book_review.review
+        response = self.client.post(self.url, self.data, follow=True)
+        self.book_review.refresh_from_db()
+        self.assertTemplateNotUsed('edit_review.html')
+        messages_list = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list), 1)
+        self.assertTrue(messages_list[0].level,messages.ERROR)
+        self.assertEqual(str(messages_list[0]),"Book or review not found!")
+        self.assertNotEqual(self.book_review.user.id, self.another_user.id)
+        self.assertEqual(self.book_review.rating, book_rating_before)
+        self.assertEqual(self.book_review.review, book_review_before)

@@ -1,63 +1,69 @@
 {% extends 'base_content.html' %}
-
 {% block page_title %}
-{{ book.title }}
+    {{ book.title }}
 {% endblock page_title %}
-
 {% block page_subtitle %}
-This is the detail view for {{book.title}}
+    This is the detail view for {{ book.title }}
 {% endblock page_subtitle %}
-
 {% block content %}
     <div class="columns">
-
         <div class="column is-3">
-
             <a class="button is-fullwidth is-link" href="{% url 'library_books' %}"><b>Back to Books</b></a>
-
             <hr class="solid">
-
             <div class="card">
                 <div class="card-image">
                     <figure class="image">
                         {% if book.imageL %}
-                        <img src="{{ book.imageL }}" alt="Book Cover">
+                            <img src="{{ book.imageL }}" alt="Book Cover">
                         {% else %}
-                        <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" alt="Book Cover">
+                            <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+                                 alt="Book Cover">
                         {% endif %}
                     </figure>
                 </div>
             </div>
-
             <hr class="solid">
-
             <div class="card">
                 <div class="card-content">
-                    <p class="subtitle"><b>Published in: </b>
+                    <p class="subtitle">
+                        <b>Published in: </b>
                         {% if book.getPublicationYear == 1 %}
                             Information not available
-                        {%else%}
+                        {% else %}
                             {{ book.getPublicationYear }}
-                        {%endif%}</p>
-                    <p class="subtitle"><b>Published by: </b> {{ book.publisher }}</p>
-                    <p class="subtitle"><b>ISBN: </b>{{ book.ISBN }}</p>
-                    <p class="subtitle"><b>Author: </b>{{ book.author }}</p>
+                        {% endif %}
+                    </p>
+                    <p class="subtitle">
+                        <b>Published by: </b> {{ book.publisher }}
+                    </p>
+                    <p class="subtitle">
+                        <b>ISBN: </b>{{ book.ISBN }}
+                    </p>
+                    <p class="subtitle">
+                        <b>Author: </b>{{ book.author }}
+                    </p>
                 </div>
             </div>
-
         </div>
-
         <div class="column is-9">
-
-            <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
+            <nav class="breadcrumb"
+                 aria-label="breadcrumbs"
+                 style="padding-left: 5px;">
                 <ul>
-                    <li><a href="{% url 'home' %}">Home</a></li>
-                    <li><a href="{% url 'library_dashboard' %}">Library</a></li>
-                    <li><a href="{% url 'library_books' %}">Books</a></li>
-                    <li><a href="{% url 'book_view' book.id %}">{{ book.title }}</a></li>
+                    <li>
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'library_dashboard' %}">Library</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'library_books' %}">Books</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'book_view' book.id %}">{{ book.title }}</a>
+                    </li>
                 </ul>
             </nav>
-
             <div id="tabs-with-content">
                 <div class="tabs is-centered">
                     <ul>
@@ -87,48 +93,71 @@ This is the detail view for {{book.title}}
                         </li>
                     </ul>
                 </div>
-
                 <div>
                     <section class="tab-content">
-                        <div class="box"><b>Description:</b> <p id="description"></p></div>
-                        <div class="box"><b>Genre:</b> <p id="genre"></p></div>
-                        <div class="box"><b>Page Count:</b> <p id="pageCount"></p></div>
-                        <div class="box"><b>On Sale?:</b> <p id="saleability"></p></div>
-                        <div class="box"><b>Ebook Available?:</b> <p id="ebook"></p></div>
+                        <div class="box">
+                            <b>Description:</b>
+                            <p id="description">
+                            </p>
+                        </div>
+                        <div class="box">
+                            <b>Genre:</b>
+                            <p id="genre">
+                            </p>
+                        </div>
+                        <div class="box">
+                            <b>Page Count:</b>
+                            <p id="pageCount">
+                            </p>
+                        </div>
+                        <div class="box">
+                            <b>On Sale?:</b>
+                            <p id="saleability">
+                            </p>
+                        </div>
+                        <div class="box">
+                            <b>Ebook Available?:</b>
+                            <p id="ebook">
+                            </p>
+                        </div>
                     </section>
-
                     <section class="tab-content">
-
                         {% if reviews %}
                             <div class="box">
                                 <b>Average rating: </b>{{ average }} out of 10
                             </div>
-
                             {% for review in reviews %}
                                 <div class="box">
                                     <div class="card-content">
-                                    <p><b>Review by: </b> {{ review.user }}</p>
-                                    <p><b>Created on: </b>{{ review.createdOn }}</p>
-                                    <p><b>Review:</b> {{ review.review }} </p>
-                                    <p><b>Rating: </b>{{ review.rating }}</p>
+                                        <p>
+                                            <b>Review by: </b> {{ review.user }}
+                                        </p>
+                                        <p>
+                                            <b>Created on: </b>{{ review.createdOn }}
+                                        </p>
+                                        <p>
+                                            <b>Review:</b> {{ review.review }}
+                                        </p>
+                                        <p>
+                                            <b>Rating: </b>{{ review.rating }}
+                                        </p>
                                     </div>
                                 </div>
                             {% endfor %}
-
                             <div class="box">
                                 <form method="get" action="{% url 'create_review' book.id %}">
                                     <button class="button is-info is-fullwidth">Add Review</button>
                                 </form>
-
                                 <form method="get" action="{% url 'book_reviews' book.id %}">
                                     <button class="button is-link is-fullwidth">See more</button>
                                 </form>
                             </div>
                         {% else %}
                             <div class="box">
-                                <p>No reviews as of yet</p>
+                                <p>
+                                    No reviews as of yet
+                                </p>
                             </div>
-
                             <div class="box">
                                 <form method="get" action="{% url 'create_review' book.id %}">
                                     <button class="button is-info is-fullwidth">Add Review</button>
@@ -136,25 +165,16 @@ This is the detail view for {{book.title}}
                             </div>
                         {% endif %}
                     </section>
-
                     <section class="tab-content">
                         <script type="text/javascript" src="//books.google.com/books/previewlib.js"></script>
-                        <script type="text/javascript">
-                        GBS_insertEmbeddedViewer('ISBN:8401474736',600,500);
-                        </script>
+                        <script type="text/javascript">GBS_insertEmbeddedViewer('ISBN:8401474736',600,500);</script>
                     </section>
-
                     <section class="tab-content">
-
                     </section>
-
                 </div>
-
             </div>
-
         </div>
     </div>
-
     <style>
         #tabs-with-content .tabs:not(:last-child) {
           margin-bottom: 0;
@@ -169,9 +189,7 @@ This is the detail view for {{book.title}}
           display: block;
         }
     </style>
-
     <script>
-
         window.onload = function() {
             if (String({{ book.ISBN }}).length < 10) {
                 var url = "https://www.googleapis.com/books/v1/volumes?q=isbn:0" + String({{ book.ISBN }});
@@ -257,6 +275,5 @@ This is the detail view for {{book.title}}
 
           tabs[0].click();
         })();
-    </script>
-
+</script>
 {% endblock %}

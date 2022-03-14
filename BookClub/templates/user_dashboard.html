@@ -1,235 +1,260 @@
 {% extends 'base_content.html' %}
-
 {% block page_title %}
-User Dashboard
+    User Dashboard
 {% endblock page_title %}
-
 {% block page_subtitle %}
-This is the User Dashboard, the main home page for your user profile!
+    This is the User Dashboard, the main home page for your user profile!
 {% endblock page_subtitle %}
-
 {% block content %}
-
-<div class="columns">
-
-    <div class="column is-3">
-
-        <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
-
-            <p class="menu-label">Profile</p>
-
-            <ul class="menu-list">
-                <li><a class="is-active"><b>Profile Dashboard</b></a></li>
-                <li><a href="{% url 'edit_profile' %}"> Edit Profile</a></li>
-                <li><a href="{% url 'password_change' %}">Change Password</a></li>
-                <li><a>Profile Settings</a></li>
-            </ul>
-
-            <p class="menu-label">Clubs</p>
-
-            <ul class="menu-list">
-                <li><a href="{% url 'create_club' %}">Create Club</a></li>
-                <li><a href="{% url 'available_clubs' %}">Join club</a></li>
-                <li><a href="{% url 'my_club_memberships' %}">Memberships</a></li>
-            </ul>
-
-            <p class="menu-label">Book Lists</p>
-
-            <ul class="menu-list">
-                <li><a href="{% url 'booklists_list' user.username %}">My Book Lists</a></li>
-            </ul>
-
-            <p class="menu-label">Calendar</p>
-
-            <ul class="menu-list">
-                <li><a>View Calendar</a></li>
-            </ul>
-
-        </aside>
-
-    </div>
-
-    <div class="column is-9">
-
-        <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
-            <ul>
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'user_dashboard' %}">Profile</a></li>
-                <li><a href="{% url 'user_dashboard' %}">Dashboard</a></li>
-            </ul>
-        </nav>
-
-        <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
-            <div class="hero-body">
-                <div class="container">
-                    <h1 class="title">{{ user.username }}'s Dashboard</h1>
-                    <h2 class="subtitle">Welcome to your profile page!</h2>
+    <div class="columns">
+        <div class="column is-3">
+            <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+                <p class="menu-label">
+                    Profile
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'user_dashboard' %}" class="is-active"><b>Profile Dashboard</b></a>
+                    </li>
+                    <li>
+                        <a href="{% url 'edit_profile' %}">Edit Profile</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'password_change' %}">Change Password</a>
+                    </li>
+                    <li>
+                        <a href="#">Profile Settings</a>
+                    </li>
+                </ul>
+                <p class="menu-label">
+                    Clubs
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'create_club' %}">Create Club</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'available_clubs' %}">Join club</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'my_club_memberships' %}">Memberships</a>
+                    </li>
+                </ul>
+                <p class="menu-label">
+                    Book Lists
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'booklists_list' user.username %}">My Book Lists</a>
+                    </li>
+                </ul>
+                <p class="menu-label">
+                    Agenda
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'agenda' %}">View Agenda</a>
+                    </li>
+                </ul>
+            </aside>
+        </div>
+        <div class="column is-9">
+            <nav class="breadcrumb"
+                 aria-label="breadcrumbs"
+                 style="padding-left: 5px;">
+                <ul>
+                    <li>
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'user_dashboard' %}">Profile</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'user_dashboard' %}">Dashboard</a>
+                    </li>
+                </ul>
+            </nav>
+            <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
+                <div class="hero-body">
+                    <div class="container">
+                        <h1 class="title">{{ user.username }}'s Dashboard</h1>
+                        <h2 class="subtitle">Welcome to your profile page!</h2>
+                    </div>
                 </div>
-            </div>
-        </section>
-
-        <div class="columns">
-
-            <div class="column is-12">
-                
-                <div class="card">
-                    
-                    <div class="card-content">
-                        <p class="title">User Details</p>
-                        <div class="media">
-                            <div class="media-left">
-                                <figure class="image is-128x128">
-                                    <img class="is-rounded" src="{{ gravatar }}" alt="Placeholder image">
-                                </figure>
-                            </div>
-                            <div class="media-content">
-                                <div class="content">
-                                    <p class="subtitle is-5"><b>Username: </b> {{ username }}</p>
-                                    <p class="subtitle is-5"><b>Email: </b> {{ email }}</p>
-                                    <p class="subtitle is-5"><b>Public Bio: </b> {{ public_bio }}</p>
+            </section>
+            <div class="columns">
+                <div class="column is-12">
+                    <div class="card">
+                        <div class="card-content">
+                            <p class="title">
+                                User Details
+                            </p>
+                            <div class="media">
+                                <div class="media-left">
+                                    <figure class="image is-128x128">
+                                        <img class="is-rounded" src="{{ gravatar }}" alt="Placeholder image">
+                                    </figure>
+                                </div>
+                                <div class="media-content">
+                                    <div class="content">
+                                        <p class="subtitle is-5">
+                                            <b>Username: </b> {{ username }}
+                                        </p>
+                                        <p class="subtitle is-5">
+                                            <b>Email: </b> {{ email }}
+                                        </p>
+                                        <p class="subtitle is-5">
+                                            <b>Public Bio: </b> {{ public_bio }}
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
-
-        </div>
-
-        <div class="columns">
-
-            <div class="column is-6">
-
-                <div class="card">
-                    <div class="card-content">
-                        <p class="title">Following</p>
-                        
-                    </div>
-                    <div class="card-footer">
-                        <p class="card-footer-item">
-                            <span><a href="#">View All</a></span>
-                        </p>
+            <div class="columns">
+                <div class="column is-6">
+                    <div class="card">
+                        <div class="card-content">
+                            <p class="title">
+                                Following
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            <a class="card-footer-item" href="{% url 'user_following' username %}">View All</a>
+                        </div>
                     </div>
                 </div>
-
-            </div>
-
-            <div class="column is-6">
-
-                <div class="card">
-                    <div class="card-content">
-                        <p class="title">Clubs</p>
-                        
-                    </div>
-                    <div class="card-footer">
-                        <p class="card-footer-item">
-                            <span><a href="{% url 'my_club_memberships' %}">View All</a></span>
-                        </p>
+                <div class="column is-6">
+                    <div class="card">
+                        <div class="card-content">
+                            <p class="title">
+                                Clubs
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            <a class="card-footer-item" href="{% url 'my_club_memberships' %}">View All</a>
+                        </div>
                     </div>
                 </div>
-
             </div>
-
-        </div>
-
-        <div class="tile is-ancestor has-text-centered">
-            <div class="tile is-parent" onclick="window.location='{% url 'booklists_list' user.username %}';" style="cursor:pointer;">
-                <article class="tile is-child box">
-                    <p class="title">20</p>
-                    <p class="subtitle">Book Lists</p>
-                </article>
-            </div>
-            <div class="tile is-parent">
-                <article class="tile is-child box">
-                    <p class="title">69k</p>
-                    <p class="subtitle">Following</p>
-                </article>
-            </div>
-            <div class="tile is-parent">
-                <article class="tile is-child box">
-                    <p class="title">5</p>
-                    <p class="subtitle">Clubs Joined</p>
-                </article>
-            </div>
-            <div class="tile is-parent">
-                <article class="tile is-child box">
-                    <p class="title">+19</p>
-                    <p class="subtitle">Review Score</p>
-                </article>
-            </div>
-        </div>
-
-        <div class="columns">
-
-            <div class="column is-6">
-
-                <div class="card">
-                    <div class="card-content">
-                        <p class="title">Book Lists</p>
-                        
-                    </div>
-                    <div class="card-footer">
-                        <p class="card-footer-item">
-                            <span><a href="#">Read List</a></span>
-                        </p>
-                        <p class="card-footer-item" onclick="window.location='{% url 'booklists_list' user.username %}';" style="cursor:pointer;">
-                            <span><a href="#">View All</a></span>
-                        </p>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="column is-6">
-
-                <div class="card">
-                    <div class="card-content">
-                        <p class="title">Reviews</p>
-                        
-                    </div>
-                    <div class="card-footer">
-                        <p class="card-footer-item">
-                            <span><a href="#">View All</a></span>
-                        </p>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-
-        <section class="info-tiles">
             <div class="tile is-ancestor has-text-centered">
-                <div class="tile is-parent">
+                <div class="tile is-parent"
+                     onclick="window.location='{% url 'booklists_list' user.username %}';"
+                     style="cursor:pointer;">
                     <article class="tile is-child box">
-                        <p class="title">20</p>
-                        <p class="subtitle">Currently Reading</p>
+                        <p class="title">
+                            20
+                        </p>
+                        <p class="subtitle">
+                            Book Lists
+                        </p>
                     </article>
                 </div>
                 <div class="tile is-parent">
                     <article class="tile is-child box">
-                        <p class="title">69k</p>
-                        <p class="subtitle">Completed Books</p>
+                        <p class="title">
+                            69k
+                        </p>
+                        <p class="subtitle">
+                            Following
+                        </p>
                     </article>
                 </div>
                 <div class="tile is-parent">
                     <article class="tile is-child box">
-                        <p class="title">5</p>
-                        <p class="subtitle">On-hold</p>
+                        <p class="title">
+                            5
+                        </p>
+                        <p class="subtitle">
+                            Clubs Joined
+                        </p>
                     </article>
                 </div>
                 <div class="tile is-parent">
                     <article class="tile is-child box">
-                        <p class="title">+19</p>
-                        <p class="subtitle">Plan to Read</p>
+                        <p class="title">
+                            +19
+                        </p>
+                        <p class="subtitle">
+                            Review Score
+                        </p>
                     </article>
                 </div>
             </div>
-        </section>
-
+            <div class="columns">
+                <div class="column is-6">
+                    <div class="card">
+                        <div class="card-content">
+                            <p class="title">
+                                Book Lists
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            <a class="card-footer-item" href="#">Read List</a>
+                            <a class="card-footer-item"
+                               href="{% url 'booklists_list' user.username %}">View All</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-6">
+                    <div class="card">
+                        <div class="card-content">
+                            <p class="title">
+                                Reviews
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            <a class="card-footer-item" href="#">View All</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <section class="info-tiles">
+                <div class="tile is-ancestor has-text-centered">
+                    <div class="tile is-parent">
+                        <article class="tile is-child box">
+                            <p class="title">
+                                20
+                            </p>
+                            <p class="subtitle">
+                                Currently Reading
+                            </p>
+                        </article>
+                    </div>
+                    <div class="tile is-parent">
+                        <article class="tile is-child box">
+                            <p class="title">
+                                69k
+                            </p>
+                            <p class="subtitle">
+                                Completed Books
+                            </p>
+                        </article>
+                    </div>
+                    <div class="tile is-parent">
+                        <article class="tile is-child box">
+                            <p class="title">
+                                5
+                            </p>
+                            <p class="subtitle">
+                                On-hold
+                            </p>
+                        </article>
+                    </div>
+                    <div class="tile is-parent">
+                        <article class="tile is-child box">
+                            <p class="title">
+                                +19
+                            </p>
+                            <p class="subtitle">
+                                Plan to Read
+                            </p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+        </div>
     </div>
-
-</div>
-
 {% endblock %}

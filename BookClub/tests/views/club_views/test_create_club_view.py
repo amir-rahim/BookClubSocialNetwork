@@ -3,14 +3,14 @@ from datetime import date
 from django.test import TestCase, tag
 from django.urls import reverse
 
-from BookClub.models.user import User
+from BookClub.forms.club import ClubForm
 from BookClub.models.club import Club
 from BookClub.models.club_membership import ClubMembership
-
-from BookClub.forms.club import ClubForm
-
+from BookClub.models.user import User
 from BookClub.tests.helpers import reverse_with_next
-@tag('createclub','club')
+
+
+@tag('club', 'create_club')
 class CreateClubViewTestcase(TestCase):
     fixtures = [
         "BookClub/tests/fixtures/default_users.json",
@@ -33,14 +33,13 @@ class CreateClubViewTestcase(TestCase):
     def test_create_club_url(self):
         self.assertEqual(self.url, '/create/')
 
-
     def test_post_create_club_redirects_when_not_logged_in(self):
         club_count_before = Club.objects.count()
         redirect_url = reverse_with_next('login', self.url)
         response = self.client.post(self.url, self.data, follow=True)
         self.assertRedirects(response, redirect_url,
-            status_code=302, target_status_code=200, fetch_redirect_response=True
-        )
+                             status_code=302, target_status_code=200, fetch_redirect_response=True
+                             )
         self.assertTemplateUsed(response, 'login.html')
         club_count_after = Club.objects.count()
         self.assertEqual(club_count_after, club_count_before)
@@ -50,8 +49,8 @@ class CreateClubViewTestcase(TestCase):
         redirect_url = reverse_with_next('login', self.url)
         response = self.client.get(self.url, follow=True)
         self.assertRedirects(response, redirect_url,
-            status_code=302, target_status_code=200, fetch_redirect_response=True
-        )
+                             status_code=302, target_status_code=200, fetch_redirect_response=True
+                             )
         self.assertTemplateUsed(response, 'login.html')
         club_count_after = Club.objects.count()
         self.assertEqual(club_count_after, club_count_before)
@@ -67,7 +66,7 @@ class CreateClubViewTestcase(TestCase):
 
     def test_unsuccesful_create_club(self):
         self.client.login(username=self.user.username, password='Password123')
-        self.data['name'] = Club.objects.get(pk = 1).name
+        self.data['name'] = Club.objects.get(pk=1).name
         before_count = Club.objects.count()
         response = self.client.post(self.url, self.data)
         after_count = Club.objects.count()
@@ -83,9 +82,9 @@ class CreateClubViewTestcase(TestCase):
         before_count = Club.objects.count()
         saving_date = date.today()
         response = self.client.post(self.url, self.data, follow=True)
-        club = Club.objects.get(name = self.data['name'])
+        club = Club.objects.get(name=self.data['name'])
         after_count = Club.objects.count()
-        self.assertEqual(after_count, before_count+1)
+        self.assertEqual(after_count, before_count + 1)
         response_url = reverse('club_dashboard', kwargs={'club_url_name': club.club_url_name})
         self.assertRedirects(response, response_url, status_code=302, target_status_code=200)
         self.assertTemplateUsed(response, 'club_dashboard.html')
@@ -97,5 +96,5 @@ class CreateClubViewTestcase(TestCase):
         self.assertEqual(club.rules, self.data['rules'])
         self.assertEqual(club.created_on, saving_date)
 
-        club_owner = ClubMembership.objects.get(club = club, membership = ClubMembership.UserRoles.OWNER).user
+        club_owner = ClubMembership.objects.get(club=club, membership=ClubMembership.UserRoles.OWNER).user
         self.assertEqual(club_owner, self.user)

@@ -1,11 +1,12 @@
-'''Library Related Views'''
+"""Library Related Views"""
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.shortcuts import redirect, render, reverse
 from django.views.generic import ListView, FormView
-from django.contrib.auth.mixins import LoginRequiredMixin
+
+from BookClub.forms import AddBookForm
 from BookClub.models import Book, BookList
-from django.db.models import Exists, Q, OuterRef
-from BookClub.forms import AddBookForm  
 
 
 def library_dashboard(request):
@@ -18,18 +19,12 @@ class BookListView(ListView):
     template_name = "library_books.html"
     context_object_name = 'books'
     paginate_by = 20
-    
+
     def post(self, request):
         if request.POST.get('q'):
             request.session['query'] = request.POST['q']
 
         return redirect(reverse('library_books', kwargs=self.kwargs))
-
-    def get_paginate_by(self, queryset):
-        if self.request.session.get('paginate_setting'):
-            return self.request.session.get('paginate_setting')
-        else:
-            return self.paginate_by
 
     def get_queryset(self):  # new
         query = self.request.session.get('query')
@@ -40,17 +35,18 @@ class BookListView(ListView):
         except:
             object_list = Book.objects.all()
         return object_list
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         if not user.is_anonymous:
-            context['lists'] = BookList.objects.filter(creator = user)
+            context['lists'] = BookList.objects.filter(creator=user)
             context['user'] = user
         else:
             context['lists'] = None
             context['user'] = None
         return context
+
 
 class AddToBookListView(LoginRequiredMixin, FormView):
     model = BookList
@@ -64,21 +60,17 @@ class AddToBookListView(LoginRequiredMixin, FormView):
         except:
             book = None
             booklist = None
-        
+
         if booklist is None or book is None:
             messages.error(self.request, "There was an error finding the book or booklist")
 
-        elif (booklist.get_books().filter(pk=book.id)):
+        elif booklist.get_books().filter(pk=book.id):
             messages.info(self.request, "This book is already in the list")
         else:
             booklist.add_book(book)
             booklist.save()
-            messages.success(self.request, "The book has been saved to "+book.title)
+            messages.success(self.request, "The book has been saved to " + book.title)
         return super().form_valid(form)
-    
-    def form_invalid(self, form):
-        messages.error(self.request, "There was an error adding the book")
-        return super().form_invalid(form)
-        
+
     def get_success_url(self):
         return reverse('library_books')

@@ -1,11 +1,10 @@
-'''Memberships Related Views'''
-from django.shortcuts import redirect, render
-from django.contrib import messages
-from django.views.generic import ListView
+"""Memberships Related Views"""
 from django.contrib.auth.mixins import LoginRequiredMixin
-from BookClub.models.club_membership import ClubMembership
-from BookClub.models.club import Club
 from django.db.models import Exists, Q, OuterRef
+from django.views.generic import ListView
+
+from BookClub.models import Club, ClubMembership
+
 
 class AvailableClubsView(LoginRequiredMixin, ListView):
     model = Club
@@ -25,6 +24,7 @@ class AvailableClubsView(LoginRequiredMixin, ListView):
         context['clubs'] = self.get_queryset()
         return context
 
+
 class MyClubMembershipsView(LoginRequiredMixin, ListView):
     model = Club
     template_name = 'my_club_memberships.html'
@@ -42,5 +42,3 @@ class MyClubMembershipsView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['clubs'] = self.get_queryset()
         return context
-        
-

@@ -1,10 +1,12 @@
 """Unit tests of the sign up form."""
-from django.contrib.auth.hashers import check_password
 from django import forms
 from django.test import TestCase, tag
+
 from BookClub.forms import SignUpForm
 from BookClub.models import User
-@tag('auth','user')
+
+
+@tag('forms', 'user')
 class SignUpFormTestCase(TestCase):
     """Unit tests of the sign up form."""
 
@@ -43,7 +45,7 @@ class SignUpFormTestCase(TestCase):
         self.assertTrue(isinstance(password_confirmation_widget, forms.PasswordInput))
 
     def test_form_uses_model_validation(self):
-        self.form_input['username'] = '.badusername.'
+        self.form_input['username'] = '.badusername¬'
         form = SignUpForm(data=self.form_input)
 
         self.assertFalse(form.is_valid())

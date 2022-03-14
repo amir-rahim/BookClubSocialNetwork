@@ -1,102 +1,111 @@
 {% extends 'base_content.html' %}
-
 {% block page_title %}
-User Profile
+    User Profile
 {% endblock page_title %}
-
 {% block page_subtitle %}
-This is the User Profile, this is where you can view other profiles!
+    This is the User Profile, this is where you can view other profiles!
 {% endblock page_subtitle %}
-
 {% block content %}
-
-<div class="columns">
-
-    <div class="column is-3">
-
-        <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
-
-            <p class="menu-label">Profile</p>
-
-            <ul class="menu-list">
-                <li><a href="{% url 'user_profile' username %}">Profile Dashboard</a></li>
-                <li><a class="is-active"><b>Following</b></a></li>
-            </ul>
-
-            <p class="menu-label">Clubs</p>
-
-            <ul class="menu-list">
-                <li><a href="{% url 'user_memberships' username %}">Club Memberships</a></li>
-            </ul>
-
-            <p class="menu-label">Books</p>
-
-            <ul class="menu-list">
-                <li><a>Book Lists</a></li>
-            </ul>
-
-        </aside>
-
-    </div>
-
-    <div class="column is-9">
-
-        <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
-            <ul>
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'user_dashboard' %}">Profile</a></li>
-                <li><a>{{ username }}</a></li>
-                <li><a>Following</a></li>
-            </ul>
-        </nav>
-
-        <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
-            <div class="hero-body">
-                <div class="container">
-                    <h1 class="title">{{ username }}</h1>
-                    <h2 class="subtitle">This is the profiles that this user follows.</h2>
+    <div class="columns">
+        <div class="column is-3">
+            <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+                <p class="menu-label">
+                    Profile
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'user_profile' username %}">Profile Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'user_following' username %}" class="is-active"><b>Following</b></a>
+                    </li>
+                </ul>
+                <p class="menu-label">
+                    Clubs
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'user_memberships' username %}">Club Memberships</a>
+                    </li>
+                </ul>
+                <p class="menu-label">
+                    Books
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'user_memberships' username %}">Book Lists</a>
+                    </li>
+                </ul>
+            </aside>
+        </div>
+        <div class="column is-9">
+            <nav class="breadcrumb"
+                 aria-label="breadcrumbs"
+                 style="padding-left: 5px;">
+                <ul>
+                    <li>
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'user_dashboard' %}">Profile</a>
+                    </li>
+                    <li>
+                        <a>{{ username }}</a>
+                    </li>
+                    <li>
+                        <a>Following</a>
+                    </li>
+                </ul>
+            </nav>
+            <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
+                <div class="hero-body">
+                    <div class="container">
+                        <h1 class="title">{{ username }}</h1>
+                        <h2 class="subtitle">This is the profiles that this user follows.</h2>
+                    </div>
                 </div>
-            </div>
-        </section>
-
-        {% if following %}
-            {% for follower in following %}
-            <div class="columns">
-
-                <div class="column is-12">
-                    <div class="card">
-                        <div class="card-content">
-                            <div class="media">
-                                <div class="media-left">
-                                    <figure class="image is-64x64">
-                                        <img class="is-rounded" src="{{ follower.gravatar }}" alt="Placeholder image">
-                                    </figure>
-                                </div>
-                                <hr class="solid">
-                                <div class="media-content">
-                                    <div class="content">
-                                        <p class="text"><b>Name: </b> {{ follower.username }}</p>
-                                        <p class="text"><b>Public Bio: </b> {{ follower.public_bio }}</p>
-                                    </div>
-                                    <div class="buttons">
-                                        <button class="button is-warning is-small" style="margin-right: 5px">View</button>
+            </section>
+            {% if following %}
+                {% for follower in following %}
+                    <div class="columns">
+                        <div class="column is-12">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <figure class="image is-64x64">
+                                                <img class="is-rounded"
+                                                     src="{{ follower.gravatar }}"
+                                                     alt="Placeholder image">
+                                            </figure>
+                                        </div>
+                                        <hr class="solid">
+                                        <div class="media-content">
+                                            <div class="content">
+                                                <p class="text">
+                                                    <b>Name: </b> {{ follower.username }}
+                                                </p>
+                                                <p class="text">
+                                                    <b>Public Bio: </b> {{ follower.public_bio }}
+                                                </p>
+                                            </div>
+                                            <div class="buttons">
+                                                <button class="button is-warning is-small" style="margin-right: 5px">View</button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-            </div>
-            {% endfor %}
-        {% else %}
-            <hr class="solid">
-            <p style="text-align: center;"><i>There is no followers for this user.</i></p>
-            <hr class="solid">
-        {% endif %}
-
+                {% endfor %}
+            {% else %}
+                <hr class="solid">
+                <p style="text-align: center;">
+                    <i>There is no followers for this user.</i>
+                </p>
+                <hr class="solid">
+            {% endif %}
+        </div>
     </div>
-
-</div>
-
 {% endblock %}
