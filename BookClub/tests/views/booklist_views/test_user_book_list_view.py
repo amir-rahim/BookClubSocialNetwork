@@ -23,7 +23,7 @@ class UserBookListViewTestCase(TestCase, LogInTester):
         self.url = reverse('user_booklist', kwargs={'username': self.user.username, 'booklist_id': self.booklist.id})
 
     def test_url(self):
-        self.assertEqual(self.url, f'/user/{self.user.username}/lists/{self.booklist.id}')
+        self.assertEqual(self.url, f'/user/{self.user.username}/lists/{self.booklist.id}/')
 
     def test_get_template(self):
         self.client.login(username=self.user.username, password="Password123")
