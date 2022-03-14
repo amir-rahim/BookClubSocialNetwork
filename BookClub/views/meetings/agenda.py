@@ -1,5 +1,5 @@
 """Agenda Related Views"""
-import datetime
+import datetime, pytz
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
@@ -14,7 +14,7 @@ class AgendaView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         user = User.objects.get(id=self.request.user.id)
-        today = datetime.date.today()
+        today = pytz.utc.localize(datetime.datetime.today())
         subquery = Meeting.objects.filter(Q(members=user.id, meeting_time__gte=today)).order_by('meeting_time')
 
         return subquery
