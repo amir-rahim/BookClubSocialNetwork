@@ -49,10 +49,12 @@ class EvaluationPopularity:
 
             hit_rate = evaluator_metrics.get_hit_rate(recommendations, self.testset)
             average_reciprocal_hit_rate = evaluator_metrics.get_average_reciprocal_hit_rate(recommendations, self.testset)
+            novelty = evaluator_metrics.get_novelty(recommendations, self.trainset)
             print()
             print(f"Scoring method: {scoring_method}")
             print(f" -> hit_rate:{hit_rate}")
             print(f" -> average_reciprocal_hit_rate:{average_reciprocal_hit_rate}")
+            print(f" -> novelty:{novelty}")
             print()
 
     """Get the recommendations for all users from the train set, using the
