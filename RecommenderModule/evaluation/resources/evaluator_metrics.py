@@ -49,8 +49,8 @@ def get_average_reciprocal_hit_rate(recommendations, left_out_test_set):
     the train set itself."""
 def get_novelty(recommendations, trainset):
 
+    # Get a list of all books in the trainset, sorted from the book with the most ratings to the one with the fewest ratings
     popularity_list = get_books_sorted_by_most_read(trainset)
-    # Try again with average popularity list (contains tuples (isbn, score) !)
 
     sum = 0
     total = 0
@@ -69,6 +69,7 @@ def get_novelty(recommendations, trainset):
     return sum / total
 
 
+"""Get a list of all books in the given trainset, sorted from the book with the most ratings to the one with the fewest ratings (descending order)."""
 def get_books_sorted_by_most_read(trainset):
 
     all_book_occurrences = []
