@@ -40,11 +40,11 @@ class CreateVoteViewTestCase(TestCase):
                           password="Password123")
         header = {'HTTP_Referer': '/forum/'}
         response = self.client.post(self.upvoteurl, self.form, **header)
-        self.assertJSONEqual(response.content, {"rating": 1, "downvote": True, "upvote": False})
+        self.assertJSONEqual(response.content, {"rating": 1, "downvote": False, "upvote": True, "no_vote": False})
 
         self.form['type'] = False
         response = self.client.post(self.downvoteurl, self.form, **header)
-        self.assertJSONEqual(response.content, {"rating": -1, "downvote": False, "upvote": True})
+        self.assertJSONEqual(response.content, {"rating": -1, "downvote": True, "upvote": False, "no_vote" : False})
 
     def test_valid_up_vote_none_exists(self):
         self.client.login(username=self.user.username, password="Password123")
@@ -69,7 +69,7 @@ class CreateVoteViewTestCase(TestCase):
         self.client.login(username=self.user.username, password="Password123")
         header = {'HTTP_Referer': '/forum/'}
         response = self.client.post(self.upvoteurl, self.form, **header)
-        self.assertEqual(ForumPost.objects.get(pk=1).rating, 1)
+        self.assertEqual(ForumPost.objects.get(pk=1).rating, 0)
 
     def test_valid_down_vote_up_vote_exists(self):
         Vote.objects.create(
@@ -113,7 +113,7 @@ class CreateVoteViewTestCase(TestCase):
         header = {'HTTP_Referer': '/forum/'}
         self.form['type'] = False
         response = self.client.post(self.upvoteurl, self.form, **header)
-        self.assertEqual(ForumPost.objects.get(pk=1).rating, -1)
+        self.assertEqual(ForumPost.objects.get(pk=1).rating, 0)
 
     def test_invalid_form_returns_no_changes(self):
         self.client.login(username=self.user.username,
@@ -123,9 +123,9 @@ class CreateVoteViewTestCase(TestCase):
         response = self.client.post(self.upvoteurl, self.form, **header)
         self.assertEqual(ForumPost.objects.get(pk=1).rating, 0)
         self.assertJSONEqual(response.content,
-                             {"rating": 0, "downvote": True, "upvote": True}
+                             {"rating": 0, "downvote": False, "upvote": False, "no_vote": True}
                              )
-
+    
     def test_invalid_form_object_missing(self):
         self.client.login(username=self.user.username,
                           password="Password123")
@@ -134,4 +134,3 @@ class CreateVoteViewTestCase(TestCase):
         response = self.client.post(self.upvoteurl, self.form, **header, follow=False)
         self.assertEqual(ForumPost.objects.get(pk=1).rating, 0)
         self.assertRedirects(response, expected_url=reverse('global_forum'), status_code=302, target_status_code=200)
-
