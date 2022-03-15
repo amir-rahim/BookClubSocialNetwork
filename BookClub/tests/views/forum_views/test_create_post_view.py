@@ -3,7 +3,7 @@ from django.contrib.messages import get_messages
 from django.test import TestCase, tag
 from django.urls import reverse
 
-from BookClub.models import User, ForumPost, Club
+from BookClub.models import User, ForumPost, Club, Forum
 from BookClub.tests.helpers import reverse_with_next
 
 
@@ -23,6 +23,8 @@ class CreatePostViewTestCase(TestCase):
         self.club = Club.objects.get(pk=1)
         self.club_url = reverse('create_forum_post', kwargs={"club_url_name": self.club.club_url_name})
         self.user = User.objects.get(username="johndoe")
+        self.global_forum = Forum.objects.get(pk=1)
+        self.club_forum = Forum.objects.get(pk=2)
         self.post = {
             "title": "Lorem Ipsum",
             "content": "HELLO, HOW DO YOU DO!",
@@ -76,6 +78,7 @@ class CreatePostViewTestCase(TestCase):
         self.client.login(username=self.user.username, password="Password123")
         redirect_url = reverse('global_forum')
         post_count_before = ForumPost.objects.count()
+        self.post['forum'] = self.global_forum
         response = self.client.post(self.url, self.post, follow=True)
         self.assertRedirects(response, redirect_url,
                              status_code=302, target_status_code=200, fetch_redirect_response=True
@@ -87,6 +90,7 @@ class CreatePostViewTestCase(TestCase):
         self.client.login(username=self.user.username, password="Password123")
         redirect_url = reverse('club_forum', kwargs={"club_url_name": self.club.club_url_name})
         post_count_before = ForumPost.objects.count()
+        self.post['forum'] = self.club_forum
         response = self.client.post(self.club_url, self.post, follow=True)
         self.assertRedirects(response, redirect_url,
                              status_code=302, target_status_code=200, fetch_redirect_response=True
@@ -99,6 +103,7 @@ class CreatePostViewTestCase(TestCase):
         redirect_url = reverse('global_forum')
         post_count_before = ForumPost.objects.count()
         self.post['content'] = "x" * 1025
+        self.post['forum'] = self.global_forum
         response = self.client.post(self.url, self.post, follow=True)
         self.assertRedirects(response, redirect_url,
                              status_code=302, target_status_code=200, fetch_redirect_response=True

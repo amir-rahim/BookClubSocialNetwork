@@ -67,14 +67,6 @@ class ClubMeetingAdmin(admin.ModelAdmin):
     ]
 
 
-@admin.register(ForumPost)
-class ForumPostAdmin(admin.ModelAdmin):
-    """Configuration of the admin interface for club meetings."""
-    list_display = [
-        'creator', 'created_on', 'title', 'content', 'rating'
-    ]
-
-
 @admin.register(Forum)
 class ForumAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for club meetings."""
@@ -82,7 +74,15 @@ class ForumAdmin(admin.ModelAdmin):
     list_display = [
         'title', 'associated_with', 'slug'
     ]
-    filter_horizontal = ['posts']
+    # filter_horizontal = ['posts']
+
+
+@admin.register(ForumPost)
+class ForumPostAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for club meetings."""
+    list_display = [
+        'creator', 'created_on', 'forum', 'title', 'content', 'rating'
+    ]
 
 
 @admin.register(ForumComment)

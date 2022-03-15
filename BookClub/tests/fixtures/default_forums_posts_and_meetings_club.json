@@ -3,8 +3,7 @@
         "pk": 2,
         "fields": {
             "title": "Johnathan Club Forum",
-            "associated_with": 1,
-            "posts": []
+            "associated_with": 1
         }
     },
     {
@@ -12,8 +11,7 @@
         "pk": 3,
         "fields": {
             "title": "Jeannette Club Forum",
-            "associated_with": 2,
-            "posts": [1]
+            "associated_with": 2
         }
     },
     {
@@ -25,7 +23,8 @@
             ],
             "created_on": "2022-02-27T22:45:06.275Z",
             "title": "Lorem Ipsum",
-            "content": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrial standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+            "content": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrial standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+            "forum": 2
         }
     },
     {

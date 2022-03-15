@@ -2,8 +2,7 @@
         "model": "BookClub.Forum",
         "pk": 1,
         "fields": {
-            "title": "Global Forum",
-            "posts": [1, 2, 3]
+            "title": "Global Forum"
         }
     },
     {
@@ -11,8 +10,7 @@
         "pk": 2,
         "fields": {
             "title": "Johnathan Club Forum",
-            "associated_with": 1,
-            "posts": [4]
+            "associated_with": 1
         }
     }
 ]

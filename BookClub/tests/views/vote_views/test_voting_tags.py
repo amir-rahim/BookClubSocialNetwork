@@ -6,7 +6,8 @@ from django.contrib.contenttypes.models import ContentType
 @tag('vote','post','tag')
 class HasUserVotedTagTestCase(TestCase):
     fixtures = [
-        
+        'BookClub/tests/fixtures/default_clubs.json',
+        'BookClub/tests/fixtures/default_forum.json',
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_posts.json',
     ]
@@ -18,12 +19,12 @@ class HasUserVotedTagTestCase(TestCase):
         self.post = ForumPost.objects.get(pk=1)
         self.forummpostcontenttypepk = ContentType.objects.get_for_model(
             self.post.__class__).pk
-        
+
 
     def test_user_has_voted_has_not_voted(self):
         self.votes = self.post.votes.all()
         self.assertFalse(has_user_voted(None, self.votes, self.user))
-        
+
     def test_user_has_voted_has_down_voted(self):
         Vote.objects.create(
             creator=self.user,
@@ -34,7 +35,7 @@ class HasUserVotedTagTestCase(TestCase):
         )
         self.votes = self.post.votes.all()
         self.assertTrue(has_user_voted(None, self.votes, self.user))
-        
+
     def test_user_has_voted_has_up_voted(self):
         Vote.objects.create(
             creator=self.user,
@@ -45,11 +46,12 @@ class HasUserVotedTagTestCase(TestCase):
         )
         self.votes = self.post.votes.all()
         self.assertTrue(has_user_voted(None, self.votes, self.user))
-        
+
 @tag('tag')
 class GetUserVoteTagTestCase(TestCase):
     fixtures = [
-
+        'BookClub/tests/fixtures/default_clubs.json',
+        'BookClub/tests/fixtures/default_forum.json',
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_posts.json',
     ]
@@ -62,7 +64,7 @@ class GetUserVoteTagTestCase(TestCase):
         self.post = ForumPost.objects.get(pk=1)
         self.forummpostcontenttypepk = ContentType.objects.get_for_model(
             self.post.__class__).pk
-        
+
     def test_get_vote_has_not_voted(self):
         self.votes = self.post.votes.all()
         self.assertIsNone(get_user_vote_type(None, self.votes, self.user))
@@ -77,7 +79,7 @@ class GetUserVoteTagTestCase(TestCase):
         )
         self.votes = self.post.votes.all()
         self.assertEqual(get_user_vote_type(None, self.votes, self.user), vote.type)
-        
+
     def test_get_vote_has_downvoted(self):
         vote = Vote.objects.create(
             creator=self.user,

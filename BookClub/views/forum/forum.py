@@ -52,7 +52,8 @@ class ForumView(ClubMemberTestMixin, ListView):
             forum = Forum.objects.get(associated_with=club)
         else:
             forum = Forum.objects.get(associated_with=None)
-        posts = forum.posts.all()
+        # posts = forum.posts.all()
+        posts = forum.get_posts()
         return posts
 
     def get_context_data(self, **kwargs):
@@ -70,8 +71,8 @@ class ForumView(ClubMemberTestMixin, ListView):
         replies = 0
         votes_cast = 0
 
-        for post in context['forum'].posts.all():
-            replies += post.forumcomment_set.all().count()
+        for post in context['forum'].get_posts():
+            replies += post.get_comments().count()
             votes_cast = post.votes.all().count()
 
         context['replies'] = replies
@@ -94,8 +95,8 @@ class CreatePostView(LoginRequiredMixin, ClubMemberTestMixin, CreateView):
             forum = Forum.objects.get(associated_with=None)
 
         form.instance.creator = self.request.user
+        form.instance.forum = forum
         self.object = form.save()
-        forum.add_post(self.object)
         return super().form_valid(form)
 
     def form_invalid(self, form):

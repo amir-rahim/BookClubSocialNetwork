@@ -51,7 +51,7 @@ class Command(BaseCommand):
             except IntegrityError as e:
                 print("Integrity error was found, attempting again")
                 print(str(e))
-        
+
         call_command('importbooks', 5)
         id1 = Book.objects.all()[0].id
         print(id1)
@@ -118,9 +118,10 @@ class Command(BaseCommand):
             curPost = ForumPost.objects.create(
                 title=self.faker.text(max_nb_chars=30),
                 content=self.faker.text(max_nb_chars=1024),
-                creator=user
+                creator=user,
+                forum=globalForum
             )
-            globalForum.add_post(curPost)
+            # globalForum.add_post(curPost)
             for x in range(1, random.randrange(0, 5)):
                 commentUser = User.objects.order_by('?')[0]
                 curComment = ForumComment.objects.create(
