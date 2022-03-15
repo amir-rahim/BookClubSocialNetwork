@@ -59,6 +59,7 @@ def get_novelty(recommendations, trainset):
         for isbn in recommended_books:
             try:
                 sum += popularity_list.index(isbn)
+                total += 1
             except: # The book is not in the popularity list, we consider its index as the last index of the list + 1
                 sum += len(popularity_list)
             total += 1
