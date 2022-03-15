@@ -1,7 +1,7 @@
 from RecommenderModule.recommenders.resources.data_provider import DataProvider
 from RecommenderModule.evaluation.resources.evaluation_data_provider import EvaluationDataProvider
 from RecommenderModule.recommenders.resources.popular_books_recommender_methods import PopularBooksMethods
-from RecommenderModule.evaluation.resources import evaluator_metrics
+from RecommenderModule.evaluation.resources.evaluator import Evaluator
 
 """This file evaluates popularity-based recommenders according to the different
     metrics (average, median, both), in order for the developer to pick the best
@@ -46,16 +46,9 @@ class EvaluationPopularity:
         all_recommendations["Combination"] = recommendations_combination
 
         for (scoring_method, recommendations) in all_recommendations.items():
-
-            hit_rate = evaluator_metrics.get_hit_rate(recommendations, self.testset)
-            average_reciprocal_hit_rate = evaluator_metrics.get_average_reciprocal_hit_rate(recommendations, self.testset)
-            novelty = evaluator_metrics.get_novelty(recommendations, self.trainset)
-            print()
-            print(f"Scoring method: {scoring_method}")
-            print(f" -> hit_rate:{hit_rate}")
-            print(f" -> average_reciprocal_hit_rate:{average_reciprocal_hit_rate}")
-            print(f" -> novelty:{novelty}")
-            print()
+            print(f"\nScoring method: {scoring_method}")
+            evaluator = Evaluator(recommendations, self.trainset, self.testset)
+            evaluator.evaluate()
 
     """Get the recommendations for all users from the train set, using the
         average metric."""

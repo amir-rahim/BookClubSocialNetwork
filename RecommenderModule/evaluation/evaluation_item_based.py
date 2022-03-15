@@ -1,7 +1,7 @@
 from RecommenderModule.recommenders.resources.data_provider import DataProvider
 from RecommenderModule.evaluation.resources.evaluation_data_provider import EvaluationDataProvider
 from RecommenderModule.recommenders.resources.item_based_collaborative_filtering_methods import ItemBasedCollaborativeFilteringMethods
-from RecommenderModule.evaluation.resources import evaluator_metrics
+from RecommenderModule.evaluation.resources.evaluator import Evaluator
 
 """This class evaluates item-based collaborative filtering recommenders with
     different parameters, in order for the developer to pick the best parameters
@@ -16,8 +16,8 @@ class EvaluationItemBased:
 
         self.trainset, self.testset = self.get_train_test_datasets()
         parameters_to_evaluate = {
-            'min_support': [2, 5, 10],
-            'model_function_name': ['cosine', 'msd', 'pearson', 'pearson_baseline']
+            'min_support': [5, 10],
+            'model_function_name': ['pearson', 'pearson_baseline']
         }
         self.evaluate_all_combinations(parameters_to_evaluate)
 
@@ -34,16 +34,10 @@ class EvaluationItemBased:
     def evaluate_all_combinations(self, parameters_to_evaluate):
         for min_support in parameters_to_evaluate['min_support']:
             for model_function_name in parameters_to_evaluate['model_function_name']:
+                print(f"\nmin_support:{min_support}, model_function_name:{model_function_name}")
                 recommendations = self.get_recommendations_for_combination(min_support, model_function_name)
-                hit_rate = evaluator_metrics.get_hit_rate(recommendations, self.testset)
-                average_reciprocal_hit_rate = evaluator_metrics.get_average_reciprocal_hit_rate(recommendations, self.testset)
-                novelty = evaluator_metrics.get_novelty(recommendations, self.trainset)
-                print()
-                print(f"min_support:{min_support}, model_function_name:{model_function_name}")
-                print(f" -> hit_rate:{hit_rate}")
-                print(f" -> average_reciprocal_hit_rate:{average_reciprocal_hit_rate}")
-                print(f" -> novelty:{novelty}")
-                print()
+                evaluator = Evaluator(recommendations, self.trainset, self.testset)
+                evaluator.evaluate()
 
     """Get the recommendations for all users from the train set, for the given
         parameters combination."""
