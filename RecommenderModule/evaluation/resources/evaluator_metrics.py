@@ -1,4 +1,4 @@
-from RecommenderModule.recommenders.resources.popular_books_recommender_methods import PopularBooksMethods
+from collections import Counter
 
 """Get the hit-rate of an algorithm, given the recommendations produced from
     the dataset's LOOCV train set and the left-out LOOCV test set."""
@@ -49,8 +49,8 @@ def get_average_reciprocal_hit_rate(recommendations, left_out_test_set):
     the train set itself."""
 def get_novelty(recommendations, trainset):
 
-    popular_books = PopularBooksMethods(trainset=trainset)
-    popularity_list = popular_books.sorted_average_ratings
+    popularity_list = get_books_sorted_by_most_read(trainset)
+    # Try again with average popularity list (contains tuples (isbn, score) !)
 
     sum = 0
     total = 0
@@ -67,3 +67,13 @@ def get_novelty(recommendations, trainset):
     if (total == 0):
         return 0
     return sum / total
+
+
+def get_books_sorted_by_most_read(trainset):
+
+    all_book_occurrences = []
+    for user_inner_id, item_inner_id, rating in trainset.all_ratings():
+        all_book_occurrences.append(trainset.to_raw_iid(item_inner_id))
+    counter = Counter(all_book_occurrences)
+    sorted_books = sorted(counter.items(), key=lambda item: item[1], reverse=True)
+    return [pair[0] for pair in sorted_books]
