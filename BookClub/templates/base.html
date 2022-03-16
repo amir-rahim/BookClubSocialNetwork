@@ -3,10 +3,13 @@
 {% load static %}
 <html lang="en" class="has-navbar-fixed-top">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link rel="shortcut icon" href="{% static 'favicon.ico' %}" />
-        <link rel="stylesheet" href="{% static 'bulma/css/mystyles.css' %}">
+        <link rel="stylesheet" href="{% static 'bulma/css/mystyles.css' %}"/>
+        <link rel="stylesheet"
+              href="{% static 'bulma-calendar/dist/css/bulma-calendar.min.css' %}"/>
+        <script src="{% static 'bulma-calendar/dist/js/bulma-calendar.min.js' %}"></script>
         <script src="https://kit.fontawesome.com/4c481256fb.js" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script>
@@ -59,14 +62,45 @@
 
         </style>
         <title>
-            {% block page_title %}{% endblock %}
+            {% block page_title %}{% endblock page_title %}
         | Novella</title>
-        {% block head %}{% endblock %}
+        {% block head %}{% endblock head %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        {% block body %}{% endblock body %}
     </body>
     <script>
+      // Initialize all input of type date
+        var calendars = bulmaCalendar.attach('[type="datetime"]', {
+          dateFormat: 'yyyy-MM-dd',
+          timeFormat: 'HH:mm:SS',
+          closeOnSelect : true,
+          displayMode : 'dialog',
+          validateLabel : "Select",
+          minuteSteps : 15,
+          color : 'primary'
+        });
+
+        // Loop on each calendar initialized
+        for(var i = 0; i < calendars.length; i++) {
+          // Add listener to select event
+          calendars[i].on('select', date => {
+            console.log(date);
+          });
+        }
+
+        // To access to bulmaCalendar instance of an element
+        var element = document.querySelector('#my-element');
+        if (element) {
+          // bulmaCalendar instance is available as element.bulmaCalendar
+          element.bulmaCalendar.on('select', function(datepicker) {
+            console.log(datepicker.data.value());
+          });
+        }
+
+
+
+
         document.addEventListener('DOMContentLoaded', () => {
           // Functions to open and close a modal
           function openModal($el) {
