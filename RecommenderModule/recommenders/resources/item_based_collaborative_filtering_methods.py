@@ -21,7 +21,7 @@ class ItemBasedCollaborativeFilteringMethods:
 
     def __init__(self, parameters={}, retraining=False, retraining_and_saving=False, trainset=None):
         self.initialise_parameters(parameters)
-        self.data_provider = DataProvider(filtering_min_ratings_threshold=self.min_ratings_threshold)
+        self.library = Library(trainset=trainset)
         if (trainset == None):
             if (retraining or retraining_and_saving):
                 self.build_trainset()
@@ -36,7 +36,6 @@ class ItemBasedCollaborativeFilteringMethods:
         else: # trainset != None
             self.trainset = trainset
             self.train_model()
-        self.import_library()
 
 
     """Store the values of the parameters into class attributes"""
@@ -50,6 +49,8 @@ class ItemBasedCollaborativeFilteringMethods:
 
     """Build the filtered ratings trainset, with only books having at least {filtering_min_ratings_threshold} ratings"""
     def build_trainset(self):
+        if self.data_provider is None:
+            self.data_provider = DataProvider(filtering_min_ratings_threshold=self.min_ratings_threshold)
         self.trainset = self.data_provider.get_filtered_ratings_trainset()
 
     """Train the KNN model on the defined trainset and compute the associated similarities matrix"""
@@ -73,10 +74,6 @@ class ItemBasedCollaborativeFilteringMethods:
         self.trainset = joblib.load(f"{self.path_to_model}/trainset.sav")
         self.similarities_matrix = joblib.load(f"{self.path_to_model}/similarities_matrix.sav")
 
-    """Import library object, using local trainset"""
-    def import_library(self):
-        self.library = Library(trainset=self.trainset)
-
     """Get the recommended books (up to 10) given a specified user_id, from all of the user's rated books"""
     def get_recommendations_all_ratings_from_user_id(self, user_id):
         user_ratings = self.get_trainset_user_book_ratings(user_id)
@@ -85,20 +82,22 @@ class ItemBasedCollaborativeFilteringMethods:
 
     """Get the recommended books (up to 10) given a specified user_id, from all of the user's positively (> 6/10) rated books"""
     def get_recommendations_positive_ratings_only_from_user_id(self, user_id, min_rating=6):
-        user_ratings = self.get_trainset_user_book_ratings(user_id)
-        positive_user_ratings = self.library.get_trainset_user_book_ratings(user_id, min_rating=min_rating)
+        user_read_books = self.library.get_all_books_rated_by_user(user_id)
+        user_ratings = self.get_trainset_user_book_ratings(user_id, items=user_read_books)
+        positive_user_ratings = self.get_trainset_user_book_ratings(user_id, min_rating=min_rating, items=user_read_books)
         recommendations = self.get_recommendations_from_user_inner_ratings(positive_user_ratings, all_books_rated=user_ratings)
         return recommendations
 
     """Get all the ratings from the specified user, of books that are in the trainset, with a minimum rating value of {min_rating}"""
-    def get_trainset_user_book_ratings(self, user_id, min_rating=0):
-        items = self.library.get_all_books_rated_by_user(user_id)
+    def get_trainset_user_book_ratings(self, user_id, min_rating=0, items=None):
+        if items is None:
+            items = self.library.get_all_books_rated_by_user(user_id)
         inner_items = []
         for item in items:
             try:
                 inner_item = self.trainset.to_inner_iid(item)
                 rating = self.library.get_rating_from_user_and_book(user_id, item)
-                if (rating >= min_rating):
+                if rating >= min_rating:
                     inner_items.append((inner_item, rating))
             except:
                 pass

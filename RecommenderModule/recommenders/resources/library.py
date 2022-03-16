@@ -37,6 +37,7 @@ class Library:
                 books = []
                 for review in user_reviews:
                     books.append(review.book.ISBN)
+                return books
             except:
                 return []
 
@@ -51,10 +52,18 @@ class Library:
 
     """Get the rating the specified user made for the specified book"""
     def get_rating_from_user_and_book(self, user_id, book_isbn):
-        if (self.trainset == None):
-            print("No trainset provided")
-            return None
+        if (self.trainset == None): # Get from Django
+
+            try:
+                user = User.objects.get(username=user_id)
+                book = Book.objects.get(ISBN=book_isbn)
+                review = BookReview.objects.get(user=user, book=book)
+                return int(review.rating)
+            except:
+                return None
+
         else:
+
             try:
                 user_inner_id = self.trainset.to_inner_uid(user_id)
                 item_inner_id = self.trainset.to_inner_iid(book_isbn)
@@ -65,17 +74,3 @@ class Library:
                 return None
             except:
                 return None
-
-    """Get all the ratings from the specified user, of books that are in the trainset, with a minimum rating value of {min_rating}"""
-    def get_trainset_user_book_ratings(self, user_id, min_rating=0):
-        items = self.get_all_books_rated_by_user(user_id)
-        inner_items = []
-        for item in items:
-            try:
-                inner_item = self.trainset.to_inner_iid(item)
-                rating = self.get_rating_from_user_and_book(user_id, item)
-                if (rating != None and rating >= min_rating):
-                    inner_items.append((inner_item, rating))
-            except:
-                pass
-        return inner_items
