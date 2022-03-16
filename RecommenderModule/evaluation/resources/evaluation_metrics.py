@@ -4,6 +4,7 @@ class EvaluationMetrics:
 
     trainset = None
     testset = []
+    popularity_list = []
 
     def __init__(self, trainset, testset):
         self.trainset = trainset

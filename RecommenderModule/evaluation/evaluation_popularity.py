@@ -2,6 +2,7 @@ from RecommenderModule.recommenders.resources.data_provider import DataProvider
 from RecommenderModule.evaluation.resources.evaluation_data_provider import EvaluationDataProvider
 from RecommenderModule.recommenders.resources.popular_books_recommender_methods import PopularBooksMethods
 from RecommenderModule.evaluation.evaluator import Evaluator
+from RecommenderModule.recommenders.popular_books_recommender import PopularBooksRecommender
 
 """This file evaluates popularity-based recommenders according to the different
     metrics (average, median, both), in order for the developer to pick the best
@@ -13,7 +14,7 @@ class EvaluationPopularity:
     evaluator = None
     recommender = None
     evaluation_data_provider = None
-    read_books_all_users = None
+    read_books_all_users = {}
 
     def __init__(self, min_ratings_threshold=300):
         self.min_ratings_threshold = min_ratings_threshold
@@ -23,13 +24,12 @@ class EvaluationPopularity:
         self.evaluator = Evaluator()
         self.trainset, self.testset = self.evaluator.get_train_test_datasets()
         self.recommender = PopularBooksMethods(trainset=self.trainset)
+        self.build_read_books_all_users_dict()
         self.evaluate_recommenders()
 
     """Evaluate the popularity-based recommender using the 3 possible metrics:
         average, median and both."""
     def evaluate_recommenders(self):
-        self.read_books_all_users = self.evaluation_data_provider.get_read_books_all_users_dict()
-
         all_recommendations = {}
         recommendations_average = self.get_average_recommendations()
         all_recommendations["Average"] = recommendations_average
@@ -77,3 +77,17 @@ class EvaluationPopularity:
             user_recommendations = self.recommender.get_recommendations_from_average_and_median(user_read_books)
             recommendations[user_id] = user_recommendations
         return recommendations
+
+
+    """Build the read_books_all_users dictionary, which for every user holds 
+        an array of all books read by that user."""
+    def build_read_books_all_users_dict(self):
+        self.read_books_all_users = {}
+        trainset = self.trainset
+        for inner_user_id, inner_item_id, rating in trainset.all_ratings():
+            raw_user_id = trainset.to_raw_uid(inner_user_id)
+            raw_item_id = trainset.to_raw_iid(inner_item_id)
+            try:
+                self.read_books_all_users[raw_user_id].append(raw_item_id)
+            except:
+                self.read_books_all_users[raw_user_id] = [raw_item_id]
