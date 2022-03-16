@@ -1,6 +1,6 @@
 {% load widget_tweaks %}
 {% for field in form %}
-    {% if field|widget_type != 'hiddeninput' %}
+
         <div class="field">
             {% if field|widget_type == 'checkboxinput' %}
                 <div class="control">
@@ -54,5 +54,5 @@
                 {% endif %}
             {% endif %}
         </div>
-    {% endif %}
+
 {% endfor %}
