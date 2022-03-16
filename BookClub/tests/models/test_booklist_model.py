@@ -164,3 +164,8 @@ class BookListTestCase(TestCase):
         self.bookList.remove_book(self.book_one)
         after_count = len(self.bookList.get_books())
         self.assertEqual(before_count, after_count + 1)
+
+    def test_get_absolute_url(self):
+        url = self.bookList.get_absolute_url()
+        correct_url = '/user/johndoe/lists/1/'
+        self.assertEqual(url, correct_url)

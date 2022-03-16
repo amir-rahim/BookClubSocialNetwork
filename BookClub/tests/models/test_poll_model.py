@@ -64,3 +64,8 @@ class PollModelTestCase(TestCase):
         self._assert_poll_is_valid()
         self.poll.deadline = ""
         self._assert_poll_is_valid()
+
+    def test_str_function(self):
+        return_str = str(self.poll)
+        correct_str = f'Poll in "Johnathan Club" on "My First Poll"'
+        self.assertEqual(return_str, correct_str)

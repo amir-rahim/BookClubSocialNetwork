@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.views.generic import TemplateView, View
+from django.core.exceptions import ObjectDoesNotExist
 
 from BookClub.helpers import *
 from BookClub.models import Club, User, ClubMembership
@@ -26,7 +27,7 @@ class ActionView(TemplateView):
             club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
             current_user = self.request.user
             target_user = User.objects.get(username=self.request.POST.get('user'))
-        except:
+        except ObjectDoesNotExist:
             messages.error(self.request, "Error, user or club not found.")
 
         if self.is_actionable(current_user, target_user, club):
@@ -203,7 +204,7 @@ class JoinClubView(LoginRequiredMixin, View):
     def is_not_actionable(self, current_user, club):
         """If user has a membership with the club already"""
 
-        if is_club_private(club):
+        if club.is_private:
             messages.info(self.request, "You have already applied to this club.")
         else:
             messages.info(self.request, "You are already a member of this club.")
@@ -211,7 +212,7 @@ class JoinClubView(LoginRequiredMixin, View):
     def action(self, current_user, club):
         """Create membership for user with the club depending on privacy"""
 
-        if is_club_private(club):
+        if club.is_private:
             create_membership(club, current_user, ClubMembership.UserRoles.APPLICANT)
             messages.success(self.request, "Application to club successful.")
         else:
@@ -289,7 +290,7 @@ class DeleteClubView(LoginRequiredMixin, View):
         messages.error(self.request, f"You are not allowed to delete the club!")
 
     def action(self, current_user, club):
-        delete_club(club)
+        club.delete()
         messages.success(self.request, "You have deleted the club.")
 
     def post(self, request, *args, **kwargs):

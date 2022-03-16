@@ -2,14 +2,16 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase, tag
 
 from BookClub.models import Club, ClubMembership, User
+from BookClub.models.forum import ForumPost
 
 
-@tag('models', 'club')
+@tag('models', 'club', 'clubmodel')
 class ClubModelTestCase(TestCase):
     fixtures = [
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_clubs.json',
         'BookClub/tests/fixtures/default_club_owners.json',
+        'BookClub/tests/fixtures/default_forums_posts_and_meetings_club.json'
     ]
 
     def setUp(self):
@@ -19,13 +21,13 @@ class ClubModelTestCase(TestCase):
         self.applicant = User.objects.get(pk = 5)
         self.moderator = User.objects.get(pk = 3)
         self.member = User.objects.get(pk = 6)
-        
+
         ClubMembership.objects.create(user = self.applicant,club=self.club1, membership = ClubMembership.UserRoles.APPLICANT)
         ClubMembership.objects.create(user = self.moderator,club=self.club1, membership = ClubMembership.UserRoles.MODERATOR)
         ClubMembership.objects.create(user = self.member,club=self.club1, membership = ClubMembership.UserRoles.MEMBER)
-        
+
     def _assert_club_is_valid(self):
-        try:    
+        try:
             self.club1.full_clean()
         except ValidationError:
             self.fail('Test club should be valid')
@@ -168,10 +170,10 @@ class ClubModelTestCase(TestCase):
         expectedUrl = "Daves_Club_Of_Spaces"
         resultUrl = Club.convertNameToUrl(None, testName)
         self.assertEqual(expectedUrl, resultUrl)
-    
+
     def test_is_applicant(self):
         self.assertTrue(self.club1.is_applicant(self.applicant))
-        
+
     def test_is_member(self):
         self.assertTrue(self.club1.is_member(self.member))
 
@@ -180,7 +182,7 @@ class ClubModelTestCase(TestCase):
 
     def test_is_owner(self):
         self.assertTrue(self.club1.is_owner(self.owner))
-         
+
     # unimplemented
     def test_get_number_of_meetings(self):
         pass
@@ -198,7 +200,7 @@ class ClubModelTestCase(TestCase):
 
     def test_get_users_with_members(self):
         self.assertQuerysetEqual(self.club1.get_users(ClubMembership.UserRoles.MEMBER), [self.member], ordered = False)
-        
+
     def test_get_users_with_moderators(self):
         self.assertQuerysetEqual(self.club1.get_users(ClubMembership.UserRoles.MODERATOR), [self.moderator], ordered = False)
 
@@ -213,7 +215,18 @@ class ClubModelTestCase(TestCase):
 
     def test_get_moderators(self):
         self.assertQuerysetEqual(self.club1.get_moderators(), [self.moderator], ordered = False)
-    
+
     def test_get_owner(self):
         self.assertQuerysetEqual(self.club1.get_owner(),[self.owner], ordered = False)
-    
+
+    def test_get_posts_no_posts(self):
+        self.assertEqual(self.club2.get_number_of_posts(), 0)
+
+    def test_get_posts_some_posts(self):
+        self.assertEqual(self.club1.get_number_of_posts(), 1)
+
+    def test_get_number_meetings_no_meetings(self):
+        self.assertEqual(self.club1.get_number_of_meetings(), 0)
+
+    def test_get_number_meetings_some_meetings(self):
+        self.assertEqual(self.club2.get_number_of_meetings(), 1)

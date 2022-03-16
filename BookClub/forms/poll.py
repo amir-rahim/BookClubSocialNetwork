@@ -26,8 +26,7 @@ class ISBNField(forms.CharField):
 
         if not self.required and not cleaned_field_data:
             return cleaned_field_data
-
-        if Book.objects.filter(ISBN=cleaned_field_data).exists():
+        if(len(cleaned_field_data) == 10 or len(cleaned_field_data) == 13) and Book.objects.filter(ISBN=cleaned_field_data).exists():
             return cleaned_field_data
         else:
             raise ValidationError(
@@ -72,8 +71,6 @@ class PollForm(forms.Form):
             raise ObjectDoesNotExist('Supplied club object for creator is invalid')
 
         poll_active = True
-        # print(self.cleaned_data['deadline'])
-        # print(datetime.now())
         if self.cleaned_data['deadline'] and (self.cleaned_data['deadline'] < pytz.utc.localize(datetime.now())):
             poll_active = False
 

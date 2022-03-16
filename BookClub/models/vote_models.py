@@ -82,7 +82,7 @@ class Vote(UserCreatedObject):
             super().save()
             self.target.add_vote(self)
         else:
-            raise Exception()
+            raise ValueError()
 
     def delete(self, *args, **kwargs):
         """

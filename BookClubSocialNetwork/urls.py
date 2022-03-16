@@ -123,7 +123,7 @@ urlpatterns = [
          views.DeleteBookListView.as_view(), name='delete_booklist'),
     path('user/<str:username>/lists/<int:booklist_id>/edit/',
          views.EditBookListView.as_view(), name='edit_booklist'),
-    path('user/<str:username>/lists/<int:booklist_id>',
+    path('user/<str:username>/lists/<int:booklist_id>/',
          views.UserBookListView.as_view(), name='user_booklist'),
     path('user/<str:username>/lists/<int:booklist_id>/<int:book_id>/delete', views.RemoveFromBookListView.as_view(), name='remove_book'),
     path('user/<str:username>/lists/create/',
