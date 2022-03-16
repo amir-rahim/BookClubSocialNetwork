@@ -30,7 +30,7 @@ def get_user_read_books(user):
     return isbn_list
 
 """Get (up to) 10 book recommendations, from books the user has rated."""
-def get_item_based_recommendations(user, positive_ratings_only=True):
+def get_personalised_recommendations(user, positive_ratings_only=True):
     item_based = ItemBasedRecommender()
     if positive_ratings_only:
         recommended_books = item_based.get_recommendations_positive_ratings_only_from_user_id(user.username)
