@@ -9,9 +9,6 @@ class PopularBooksRecommender(AbstractRecommender):
     popular_books_methods = None
     trainset = None
 
-    def __init__(self):
-        self.popular_books_methods = PopularBooksMethods()
-
     """Train the recommender to recommend books, using the current or given data;
         parameters may contain a value for 'min_ratings_threshold' """
     def train(self, trainset=None, parameters={}):
@@ -35,4 +32,6 @@ class PopularBooksRecommender(AbstractRecommender):
             self.trainset = data_provider.get_filtered_ratings_trainset()
         library = Library(self.trainset)
         user_read_books = library.get_all_books_rated_by_user(user_id)
+        if self.popular_books_methods is None:
+            self.popular_books_methods = PopularBooksMethods
         return self.popular_books_methods.get_recommendations_from_average(user_read_books=user_read_books)

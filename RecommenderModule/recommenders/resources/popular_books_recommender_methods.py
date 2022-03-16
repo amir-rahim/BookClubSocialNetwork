@@ -47,10 +47,10 @@ class PopularBooksMethods:
 
     """Get all books with at least {self.min_ratings_threshold} user ratings"""
     def load_filtered_books_list(self, min_ratings_threshold):
-        if self.trainset == None:
+        if self.trainset is None:
             self.data_provider = DataProvider(filtering_min_ratings_threshold=min_ratings_threshold)
             self.filtered_books_list = self.data_provider.get_filtered_books_list()
-            self.trainset = self.data_provider.filtered_ratings_trainset
+            self.trainset = self.data_provider.get_filtered_ratings_trainset()
         else:
             books_list = []
             for item_inner_id in self.trainset.all_items():

@@ -11,7 +11,7 @@ def get_popularity_recommendations(user_id):
 """Retrain the popularity recommender with the current data."""
 def retrain_popularity_recommender(min_ratings_threshold=300):
     popularity_recommender = PopularBooksRecommender()
-    popularity_recommender.train_and_save({"min_ratings_threshold": min_ratings_threshold})
+    popularity_recommender.train_and_save(parameters={"min_ratings_threshold": min_ratings_threshold})
 
 """Get (up to) 10 book recommendations, from books the user has rated."""
 def get_personalised_recommendations(user_id):
