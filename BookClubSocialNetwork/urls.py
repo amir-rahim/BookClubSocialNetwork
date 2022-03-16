@@ -14,7 +14,7 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from BookClub import views
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.views.generic.base import RedirectView
@@ -130,4 +130,6 @@ urlpatterns = [
 
     # '''Agenda URLs'''
     path('agenda/', views.AgendaView.as_view(), name='agenda'),
+
+    path('verification/', include('verify_email.urls')),
 ]
