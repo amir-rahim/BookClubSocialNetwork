@@ -14,5 +14,10 @@ class Command(BaseCommand):
         def handle(self, *args, **options):
             min_ratings_threshold = options.get('min_ratings_threshold', None)
             min_support = options.get('min_support', None)
+            parameters = {}
+            if min_ratings_threshold is not None:
+                parameters["min_ratings_threshold"] = min_ratings_threshold
+            if min_support is not None:
+                parameters["min_support"] = min_support
             print("Started training item-based recommender...")
-            recommendations_provider.retrain_item_based_recommender(min_ratings_threshold=min_ratings_threshold, min_support=min_support)
+            recommendations_provider.retrain_item_based_recommender(parameters=parameters)

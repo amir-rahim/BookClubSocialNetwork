@@ -41,18 +41,12 @@ class ItemBasedCollaborativeFilteringMethods:
 
     """Store the values of the parameters into class attributes"""
     def initialise_parameters(self, parameters):
-        try:
+        if "min_ratings_threshold" in parameters.keys():
             self.min_ratings_threshold = parameters["min_ratings_threshold"]
-        except:
-            pass
-        try:
+        if "min_support" in parameters.keys():
             self.min_support = parameters["min_support"]
-        except:
-            pass
-        try:
+        if "model_function_name" in parameters.keys():
             self.model_function_name = parameters["model_function_name"]
-        except:
-            pass
 
     """Build the filtered ratings trainset, with only books having at least {filtering_min_ratings_threshold} ratings"""
     def build_trainset(self):

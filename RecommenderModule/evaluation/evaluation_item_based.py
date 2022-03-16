@@ -1,6 +1,6 @@
 from RecommenderModule.recommenders.resources.data_provider import DataProvider
 from RecommenderModule.evaluation.resources.evaluation_data_provider import EvaluationDataProvider
-from RecommenderModule.recommenders.resources.item_based_collaborative_filtering_methods import ItemBasedCollaborativeFilteringMethods
+from RecommenderModule.recommenders.item_based_recommender import ItemBasedRecommender
 from RecommenderModule.evaluation.resources.evaluator import Evaluator
 
 """This class evaluates item-based collaborative filtering recommenders with
@@ -16,8 +16,8 @@ class EvaluationItemBased:
 
         self.trainset, self.testset = self.get_train_test_datasets()
         parameters_to_evaluate = {
-            'min_support': [5, 10],
-            'model_function_name': ['pearson', 'pearson_baseline']
+            'min_support': [2, 5, 10],
+            'model_function_name': ['cosine', 'msd', 'pearson', 'pearson_baseline']
         }
         self.evaluate_all_combinations(parameters_to_evaluate)
 
@@ -43,14 +43,19 @@ class EvaluationItemBased:
         parameters combination."""
     def get_recommendations_for_combination(self, min_support, model_function_name):
         print("Getting recommendations...")
-        item_based_recommender = ItemBasedCollaborativeFilteringMethods(trainset=self.trainset, min_support=min_support, model_function_name=model_function_name)
+        parameters = {
+            "min_support": min_support,
+            "model_funciton_name": model_function_name
+        }
+        item_based_recommender = ItemBasedRecommender()
+        item_based_recommender.train(trainset=self.trainset, parameters=parameters)
         recommendations = {}
         nb_users = self.trainset.n_users
         for user_inner_id in self.trainset.all_users():
             if (user_inner_id % 1000 == 0):
                 print(f"{user_inner_id} / {nb_users}")
             user_id = self.trainset.to_raw_uid(user_inner_id)
-            user_recommendations = item_based_recommender.get_recommendations_positive_ratings_only_from_user_id(user_id)
+            user_recommendations = item_based_recommender.get_recommendations(user_id)
             recommendations[user_id] = user_recommendations
         print("Getting recommendations done")
         return recommendations
