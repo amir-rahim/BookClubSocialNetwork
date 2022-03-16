@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'widget_tweaks',
+    'verify_email.apps.VerifyEmailConfig',
 ]
 
 MIDDLEWARE = [
@@ -148,3 +149,19 @@ except:
     if '/app' in os.path.expanduser('~'):
         import django_heroku
         django_heroku.settings(locals())
+
+# SMTP Configuration
+# For Django Email Backend
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+# EMAIL_HOST_USER = os.environ.get('')
+# EMAIL_HOST_PASSWORD = os.environ.get('')  # os.environ['password_key'] suggested
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = True
+
+DEFAULT_FROM_EMAIL = 'noreply<no_reply@domain.com>'
+
+EXPIRE_AFTER = "1h" # Will expire after one hour from link generation
