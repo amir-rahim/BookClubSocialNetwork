@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, render, reverse
 from django.views.generic import FormView, View
+from verify_email.email_handler import send_verification_email
 
 from BookClub.forms import LogInForm, SignUpForm
 from BookClub.helpers import LoginProhibitedMixin
@@ -17,9 +18,7 @@ class SignUpView(LoginProhibitedMixin, FormView):
     redirect_when_logged_in_url = 'home'
 
     def form_valid(self, form):
-        self.object = form.save()
-        login(self.request, self.object)
-        messages.add_message(self.request, messages.SUCCESS, "Welcome to the club")
+        inactive_user = send_verification_email(self.request, form)
         return super().form_valid(form)
 
     def form_invalid(self, form):
