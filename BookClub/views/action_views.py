@@ -246,16 +246,13 @@ class LeaveClubView(LoginRequiredMixin, View):
     def is_actionable(self, current_user, club):
         """Check if currentUser is in the club"""
 
-        return has_membership(club, current_user) and not (
-                has_applicant_rank(current_user, club) or has_owner_rank(current_user, club))
+        return (has_membership(club, current_user) or has_applicant_rank(current_user, club)) and not (has_owner_rank(current_user, club))
 
     def is_not_actionable(self, current_user, club):
         """If the user is unable to leave the club"""
 
         if has_owner_rank(current_user, club):
             messages.error(self.request, "The owner of the club cannot leave.")
-        if has_applicant_rank(current_user, club):
-            messages.error(self.request, "You can't leave as an applicant.")
 
     def action(self, current_user, club):
         """User leaves the club, membership with the club is deleted"""
