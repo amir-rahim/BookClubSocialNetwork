@@ -15,10 +15,13 @@ class ItemBasedCollaborativeFilteringMethods:
     similarities_matrix = None
     library = None
 
-    def __init__(self, filtering_min_ratings_threshold=15, min_support=5, model_function_name='pearson', retraining=False, retraining_and_saving=False, trainset=None):
-        self.min_support = min_support
-        self.model_function_name = model_function_name
-        self.data_provider = DataProvider(filtering_min_ratings_threshold=filtering_min_ratings_threshold)
+    min_ratings_threshold = 15
+    min_support = 5
+    model_function_name = 'pearson_baseline'
+
+    def __init__(self, parameters={}, retraining=False, retraining_and_saving=False, trainset=None):
+        self.initialise_parameters(parameters)
+        self.data_provider = DataProvider(filtering_min_ratings_threshold=self.min_ratings_threshold)
         if (trainset == None):
             if (retraining or retraining_and_saving):
                 self.build_trainset()
@@ -29,12 +32,27 @@ class ItemBasedCollaborativeFilteringMethods:
                 try:
                     self.import_model()
                 except:
-                    self.__init__(filtering_min_ratings_threshold=filtering_min_ratings_threshold, retraining_and_saving=True)
+                    self.__init__(parameters=parameters, retraining_and_saving=True)
         else: # trainset != None
             self.trainset = trainset
             self.train_model()
         self.import_library()
 
+
+    """Store the values of the parameters into class attributes"""
+    def initialise_parameters(self, parameters):
+        try:
+            self.min_ratings_threshold = parameters["min_ratings_threshold"]
+        except:
+            pass
+        try:
+            self.min_support = parameters["min_support"]
+        except:
+            pass
+        try:
+            self.model_function_name = parameters["model_function_name"]
+        except:
+            pass
 
     """Build the filtered ratings trainset, with only books having at least {filtering_min_ratings_threshold} ratings"""
     def build_trainset(self):

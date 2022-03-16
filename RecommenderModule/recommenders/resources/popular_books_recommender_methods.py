@@ -18,12 +18,12 @@ class PopularBooksMethods:
     sorted_median_ratings = []
     sorted_combination_scores = []
 
-    def __init__(self, min_ratings_threshold=100, retraining=False, retraining_and_saving=False, trainset=None):
-        if (trainset == None):
+    def __init__(self, min_ratings_threshold=300, retraining=False, retraining_and_saving=False, trainset=None):
+        if trainset is None:
             if (retraining or retraining_and_saving):
                 self.load_filtered_books_list(min_ratings_threshold)
                 self.compute_all_popularity_lists()
-                if (retraining_and_saving):
+                if retraining_and_saving:
                     self.save_all_popularity_lists()
             else:
                 # Import popularity lists if files exist, otherwise train and save popularity lists
@@ -35,6 +35,8 @@ class PopularBooksMethods:
             self.trainset = trainset
             self.load_filtered_books_list(None)
             self.compute_all_popularity_lists()
+            if retraining_and_saving:
+                self.save_all_popularity_lists()
 
 
     """Import all sorted ratings list objects, using the joblib library"""
@@ -45,7 +47,7 @@ class PopularBooksMethods:
 
     """Get all books with at least {self.min_ratings_threshold} user ratings"""
     def load_filtered_books_list(self, min_ratings_threshold):
-        if (self.trainset == None):
+        if self.trainset == None:
             self.data_provider = DataProvider(filtering_min_ratings_threshold=min_ratings_threshold)
             self.filtered_books_list = self.data_provider.get_filtered_books_list()
             self.trainset = self.data_provider.filtered_ratings_trainset
@@ -130,9 +132,8 @@ class PopularBooksMethods:
         final_recommendations = []
         for (isbn, score) in popularity_list:
             if (isbn not in user_read_books) and (score > 0):
-                #print(f"{isbn}: {score}")
                 final_recommendations.append(isbn)
-                if (len(final_recommendations) >= 10):
+                if len(final_recommendations) >= 10:
                     break
         return final_recommendations
 
