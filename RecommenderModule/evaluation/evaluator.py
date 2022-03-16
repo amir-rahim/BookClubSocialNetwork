@@ -16,10 +16,13 @@ class Evaluator:
 
     """Get the LeaveOneOut train and test datasets."""
     def get_train_test_datasets(self):
-        data_provider = DataProvider(get_data_from_csv=True)
-        dataset = data_provider.get_filtered_ratings_dataset()
-        evaluation_data_provider = EvaluationDataProvider(dataset)
-        return evaluation_data_provider.get_loocv_datasets()
+        if self.trainset is None:
+            data_provider = DataProvider(get_data_from_csv=True)
+            dataset = data_provider.get_filtered_ratings_dataset()
+            evaluation_data_provider = EvaluationDataProvider(dataset)
+            return evaluation_data_provider.get_loocv_datasets()
+        else:
+            return (self.trainset, self.testset)
 
 
     def evaluate_all_combinations(self, recommender, parameters_dict):

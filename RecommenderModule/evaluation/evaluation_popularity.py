@@ -1,7 +1,7 @@
 from RecommenderModule.recommenders.resources.data_provider import DataProvider
 from RecommenderModule.evaluation.resources.evaluation_data_provider import EvaluationDataProvider
 from RecommenderModule.recommenders.resources.popular_books_recommender_methods import PopularBooksMethods
-from RecommenderModule.evaluation.resources.evaluator import Evaluator
+from RecommenderModule.evaluation.evaluator import Evaluator
 
 """This file evaluates popularity-based recommenders according to the different
     metrics (average, median, both), in order for the developer to pick the best
@@ -10,6 +10,7 @@ class EvaluationPopularity:
 
     trainset = None
     testset = None
+    evaluator = None
     recommender = None
     evaluation_data_provider = None
     read_books_all_users = None
@@ -19,18 +20,10 @@ class EvaluationPopularity:
 
     """Evaluate the possible popularity-based recommenders and print the insights."""
     def run_evaluations(self):
-
-        self.trainset, self.testset = self.get_train_test_datasets()
+        self.evaluator = Evaluator()
+        self.trainset, self.testset = self.evaluator.get_train_test_datasets()
         self.recommender = PopularBooksMethods(trainset=self.trainset)
         self.evaluate_recommenders()
-
-
-    """Get the LeaveOneOut train and test datasets."""
-    def get_train_test_datasets(self):
-        data_provider = DataProvider(get_data_from_csv=True, filtering_min_ratings_threshold=self.min_ratings_threshold)
-        dataset = data_provider.get_filtered_ratings_dataset()
-        self.evaluation_data_provider = EvaluationDataProvider(dataset)
-        return self.evaluation_data_provider.get_loocv_datasets()
 
     """Evaluate the popularity-based recommender using the 3 possible metrics:
         average, median and both."""
@@ -47,8 +40,7 @@ class EvaluationPopularity:
 
         for (scoring_method, recommendations) in all_recommendations.items():
             print(f"\nScoring method: {scoring_method}")
-            evaluator = Evaluator(recommendations, self.trainset, self.testset)
-            evaluator.evaluate()
+            self.evaluator.evaluate(recommendations)
 
     """Get the recommendations for all users from the train set, using the
         average metric."""
