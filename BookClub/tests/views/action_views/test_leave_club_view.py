@@ -97,19 +97,19 @@ class LeaveClubViewTestCase(TestCase, LogInTester):
         self.assertEqual(before_count, after_count)
         self.assertTrue(ClubMembership.objects.filter(user=self.owner, club=self.club).exists())
 
-    def test_applicant_cannot_leave_club(self):
+    def test_applicant_can_leave_club(self):
         self.client.login(username=self.applicant.username, password='Password123')
         before_count = ClubMembership.objects.count()
         response = self.client.post(self.url)
         response_message = self.client.get(reverse('my_club_memberships'))
         messages_list = list(response_message.context['messages'])
         self.assertEqual(len(messages_list), 1)
-        self.assertEqual(messages_list[0].level, messages.ERROR)
+        self.assertEqual(messages_list[0].level, messages.SUCCESS)
         url = reverse('my_club_memberships')
         self.assertRedirects(response, url, status_code=302, target_status_code=200)
         after_count = ClubMembership.objects.count()
-        self.assertEqual(before_count, after_count)
-        self.assertTrue(ClubMembership.objects.filter(user=self.applicant, club=self.club).exists())
+        self.assertEqual(before_count, after_count+1)
+        self.assertFalse(ClubMembership.objects.filter(user=self.applicant, club=self.club).exists())
 
     # Tests for user leaving a club they're not in
     def test_member_leave_wrong_club(self):

@@ -55,6 +55,7 @@ urlpatterns = [
     # '''Membership URLs'''
     path('club/', views.AvailableClubsView.as_view(), name='available_clubs'),
     path('memberships/', views.MyClubMembershipsView.as_view(), name='my_club_memberships'),
+    path('applications/', views.ApplicationListView.as_view(), name='applications'),
     path('create/', views.CreateClubView.as_view(), name='create_club'),
 
     path('club/<str:club_url_name>/', views.ClubDashboardView.as_view(), name='club_dashboard'),
