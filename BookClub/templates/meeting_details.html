@@ -30,7 +30,7 @@
                     </p>
                     <ul class="menu-list">
                         <li>
-                            <a>Manage Meeting</a>
+                            <a href="{% url 'edit_meeting' club.club_url_name meeting.id %}">Manage Meeting</a>
                         </li>
                     </ul>
                 {% endif %}

@@ -122,4 +122,3 @@ class EditPostViewTestCase(TestCase):
                                       "1500s, when an unknown printer took a galley of type and scrambled it to make "
                                       "a type specimen book.")
         self.assertContains(response, "Posted by: johndoe")
-

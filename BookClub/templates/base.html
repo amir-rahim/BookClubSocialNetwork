@@ -136,13 +136,21 @@
             data: $(form).serializeArray()
           }).done(function (response){
             rating = response['rating']
-            upvoteAvailable = response['upvote']
-            downvoteAvailable = response['downvote']
-            if(upvoteAvailable){
+            upvoted = response['upvote']
+            downvoted = response['downvote']
+            noVote = response['no_vote']
+            console.log(upvoted)
+            console.log(downvoted)
+            console.log(noVote)
+            if(noVote){
+              minimise_downvote(identifier)
+              minimise_upvote(identifier)
+            }
+            else if(downvoted){
               minimise_upvote(identifier)
               highlight_downvote(identifier)
             }
-            if(downvoteAvailable){
+            else if(upvoted){
               minimise_downvote(identifier)
               highlight_upvote(identifier)
             }
