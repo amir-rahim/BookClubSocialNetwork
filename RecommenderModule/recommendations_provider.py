@@ -4,8 +4,8 @@ from RecommenderModule.recommenders.item_based_recommender import ItemBasedRecom
 """Get the 10 most popular books recommended to the user (that the user has not read yet).
     Returns a list of ISBN numbers."""
 def get_popularity_recommendations(user_id):
-    popular_books = PopularBooksRecommender()
-    recommended_books = popular_books.get_recommendations(user_id)
+    popularity_recommender = PopularBooksRecommender()
+    recommended_books = popularity_recommender.get_recommendations(user_id)
     return recommended_books
 
 """Retrain the popularity recommender with the current data."""

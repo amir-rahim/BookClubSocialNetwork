@@ -1,5 +1,5 @@
 import pandas as pd
-from BookClub.models.book import Book
+from BookClub.models import Book, User, BookReview
 
 """This class acts as a library to recover information about books and ratings."""
 class Library:
@@ -29,10 +29,19 @@ class Library:
 
     """Get the ISBN value of all books the specified user has rated"""
     def get_all_books_rated_by_user(self, user_id):
-        if (self.trainset == None):
-            print("No trainset provided")
-            return []
+        if self.trainset is None: # Get from Django
+
+            try:
+                user = User.objects.get(username=user_id)
+                user_reviews = BookReview.objects.filter(user=user)
+                books = []
+                for review in user_reviews:
+                    books.append(review.book.ISBN)
+            except:
+                return []
+
         else:
+
             user_inner_id = self.trainset.to_inner_uid(user_id)
             ratings_tuples = self.trainset.ur[user_inner_id]
             books = []

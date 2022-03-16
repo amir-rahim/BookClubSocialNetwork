@@ -52,11 +52,9 @@ class DataProvider:
     """Get data from Django database as pandas DataFrame"""
     def get_ratings_from_django_database(self):
         ratings_query = BookReview.objects.all()
-        ratings_df = pd.DataFrame(data=None, columns=["User-ID", "ISBN", "Book-Rating"])
         ratings_list = []
         for rating in ratings_query:
             ratings_list.append([rating.user.username, rating.book.ISBN, rating.rating])
-            #ratings_df = ratings_df.append({"User-ID": rating.user.username, "ISBN": rating.book.ISBN, "Book-Rating": rating.rating}, ignore_index=True)
         ratings_df = pd.DataFrame.from_records(ratings_list, columns=["User-ID", "ISBN", "Book-Rating"])
         self.ratings_df = ratings_df
 

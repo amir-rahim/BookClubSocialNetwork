@@ -27,11 +27,8 @@ class PopularBooksRecommender(AbstractRecommender):
 
     """Get most popular books (up to 10) according to their average rating, that the user has not read yet"""
     def get_recommendations(self, user_id):
-        if self.trainset == None:
-            data_provider = DataProvider()
-            self.trainset = data_provider.get_filtered_ratings_trainset()
         library = Library(self.trainset)
         user_read_books = library.get_all_books_rated_by_user(user_id)
         if self.popular_books_methods is None:
-            self.popular_books_methods = PopularBooksMethods
+            self.popular_books_methods = PopularBooksMethods()
         return self.popular_books_methods.get_recommendations_from_average(user_read_books=user_read_books)
