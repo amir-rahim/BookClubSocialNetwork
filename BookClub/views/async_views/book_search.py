@@ -8,53 +8,51 @@ from BookClub.models.booklist import BookList
 
 class BookSearchView(TemplateView):
     
+    paginate_by = 20
+    
     def get(self, request, *args, **kwargs):
-        url_parameter = request.GET.get('q')
+        context = super().get_context_data(*args, **kwargs)
         select = request.GET.get('select')
         page = request.GET.get('page', 1)
-        context = {}
-        books = None
+        query = request.GET.get('q', None)
         
-        if url_parameter:
-            query = url_parameter
-            books = Book.objects.filter(
-                Q(title__icontains=query) | Q(author__icontains=query) | Q(
-                    publisher__icontains=query)
-            )
-            
-            paginate_by = 10
-            
-            if select:
-                paginate_by = 5
-            
-            user = self.request.user
-            if not user.is_anonymous:
-                context['lists'] = BookList.objects.filter(creator=user)
-                context['user'] = user
-            else:
-                context['lists'] = None
-                context['user'] = None
-    
-            paginator = Paginator(books, paginate_by)
-            
-            try:
-                books = paginator.page(page)
-            except PageNotAnInteger:
-                print("not int")
-                books = paginator.page(1)
-            except EmptyPage:
-                print("empty")
-                books = paginator.page(paginator.num_pages)
-        else:
-            books = Book.objects.all()
-        context['books'] = books
+        books = self.get_queryset(query)
         
+        if select:
+            self.paginate_by = 5
+            
+        context['page_obj'] = self.get_pagination(books, page)
+        context['lists'] = None
+        
+        user = self.request.user
+        if not user.is_anonymous:
+            context['lists'] = BookList.objects.filter(creator=user)        
+
         if request.is_ajax():
             html = render_to_string(
-                template_name=self.get_template_names()[0], context=context)
+                template_name=self.get_template_names()[0], context=context, request=request)
             data_dict = {"html_from_view" : html}
             return JsonResponse(data=data_dict, safe=False)
         
+    def get_queryset(self, query=None):
+        if query is not None:
+            return Book.objects.filter(
+                Q(title__icontains=query) | Q(author__icontains=query) | Q(
+                    publisher__icontains=query)
+            )
+        return Book.objects.all()
+    
+    def get_pagination(self, object_list, page=1):
+        paginator = Paginator(object_list, self.paginate_by)
+        try:
+            page_obj = paginator.page(page)
+        except PageNotAnInteger:
+            page_obj = paginator.page(1)
+        except EmptyPage:
+            page_obj = paginator.page(paginator.num_pages)
+        
+        return page_obj
+    
     def get_template_names(self):
         select = self.request.GET.get('select')
         
