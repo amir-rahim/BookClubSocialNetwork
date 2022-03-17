@@ -1,7 +1,6 @@
 from RecommenderModule.recommenders.resources.popular_books_recommender_methods import PopularBooksMethods
 from RecommenderModule.recommenders.resources.abstract_recommender import AbstractRecommender
 from RecommenderModule.recommenders.resources.library import Library
-from RecommenderModule.recommenders.resources.data_provider import DataProvider
 
 """This class allows the developer to recommend the most popular books to a user"""
 class PopularBooksRecommender(AbstractRecommender):
@@ -31,4 +30,4 @@ class PopularBooksRecommender(AbstractRecommender):
         user_read_books = library.get_all_books_rated_by_user(user_id)
         if self.popular_books_methods is None:
             self.popular_books_methods = PopularBooksMethods()
-        return self.popular_books_methods.get_recommendations_from_average(user_read_books=user_read_books)
+        return self.popular_books_methods.get_recommendations_from_median(user_read_books=user_read_books)
