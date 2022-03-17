@@ -2,8 +2,7 @@
     <div class="table-container">
         <table class="table is-hoverable is-fullwidth is-scrollable"
                id="table-books"
-               data-toggle="table"
-               height="200px">
+               data-toggle="table">
             <thead>
                 <tr>
                     <th scope="col">Cover</th>
@@ -30,9 +29,7 @@
                         <td>{{ book.title }}</td>
                         <td>{{ book.author }}</td>
                         {% if is_selection %}
-                            <td>
-                                select
-                            </td>
+                            <td>select</td>
                         {% else %}
                             <td>
                                 <button class="button is-fullwidth is-link"
@@ -44,6 +41,23 @@
             </tbody>
         </table>
     </div>
+    <nav class="pagination is-rounded is-left"
+         role="navigation"
+         aria-label="pagination">
+        {% if page_obj.has_previous %}
+            <a id="prev-page" class="pagination-previous">&#60;&#60; First</a>
+            <a class="pagination-previous"
+               href="?page={{ page_obj.previous_page_number }}">&#60; Previous</a>
+        {% endif %}
+        <ul class="pagination-list">
+            <li>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</li>
+        </ul>
+        {% if page_obj.has_next %}
+            <a class="pagination-next">Next &#62;</a>
+            <a class="pagination-next"
+               href="?page={{ page_obj.paginator.num_pages }}">Last &#62;&#62;</a>
+        {% endif %}
+    </nav>
 {% else %}
     <hr />
     <p style="text-align: center">
@@ -51,10 +65,22 @@
     </p>
     <hr />
 {% endif %}
+
 <script>
-const dataTable = new simpleDatatables.DataTable("#table-books", {
-    columns: [
-      {select: [1], sortable:false}
-    ]
-})
+    const prev_page = $("#prev-page")
+    const next_page = $("#next-page")
+
+    next_page.on('click', function() {
+        {% if page_obj.has_next %}
+            page_num = {{ page_obj.next_page_number }};
+        {% endif %}
+        request_parameters.push( page : page_num)
+    })
+
+    prev_page.on('click', function()){
+        {% if page_obj.has_previous %}
+            page_num = {{ page_obj.previous_page_number }};
+        {% endif %}
+    }
+
 </script>
