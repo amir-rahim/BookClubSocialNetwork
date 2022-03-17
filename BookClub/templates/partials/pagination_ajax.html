@@ -27,7 +27,7 @@
         if (scheduled_function){
             clearTimeout(scheduled_function)
         }
-        scheduled_function = setTimeout(ajax_call, 10, view, request_parameters)
+        scheduled_function = setTimeout(call_book_search, 10, view, request_parameters)
     })
 
     prev_page.on('click', function(){
@@ -38,5 +38,6 @@
         if (scheduled_function){
             clearTimeout(scheduled_function)
         }
-        scheduled_function = setTimeout(ajax_call, 10, view, request_parameters)
+        scheduled_function = setTimeout(call_book_search, 10, view, request_parameters)
     })
+</script>
