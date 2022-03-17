@@ -166,3 +166,8 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'noreply<no_reply@domain.com>'
 
 EXPIRE_AFTER = "1h" # Will expire after one hour from link generation
+
+HTML_MESSAGE_TEMPLATE = 'verification_email.html'
+# VERIFICATION_SUCCESS_TEMPLATE = 'verification_email_success.html'
+# VERIFICATION_FAILED_TEMPLATE = 'verification_email_failed.html'
+# LINK_EXPIRED_TEMPLATE = 'verification_email_expired.html'
