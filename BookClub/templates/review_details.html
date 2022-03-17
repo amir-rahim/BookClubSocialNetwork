@@ -1,0 +1,207 @@
+{% extends 'base_content.html' %}
+{% block page_title %}
+    Book Review
+{% endblock page_title %}
+{% block page_subtitle %}
+  This is a Review of a title. You can read the review, comment it, and read comments by others.
+{% endblock page_subtitle %}
+{% block content %}
+    <div class="columns">
+        <div class="column is-3">
+            <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+                <p class="menu-label">
+                    Clubs
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'available_clubs' %}">Available Clubs</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'my_club_memberships' %}">Memberships</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'create_club' %}">Create Club</a>
+                    </li>
+                </ul>
+                <p class="menu-label">
+                    Useful Links
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'user_dashboard' %}">User Profile</a>
+                    </li>
+                    <li>
+                        <a>Library</a>
+                    </li>
+                    <li>
+                        <a>Forum</a>
+                    </li>
+                </ul>
+            </aside>
+        </div>
+        <div class="column is-9">
+            <nav class="breadcrumb"
+                 aria-label="breadcrumbs"
+                 style="padding-left: 10px;">
+                <ul>
+                    <li>
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'book_view' book_id=review.book.id %}">{{review.book.title}}</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'book_review' book_id=review.book.id review_id=review.id %}">Review by {{ review.creator }}</a>
+                    </li>
+                </ul>
+            </nav>
+            <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
+                <div class="hero-body">
+                    <p class="title">
+                        <b>{{ review.book.title }}</b>
+                    </p>
+                </div>
+            </section>
+            <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
+                <div class="hero-body">
+                    <p class="subtitle">
+                        {{review.book_rating}}/10
+                    </p>
+                    <p class="subtitle">
+                        <b>{{review.title}}</b>
+                    </p>
+                </div>
+            </section>
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title is-vcentered">
+                        <span class="has-text-grey-light">Posted by: {{ review.creator }} {{ review.created_on | timesince }} ago</span>
+                    </p>
+                    <div class="card-header-icon">
+                        {% if user == review.creator %}
+                            <a href="{% url 'edit_review' book_id=review.book.id %}">
+                                <button class="button is-success is-rounded" aria-label="Edit Review">
+                                    <span class="icon">
+                                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                    </span>
+                                    <span>Edit</span>
+                                </button>
+                            </a>
+                            {% include 'partials/delete_button_and_modal.html' with delete_item=review delete_modal_id=review.pk %}
+                            {# <form method="post" action="{% url 'delete_review' book_id=review.book.id %}"> #}
+                                {# {% csrf_token %} #}
+                                {# <button class="button is-danger is-rounded" aria-label="Delete Review" type="submit"> #}
+                                    {# <span class="icon"> #}
+                                        {# <i class="fa-solid fa-x"></i> #}
+                                    {# </span> #}
+                                    {# <span>Delete</span> #}
+                                {# </button> #}
+                            {# </form> #}
+                        {% endif %}
+                    </div>
+                </header>
+                <div class="card-content">
+                    <div class="content">
+                        <span class="has-text-grey">{{ review.content }}</span>
+                    </div>
+                </div>
+                <footer class="card-footer">
+                    <p class="card-footer-item">
+                        <button class="button is-info js-modal-trigger is-rounded"
+                                data-target="modal-create-comment">
+                            <span class="icon">
+                                <i class="fa-solid fa-pen"></i>
+                            </span>
+                            <span>Comment</span>
+                        </button>
+                    </p>
+                    <div class="card-footer-item">{% include 'partials/voting.html' with content=review %}</div>
+                </footer>
+            </div>
+            <br />
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-header-title">Comments to Review:</div>
+                </div>
+                <div class="card-content">
+                    {% if comments.count > 0 %}
+                        {% for comment in comments %}
+                            <article class="message">
+                                <div class="columns is-vcentered">
+                                    <div class="column is-1" style="margin-left: 20px;">{% include 'partials/voting.html' with content=comment %}</div>
+                                    <div class="column is-11">
+                                        <div class="message-body" style="margin-right: 20px;">
+                                            <p class="has-text-justified">
+                                                "{{ comment.content }}"
+                                            </p>
+                                            <br />
+                                            <p class="has-text-right">
+                                                <i>- by {{ comment.creator }}, {{ comment.created_on | timesince }} ago</i>
+                                            </p>
+                                            <div class="buttons">
+                                                {% if comment.creator == user %}
+                                                {% include 'partials/delete_button_and_modal.html' with delete_item=comment delete_modal_id=comment.pk %}
+                                                    {# <form method="post" action="{% url 'delete_review_comment' review.book.id review.id comment.id %}"> #}
+                                                        {# {% csrf_token %} #}
+                                                        {# <button class="button is-danger is-rounded" aria-label="Delete Review" type="submit"> #}
+                                                            {# <span class="icon"> #}
+                                                                {# <i class="fa-solid fa-x"></i> #}
+                                                            {# </span> #}
+                                                            {# <span>Delete</span> #}
+                                                        {# </button> #}
+                                                    {# </form> #}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                                <br />
+                            {% endfor %}
+                            {% include 'partials/pagination.html' %}
+                        {% else %}
+                            <p class="has-text-grey-light has-text-centered">
+                                <i>There are no comments for this review. Comment using the reply button on the review.</i>
+                            </p>
+                            <br />
+                        {% endif %}
+                    </div>
+                </div>
+                <div id="modal-create-comment" class="modal">
+                    <div class="modal-background"></div>
+                    <div class="modal-content">
+                        <div class="card">
+                            <div class="card-header">
+                                <button class="card-header-icon" aria-label="more options">
+                                    <span class="icon">
+                                        <i class="card-header-icon fa-solid fa-pen-clip"></i>
+                                    </span>
+                                </button>
+                                <p class="card-header-title">
+                                    Create Comment/Reply
+                                </p>
+                            </div>
+                            <div class="card-content">
+                                <form method="post" action="{% url 'comment_review' book_id=review.book.id review_id=review.id %}">
+                                    <div class="card-content">
+                                        <div class="container">
+                                            {% csrf_token %}
+                                            {% include 'partials/bulma_form.html' with form=review_comment_form %}
+                                        </div>
+                                    </div>
+                                    <footer class="card-footer">
+                                        <input type="button"
+                                               value="Reset"
+                                               id="resetBtn"
+                                               onClick="this.form.reset()"
+                                               class="button is-danger is-fullwidth"/>
+                                        <input type="submit" value="Add Comment" class="button is-link is-fullwidth"/>
+                                    </footer>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="modal-close is-large" aria-label="close"></button>
+                </div>
+            </div>
+        </div>
+    {% endblock content %}
