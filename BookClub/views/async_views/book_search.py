@@ -28,11 +28,11 @@ class BookSearchView(TemplateView):
         if not user.is_anonymous:
             context['lists'] = BookList.objects.filter(creator=user)        
 
-        if request.is_ajax():
-            html = render_to_string(
-                template_name=self.get_template_names()[0], context=context, request=request)
-            data_dict = {"html_from_view" : html}
-            return JsonResponse(data=data_dict, safe=False)
+        
+        html = render_to_string(
+            template_name=self.get_template_names()[0], context=context, request=request)
+        data_dict = {"html_from_view" : html}
+        return JsonResponse(data=data_dict, safe=False)
         
     def get_queryset(self, query=None):
         if query is not None:
@@ -55,7 +55,6 @@ class BookSearchView(TemplateView):
     
     def get_template_names(self):
         select = self.request.GET.get('select')
-        
         if select:
             return ['partials/book_select_list.html']
         
