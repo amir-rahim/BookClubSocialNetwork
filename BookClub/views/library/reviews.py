@@ -7,7 +7,8 @@ from django.views import View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 
-from django.http import Http404
+from django.http import Http404,HttpResponseRedirect
+
 
 from BookClub.forms import ReviewForm, BookReviewCommentForm
 from BookClub.helpers import delete_bookreview
