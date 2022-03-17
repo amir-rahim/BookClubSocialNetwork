@@ -99,8 +99,10 @@
                           method="post">
                         {% csrf_token %}
                         {% include 'partials/bulma_form.html' with form=form %}
+                        {% include 'partials/book_search_partial.html' %}
                         <input type="submit" value="Create meeting" class="button is-link">
                     </form>
+                    
                 </div>
             </div>
         </div>
