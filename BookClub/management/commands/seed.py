@@ -51,7 +51,7 @@ class Command(BaseCommand):
             except IntegrityError as e:
                 print("Integrity error was found, attempting again")
                 print(str(e))
-        
+
         call_command('importbooks', 5)
         id1 = Book.objects.all()[0].id
         print(id1)
@@ -97,17 +97,18 @@ class Command(BaseCommand):
 
         for i in range(1, random.randrange(2, 20)):
             user = User.objects.order_by('?')[0]
-            curReviews = BookReview.objects.filter(user=user, book=book)
+            curReviews = BookReview.objects.filter(creator=user, book=book)
             while (curReviews.count() != 0):
                 user = User.objects.order_by('?')[0]
-                curReviews = BookReview.objects.filter(user=user, book=book)
+                curReviews = BookReview.objects.filter(creator=user, book=book)
 
             if (curReviews.count() == 0):
                 review = BookReview.objects.create(
-                    user=user,
+                    creator=user,
                     book=book,
-                    rating=random.randrange(0, 10),
-                    review="Material Gworl"
+                    title="Book Title",
+                    book_rating=random.randrange(0, 10),
+                    content="Material Gworl"
                 )
 
     def create_global_forum(self):

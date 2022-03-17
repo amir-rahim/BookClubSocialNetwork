@@ -1,14 +1,16 @@
 from django.db import models
+from BookClub.models.rated_content import *
 
-
-class BookReview(models.Model):
+class BookReview(TextPost):
     class Meta:
-        unique_together = ['book', 'user']
+        unique_together =['book', 'creator']
 
-    RATINGS = [(0, 0), (1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6), (7, 7), (8, 8), (9, 9), (10, 10)]
+    RATINGS = [(0,0), (1,1), (2,2), (3,3), (4,4), (5,5), (6,6), (7,7), (8,8), (9,9), (10,10)]
 
     book = models.ForeignKey('Book', on_delete=models.CASCADE)
-    rating = models.IntegerField(verbose_name='Ratings', choices=RATINGS, default=0, blank=False, null=False)
-    review = models.CharField(verbose_name="Review:", max_length=1024, blank=True, null=False)
-    user = models.ForeignKey('User', on_delete=models.CASCADE)
-    createdOn = models.DateTimeField(verbose_name="Reviewed on:", auto_now=True, blank=False, null=False)
+    book_rating = models.IntegerField(verbose_name='Rating', choices=RATINGS, default=0, blank=False, null=False)
+
+
+class BookReviewComment(TextComment):
+
+    book_review = models.ForeignKey('BookReview', blank = False, null = False, on_delete=models.CASCADE)

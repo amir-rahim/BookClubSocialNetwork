@@ -101,6 +101,7 @@ urlpatterns = [
     path('library/books/<int:book_id>/create/', views.CreateReviewView.as_view(), name='create_review'),
     path('library/books/<int:book_id>/edit/', views.EditReviewView.as_view(), name='edit_review'),
     path('library/books/<int:book_id>/delete/', views.DeleteReviewView.as_view(), name='delete_review'),
+    # path('library/review/<int:book_id>/<int:book_review_id>/comment/', views.CreateCommentForReviewView.as_view(), name='comment_review'),
 
     # '''Forum URLs'''
     path('forum/', views.ForumView.as_view(), name='global_forum'),
