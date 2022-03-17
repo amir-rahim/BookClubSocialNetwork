@@ -88,15 +88,6 @@
                                 </button>
                             </a>
                             {% include 'partials/delete_button_and_modal.html' with delete_item=review delete_modal_id=review.pk %}
-                            {# <form method="post" action="{% url 'delete_review' book_id=review.book.id %}"> #}
-                                {# {% csrf_token %} #}
-                                {# <button class="button is-danger is-rounded" aria-label="Delete Review" type="submit"> #}
-                                    {# <span class="icon"> #}
-                                        {# <i class="fa-solid fa-x"></i> #}
-                                    {# </span> #}
-                                    {# <span>Delete</span> #}
-                                {# </button> #}
-                            {# </form> #}
                         {% endif %}
                     </div>
                 </header>
@@ -141,15 +132,6 @@
                                             <div class="buttons">
                                                 {% if comment.creator == user %}
                                                 {% include 'partials/delete_button_and_modal.html' with delete_item=comment delete_modal_id=comment.pk %}
-                                                    {# <form method="post" action="{% url 'delete_review_comment' review.book.id review.id comment.id %}"> #}
-                                                        {# {% csrf_token %} #}
-                                                        {# <button class="button is-danger is-rounded" aria-label="Delete Review" type="submit"> #}
-                                                            {# <span class="icon"> #}
-                                                                {# <i class="fa-solid fa-x"></i> #}
-                                                            {# </span> #}
-                                                            {# <span>Delete</span> #}
-                                                        {# </button> #}
-                                                    {# </form> #}
                                                 {% endif %}
                                             </div>
                                         </div>
