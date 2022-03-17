@@ -1,4 +1,5 @@
-from django.forms import ModelForm, Textarea, TextInput, ValidationError
+from django.forms import HiddenInput, ModelForm, Textarea, TextInput, ValidationError
+from BookClub.forms.widgets import BookSelectorInput
 
 from BookClub.models.meeting import Meeting
 
@@ -17,7 +18,9 @@ class MeetingForm(ModelForm):
 
         widgets = {
             'description': Textarea,
-            'meeting_time': TextInput(attrs={'placeholder': 'YYYY/MM/DD HH:MM:SS'})
+            'meeting_time': TextInput(attrs={'placeholder': 'YYYY/MM/DD HH:MM:SS'}),
+            'book' : BookSelectorInput()
+            
         }
         
     def clean(self):
@@ -26,5 +29,5 @@ class MeetingForm(ModelForm):
         if meeting_type == Meeting.MeetingType.BOOK:
             book = self.cleaned_data.get('book')
             if book is None:
-                raise ValidationError("A book meeting needs a book selected!")
+                self.add_error('book', "Book is required when creating a book meeting")
         
