@@ -2,6 +2,7 @@ import datetime
 from django.forms import ValidationError
 from BookClub.models import Book, User, BookReview, BookReviewComment
 from django.db import IntegrityError, models
+from django.urls import reverse
 from django.test import TestCase, tag
 
 from BookClub.models.user import User
@@ -14,6 +15,7 @@ class BookReviewModelTestCase(TestCase):
         'BookClub/tests/fixtures/default_books.json',
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_book_reviews.json',
+        'BookClub/tests/fixtures/default_book_review_comments.json'
     ]
 
     def setUp(self):
@@ -114,7 +116,17 @@ class BookReviewModelTestCase(TestCase):
         except ValidationError:
             self.fail('Review2 should be valid')
 
+    def test_get_comments(self):
+        self.assertTrue(self.review1.get_comments()!=None)
 
+    def test_get_delete_url(self):
+        delete_url = reverse('delete_review',kwargs={'book_id': self.review1.book.pk})
+        self.assertEqual(self.review1.get_delete_url(),delete_url)
+    
+    def test_str(self):
+        self.assertEqual(self.review1.str(),"1/10 rating & review by johndoe on \"Classical Mythology\"")
+        self.assertEqual(str(self.review1),"1/10 rating & review by johndoe on \"Classical Mythology\"")
+        
 @tag('models', 'reviewcomment')
 class BookReviewCommentTestCase(TestCase):
     fixtures = [
@@ -161,3 +173,14 @@ class BookReviewCommentTestCase(TestCase):
         self.assertInvalid()
         self.bookReviewComment.rating = ""
         self.assertInvalid()
+
+    def test_str(self):
+        self.assertEqual(self.bookReviewComment.str(),"Comment by johndoe on 1/10 rating & review by johndoe on \"Classical Mythology\"")
+
+    def test_get_delete_url(self):
+        delete_url = reverse('delete_review_comment',kwargs={
+            'book_id': self.bookReview.book.id,
+            'review_id': self.bookReview.id,
+            'comment_id': self.bookReviewComment.id 
+            })
+        self.assertEqual(self.bookReviewComment.get_delete_url(),delete_url)

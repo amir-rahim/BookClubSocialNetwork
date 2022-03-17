@@ -20,6 +20,8 @@ class BookReview(TextPost):
     def __str__(self):
         return f'{self.book_rating}/10 rating & review by {str(self.creator)} on "{str(self.book)}"'
 
+    def str(self):
+        return self.__str__()
 class BookReviewComment(TextComment):
 
     book_review = models.ForeignKey('BookReview', blank = False, null = False, on_delete=models.CASCADE)
@@ -34,3 +36,6 @@ class BookReviewComment(TextComment):
 
     def __str__(self):
         return f'Comment by {str(self.creator)} on {str(self.book_review)}'
+
+    def str(self):
+        return self.__str__()
