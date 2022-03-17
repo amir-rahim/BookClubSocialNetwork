@@ -144,7 +144,7 @@ class CreateMeetingView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def get_success_url(self):
         # Change to redirect to list of meetings
-        return reverse('create_meeting', kwargs={'club_url_name': self.kwargs['club_url_name']})
+        return reverse('meeting_list', kwargs={'club_url_name': self.kwargs['club_url_name']})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
