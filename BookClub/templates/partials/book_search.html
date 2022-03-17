@@ -6,8 +6,9 @@
            placeholder="Search"/>
 </div>
 <div id="replaceable_content" class="column is-12">
-    {% include 'partials/partial_books_list.html' %}
+    {% include 'partials/book_search_list.html' %}
 </div>
+
 <script>
     const user_input = $("#user_input")
     const books_div = $("#replaceable_content")
@@ -16,11 +17,10 @@
     var request_parameters = {}
     let scheduled_function = false
 
-    let ajax_call = function (view, request_parameters) {
+    let call_book_search = function (view, request_parameters) {
         $.getJSON(view, request_parameters).done(response => {
             books_div.fadeTo('fast', 0).promise().then(() => {
                 books_div.html(response['html_from_view'])
-
                 books_div.fadeTo('fast', 1)
             })
         })
@@ -31,6 +31,6 @@
         if (scheduled_function){
             clearTimeout(scheduled_function)
         }
-        scheduled_function = setTimeout(ajax_call, delay_by_in_ms, view, request_parameters)
+        scheduled_function = setTimeout(call_book_search, delay_by_in_ms, view, request_parameters)
     })
 </script>

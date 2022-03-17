@@ -14,7 +14,7 @@
                     {% for book in books %}
                         <tr>
                             <td>
-                                {% if book.imageM %}
+                                {% if book.imageS %}
                                     <img src="{{ book.imageS }}" alt=""/>
                                 {% else %}
                                     <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
@@ -23,7 +23,9 @@
                             </td>
                             <td>{{ book.title }}</td>
                             <td>{{ book.author }}</td>
-                            <td><input type="radio" name="book" value="{{ book.id }}"/></td>
+                            <td>
+                                <input type="radio" name="book" value="{{ book.id }}"/>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
