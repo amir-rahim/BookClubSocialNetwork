@@ -8,7 +8,7 @@ from RecommenderModule.recommenders.resources.library import Library
 """This class loads the ratings dataset from the 'BX-Book-Ratings.csv' file and builds the train sets"""
 class DataProvider:
 
-    ratings_path = "static/dataset/BX-Book-Ratings.csv"
+    ratings_path = "/home/k20008210/PycharmProjects/BookClubSocialNetwork2/static/dataset/BX-Book-Ratings.csv"
     ratings_trainset = None
     ratings_df = None
     train_df = None

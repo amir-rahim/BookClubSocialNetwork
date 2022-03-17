@@ -1,5 +1,4 @@
 from RecommenderModule.recommenders.resources.data_provider import DataProvider
-from RecommenderModule.evaluation.resources.evaluation_data_provider import EvaluationDataProvider
 from RecommenderModule.recommenders.resources.popular_books_recommender_methods import PopularBooksMethods
 from RecommenderModule.evaluation.evaluator import Evaluator
 from RecommenderModule.recommenders.popular_books_recommender import PopularBooksRecommender
@@ -23,7 +22,9 @@ class EvaluationPopularity:
     def run_evaluations(self):
         self.evaluator = Evaluator()
         self.trainset, self.testset = self.evaluator.get_train_test_datasets()
-        self.recommender = PopularBooksMethods(trainset=self.trainset)
+        data_provider = DataProvider(filtering_min_ratings_threshold=self.min_ratings_threshold, get_data_from_csv=True)
+        recommender_trainset = data_provider.get_filtered_ratings_trainset()
+        self.recommender = PopularBooksMethods(trainset=recommender_trainset)
         self.build_read_books_all_users_dict()
         self.evaluate_recommenders()
 

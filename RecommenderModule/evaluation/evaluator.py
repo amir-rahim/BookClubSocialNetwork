@@ -9,15 +9,18 @@ class Evaluator:
     testset = []
     evaluation_metrics = None
 
-    def __init__(self):
-        self.trainset, self.testset = self.get_train_test_datasets()
+    def __init__(self, min_ratings_threshold=None):
+        self.trainset, self.testset = self.get_train_test_datasets(min_ratings_threshold)
         self.evaluation_metrics = EvaluationMetrics(self.trainset, self.testset)
 
 
     """Get the LeaveOneOut train and test datasets."""
-    def get_train_test_datasets(self):
+    def get_train_test_datasets(self, min_ratings_threshold=None):
         if self.trainset is None:
-            data_provider = DataProvider(get_data_from_csv=True)
+            if min_ratings_threshold is None:
+                data_provider = DataProvider(get_data_from_csv=True)
+            else:
+                data_provider = DataProvider(get_data_from_csv=True, filtering_min_ratings_threshold=min_ratings_threshold)
             dataset = data_provider.get_filtered_ratings_dataset()
             evaluation_data_provider = EvaluationDataProvider(dataset)
             return evaluation_data_provider.get_loocv_datasets()
