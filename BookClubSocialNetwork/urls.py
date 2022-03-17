@@ -32,7 +32,7 @@ urlpatterns = [
     path('log_out/', views.LogOutView.as_view(), name='log_out'),
     path('verification/', include('verify_email.urls')),
 
-    path('reset_password/', auth_views.PasswordResetView.as_view(template_name='reset_password.html'), name='reset_password'),
+    path('reset_password/', auth_views.PasswordResetView.as_view(template_name='reset_password.html', html_email_template_name="password_reset_email.html"), name='reset_password'),
 
     path('reset_password_sent/', auth_views.PasswordResetDoneView.as_view(template_name='reset_password_sent.html'), name='password_reset_done'),
 
