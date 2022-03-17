@@ -8,79 +8,32 @@
                     <th scope="col">Cover</th>
                     <th scope="col">Title</th>
                     <th scope="col">Author</th>
-                    {% if is_selection %}
-                        <th scope="col">Select</th>
-                    {% else %}
-                        <th scope="col">View</th>
-                    {% endif %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for book in books %}
-                    <tr>
-                        <td>
-                            {% if book.imageM %}
-                                <img src="{{ book.imageM }}" alt=""/>
-                            {% else %}
-                                <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-                                     alt=""/>
-                            {% endif %}
-                        </td>
-                        <td>{{ book.title }}</td>
-                        <td>{{ book.author }}</td>
-                        {% if is_selection %}
-                            <td>select</td>
-                        {% else %}
+                    <th scope="col">Select</th>
+                </thead>
+                <tbody>
+                    {% for book in books %}
+                        <tr>
                             <td>
-                                <button class="button is-fullwidth is-link"
-                                        onclick="window.location='{% url 'book_view' book.id %}';">View</button>
+                                {% if book.imageM %}
+                                    <img src="{{ book.imageS }}" alt=""/>
+                                {% else %}
+                                    <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+                                         alt=""/>
+                                {% endif %}
                             </td>
-                        {% endif %}
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <nav class="pagination is-rounded is-left"
-         role="navigation"
-         aria-label="pagination">
-        {% if page_obj.has_previous %}
-            <a id="prev-page" class="pagination-previous">&#60;&#60; First</a>
-            <a class="pagination-previous"
-               href="?page={{ page_obj.previous_page_number }}">&#60; Previous</a>
-        {% endif %}
-        <ul class="pagination-list">
-            <li>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</li>
-        </ul>
-        {% if page_obj.has_next %}
-            <a class="pagination-next">Next &#62;</a>
-            <a class="pagination-next"
-               href="?page={{ page_obj.paginator.num_pages }}">Last &#62;&#62;</a>
-        {% endif %}
-    </nav>
-{% else %}
-    <hr />
-    <p style="text-align: center">
-        There are no available books at the moment.
-    </p>
-    <hr />
-{% endif %}
-
-<script>
-    const prev_page = $("#prev-page")
-    const next_page = $("#next-page")
-
-    next_page.on('click', function() {
-        {% if page_obj.has_next %}
-            page_num = {{ page_obj.next_page_number }};
-        {% endif %}
-        request_parameters.push( page : page_num)
-    })
-
-    prev_page.on('click', function()){
-        {% if page_obj.has_previous %}
-            page_num = {{ page_obj.previous_page_number }};
-        {% endif %}
-    }
-
-</script>
+                            <td>{{ book.title }}</td>
+                            <td>{{ book.author }}</td>
+                            <td><input type="radio" name="book" value="{{ book.id }}"/></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% include 'partials/pagination_ajax.html' with page_obj=books %}
+    {% else %}
+        <hr />
+        <p style="text-align: center">
+            There are no available books at the moment.
+        </p>
+        <hr />
+    {% endif %}

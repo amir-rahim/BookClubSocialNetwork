@@ -10,12 +10,33 @@
         <li>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</li>
     </ul>
     {% if page_obj.has_next %}
-        <a class="pagination-next">Next &#62;</a>
-        <a class="pagination-next"
-           href="?page={{ page_obj.paginator.num_pages }}">Last &#62;&#62;</a>
+        <a id="next-page" class="pagination-next">Next &#62;</a>
+        <a class="pagination-next">Last &#62;&#62;</a>
     {% endif %}
 </nav>
+
 <script>
-    const next_page = $('#next-page')
-    const prev_page = $('#prev-page')
-    request_parameters.push('page':)
+    var next_page = $("#next-page")
+    var prev_page = $("#prev-page")
+
+    next_page.on('click', function(){
+        {% if page_obj.has_next %}
+        var page_num = {{ page_obj.next_page_number }}
+        {% endif %}
+        request_parameters['page'] = page_num
+        if (scheduled_function){
+            clearTimeout(scheduled_function)
+        }
+        scheduled_function = setTimeout(ajax_call, 10, view, request_parameters)
+    })
+
+    prev_page.on('click', function(){
+        {% if page_obj.has_previous %}
+        var page_num = {{ page_obj.previous_page_number }}
+        {% endif %}
+        request_parameters['page'] = page_num
+        if (scheduled_function){
+            clearTimeout(scheduled_function)
+        }
+        scheduled_function = setTimeout(ajax_call, 10, view, request_parameters)
+    })

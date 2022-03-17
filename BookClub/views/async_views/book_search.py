@@ -11,27 +11,26 @@ class BookSearchView(TemplateView):
         url_parameter = request.GET.get('q')
         page = request.GET.get('page', 1)
         context = {}
-        object_list = None
+        books = None
         
         
         if url_parameter:
             query = url_parameter
-            object_list = Book.objects.filter(
+            books = Book.objects.filter(
                 Q(title__icontains=query) | Q(author__icontains=query) | Q(
                     publisher__icontains=query)
             )
             
-        paginator = Paginator(object_list, 10)
-        
-        try:
-            books = paginator.page(page)
-        except PageNotAnInteger:
-            books = paginator.page(1)
-        except EmptyPage:
-            books = paginator.page(paginator.num_pages)
+            paginator = Paginator(books, 5)
             
+            try:
+                books = paginator.page(page)
+            except PageNotAnInteger:
+                books = paginator.page(1)
+            except EmptyPage:
+                books = paginator.page(paginator.num_pages)
             
-        context['books'] = object_list
+        context['books'] = books
         if request.is_ajax():
             html = render_to_string(
                 template_name='partials/partial_books_list.html', context={'books': books})

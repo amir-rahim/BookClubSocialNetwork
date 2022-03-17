@@ -6,14 +6,14 @@
            placeholder="Search"/>
 </div>
 <div id="replaceable_content" class="column is-12">
-    {% include 'partials/partial_books_list.html' with is_selection=True %}
+    {% include 'partials/partial_books_list.html' %}
 </div>
-
 <script>
     const user_input = $("#user_input")
     const books_div = $("#replaceable_content")
     const view = "/search_books/"
-    const delay_by_in_ms = 700
+    const delay_by_in_ms = 500
+    var request_parameters = {}
     let scheduled_function = false
 
     let ajax_call = function (view, request_parameters) {
@@ -27,10 +27,7 @@
     }
 
     user_input.on('keyup', function () {
-        var request_parameters = {
-            q: $(this).val()
-        }
-        
+        request_parameters['q'] = $(this).val()
         if (scheduled_function){
             clearTimeout(scheduled_function)
         }
