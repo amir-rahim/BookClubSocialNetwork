@@ -9,13 +9,8 @@ class Library:
     def __init__(self, trainset=None):
         self.trainset = trainset
 
-    """Get the title of the book, given its ISBN value"""
-    def get_book_title(self, book_isbn):
-        book = Book.objects.get(ISBN = book_isbn)
-        return book.title
-
     """Get all the ratings values for the specified book"""
-    def get_all_ratings_for_isbn(self, isbn):
+    def get_all_ratings_for_isbn_from_trainset(self, isbn):
         if (self.trainset == None):
             print("No trainset provided")
             return []
@@ -43,12 +38,15 @@ class Library:
 
         else:
 
-            user_inner_id = self.trainset.to_inner_uid(user_id)
-            ratings_tuples = self.trainset.ur[user_inner_id]
-            books = []
-            for item_inner_id, rating in ratings_tuples:
-                books.append(self.trainset.to_raw_iid(item_inner_id))
-            return books
+            try:
+                user_inner_id = self.trainset.to_inner_uid(user_id)
+                ratings_tuples = self.trainset.ur[user_inner_id]
+                books = []
+                for item_inner_id, rating in ratings_tuples:
+                    books.append(self.trainset.to_raw_iid(item_inner_id))
+                return books
+            except:
+                return []
 
     """Get the rating the specified user made for the specified book"""
     def get_rating_from_user_and_book(self, user_id, book_isbn):

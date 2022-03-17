@@ -22,13 +22,15 @@ class DataProvider:
     """Constructor for the DataProvider class
         train_dataset_size_percentage (value between 0 and 1): (unfiltered dataset) percentage of dataset to use in training dataset (rest used in testing dataset)
         filtering_min_ratings_threshold: minimum number of ratings for books to be included in the filtered ratings dataset"""
-    def __init__(self, train_dataset_size_percentage=0.01, filtering_min_ratings_threshold=15, get_data_from_csv=False):
-        print("Getting data...")
+    def __init__(self, train_dataset_size_percentage=0.01, filtering_min_ratings_threshold=15, get_data_from_csv=False, print_status=False):
+        if print_status:
+            print("Getting data...")
         self.train_dataset_size_percentage = train_dataset_size_percentage
         self.load_ratings_datasets(get_data_from_csv)
         self.filtering_min_ratings_threshold = filtering_min_ratings_threshold
         self.load_filtered_ratings_dataset()
-        print("Getting data done")
+        if print_status:
+           print("Getting data done")
 
     """Load the ratings from the csv file, split the data in train and test partitions, and build train set"""
     def load_ratings_datasets(self, get_data_from_csv=False):
@@ -115,7 +117,7 @@ class DataProvider:
     def get_all_ratings_for_isbn(self, isbn):
         if (self.library == None):
             self.import_library()
-        return self.library.get_all_ratings_for_isbn(isbn)
+        return self.library.get_all_ratings_for_isbn_from_trainset(isbn)
 
     """Import library object, using local trainset"""
     def import_library(self):

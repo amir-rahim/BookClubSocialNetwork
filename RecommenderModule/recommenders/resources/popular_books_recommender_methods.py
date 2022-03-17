@@ -72,7 +72,7 @@ class PopularBooksMethods:
 
     """Get the average rating for the book with the given ISBN number"""
     def get_average_rating(self, isbn):
-        ratings_arr = self.library.get_all_ratings_for_isbn(isbn)
+        ratings_arr = self.library.get_all_ratings_for_isbn_from_trainset(isbn)
         sum = 0
         for rating in ratings_arr:
             sum += rating
@@ -93,7 +93,7 @@ class PopularBooksMethods:
 
     """Get the median rating for the book with the given ISBN number"""
     def get_median_rating(self, isbn):
-        ratings_sorted_arr = np.sort(self.library.get_all_ratings_for_isbn(isbn))
+        ratings_sorted_arr = np.sort(self.library.get_all_ratings_for_isbn_from_trainset(isbn))
         if (len(ratings_sorted_arr) % 2 == 0): # even number of ratings
             index = (len(ratings_sorted_arr) // 2) - 1
             median = (ratings_sorted_arr[index] + ratings_sorted_arr[index+1]) / 2
