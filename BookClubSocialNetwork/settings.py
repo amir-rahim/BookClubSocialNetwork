@@ -168,6 +168,7 @@ DEFAULT_FROM_EMAIL = 'noreply<no_reply@domain.com>'
 EXPIRE_AFTER = "1h" # Will expire after one hour from link generation
 
 HTML_MESSAGE_TEMPLATE = 'verification_email.html'
-# VERIFICATION_SUCCESS_TEMPLATE = 'verification_email_success.html'
+VERIFICATION_SUCCESS_TEMPLATE = None
 # VERIFICATION_FAILED_TEMPLATE = 'verification_email_failed.html'
-# LINK_EXPIRED_TEMPLATE = 'verification_email_expired.html'
+# REQUEST_NEW_EMAIL_TEMPLATE = 'verification_email_request.html'
+LINK_EXPIRED_TEMPLATE = 'verification_email_expired.html'
