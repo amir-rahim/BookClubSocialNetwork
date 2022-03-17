@@ -79,10 +79,10 @@ class EvaluationMetrics:
         for (user_id, recommended_books) in recommendations.items():
             for isbn in recommended_books:
                 try:
-                    sum += self.popularity_list.index(isbn)
+                    sum += self.popularity_list.index(isbn) + 1 # We add 1 to account for the fact that the first book in the list has index 0
                     total += 1
                 except: # The book is not in the popularity list, we consider its index as the last index of the list + 1
-                    sum += len(self.popularity_list)
+                    sum += len(self.popularity_list) + 1 # We add 1 to account for the fact that the first book in the list has index 0
                 total += 1
 
         if (total == 0):
