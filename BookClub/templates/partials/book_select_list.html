@@ -1,4 +1,4 @@
-{% if books %}
+{% if page_obj %}
     <div class="table-container">
         <table class="table is-hoverable is-fullwidth is-scrollable"
                id="table-books"
@@ -11,7 +11,7 @@
                     <th scope="col">Select</th>
                 </thead>
                 <tbody>
-                    {% for book in books %}
+                    {% for book in page_obj %}
                         <tr>
                             <td>
                                 {% if book.imageS %}
@@ -31,7 +31,7 @@
                 </tbody>
             </table>
         </div>
-        {% include 'partials/pagination_ajax.html' with page_obj=books %}
+        {% include 'partials/pagination_ajax.html' with page_obj=page_obj %}
     {% else %}
         <hr />
         <p style="text-align: center">
