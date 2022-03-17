@@ -3,6 +3,7 @@ from RecommenderModule.recommenders.resources.data_provider import DataProvider
 from RecommenderModule.evaluation.resources.evaluation_data_provider import EvaluationDataProvider
 import itertools as it
 
+"""This class allows the developer to evaluate recommenders, using the same train and test sets"""
 class Evaluator:
 
     trainset = None
@@ -28,18 +29,22 @@ class Evaluator:
             return (self.trainset, self.testset)
 
 
+    """Evaluate the recommender for all possible combinations of parameters, from the parameters_dict argument
+        (parameters_dict contains the parameter name as key and a list of its possible values as value)"""
     def evaluate_all_combinations(self, recommender, parameters_dict):
         all_combinations = self.make_combinations_from_dict(parameters_dict)
         for combination in all_combinations:
             self.evaluate_single_recommender(recommender, combination)
 
 
+    """Evaluate the recommender, using the given set of parameters"""
     def evaluate_single_recommender(self, recommender, parameters={}):
         print(f"\nEvaluating recommender with parameters: {parameters}")
         recommendations = self.get_recommendations(recommender, parameters)
         self.evaluate(recommendations)  # also calls print_evaluations
 
 
+    """Get a dictionary of the recommended books for all users in the trainset"""
     def get_recommendations(self, recommender, parameters):
         print("Getting recommendations...")
         recommender.train(trainset=self.trainset, parameters=parameters)
@@ -64,6 +69,7 @@ class Evaluator:
         self.print_evaluations(hit_rate, average_reciprocal_hit_rate, novelty)
 
 
+    """Print the results of the evaluation of the recommender system"""
     def print_evaluations(self, hit_rate, average_reciprocal_hit_rate, novelty):
         print()
         print(f" -> hit_rate:{hit_rate}")
@@ -71,6 +77,8 @@ class Evaluator:
         print(f" -> novelty:{novelty}")
         print()
 
+    """Create a list of all possible combinations of parameters, from the parameters_dict argument
+        (parameters_dict contains the parameter name as key and a list of its possible values as value)"""
     def make_combinations_from_dict(self, parameters_dict):
         all_parameter_names = sorted(parameters_dict)
         number_of_parameters = len(all_parameter_names)
