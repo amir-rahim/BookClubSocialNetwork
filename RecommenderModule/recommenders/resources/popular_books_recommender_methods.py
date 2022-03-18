@@ -19,7 +19,7 @@ class PopularBooksMethods:
     sorted_combination_scores = []
 
     def __init__(self, min_ratings_threshold=300, retraining=False, retraining_and_saving=False, trainset=None, print_status=True):
-        self.print_status = False
+        self.print_status = print_status
         if trainset is None:
             if (retraining or retraining_and_saving):
                 self.load_filtered_books_list(min_ratings_threshold)
