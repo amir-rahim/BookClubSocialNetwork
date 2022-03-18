@@ -54,11 +54,8 @@ class DataProviderTestCase(TestCase):
                 filtered_books_list_from_dataset.append(isbn)
         self.assertEqual(len(filtered_books_list), len(filtered_books_list_from_dataset))
         ratings_df = self.data_provider_csv.ratings_df
-        filtered_ratings_count = 0
-        for index, rating in ratings_df.iterrows():
-            if rating["ISBN"] in filtered_books_list:
-                filtered_ratings_count += 1
-        self.assertEqual(len(filtered_ratings_dataset.raw_ratings), filtered_ratings_count)
+        filtered_ratings = ratings_df.loc[ratings_df["ISBN"].isin(filtered_books_list)]
+        self.assertEqual(len(filtered_ratings_dataset.raw_ratings), len(filtered_ratings))
 
     def test_get_filtered_ratings_trainset(self):
         filtered_ratings_trainset = self.data_provider_csv.get_filtered_ratings_trainset()
