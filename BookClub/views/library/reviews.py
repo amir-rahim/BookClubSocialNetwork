@@ -190,7 +190,6 @@ class DeleteCommentForReviewView(LoginRequiredMixin, UserPassesTestMixin, Delete
     pk_url_kwarg = 'comment_id'
 
     def handle_no_permission(self):
-        self.kwargs.pop('comment_id', None)
         if not self.request.user.is_authenticated:
             return super(LoginRequiredMixin, self).handle_no_permission()
         else:
@@ -209,5 +208,5 @@ class DeleteCommentForReviewView(LoginRequiredMixin, UserPassesTestMixin, Delete
             return False
 
     def get_success_url(self):
-        self.kwargs.pop('comment_id')
+        self.kwargs.pop('comment_id') 
         return reverse('book_review', kwargs=self.kwargs)
