@@ -1,94 +1,108 @@
 {% extends 'base_content.html' %}
-
 {% block page_title %}
-Create a Meeting
+    Create a Meeting
 {% endblock page_title %}
-
 {% block page_subtitle %}
-This is a page to create your meeting
+    This is a page to create your meeting
 {% endblock page_subtitle %}
-
 {% block content %}
-
-<div class="columns">
-
-  <div class="column is-3">
-
-      <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
-
-          <p class="menu-label">Club Views</p>
-
-          <ul class="menu-list">
-              <li><a href="{% url 'club_dashboard' current_club.club_url_name %}">Dashboard</a></li>
-              <li><a href="{% url 'member_list' current_club.club_url_name %}">Member List</a></li>
-          </ul>
-
-          {% if user == current_club.get_club_owner %}
-
-              <p class="menu-label">Club Administration</p>
-
-              <ul class="menu-list">
-                  <li><a>Manage Club</a></li>
-                  <li><a>Club Settings</a></li>
-              </ul>
-
-          {% endif %}
-
-          <p class="menu-label">Forum & Reviews</p>
-
-          <ul class="menu-list">
-              <li><a>Forum</a></li>
-              <li><a>Members Reviews</a></li>
-          </ul>
-
-          <p class="menu-label">Meetings</p>
-
-          <ul class="menu-list">
-              <li><a href="{% url 'meeting_list' current_club.club_url_name %}">All Meetings</a></li>
-              <li><a class="is-active"><b>Create a Meeting</b></a></li>
-              <li><a>Joined Upcoming Meetings</a></li>
-              <li><a>Prior Meetings</a></li>
-          </ul>
-
-      </aside>
-
-  </div>
-
-  <div class="column is-9">
-
-      <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
-          <ul>
-              <li><a href="{% url 'home' %}">Home</a></li>
-              <li><a>Club</a></li>
-              <li><a href="{% url 'club_dashboard' current_club.club_url_name %}">{{ current_club.name }}</a></li>
-              <li><a>Meetings</a></li>
-              <li><a>Create a Meeting</a></li>
-          </ul>
-      </nav>
-
-      <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
-          <div class="hero-body">
-              <div class="container">
-                  <h1 class="title">Create a Meeting</h1>
-                  <h2 class="subtitle">Enter details for meeting for club {{ current_club.name }}</h2>
-              </div>
-          </div>
-      </section>
-
-      <div class="columns">
-
-          <div class="column is-12">
-              <form action="{% url 'create_meeting' current_club.club_url_name %}" method="post">
-                {% csrf_token %}
-                {% include 'partials/bulma_form.html' with form=form %}
-                <input type="submit" value="Create meeting" class="button is-link">
-              </form>
-          </div>
-
-      </div>
-
-  </div>
-
-</div>
-
+    <div class="columns">
+        <div class="column is-3">
+            <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+                <p class="menu-label">
+                    Club Views
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'club_dashboard' current_club.club_url_name %}">Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'member_list' current_club.club_url_name %}">Member List</a>
+                    </li>
+                </ul>
+                {% if user == current_club.get_club_owner %}
+                    <p class="menu-label">
+                        Club Administration
+                    </p>
+                    <ul class="menu-list">
+                        <li>
+                            <a>Manage Club</a>
+                        </li>
+                        <li>
+                            <a>Club Settings</a>
+                        </li>
+                    </ul>
+                {% endif %}
+                <p class="menu-label">
+                    Forum & Reviews
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a>Forum</a>
+                    </li>
+                    <li>
+                        <a>Members Reviews</a>
+                    </li>
+                </ul>
+                <p class="menu-label">
+                    Meetings
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'meeting_list' current_club.club_url_name %}">All Meetings</a>
+                    </li>
+                    <li>
+                        <a class="is-active"><b>Create a Meeting</b></a>
+                    </li>
+                    <li>
+                        <a>Joined Upcoming Meetings</a>
+                    </li>
+                    <li>
+                        <a>Prior Meetings</a>
+                    </li>
+                </ul>
+            </aside>
+        </div>
+        <div class="column is-9">
+            <nav class="breadcrumb"
+                 aria-label="breadcrumbs"
+                 style="padding-left: 5px;">
+                <ul>
+                    <li>
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li>
+                        <a>Club</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'club_dashboard' current_club.club_url_name %}">{{ current_club.name }}</a>
+                    </li>
+                    <li>
+                        <a>Meetings</a>
+                    </li>
+                    <li>
+                        <a>Create a Meeting</a>
+                    </li>
+                </ul>
+            </nav>
+            <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
+                <div class="hero-body">
+                    <div class="container">
+                        <h1 class="title">Create a Meeting</h1>
+                        <h2 class="subtitle">Enter details for meeting for club {{ current_club.name }}</h2>
+                    </div>
+                </div>
+            </section>
+            <div class="columns">
+                <div class="column is-12">
+                    <form action="{% url 'create_meeting' current_club.club_url_name %}"
+                          method="post">
+                        {% csrf_token %}
+                        {% include 'partials/bulma_form.html' with form=form %}
+                        <input type="submit" value="Create meeting" class="button is-link">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

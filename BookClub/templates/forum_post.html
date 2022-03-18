@@ -1,9 +1,9 @@
 {% extends 'base_content.html' %}
 {% block page_title %}
-    Global Forum
+    Forum Post
 {% endblock page_title %}
 {% block page_subtitle %}
-    This is the Global Forum, you can look at what our members are posting about!
+    This is the Forum Post, you can view and make comments on the post!
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
@@ -57,32 +57,29 @@
             </nav>
             <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
                 <div class="hero-body">
-                    <h1 class="title">Forum Post</h1>
+                    <h1 class="title">
+                        <b>{{ post.title }}</b>
+                    </h1>
                 </div>
             </section>
             <div class="card">
                 <header class="card-header">
-                    <div class="card-header-title">
-                        <p class="subtitle">
-                            <b>{{ post.title }}</b>
-                            <p class="subtitle is-6">
-                                <span class="is-1 has-text-grey-light">Posted by: {{ post.creator }} {{ post.created_on | timesince }} ago</span>
-                            </p>
-                        </p>
-                    </div>
+                    <p class="card-header-title is-vcentered">
+                        <span class="has-text-grey-light">Posted by: {{ post.creator }} {{ post.created_on | timesince }} ago</span>
+                    </p>
                     <div class="card-header-icon">
                         {% if user == post.creator %}
-                            <a href="{% url 'edit_forum_post' post.id %}">
-                                <button class="button is-success is-rounded is-small" aria-label="Edit Post">
+                            <a href="{% url 'edit_forum_post' post_id=post.id %}">
+                                <button class="button is-success is-rounded" aria-label="Edit Post">
                                     <span class="icon">
                                         <i class="fa-solid fa-wand-magic-sparkles"></i>
                                     </span>
                                     <span>Edit</span>
                                 </button>
                             </a>
-                            <form method="post" action="{% url 'delete_forum_post' post.id %}">
+                            <form method="post" action="{% url 'delete_forum_post' post_id=post.id %}">
                                 {% csrf_token %}
-                                <button class="button is-danger is-rounded is-small"
+                                <button class="button is-danger is-rounded"
                                         aria-label="Delete Post"
                                         type="submit">
                                     <span class="icon">
@@ -109,19 +106,7 @@
                             <span>Reply</span>
                         </button>
                     </p>
-                    <p class="card-footer-item">
-                        <button class="button is-primary is-rounded is-small" aria-label="Upvote">
-                            <span class="icon">
-                                <i class="fa-solid fa-arrow-up"></i>
-                            </span>
-                        </button>
-                        <button class="button is-danger is-rounded is-small" aria-label="Downvote">
-                            <span class="icon">
-                                <i class="fa-solid fa-arrow-down"></i>
-                            </span>
-                        </button>
-                        <button class="button is-rounded is-small" title="Disabled button" disabled>{{ post.rating }}</button>
-                    </p>
+                    <div class="card-footer-item">{% include 'partials/voting.html' with content=post %}</div>
                 </footer>
             </div>
             <br />
@@ -130,69 +115,89 @@
                     <div class="card-header-title">Comments to Post:</div>
                 </div>
                 <div class="card-content">
-                    {% if post.comments.count > 0 %}
-                        {% for comment in post.comments.all %}
+                    {% if comments.count > 0 %}
+                        {% for comment in comments %}
                             <article class="message">
-                                <div class="message-body">
-                                    <p class="has-text-justified">
-                                        "{{ comment.content }}"
-                                    </p>
-                                    <br />
-                                    <p class="has-text-right">
-                                        <i>- by {{ comment.creator }}, {{ comment.created_on | timesince }} ago</i>
-                                    </p>
-                                </div>
-                            </article>
-                            <br />
-                        {% endfor %}
-                        {% include 'partials/pagination.html' %}
-                    {% else %}
-                        <p class="has-text-grey-light has-text-centered">
-                            <i>There are no comments for this post. Comment using the reply button on the post.</i>
-                        </p>
-                        <br />
-                    {% endif %}
-                </div>
-            </div>
-            <div id="modal-create-comment" class="modal">
-                <div class="modal-background"></div>
-                <div class="modal-content">
-                    <div class="card">
-                        <div class="card-header">
-                            <button class="card-header-icon" aria-label="more options">
-                                <span class="icon">
-                                    <i class="card-header-icon fa-solid fa-pen-clip"></i>
-                                </span>
-                            </button>
-                            <p class="card-header-title">
-                                Create Comment/Reply
-                            </p>
-                        </div>
-                        <div class="card-content">
-                            <form method="post" action="{% url 'create_forum_comment' post.id %}">
-                                <div class="card-content">
-                                    <div class="container">
-                                        {% csrf_token %}
-                                        {% include 'partials/bulma_form.html' with form=forum_comment_form %}
+                                <div class="columns is-vcentered">
+                                    <div class="column is-1" style="margin-left: 20px;">{% include 'partials/voting.html' with content=comment %}</div>
+                                    <div class="column is-11">
+                                        <div class="message-body" style="margin-right: 20px;">
+                                            <p class="has-text-justified">
+                                                "{{ comment.content }}"
+                                            </p>
+                                            <br />
+                                            <p class="has-text-right">
+                                                <i>- by {{ comment.creator }}, {{ comment.created_on | timesince }} ago</i>
+                                            </p>
+                                            <div class="buttons">
+                                                {% if comment.creator == user %}
+                                                    <form method="post"
+                                                          action="{% url 'delete_forum_comment' post.id comment.id %}">
+                                                        {% csrf_token %}
+                                                        <button class="button is-danger is-rounded"
+                                                                aria-label="Delete Post"
+                                                                type="submit">
+                                                            <span class="icon">
+                                                                <i class="fa-solid fa-x"></i>
+                                                            </span>
+                                                            <span>Delete</span>
+                                                        </button>
+                                                    </form>
+                                                {% endif %}
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <footer class="card-footer">
-                                    <input type="button"
-                                           value="Reset"
-                                           id="resetBtn"
-                                           onClick="this.form.reset()"
-                                           class="button is-danger is-fullwidth"/>
-                                    <input type="submit" value="Add Comment" class="button is-link is-fullwidth"/>
-                                </footer>
-                            </form>
-                        </div>
+                                </article>
+                                <br />
+                            {% endfor %}
+                            {% include 'partials/pagination.html' %}
+                        {% else %}
+                            <p class="has-text-grey-light has-text-centered">
+                                <i>There are no comments for this post. Comment using the reply button on the post.</i>
+                            </p>
+                            <br />
+                        {% endif %}
                     </div>
                 </div>
-                <button class="modal-close is-large" aria-label="close"></button>
+                <div id="modal-create-comment" class="modal">
+                    <div class="modal-background"></div>
+                    <div class="modal-content">
+                        <div class="card">
+                            <div class="card-header">
+                                <button class="card-header-icon" aria-label="more options">
+                                    <span class="icon">
+                                        <i class="card-header-icon fa-solid fa-pen-clip"></i>
+                                    </span>
+                                </button>
+                                <p class="card-header-title">
+                                    Create Comment/Reply
+                                </p>
+                            </div>
+                            <div class="card-content">
+                                <form method="post" action="{% url 'create_forum_comment' post.id %}">
+                                    <div class="card-content">
+                                        <div class="container">
+                                            {% csrf_token %}
+                                            {% include 'partials/bulma_form.html' with form=forum_comment_form %}
+                                        </div>
+                                    </div>
+                                    <footer class="card-footer">
+                                        <input type="button"
+                                               value="Reset"
+                                               id="resetBtn"
+                                               onClick="this.form.reset()"
+                                               class="button is-danger is-fullwidth"/>
+                                        <input type="submit" value="Add Comment" class="button is-link is-fullwidth"/>
+                                    </footer>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="modal-close is-large" aria-label="close"></button>
+                </div>
             </div>
         </div>
-    </div>
-    <script>
+        <script>
         document.addEventListener('DOMContentLoaded', () => {
           // Functions to open and close a modal
           function openModal($el) {
@@ -239,5 +244,5 @@
           });
         });
 
-    </script>
-{% endblock content %}
+        </script>
+    {% endblock content %}

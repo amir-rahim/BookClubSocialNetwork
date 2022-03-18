@@ -1,67 +1,68 @@
 {% extends 'base_content.html' %}
-
 {% block page_title %}
-Edit a book list
+    Edit a book list
 {% endblock page_title %}
-
 {% block page_subtitle %}
-Edit your book list here!
+    Edit your book list here!
 {% endblock page_subtitle %}
-
 {% block content %}
-
-<div class="columns">
-
-    <div class="column is-3">
-
-        <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
-
-            <p class="menu-label">Book List</p>
-
-            <ul class="menu-list">
-                <li><a href="{% url 'booklists_list' user.username %}">My Book Lists</a></li>
-                <li><a href="{% url 'create_booklist' user.username %}">Create Book List</a></li>
-                <li><a>Saved Lists</a></li>
-            </ul>
-
-        </aside>
-
-    </div>
-
-    <div class="column is-9">
-
-        <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
-            <ul>
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'user_dashboard' %}">{{ user.username }}</a></li>
-                <li><a href="{% url 'booklists_list' user.username %}">Book Lists</a></li>
-                <li><a>Edit</a></li>
-            </ul>
-        </nav>
-
-        <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
-            <div class="hero-body">
-                <div class="container">
-                    <h1 class="title">Edit book list</h1>
-                    <h2 class="subtitle">Change the details of your book list</h2>
+    <div class="columns">
+        <div class="column is-3">
+            <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+                <p class="menu-label">
+                    Book List
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'booklists_list' user.username %}">My Book Lists</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'create_booklist' user.username %}">Create Book List</a>
+                    </li>
+                    <li>
+                        <a>Saved Lists</a>
+                    </li>
+                </ul>
+            </aside>
+        </div>
+        <div class="column is-9">
+            <nav class="breadcrumb"
+                 aria-label="breadcrumbs"
+                 style="padding-left: 5px;">
+                <ul>
+                    <li>
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'user_dashboard' %}">{{ user.username }}</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'booklists_list' user.username %}">Book Lists</a>
+                    </li>
+                    <li>
+                        <a>Edit</a>
+                    </li>
+                </ul>
+            </nav>
+            <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
+                <div class="hero-body">
+                    <div class="container">
+                        <h1 class="title">Edit book list</h1>
+                        <h2 class="subtitle">Change the details of your book list</h2>
+                    </div>
+                </div>
+            </section>
+            <div class="columns">
+                <div class="column is-12">
+                    <form class=""
+                          action="{% url 'edit_booklist' booklist_id=id username=request.user.username %}"
+                          method="post">
+                        {% csrf_token %}
+                        {% include 'partials/bulma_form.html' with form=form %}
+                        <input type="submit" value="Update" class="button is-link">
+                    </form>
                 </div>
             </div>
-        </section>
-
-        <div class="columns">
-
-            <div class="column is-12">
-                <form class="" action="{% url 'edit_booklist' booklist_id=id username=request.user.username %}" method="post">
-                  {% csrf_token %}
-                  {% include 'partials/bulma_form.html' with form=form %}
-                  <input type="submit" value="Update" class="button is-link">
-                </form>
-            </div>
-
         </div>
-
     </div>
-
-</div>
-
 {% endblock %}

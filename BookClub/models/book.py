@@ -1,5 +1,5 @@
-from datetime import datetime
 from django.db import models
+from django.urls import reverse
 
 
 class Book(models.Model):
@@ -14,6 +14,9 @@ class Book(models.Model):
     imageS = models.URLField(unique=False, blank=True)
     imageM = models.URLField(unique=False, blank=True)
     imageL = models.URLField(unique=False, blank=True)
+
+    def get_absolute_url(self):
+        return reverse('book_view', kwargs={'book_id': self.pk})
 
     def __str__(self):
         return self.title

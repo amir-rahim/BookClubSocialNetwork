@@ -1,0 +1,16 @@
+[{
+        "model": "BookClub.Forum",
+        "pk": 1,
+        "fields": {
+            "title": "Global Forum"
+        }
+    },
+    {
+        "model": "BookClub.Forum",
+        "pk": 2,
+        "fields": {
+            "title": "Johnathan Club Forum",
+            "associated_with": 1
+        }
+    }
+]

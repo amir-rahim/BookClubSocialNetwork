@@ -1,241 +1,296 @@
 {% extends 'base_content.html' %}
-
 {% block page_title %}
-Club Member List
+    Club Member List
 {% endblock page_title %}
-
 {% block page_subtitle %}
-This is the list of members for this club.
+    This is the list of members for this club.
 {% endblock page_subtitle %}
-
 {% block content %}
-
-<div class="columns">
-
-    <div class="column is-3">
-
-        <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
-
-            <p class="menu-label">Club Views</p>
-
-            <ul class="menu-list">
-
-
-                <li><a href="{% url 'club_dashboard' club.club_url_name %}">Dashboard</a></li>
-                <li><a class="is-active" href="{% url 'member_list' club.club_url_name %}"><b>Member List</b></a></li>
-                <li><a href="{% url 'applicant_list' club.club_url_name %}">Applicant List</a></li>
-
-            </ul>
-
-            {% if user == club.get_club_owner %}
-
-                <p class="menu-label">Club Administration</p>
-
+    <div class="columns">
+        <div class="column is-3">
+            <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+                <p class="menu-label">
+                    Club Views
+                </p>
                 <ul class="menu-list">
-                    <li><a href="{% url 'edit_club' club.club_url_name %}">Manage Club</a></li>
-                    <li><a>Club Settings</a></li>
+                    <li>
+                        <a href="{% url 'club_dashboard' club.club_url_name %}">Dashboard</a>
+                    </li>
+                    <li>
+                        <a class="is-active" href="{% url 'member_list' club.club_url_name %}"><b>Member List</b></a>
+                    </li>
+                    <li>
+                        <a href="{% url 'applicant_list' club.club_url_name %}">Applicant List</a>
+                    </li>
                 </ul>
-
-            {% endif %}
-
-            <p class="menu-label">Forum & Reviews</p>
-
-            <ul class="menu-list">
-                <li><a>Forum</a></li>
-                <li><a>Members Reviews</a></li>
-            </ul>
-
-            <p class="menu-label">Meetings</p>
-
-            <ul class="menu-list">
-                <li><a href="{% url 'meeting_list' club.club_url_name %}">All Meetings</a></li>
-                <li><a href="{% url 'create_meeting' club.club_url_name %}">Create a Meeting</a></li>
-                <li><a>Joined Upcoming Meetings</a></li>
-                <li><a>Prior Meetings</a></li>
-            </ul>
-
-        </aside>
-
-    </div>
-
-    <div class="column is-9">
-
-        <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
-            <ul>
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'my_club_memberships' %}">Club</a></li>
-                <li><a href="{% url 'club_dashboard' club.club_url_name %}">{{ club.name }}</a></li>
-                <li><a href="{% url 'member_list' club.club_url_name %}">Member List</a></li>
-            </ul>
-        </nav>
-
-        <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
-            <div class="hero-body">
-                <div class="container">
-                    <h1 class="title">{{ club.name }}</h1>
-                    <h2 class="subtitle">{{ club.tagline }}</h2>
-                </div>
-            </div>
-        </section>
-
-        <hr class="solid">
-
-        <p class="subtitle">Owner</p>
-        {% if user == club.get_club_owner %}
-            <div class="delete">
-                <form method="post" action="{% url 'delete_club' club_url_name=club.club_url_name %}">
-                    {% csrf_token %}
-                    <button type="submit" class="button is-danger is-small" onclick="return confirm('Confirm you want to delete club {{club.name}}?');">Delete Club</button>
-                </form>
-            </div>
-        {% endif %}
-
-        <hr class="solid">
-
-        <div class="columns">
-
-            <div class="column is-12">
-                <div class="card">
-                    <div class="card-content">
-                        <div class="media">
-                            <div class="media-left">
-                                <figure class="image is-64x64">
-                                    <img class="is-rounded" src="{{ owner.gravatar }}" alt="Placeholder image">
-                                </figure>
-                            </div>
-                            <div class="media-content">
-                                <div class="content">
-                                    <p class="text"><b>Name: </b> {{ owner.username }}</p>
-                                    <p class="text"><b>Public Bio: </b> {{ owner.public_bio }}</p>
-                                </div>
-                                <hr class="solid">
-                                <div class="buttons">
-                                    <button class="button is-warning is-small" style="margin-right: 5px">View</button>
-                                </div>
-                            </div>
-
-                        </div>
+                {% if user == club.get_club_owner %}
+                    <p class="menu-label">
+                        Club Administration
+                    </p>
+                    <ul class="menu-list">
+                        <li>
+                            <a href="{% url 'edit_club' club.club_url_name %}">Manage Club</a>
+                        </li>
+                        <li>
+                            <a>Club Settings</a>
+                        </li>
+                    </ul>
+                {% endif %}
+                <p class="menu-label">
+                    Forum & Reviews
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a>Forum</a>
+                    </li>
+                    <li>
+                        <a>Members Reviews</a>
+                    </li>
+                </ul>
+                <p class="menu-label">
+                    Meetings
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'meeting_list' club.club_url_name %}">All Meetings</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'create_meeting' club.club_url_name %}">Create a Meeting</a>
+                    </li>
+                    <li>
+                        <a>Joined Upcoming Meetings</a>
+                    </li>
+                    <li>
+                        <a>Prior Meetings</a>
+                    </li>
+                </ul>
+            </aside>
+        </div>
+        <div class="column is-9">
+            <nav class="breadcrumb"
+                 aria-label="breadcrumbs"
+                 style="padding-left: 5px;">
+                <ul>
+                    <li>
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'my_club_memberships' %}">Club</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'club_dashboard' club.club_url_name %}">{{ club.name }}</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'member_list' club.club_url_name %}">Member List</a>
+                    </li>
+                </ul>
+            </nav>
+            <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
+                <div class="hero-body">
+                    <div class="container">
+                        <h1 class="title">{{ club.name }}</h1>
+                        <h2 class="subtitle">{{ club.tagline }}</h2>
                     </div>
                 </div>
-            </div>
-
-        </div>
-
-        <hr class="solid">
-
-        <p class="subtitle">Moderators</p>
-
-        <hr class="solid">
-
-        {% if moderators %}
-            {% for moderator in moderators %}
+            </section>
+            <hr class="solid">
+            <p class="subtitle">
+                Owner
+            </p>
+            {% if user == club.get_club_owner %}
+                <div class="delete">
+                    <form method="post"
+                          action="{% url 'delete_club' club_url_name=club.club_url_name %}">
+                        {% csrf_token %}
+                        <button type="submit"
+                                class="button is-danger is-small"
+                                onclick="return confirm('Confirm you want to delete club {{ club.name }}?');">
+                            Delete Club
+                        </button>
+                    </form>
+                </div>
+            {% endif %}
+            <hr class="solid">
             <div class="columns">
-
                 <div class="column is-12">
                     <div class="card">
                         <div class="card-content">
                             <div class="media">
                                 <div class="media-left">
                                     <figure class="image is-64x64">
-                                        <img class="is-rounded" src="{{ moderator.gravatar }}" alt="Placeholder image">
+                                        <img class="is-rounded" src="{{ owner.gravatar }}" alt="Placeholder image">
                                     </figure>
                                 </div>
-                                <hr class="solid">
                                 <div class="media-content">
                                     <div class="content">
-                                        <p class="text"><b>Name: </b> {{ moderator.username }}</p>
-                                        <p class="text"><b>Public Bio: </b> {{ moderator.public_bio }}</p>
+                                        <p class="text">
+                                            <b>Name: </b> {{ owner.username }}
+                                        </p>
+                                        <p class="text">
+                                            <b>Public Bio: </b> {{ owner.public_bio }}
+                                        </p>
                                     </div>
                                     <hr class="solid">
                                     <div class="buttons">
                                         <button class="button is-warning is-small" style="margin-right: 5px">View</button>
-                                        {% if request_user.membership == 2 %}
-                                            <form method="post" action="{% url 'transfer_ownership' club_url_name=club.club_url_name %}">
-                                            <input type="hidden" name="user" value="{{ moderator.username }}" />
-                                            {% csrf_token %}
-                                            <button type="submit" class="button is-success is-small" style="margin-right: 5px" onclick="return confirm('Confirm you want to transfer ownership to {{moderator.username}}?');">Transfer Ownership</button>
-                                            </form>
-                                            <form method="post" action="{% url 'demote_member' club_url_name=club.club_url_name %}">
-                                                <input type="hidden" name="user" value="{{ moderator.username }}" />
-                                                {% csrf_token %}
-                                                <button type="submit" class="button is-danger is-small" style="margin-right: 5px" onclick="return confirm('Confirm you want to demote {{moderator.username}}?');">Demote</button>
-                                            </form>
-                                            <form method="post" action="{% url 'kick_member' club_url_name=club.club_url_name %}">
-                                                <input type="hidden" name="user" value="{{ moderator.username }}" />
-                                                {% csrf_token %}
-                                                <button type="submit" class="button is-danger is-small" style="margin-right: 5px" onclick="return confirm('Confirm you want to kick {{moderator.username}}?');">Kick</button>
-                                            </form>
-                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
-            {% endfor %}
-        {% else %}
-            <p>There is no moderators to this club.</p>
-        {% endif %}
-
-        <hr class="solid">
-
-        <p class="subtitle">Members</p>
-
-        <hr class="solid">
-
-        {% if members %}
-            {% for member in members %}
-            <div class="columns">
-
-                <div class="column is-12">
-                    <div class="card">
-                        <div class="card-content">
-                            <div class="media">
-                                <div class="media-left">
-                                    <figure class="image is-64x64">
-                                        <img class="is-rounded" src="{{ member.gravatar }}" alt="Placeholder image">
-                                    </figure>
-                                </div>
-                                <hr class="solid">
-                                <div class="media-content">
-                                    <div class="content">
-                                        <p class="text"><b>Name: </b> {{ member.username }}</p>
-                                        <p class="text"><b>Public Bio: </b> {{ member.public_bio }}</p>
-                                    </div>
-                                    <hr class="solid">
-                                    <div class="buttons">
-                                        <button class="button is-warning is-small">View</button>
-                                        {% if request_user.membership == 2 %}
-                                        <form method="post" action="{% url 'promote_member' club_url_name=club.club_url_name %}">
-                                            <input type="hidden" name="user" value="{{ member.username }}" />
-                                            {% csrf_token %}
-                                            <button type="submit" class="button is-success is-small" style="margin-right: 5px" onclick="return confirm('Confirm you want to promote {{member.username}}?');">Promote</button>
-                                        </form>
-                                        {% endif %}
-                                        {% if request_user.membership == 2 or request_user.membership == 1 %}
-                                        <form method="post" action="{% url 'kick_member' club_url_name=club.club_url_name %}">
-                                            <input type="hidden" name="user" value="{{ member.username }}" />
-                                            {% csrf_token %}
-                                            <button type="submit" class="button is-danger is-small" style="margin-right: 5px" onclick="return confirm('Confirm you want to kick {{member.username}}?');">Kick</button>
-                                        </form>
-                                        {% endif %}
+            <hr class="solid">
+            <p class="subtitle">
+                Moderators
+            </p>
+            <hr class="solid">
+            {% if moderators %}
+                {% for moderator in moderators %}
+                    <div class="columns">
+                        <div class="column is-12">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <figure class="image is-64x64">
+                                                <img class="is-rounded"
+                                                     src="{{ moderator.gravatar }}"
+                                                     alt="Placeholder image">
+                                            </figure>
+                                        </div>
+                                        <hr class="solid">
+                                        <div class="media-content">
+                                            <div class="content">
+                                                <p class="text">
+                                                    <b>Name: </b> {{ moderator.username }}
+                                                </p>
+                                                <p class="text">
+                                                    <b>Public Bio: </b> {{ moderator.public_bio }}
+                                                </p>
+                                            </div>
+                                            <hr class="solid">
+                                            <div class="buttons">
+                                                <button class="button is-warning is-small" style="margin-right: 5px">View</button>
+                                                {% if request_user.membership == 2 %}
+                                                    <form method="post"
+                                                          action="{% url 'transfer_ownership' club_url_name=club.club_url_name %}">
+                                                        <input type="hidden" name="user" value="{{ moderator.username }}" />
+                                                        {% csrf_token %}
+                                                        <button type="submit"
+                                                                class="button is-success is-small"
+                                                                style="margin-right: 5px"
+                                                                onclick="return confirm('Confirm you want to transfer ownership to {{ moderator.username }}?');">
+                                                            Transfer Ownership
+                                                        </button>
+                                                    </form>
+                                                    <form method="post"
+                                                          action="{% url 'demote_member' club_url_name=club.club_url_name %}">
+                                                        <input type="hidden" name="user" value="{{ moderator.username }}" />
+                                                        {% csrf_token %}
+                                                        <button type="submit"
+                                                                class="button is-danger is-small"
+                                                                style="margin-right: 5px"
+                                                                onclick="return confirm('Confirm you want to demote {{ moderator.username }}?');">
+                                                            Demote
+                                                        </button>
+                                                    </form>
+                                                    <form method="post"
+                                                          action="{% url 'kick_member' club_url_name=club.club_url_name %}">
+                                                        <input type="hidden" name="user" value="{{ moderator.username }}" />
+                                                        {% csrf_token %}
+                                                        <button type="submit"
+                                                                class="button is-danger is-small"
+                                                                style="margin-right: 5px"
+                                                                onclick="return confirm('Confirm you want to kick {{ moderator.username }}?');">
+                                                            Kick
+                                                        </button>
+                                                    </form>
+                                                {% endif %}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-            </div>
-            {% endfor %}
-        {% else %}
-            <p>There is no members to this club.</p>
-        {% endif %}
-
+                {% endfor %}
+            {% else %}
+                <p>
+                    There is no moderators to this club.
+                </p>
+            {% endif %}
+            <hr class="solid">
+            <p class="subtitle">
+                Members
+            </p>
+            <hr class="solid">
+            {% if members %}
+                {% for member in members %}
+                    <div class="columns">
+                        <div class="column is-12">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <figure class="image is-64x64">
+                                                <img class="is-rounded"
+                                                     src="{{ member.gravatar }}"
+                                                     alt="Placeholder image">
+                                            </figure>
+                                        </div>
+                                        <hr class="solid">
+                                        <div class="media-content">
+                                            <div class="content">
+                                                <p class="text">
+                                                    <b>Name: </b> {{ member.username }}
+                                                </p>
+                                                <p class="text">
+                                                    <b>Public Bio: </b> {{ member.public_bio }}
+                                                </p>
+                                            </div>
+                                            <hr class="solid">
+                                            <div class="buttons">
+                                                <button class="button is-warning is-small">View</button>
+                                                {% if request_user.membership == 2 %}
+                                                    <form method="post"
+                                                          action="{% url 'promote_member' club_url_name=club.club_url_name %}">
+                                                        <input type="hidden" name="user" value="{{ member.username }}" />
+                                                        {% csrf_token %}
+                                                        <button type="submit"
+                                                                class="button is-success is-small"
+                                                                style="margin-right: 5px"
+                                                                onclick="return confirm('Confirm you want to promote {{ member.username }}?');">
+                                                            Promote
+                                                        </button>
+                                                    </form>
+                                                {% endif %}
+                                                {% if request_user.membership == 2 or request_user.membership == 1 %}
+                                                    <form method="post"
+                                                          action="{% url 'kick_member' club_url_name=club.club_url_name %}">
+                                                        <input type="hidden" name="user" value="{{ member.username }}" />
+                                                        {% csrf_token %}
+                                                        <button type="submit"
+                                                                class="button is-danger is-small"
+                                                                style="margin-right: 5px"
+                                                                onclick="return confirm('Confirm you want to kick {{ member.username }}?');">
+                                                            Kick
+                                                        </button>
+                                                    </form>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>
+                    There is no members to this club.
+                </p>
+            {% endif %}
+        </div>
     </div>
-
-</div>
-
 {% endblock %}

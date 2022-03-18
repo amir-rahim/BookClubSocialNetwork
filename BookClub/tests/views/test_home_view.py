@@ -1,7 +1,8 @@
 """Tests of the home view"""
-from django.test import TestCase
+from django.test import TestCase, tag
 from django.urls import reverse
 
+@tag('home')
 class HomeViewTestCase(TestCase):
     """Tests of the home view"""
 

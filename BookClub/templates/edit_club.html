@@ -1,86 +1,97 @@
 {% extends 'base_content.html' %}
-
 {% block page_title %}
-Edit Club
+    Edit Club
 {% endblock page_title %}
-
 {% block page_subtitle %}
-This is a page to edit the details of your club.
+    This is a page to edit the details of your club.
 {% endblock page_subtitle %}
-
 {% block content %}
-
-<div class="columns">
-
-    <div class="column is-3">
-
-        <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
-
-            <p class="menu-label">Club Views</p>
-
-            <ul class="menu-list">
-                <li><a href="{% url 'club_dashboard' club.club_url_name %}">Dashboard</a></li>
-                <li><a href="{% url 'member_list' club.club_url_name %}">Member List</a></li>
-            </ul>
-
-            {% if user == club.get_club_owner %}
-
-                <p class="menu-label">Club Administration</p>
-
+    <div class="columns">
+        <div class="column is-3">
+            <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+                <p class="menu-label">
+                    Club Views
+                </p>
                 <ul class="menu-list">
-                    <li><a class="is-active"><b>Manage Club</b></a></li>
-                    <li><a>Club Settings</a></li>
+                    <li>
+                        <a href="{% url 'club_dashboard' club.club_url_name %}">Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'member_list' club.club_url_name %}">Member List</a>
+                    </li>
                 </ul>
-
-            {% endif %}
-
-            <p class="menu-label">Forum & Reviews</p>
-
-            <ul class="menu-list">
-                <li><a>Forum</a></li>
-                <li><a>Members Reviews</a></li>
-            </ul>
-
-            <p class="menu-label">Meetings</p>
-
-            <ul class="menu-list">
-                <li><a>All Meetings</a></li>
-                <li><a>Joined Upcoming Meetings</a></li>
-                <li><a>Prior Meetings</a></li>
-            </ul>
-
-        </aside>
-
-    </div>
-    
-    <div class="column is-9">
-
-        <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
-            <ul>
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'my_club_memberships' %}">Club</a></li>
-                <li><a href="{% url 'club_dashboard' club.club_url_name %}">{{ club.name }}</a></li>
-                <li><a>Edit Club</a></li>
-            </ul>
-        </nav>
-
-        <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
-            <div class="hero-body">
-                <div class="container">
-                    <h1 class="title">Edit club</h1>
-                    <h2 class="subtitle">Edit the details of your club here</h2>
+                {% if user == club.get_club_owner %}
+                    <p class="menu-label">
+                        Club Administration
+                    </p>
+                    <ul class="menu-list">
+                        <li>
+                            <a class="is-active"><b>Manage Club</b></a>
+                        </li>
+                        <li>
+                            <a>Club Settings</a>
+                        </li>
+                    </ul>
+                {% endif %}
+                <p class="menu-label">
+                    Forum & Reviews
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a>Forum</a>
+                    </li>
+                    <li>
+                        <a>Members Reviews</a>
+                    </li>
+                </ul>
+                <p class="menu-label">
+                    Meetings
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a>All Meetings</a>
+                    </li>
+                    <li>
+                        <a>Joined Upcoming Meetings</a>
+                    </li>
+                    <li>
+                        <a>Prior Meetings</a>
+                    </li>
+                </ul>
+            </aside>
+        </div>
+        <div class="column is-9">
+            <nav class="breadcrumb"
+                 aria-label="breadcrumbs"
+                 style="padding-left: 5px;">
+                <ul>
+                    <li>
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'my_club_memberships' %}">Club</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'club_dashboard' club.club_url_name %}">{{ club.name }}</a>
+                    </li>
+                    <li>
+                        <a>Edit Club</a>
+                    </li>
+                </ul>
+            </nav>
+            <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
+                <div class="hero-body">
+                    <div class="container">
+                        <h1 class="title">Edit club</h1>
+                        <h2 class="subtitle">Edit the details of your club here</h2>
+                    </div>
                 </div>
-            </div>
-        </section>
-
-        <form method="post">
-            {% csrf_token %}
-            {% include 'partials/bulma_form.html' with form=form %}
-            <input type="submit" value="Update Club" class="button is-link">
-        </form>
-
+            </section>
+            <form method="post">
+                {% csrf_token %}
+                {% include 'partials/bulma_form.html' with form=form %}
+                <input type="submit" value="Update Club" class="button is-link">
+            </form>
+        </div>
     </div>
-
-</div>
-
 {% endblock %}

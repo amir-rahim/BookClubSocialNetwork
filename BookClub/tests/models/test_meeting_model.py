@@ -1,15 +1,13 @@
-from ast import Pass
-from django.test import TestCase
-from django.utils import timezone
-import pytz
 import datetime
 
-from BookClub.models import Meeting, Club, User, Book
-# from BookClub.models.club_membership import ClubMembership
 from django.core.exceptions import ValidationError
+from django.test import TestCase, tag
 
+from BookClub.models import Meeting, Club, User, Book
+
+
+@tag('models', 'meeting')
 class MeetingTestCase(TestCase):
-
     fixtures = [
         'BookClub/tests/fixtures/books.json',
         'BookClub/tests/fixtures/default_users.json',
@@ -18,19 +16,19 @@ class MeetingTestCase(TestCase):
     ]
 
     def setUp(self):
-        self.club = Club.objects.get(pk = 1)
-        self.meeting = Meeting.objects.get(pk = 1)
-        self.user = User.objects.get(username = 'johndoe')
-        self.jack = User.objects.get(username = "jackdoe")
-        self.jane = User.objects.get(username = 'janedoe')
-        self.book = Book.objects.get(pk = 1)
-    
+        self.club = Club.objects.get(pk=1)
+        self.meeting = Meeting.objects.get(pk=1)
+        self.user = User.objects.get(username='johndoe')
+        self.jack = User.objects.get(username="jackdoe")
+        self.jane = User.objects.get(username='janedoe')
+        self.book = Book.objects.get(pk=1)
+
     def _assert_meeting_is_valid(self):
         try:
             self.meeting.full_clean()
-        except(ValidationError):
+        except ValidationError:
             self.fail('test meeting should be valid')
-        
+
     def _assert_meeting_is_invalid(self):
         with self.assertRaises(ValidationError):
             self.meeting.full_clean()
@@ -38,7 +36,7 @@ class MeetingTestCase(TestCase):
     def test_valid_club(self):
         self._assert_meeting_is_valid()
 
-# Field testing
+    # Field testing
 
     # Organiser testing
 
@@ -112,7 +110,6 @@ class MeetingTestCase(TestCase):
         self.assertEquals(self.meeting.get_members().count(), 1)
         self._assert_meeting_is_valid()
 
-
     # Type testing
 
     def test_meeting_type_enum_is_invalid(self):
@@ -128,8 +125,13 @@ class MeetingTestCase(TestCase):
     def test_book_can_be_blank(self):
         self.meeting.book = None
         self._assert_meeting_is_valid()
-        
-# Function testing
+
+    # Function testing
+    def test_get_absolute_url(self):
+        url = self.meeting.get_absolute_url()
+        correct_url = f'/club/{self.club.club_url_name}/meetings/{self.meeting.id}/'
+        self.assertEqual(url, correct_url)
+
     def test_str_returns_title(self):
         self.assertEqual(str(self.meeting), self.meeting.get_title())
 
@@ -147,33 +149,32 @@ class MeetingTestCase(TestCase):
 
     def test_get_location(self):
         self.assertEqual(self.meeting.get_location(), "Franklin Wilkins Library GS04")
-    
+
     def test_get_title(self):
         self.assertEqual(self.meeting.get_title(), "Book meeting 1")
 
     def test_get_description(self):
         self.assertEqual(self.meeting.get_description(), "This is a book meeting, helll yeahhhh")
-    
+
     def test_get_members(self):
-        self.assertQuerysetEqual(self.meeting.get_members(), [self.user, self.jane], ordered = False)
+        self.assertQuerysetEqual(self.meeting.get_members(), [self.user, self.jane], ordered=False)
 
     def test_get_type(self):
         self.assertEqual(self.meeting.get_type(), "B")
 
     def test_get_book(self):
         self.assertEqual(self.meeting.get_book(), self.book)
-    
+
     def test_get_number_of_attendants(self):
         self.assertEqual(self.meeting.get_number_of_attendants(), 2)
 
     def test_not_join_member(self):
         self.meeting.join_member(self.user)
         self.assertNotEqual(self.meeting.get_number_of_attendants(), 3)
-    
+
     def test_not_leave_member(self):
         self.meeting.leave_member(self.jack)
         self.assertNotEqual(self.meeting.get_number_of_attendants(), 1)
 
     def test_get_is_not_past(self):
         self.assertEqual(self.meeting.get_is_not_past(), False)
-

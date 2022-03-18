@@ -1,12 +1,14 @@
-from django.test import TestCase, tag
-from BookClub.models import Poll
-from django.core.exceptions import ValidationError
-
 """Test case for Poll model"""
-@tag('poll', 'models')
-class PollModelTestCase(TestCase):
+from django.core.exceptions import ValidationError
+from django.test import TestCase, tag
 
+from BookClub.models import Poll, Club
+
+
+@tag('models', 'poll')
+class PollModelTestCase(TestCase):
     fixtures = [
+        'BookClub/tests/fixtures/default_clubs.json',
         'BookClub/tests/fixtures/default_polls.json',
     ]
 
@@ -16,15 +18,14 @@ class PollModelTestCase(TestCase):
     def _assert_poll_is_valid(self):
         try:
             self.poll.full_clean()
-        except(ValidationError):
+        except ValidationError:
             self.fail('Test poll should be valid')
 
     def _assert_poll_is_invalid(self):
         with self.assertRaises(ValidationError):
             self.poll.full_clean()
 
-
-# Fields testing
+    # Fields testing
 
     # Tests of title attribute
 
@@ -49,7 +50,7 @@ class PollModelTestCase(TestCase):
         self._assert_poll_is_invalid()
 
     def test_active_is_true_by_default(self):
-        poll2 = Poll.objects.create(title="Test poll 2")
+        poll2 = Poll.objects.create(title="Test poll 2", club=Club.objects.get(pk=1))
         self.assertEqual(poll2.active, True)
 
     def test_active_can_be_false(self):
@@ -63,3 +64,8 @@ class PollModelTestCase(TestCase):
         self._assert_poll_is_valid()
         self.poll.deadline = ""
         self._assert_poll_is_valid()
+
+    def test_str_function(self):
+        return_str = str(self.poll)
+        correct_str = f'Poll in "Johnathan Club" on "My First Poll"'
+        self.assertEqual(return_str, correct_str)

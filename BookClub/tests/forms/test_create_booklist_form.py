@@ -1,18 +1,20 @@
-from django import forms
+from datetime import datetime
+import pytz
+
 from django.test import TestCase, tag
-from BookClub.models import BookList, User
+
 from BookClub.forms.booklist_forms import CreateBookListForm
+from BookClub.models import BookList, User
 
-from datetime import date
 
-@tag('createbooklistform','booklist')
+@tag('forms', 'booklist')
 class BookListFormTestCase(TestCase):
     """Unit tests for Book List Form"""
 
     fixtures = [
         "BookClub/tests/fixtures/default_users.json",
     ]
-    
+
     def setUp(self):
         self.user = User.objects.get(username='johndoe')
         self.form_input = {
@@ -38,7 +40,7 @@ class BookListFormTestCase(TestCase):
     def test_form_must_save_correctly(self):
         form = CreateBookListForm(data = self.form_input)
         form.instance.creator = self.user
-        saving_date = date.today()
+        saving_date = pytz.utc.localize(datetime.today()).date()
         before_count = BookList.objects.count()
         form.save()
         after_count = BookList.objects.count()
@@ -47,7 +49,7 @@ class BookListFormTestCase(TestCase):
         self.assertEqual(booklist.title, self.form_input['title'])
         self.assertEqual(booklist.description, self.form_input['description'])
         self.assertEqual(booklist.creator, self.user)
-        self.assertEqual(booklist.created_on, saving_date)
+        self.assertEqual(booklist.created_on.date(), saving_date)
 
     def test_input_boundaries_save_successfully(self):
         self.form_input['title'] = 'y' * 120

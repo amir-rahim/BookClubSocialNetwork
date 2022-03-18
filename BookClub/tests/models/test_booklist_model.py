@@ -1,16 +1,14 @@
-import datetime
 from django.forms import ValidationError
+from django.test import TestCase, tag
+
 from BookClub.models import Book
 from BookClub.models.booklist import BookList
 from BookClub.models.user import User
-from django.db import models
-from django.test import TestCase, tag
 
-@tag('booklist')
-@tag('book')
+
+@tag('models', 'booklist')
 class BookListTestCase(TestCase):
-
-    fixtures=[
+    fixtures = [
         'BookClub/tests/fixtures/default_books.json',
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/booklists.json'
@@ -19,7 +17,8 @@ class BookListTestCase(TestCase):
     def setUp(self):
         self.bookList = BookList.objects.get(pk=1)
         self.book_one = Book.objects.get(pk=1)
-        self.book_two = Book.objects.get(pk=3)
+        self.book_two = Book.objects.get(pk=2)
+        self.book_three = Book.objects.get(pk=3)
 
     def _assert_booklist_is_valid(self):
         try:
@@ -30,7 +29,6 @@ class BookListTestCase(TestCase):
     def _assert_booklist_is_invalid(self):
         with self.assertRaises(Exception):
             self.bookList.full_clean()
-
 
     # Title
     def test_title_cannot_be_blank(self):
@@ -50,7 +48,6 @@ class BookListTestCase(TestCase):
         self.bookList.title = 'x' * 121
         self._assert_booklist_is_invalid()
 
-
     # Description
     def test_description_can_be_blank(self):
         self.bookList.description = ''
@@ -69,7 +66,6 @@ class BookListTestCase(TestCase):
         self.bookList.description = 'x' * 241
         self._assert_booklist_is_invalid()
 
-
     # Creator
     def test_creator_cannot_be_blank(self):
         self.bookList.creator = None
@@ -81,12 +77,11 @@ class BookListTestCase(TestCase):
         self._assert_booklist_is_valid()
 
     def test_booklist_is_deleted_when_creator_is_deleted(self):
-        user = User.objects.get(pk = 1)
-        user_booklist_count = BookList.objects.filter(creator = user).count()
+        user = User.objects.get(pk=1)
+        user_booklist_count = BookList.objects.filter(creator=user).count()
         booklist_count_before = BookList.objects.count()
         user.delete()
         self.assertEqual(BookList.objects.count(), booklist_count_before - user_booklist_count)
-
 
     # Books
     def test_books_field_can_be_empty(self):
@@ -103,7 +98,7 @@ class BookListTestCase(TestCase):
         for book in self.bookList.books.all():
             books_in_the_list.append(book.pk)
 
-        new_book_in_the_list = Book.objects.exclude(pk__in = books_in_the_list)[0]
+        new_book_in_the_list = Book.objects.exclude(pk__in=books_in_the_list)[0]
         list_book_count_before = self.bookList.books.count()
         self.bookList.books.add(new_book_in_the_list)
         self.assertEqual(self.bookList.books.count(), list_book_count_before + 1)
@@ -115,7 +110,7 @@ class BookListTestCase(TestCase):
         for book in self.bookList.books.all():
             books_in_the_list.append(book.pk)
 
-        new_book_in_the_list = Book.objects.exclude(pk__in = books_in_the_list)[0]
+        new_book_in_the_list = Book.objects.exclude(pk__in=books_in_the_list)[0]
         list_book_count_before = self.bookList.books.count()
         self.bookList.books.add(new_book_in_the_list)
         self.assertEqual(self.bookList.books.count(), list_book_count_before + 1)
@@ -156,4 +151,21 @@ class BookListTestCase(TestCase):
             self.assertEqual(model_string, correct_string)
 
     def test_get_books(self):
-        self.assertQuerysetEqual(self.bookList.get_books(), [self.book_one, self.book_two], ordered = False)
+        self.assertQuerysetEqual(self.bookList.get_books(), [self.book_one, self.book_three], ordered=False)
+
+    def test_add_book(self):
+        before_count = len(self.bookList.get_books())
+        self.bookList.add_book(self.book_two)
+        after_count = len(self.bookList.get_books())
+        self.assertEqual(before_count, after_count - 1)
+
+    def test_remove_book(self):
+        before_count = len(self.bookList.get_books())
+        self.bookList.remove_book(self.book_one)
+        after_count = len(self.bookList.get_books())
+        self.assertEqual(before_count, after_count + 1)
+
+    def test_get_absolute_url(self):
+        url = self.bookList.get_absolute_url()
+        correct_url = '/user/johndoe/lists/1/'
+        self.assertEqual(url, correct_url)

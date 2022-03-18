@@ -3,12 +3,17 @@
     {{ forum.title }}
 {% endblock page_title %}
 {% block page_subtitle %}
-    {{ forum.title }}
+    You can view these Forums posts, create posts, vote on them and view them in more detail.
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
         <div class="column is-3">
             <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'global_forum' %}" class="is-active"><b>Global Forum</b></a>
+                    </li>
+                </ul>
                 <p class="menu-label">
                     Clubs
                 </p>
@@ -31,10 +36,7 @@
                         <a href="{% url 'user_dashboard' %}">User Profile</a>
                     </li>
                     <li>
-                        <a>Library</a>
-                    </li>
-                    <li>
-                        <a>Forum</a>
+                        <a href="{% url 'library_dashboard' %}">Library</a>
                     </li>
                 </ul>
             </aside>
@@ -109,53 +111,48 @@
                 </div>
             </section>
             <hr class="solid"/>
-            {% for post in posts %}
-                <br />
-                <div class="card">
-                    <header class="card-header">
-                        <div class="card-header-title">
-                            <p class="subtitle">
-                                <b>{{ post.title }}</b>
+            {% if posts %}
+                {% for post in posts %}
+                    <br />
+                    <div class="card">
+                        <header class="card-header">
+                            <div class="card-header-title">
+                                <p class="subtitle">
+                                    <b>{{ post.title }}</b>
+                                </p>
+                            </div>
+                            <div class="card-header-icon">{% include 'partials/voting.html' with content=post %}</div>
+                        </header>
+                        <div class="card-content">
+                            <div class="content">
+                                <span class="has-text-grey">{{ post.content |truncatechars:240 }}</span>
+                            </div>
+                        </div>
+                        <footer class="card-footer">
+                            <p class="card-footer-item">
+                                <span class="is-small has-text-grey-light">Posted by: {{ post.creator }}</span>
                             </p>
-                        </div>
-                        <div class="card-header-icon">
-                            <button class="button is-primary is-rounded" aria-label="Upvote">
-                                <span class="icon">
-                                    <i class="fa-solid fa-arrow-up"></i>
-                                </span>
-                            </button>
-                            <button class="button is-danger is-rounded" aria-label="Downvote">
-                                <span class="icon">
-                                    <i class="fa-solid fa-arrow-down"></i>
-                                </span>
-                            </button>
-                            <button class="button is-rounded" title="Disabled button" disabled>{{ post.rating }}</button>
-                        </div>
-                    </header>
-                    <div class="card-content">
-                        <div class="content">
-                            <span class="has-text-grey">{{ post.content |truncatechars:240 }}</span>
-                        </div>
+                            <p class="card-footer-item has-text-grey-light">
+                                {{ post.created_on | timesince }} ago
+                            </p>
+                            <a {% if club %} href="{% url 'forum_post' post_id=post.id club_url_name=club.club_url_name %}" {% else %} href="{% url 'forum_post' post.id %}" {% endif %}
+                               class="card-footer-item">
+                                {% if post.get_comments.count > 0 %}
+                                    See {{ post.get_comments.count }} comments
+                                {% else %}
+                                    Be the first to comment!
+                                {% endif %}
+                            </a>
+                        </footer>
                     </div>
-                    <footer class="card-footer">
-                        <p class="card-footer-item">
-                            <span class="is-small has-text-grey-light">Posted by: {{ post.creator }}</span>
-                        </p>
-                        <p class="card-footer-item has-text-grey-light">
-                            {{ post.created_on | timesince }} ago
-                        </p>
-                        <a href="{% url 'forum_post' post.id %}" class="card-footer-item">
-                            {% if post.comments.count > 0 %}
-                                See {{ post.comments.count }} comments
-                            {% else %}
-                                Be the first to comment!
-                            {% endif %}
-                        </a>
-                    </footer>
-                </div>
-            {% endfor %}
-            <br />
-            {% include 'partials/pagination.html' %}
+                {% endfor %}
+                <br />
+                {% include 'partials/pagination.html' %}
+            {% else %}
+                <p style="text-align: center">
+                    There are no posts at the moment. Be first to post!
+                </p>
+            {% endif %}
             <div id="modal-create-post" class="modal">
                 <div class="modal-background"></div>
                 <div class="modal-content">
@@ -170,7 +167,8 @@
                                 Create Discussion Post
                             </p>
                         </div>
-                        <form method="post" action="{% url 'create_forum_post' %}">
+                        <form method="post"
+                              {% if club %} action="{% url 'create_forum_post' club.club_url_name %}" {% else %} action="{% url 'create_forum_post' %}" {% endif %}>
                             <div class="card-content">
                                 <div class="container">
                                     {% csrf_token %}

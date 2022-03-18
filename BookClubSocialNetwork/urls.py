@@ -55,20 +55,35 @@ urlpatterns = [
     # '''Membership URLs'''
     path('club/', views.AvailableClubsView.as_view(), name='available_clubs'),
     path('memberships/', views.MyClubMembershipsView.as_view(), name='my_club_memberships'),
-    path('create/', views.clubs.CreateClubView.as_view(), name='create_club'),
+    path('applications/', views.ApplicationListView.as_view(), name='applications'),
+    path('create/', views.CreateClubView.as_view(), name='create_club'),
 
     path('club/<str:club_url_name>/', views.ClubDashboardView.as_view(), name='club_dashboard'),
     path('club/<str:club_url_name>/members/', views.MembersListView.as_view(), name='member_list'),
     path('club/<str:club_url_name>/edit/', views.EditClubView.as_view(), name='edit_club'),
     path('club/<str:club_url_name>/applicants/', views.ApplicantListView.as_view(), name='applicant_list'),
     path('club/<str:club_url_name>/edit/', views.EditClubView.as_view(), name='edit_club'),
+    path('club/<str:club_url_name>/polls/create/', views.CreateClubPollView.as_view(), name='create_club_poll'),
+
+    # '''Club Forum URLs'''
+    path('club/<str:club_url_name>/forum/', views.ForumView.as_view(), name='club_forum'),
+    path('club/<str:club_url_name>/forum/post/', views.CreatePostView.as_view(), name='create_forum_post'),
+    path('club/<str:club_url_name>/forum/<int:post_id>/', views.ForumPostView.as_view(), name='forum_post'),
+    path('club/<str:club_url_name>/forum/<int:post_id>/comment/',
+         views.CreateCommentView.as_view(), name='create_forum_comment'),
+    path('club/<str:club_url_name>/forum/<int:post_id>/comment/<int:comment_id>/delete/',
+         views.DeleteForumCommentView.as_view(), name='delete_forum_comment'),
+    path('club/<str:club_url_name>/forum/<int:post_id>/edit/',
+         views.EditForumPostView.as_view(), name='edit_forum_post'),
+    path('club/<str:club_url_name>/forum/<int:post_id>/delete/',
+         views.DeleteForumPostView.as_view(), name='delete_forum_post'),
 
     # '''Meeting URLs'''
-    path('club/<str:club_url_name>/meetings/<int:meeting_id>/edit',views.EditMeetingView.as_view(), name='edit_meeting'),
+    path('club/<str:club_url_name>/meetings/<int:meeting_id>/edit/',views.EditMeetingView.as_view(), name='edit_meeting'),
     path('club/<str:club_url_name>/meetings/<int:meeting_id>/edit/remove_member/<int:member_id>', views.RemoveMeetingMember.as_view(), name='remove_meeting_member'),
     path('club/<str:club_url_name>/meetings/',views.MeetingListView.as_view(),name='meeting_list'),
-    path('club/<str:club_url_name>/meetings/<int:meeting_id>/join', views.JoinMeetingView.as_view(), name='join_meeting'),
-    path('club/<str:club_url_name>/meetings/<int:meeting_id>/leave', views.LeaveMeetingView.as_view(), name='leave_meeting'),
+    path('club/<str:club_url_name>/meetings/<int:meeting_id>/join/', views.JoinMeetingView.as_view(), name='join_meeting'),
+    path('club/<str:club_url_name>/meetings/<int:meeting_id>/leave/', views.LeaveMeetingView.as_view(), name='leave_meeting'),
     path('club/<str:club_url_name>/meetings/<int:meeting_id>/', views.MeetingDetailsView.as_view(), name='meeting_details'),
     path('club/<str:club_url_name>/meetings/<int:meeting_id>/participants/', views.MeetingParticipantsView.as_view(), name='meeting_participants'),
     path('club/<str:club_url_name>/meetings/create/', views.CreateMeetingView.as_view(), name='create_meeting'),
@@ -79,30 +94,41 @@ urlpatterns = [
     # '''Library URLs'''
     path('library/', views.library_dashboard, name='library_dashboard'),
     path('library/books/', views.BookListView.as_view(), name='library_books'),  # searching and book table
+    path('library/books/add_to_book_list/', views.AddToBookListView.as_view(), name='add_to_book_list'),
     path('library/books/<int:book_id>/', views.BookDetailView.as_view(), name='book_view'),  # book view
     path('library/books/<int:book_id>/reviews/', views.BookReviewListView.as_view(), name='book_reviews'),
 
     # '''Review URLs'''
     path('library/books/<int:book_id>/create/', views.CreateReviewView.as_view(), name='create_review'),
-    # create review for book represented by id
     path('library/books/<int:book_id>/edit/', views.EditReviewView.as_view(), name='edit_review'),
-    # path('library/review/<int:book_id/delete') # delete review for book represented by id
     path('library/books/<int:book_id>/delete/', views.DeleteReviewView.as_view(), name='delete_review'),
-    # delete review for book represented by id
-
-    # '''BookList URLs'''
-    path('user/<slug:username>/lists/', views.BooklistListView.as_view(), name='booklists_list'),
-    path('user/<slug:username>/lists/create/', views.CreateBookListView.as_view(), name='create_booklist'),
-    path('user/<slug:username>/list/<int:list_id>/delete/', views.DeleteBookListView.as_view(), name='delete_booklist'),
-    path('user/<slug:username>/lists/<int:booklist_id>/edit/', views.EditBookListView.as_view(), name='edit_booklist'),
-    path('user/<slug:username>/lists/<int:booklist_id>', views.UserBookListView.as_view(), name='user_booklist'),
 
     # '''Forum URLs'''
     path('forum/', views.ForumView.as_view(), name='global_forum'),
-    path('forum/post/', views.CreatePostView.as_view(), name = 'create_forum_post'),
+    path('forum/post/', views.CreatePostView.as_view(), name='create_forum_post'),
     path('forum/<int:post_id>/', views.ForumPostView.as_view(), name='forum_post'),
-    path('forum/<int:post_id>/comment/', views.CreateCommentView.as_view(), name = 'create_forum_comment'),
-    path('forum/<int:post_id>/edit/',views.EditForumPostView.as_view(), name='edit_forum_post'),
+    path('forum/<int:post_id>/comment/', views.CreateCommentView.as_view(), name='create_forum_comment'),
+    path('forum/<int:post_id>/edit/', views.EditForumPostView.as_view(), name='edit_forum_post'),
     path('forum/<int:post_id>/delete/', views.DeleteForumPostView.as_view(), name='delete_forum_post'),
-  
+    path('forum/<int:post_id>/comment/<int:comment_id>/delete/', views.DeleteForumCommentView.as_view(), name='delete_forum_comment'),
+    path('forum/upvote/', views.CreateVoteView.as_view(), name='upvote'),
+    path('forum/downvote/', views.CreateVoteView.as_view(), name='downvote'),
+
+    # '''Book List URLs'''
+    path('user/<str:username>/lists/',
+         views.BooklistListView.as_view(), name='booklists_list'),
+    path('user/<str:username>/lists/create/',
+         views.CreateBookListView.as_view(), name='create_booklist'),
+    path('user/<str:username>/list/<int:list_id>/delete/',
+         views.DeleteBookListView.as_view(), name='delete_booklist'),
+    path('user/<str:username>/lists/<int:booklist_id>/edit/',
+         views.EditBookListView.as_view(), name='edit_booklist'),
+    path('user/<str:username>/lists/<int:booklist_id>/',
+         views.UserBookListView.as_view(), name='user_booklist'),
+    path('user/<str:username>/lists/<int:booklist_id>/<int:book_id>/delete', views.RemoveFromBookListView.as_view(), name='remove_book'),
+    path('user/<str:username>/lists/create/',
+         views.CreateBookListView.as_view(), name='create_booklist'),
+
+    # '''Agenda URLs'''
+    path('agenda/', views.AgendaView.as_view(), name='agenda'),
 ]

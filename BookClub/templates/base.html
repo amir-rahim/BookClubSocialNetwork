@@ -1,13 +1,14 @@
 <!DOCTYPE html>
+{% load bulma_tags %}
 {% load static %}
-<html lang="en">
+<html lang="en" class="has-navbar-fixed-top">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" href="{% static 'favicon.ico' %}" />
-        <link rel="stylesheet"
-              href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+        <link rel="stylesheet" href="{% static 'bulma/css/mystyles.css' %}">
         <script src="https://kit.fontawesome.com/4c481256fb.js" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script>
 			document.addEventListener("DOMContentLoaded", () => {
 				const hamburgerButton = document.querySelector(".navbar-burger");
@@ -112,5 +113,112 @@
           });
         });
 
+        $('.voteform').on('submit', catchVote);
+
+        function catchVote(event){
+          event.preventDefault();
+          form = event.target
+          content_type = form['content_type'].value
+          object_id = form['object_id'].value
+          url = form.action
+          identifier = content_type+object_id
+          create_vote(url, identifier, form);
+        }
+
+        function updateRating(identifier, rating){
+          $('#votecount'+identifier).text(rating)
+        }
+
+        function create_vote(actionUrl, identifier, form) {
+          $.ajax({
+            type: "POST",
+            url: actionUrl,
+            data: $(form).serializeArray()
+          }).done(function (response){
+            rating = response['rating']
+            upvoted = response['upvote']
+            downvoted = response['downvote']
+            noVote = response['no_vote']
+            console.log(upvoted)
+            console.log(downvoted)
+            console.log(noVote)
+            if(noVote){
+              minimise_downvote(identifier)
+              minimise_upvote(identifier)
+            }
+            else if(downvoted){
+              minimise_upvote(identifier)
+              highlight_downvote(identifier)
+            }
+            else if(upvoted){
+              minimise_downvote(identifier)
+              highlight_upvote(identifier)
+            }
+            updateRating(identifier, rating)
+          });
+        }
+
+        function highlight_upvote(identifier){
+            $('#upvote'+identifier).addClass('is-primary')
+        }
+
+        function minimise_upvote(identifier){
+            $('#upvote'+identifier).removeClass('is-primary')
+        }
+
+        function highlight_downvote(identifier){
+            $('#downvote'+identifier).addClass('is-danger')
+        }
+
+        function minimise_downvote(identifier){
+            $('#downvote'+identifier).removeClass('is-danger')
+        }
+
+		document.addEventListener('DOMContentLoaded', () => {
+	// Functions to open and close a modal
+	function openModal($el) {
+		$el.classList.add('is-active');
+	}
+
+	function closeModal($el) {
+		$el.classList.remove('is-active');
+	}
+
+	function closeAllModals() {
+		(document.querySelectorAll('.modal') || []).forEach(($modal) => {
+			closeModal($modal);
+		});
+	}
+
+	// Add a click event on buttons to open a specific modal
+	(document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
+		const modal = $trigger.dataset.target;
+		const $target = document.getElementById(modal);
+		console.log($target);
+
+		$trigger.addEventListener('click', () => {
+			openModal($target);
+		});
+	});
+
+	// Add a click event on various child elements to close the parent modal
+	(document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
+		const $target = $close.closest('.modal');
+
+		$close.addEventListener('click', () => {
+			closeModal($target);
+		});
+	});
+
+	// Add a keyboard event to close all modals
+	document.addEventListener('keydown', (event) => {
+		const e = event || window.event;
+
+		if (e.keyCode === 27) { // Escape key
+			closeAllModals();
+		}
+	});
+	});
+		
     </script>
 </html>

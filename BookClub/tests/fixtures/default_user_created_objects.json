@@ -1,4 +1,13 @@
-[{
+[
+  {
+      "model": "BookClub.Forum",
+      "pk": 1,
+      "fields": {
+          "title": "blank",
+          "slug": "blank"
+      }
+  },
+  {
         "model": "BookClub.ForumPost",
         "pk": 1,
         "fields": {
@@ -7,7 +16,8 @@
             "title": "blank",
             "content": "blank",
             "slug": "blank",
-            "rating": 0
+            "rating": 0,
+            "forum": 1
         }
     },
     {
@@ -17,15 +27,8 @@
             "creator": 1,
             "created_on": "2022-02-22T19:00+00:00",
             "content": "blank",
-            "rating": 0
-        }
-    },
-    {
-        "model": "BookClub.Forum",
-        "pk": 1,
-        "fields": {
-            "title": "blank",
-            "slug": "blank"
+            "rating": 0,
+            "post": 1
         }
     }
 

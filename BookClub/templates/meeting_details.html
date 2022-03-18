@@ -1,58 +1,64 @@
 {% extends 'base_content.html' %}
-
 {% block page_title %}
-Meeting
+    Meeting
 {% endblock page_title %}
-
 {% block page_subtitle %}
-Meeting details for {{ meeting.get_title }}
+    Meeting details for {{ meeting.get_title }}
 {% endblock page_subtitle %}
-
 {% block content %}
-
     <div class="columns">
-
         <div class="column is-3">
-
             <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
-
-                <p class="menu-label">Meeting</p>
-
+                <p class="menu-label">
+                    Meeting
+                </p>
                 <ul class="menu-list">
-
-                    <li><a href="{% url 'meeting_list' club.club_url_name %}">Meeting List</a></li>
-                    <li><a class="is-active" href="{% url 'meeting_details' club.club_url_name meeting.id %}"><b>Meeting Details</b></a></li>
-                    <li><a href="{% url 'meeting_participants' club.club_url_name meeting.id %}">Meeting Participants</a></li>
-
+                    <li>
+                        <a href="{% url 'meeting_list' club.club_url_name %}">Meeting List</a>
+                    </li>
+                    <li>
+                        <a class="is-active"
+                           href="{% url 'meeting_details' club.club_url_name meeting.id %}"><b>Meeting Details</b></a>
+                    </li>
+                    <li>
+                        <a href="{% url 'meeting_participants' club.club_url_name meeting.id %}">Meeting Participants</a>
+                    </li>
                 </ul>
-
-                {% if user == meeting.get_organiser %} 
-
-                    <p class="menu-label">Meeting Administration</p>
-
+                {% if user == meeting.get_organiser %}
+                    <p class="menu-label">
+                        Meeting Administration
+                    </p>
                     <ul class="menu-list">
-                        <li><a>Manage Meeting</a></li>
+                        <li>
+                            <a href="{% url 'edit_meeting' club.club_url_name meeting.id %}">Manage Meeting</a>
+                        </li>
                     </ul>
-
                 {% endif %}
-
             </aside>
-
         </div>
-
         <div class="column is-9">
-
-            <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
+            <nav class="breadcrumb"
+                 aria-label="breadcrumbs"
+                 style="padding-left: 5px;">
                 <ul>
-                    <li><a href="{% url 'home' %}">Home</a></li>
-                    <li><a href="{% url 'available_clubs' %}">Club</a></li>
-                    <li><a href="{% url 'club_dashboard' club.club_url_name %}"> {{ club.name }} </a></li>
-                    <li><a href="{% url 'meeting_list' club.club_url_name %}">Meeting List</a></li>
-                    <li><a href="{% url 'meeting_details' club.club_url_name meeting.id %}">{{ meeting.get_title}}</a></li>
+                    <li>
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'available_clubs' %}">Club</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'club_dashboard' club.club_url_name %}">{{ club.name }}</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'meeting_list' club.club_url_name %}">Meeting List</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'meeting_details' club.club_url_name meeting.id %}">{{ meeting.get_title }}</a>
+                    </li>
                 </ul>
             </nav>
-
-            <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
+            <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
                 <div class="hero-body">
                     <div class="container">
                         <h1 class="title">{{ meeting.get_title }}</h1>
@@ -60,113 +66,130 @@ Meeting details for {{ meeting.get_title }}
                     </div>
                 </div>
             </section>
-
             <div class="columns is-fullheight">
-
                 <div class="column is-7">
                     <div class="card card-equal-height">
-    
                         <div class="card-content">
-                            <p class="title">Meeting Details</p>
-    
+                            <p class="title">
+                                Meeting Details
+                            </p>
                             <div class="media">
                                 <div class="media-content">
                                     <div class="content">
-                                        <p class="subtitle is-5"><b>Meeting Description: </b> {{ meeting.get_description }} </p>
-                                        <p class="subtitle is-5"><b>Meeting Time: </b> {{ meeting.get_meeting_time }} </p>
-                                        <p class="subtitle is-5"><b>Location: </b> {{ meeting.get_location }} </p>
+                                        <p class="subtitle is-5">
+                                            <b>Meeting Description: </b> {{ meeting.get_description }}
+                                        </p>
+                                        <p class="subtitle is-5">
+                                            <b>Meeting Time: </b> {{ meeting.get_meeting_time }}
+                                        </p>
+                                        <p class="subtitle is-5">
+                                            <b>Location: </b> {{ meeting.get_location }}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
-    
                         </div>
-    
                     </div>
                 </div>
-
                 <div class="column is-5">
-                    
                     <div class="card card-equal-height">
-                        
                         <div class="card-content">
-                            <p class="title">Organiser</p>
+                            <p class="title">
+                                Organiser
+                            </p>
                             <div class="media">
                                 <div class="media-left">
                                     <figure class="image is-96x96">
-                                        <img class="is-rounded" src="https://image.shutterstock.com/image-vector/default-avatar-profile-icon-grey-600w-518740741.jpg" alt="Placeholder image">
+                                        <img class="is-rounded"
+                                             src="https://image.shutterstock.com/image-vector/default-avatar-profile-icon-grey-600w-518740741.jpg"
+                                             alt="Placeholder image">
                                     </figure>
                                 </div>
                                 <div class="media-content">
                                     <div class="content">
-                                        <p class="subtitle is-5"><b>Meeting Organiser: </b> {{ meeting.get_organiser.username }} </p>
-                                        <p class="subtitle is-5"><b>Contact Details: </b> {{ meeting.get_organiser.email }} </p>
+                                        <p class="subtitle is-5">
+                                            <b>Meeting Organiser: </b> {{ meeting.get_organiser.username }}
+                                        </p>
+                                        <p class="subtitle is-5">
+                                            <b>Contact Details: </b> {{ meeting.get_organiser.email }}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
-    
                 </div>
-    
             </div>
-
             <div class="tile is-ancestor has-text-centered">
                 <div class="tile is-vertical">
                     <div class="tile">
                         <div class="tile is-parent">
-                            <div class="tile is-child" onclick="location.href='{% url "meeting_participants" club.club_url_name meeting.id %}'" style="cursor: pointer">
+                            <div class="tile is-child"
+                                 onclick="location.href='{% url "meeting_participants" club.club_url_name meeting.id %}'"
+                                 style="cursor: pointer">
                                 <article class="tile is-child box">
-                                    <p class="title is-size-3"> {{ meeting.get_number_of_attendants }} </p>
-                                    <p class="subtitle">Participants</p>
+                                    <p class="title is-size-3">
+                                        {{ meeting.get_number_of_attendants }}
+                                    </p>
+                                    <p class="subtitle">
+                                        Participants
+                                    </p>
                                 </article>
                             </div>
                         </div>
-
-
                         <div class="tile is-parent">
                             <div class="tile is-child">
                                 <article class="tile is-child box">
                                     {% if meeting.get_type == 'O' %}
-                                        <p class="title is-size-3"> Other </p>
+                                        <p class="title is-size-3">
+                                            Other
+                                        </p>
                                     {% elif meeting.get_type == 'S' %}
-                                        <p class="title is-size-3"> Social </p>
+                                        <p class="title is-size-3">
+                                            Social
+                                        </p>
                                     {% elif meeting.get_type == 'B' %}
-                                        <p class="title is-size-3"> Book </p>
+                                        <p class="title is-size-3">
+                                            Book
+                                        </p>
                                     {% elif meeting.get_type == 'C' %}
-                                    <p class="title is-size-3"> Club </p>
+                                        <p class="title is-size-3">
+                                            Club
+                                        </p>
                                     {% endif %}
-
-                                    <p class="subtitle">Type</p>
+                                    <p class="subtitle">
+                                        Type
+                                    </p>
                                 </article>
                             </div>
                         </div>
-
                         <div class="tile is-parent">
                             <div class="tile is-child">
                                 <article class="tile is-child box">
-                                    <p class="title is-size-3"> {{ meeting.get_created_on }} </p>
-                                    <p class="subtitle">Created</p>
+                                    <p class="title is-size-3">
+                                        {{ meeting.get_created_on }}
+                                    </p>
+                                    <p class="subtitle">
+                                        Created
+                                    </p>
                                 </article>
                             </div>
                         </div>
                     </div>
-
                     {% if meeting.get_book != None %}
                         <div class="tile is-parent is-12">
                             <article class="tile is-child box">
-                                <p class="title is-size-3"> {{ meeting.get_book.title }} </p>
-                                <p class="subtitle">Book</p>
+                                <p class="title is-size-3">
+                                    {{ meeting.get_book.title }}
+                                </p>
+                                <p class="subtitle">
+                                    Book
+                                </p>
                             </article>
                         </div>
                     {% endif %}
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
-
 {% endblock %}

@@ -54,7 +54,7 @@ class BookListAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for Books Reviews ."""
 
     list_display = [
-        'title', 'description', 'creator', 'created_on'
+        'title', 'creator', 'description', 'created_on'
     ]
 
 
@@ -67,22 +67,22 @@ class ClubMeetingAdmin(admin.ModelAdmin):
     ]
 
 
-@admin.register(ForumPost)
-class ForumPostAdmin(admin.ModelAdmin):
-    """Configuration of the admin interface for club meetings."""
-    list_display = [
-        'creator', 'created_on', 'title', 'content', 'rating'
-    ]
-
-
 @admin.register(Forum)
 class ForumAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for club meetings."""
     prepopulated_fields = {"slug": ("title",)}
     list_display = [
-        'title', 'associatedWith', 'slug'
+        'title', 'associated_with', 'slug'
     ]
-    filter_horizontal = ['posts']
+    # filter_horizontal = ['posts']
+
+
+@admin.register(ForumPost)
+class ForumPostAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for club meetings."""
+    list_display = [
+        'creator', 'created_on', 'forum', 'title', 'content', 'rating'
+    ]
 
 
 @admin.register(ForumComment)
@@ -90,8 +90,8 @@ class ForumCommentAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for club meetings."""
 
     list_display = [
-        'creator', 'created_on', 'content', 'rating']
-    filter_horizontal = ['subComments']
+        'creator', 'created_on', 'content', 'rating'
+    ]
 
 
 @admin.register(Vote)
@@ -100,4 +100,20 @@ class VoteAdmin(admin.ModelAdmin):
 
     list_display = [
         'creator', 'created_on', 'content_type', 'object_id', 'target'
+    ]
+
+@admin.register(Poll)
+class PollAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for club polls."""
+
+    list_display = [
+        'club', 'title', 'deadline', 'created_on', 'active'
+    ]
+
+@admin.register(Option)
+class OptionAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for poll options."""
+
+    list_display = [
+        'poll', 'text', 'book'
     ]

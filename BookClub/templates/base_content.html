@@ -1,65 +1,48 @@
 {% extends 'base.html' %}
-
 {% block head %}
-    {% block content_head %}
-    {% endblock %}
+    {% block content_head %}{% endblock %}
 {% endblock %}
-
 {% block body %}
-
-{% include 'partials/navbar.html' %}
-
-<div>
-    <section class="hero is-small is-light">
-        <div class="hero-body">
-            <p class="title">
-                {% block page_title %}
-                {% endblock page_title %}
-            </p>
-            <p class="subtitle">
-                {% block page_subtitle %}
-                {% endblock page_subtitle %}
-            </p>
+    {% include 'partials/navbar.html' %}
+    <div>
+        <section class="hero is-small is-link">
+            <div class="hero-body">
+                <p class="title">
+                    {% block page_title %}
+                    {% endblock page_title %}
+                </p>
+                <p class="subtitle">
+                    {% block page_subtitle %}
+                    {% endblock page_subtitle %}
+                </p>
+            </div>
+        </section>
+        {% if messages %}
+            <section class="container" style="padding-top: 10px;">
+                {% for message in messages %}
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                        <div class="notification is-success is-light">
+                            <button class="delete"></button>
+                            {{ message }}
+                        </div>
+                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                        <div class="notification is-danger">
+                            <button class="delete"></button>
+                            {{ message }}
+                        </div>
+                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+                        <div class="notification is-info">
+                            <button class="delete"></button>
+                            {{ message }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </section>
+        {% endif %}
+        <div class="container" style="padding: 20px 0px">
+            {% block content %}
+            {% endblock content %}
         </div>
-    </section>
-
-    {% if messages %}
-    <section class="container" style="padding-top: 10px;">
-
-
-            {% for message in messages %}
-
-                {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
-                    <div class="notification is-success is-light">
-                        <button class="delete"></button>
-                        {{ message }}
-                    </div>
-                {% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                    <div class="notification is-danger">
-                        <button class="delete"></button>
-                        {{ message }}
-                    </div>
-                {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
-                    <div class="notification is-info">
-                        <button class="delete"></button>
-                        {{ message }}
-                    </div>
-                {% endif %}
-
-            {% endfor %}
-
-    </section>
-    {% endif %}
-
-    <div class="container" style="padding: 20px 0px">
-
-        {% block content %}
-        {% endblock content %}
-
+        {% include 'partials/footer.html' %}
     </div>
-
-    {% include 'partials/footer.html' %}
-
-</div>
-
 {% endblock %}

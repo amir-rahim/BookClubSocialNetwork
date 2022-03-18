@@ -1,8 +1,10 @@
+from django.core.exceptions import ValidationError
 from django.test import TestCase, tag
-from BookClub.models import User, BookReview
-from django.core.exceptions import ValidationError  # Create your tests here.
 
-@tag('usermodel','user')
+from BookClub.models import User
+
+
+@tag('models', 'user')
 class UserModelTestCase(TestCase):
 
     fixtures = ['BookClub/tests/fixtures/default_users.json']
@@ -16,7 +18,7 @@ class UserModelTestCase(TestCase):
     def _assert_user_is_valid(self):
         try:
             self.user.full_clean()
-        except (ValidationError):
+        except ValidationError:
             self.fail('Test user should be valid')
 
     def _assert_user_is_invalid(self):
@@ -54,3 +56,12 @@ class UserModelTestCase(TestCase):
     def test_gravatar_correct_return(self):
         gravatar = "https://www.gravatar.com/avatar/fd876f8cd6a58277fc664d47ea10ad19?size=120&default=mp"
         self.assertEqual(gravatar, self.user.gravatar())
+
+    def test_str_function(self):
+        return_str = str(self.user)
+        correct_str = f'johndoe'
+        self.assertEqual(return_str, correct_str)
+
+    def test_get_absolute_url(self):
+        return_url = self.user.get_absolute_url()
+        correct_url = '/profile/johndoe/'

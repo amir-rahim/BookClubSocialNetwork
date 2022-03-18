@@ -1,7 +1,9 @@
 from django import forms
-from BookClub.models import User
-from django.core.validators import RegexValidator
 from django.contrib.auth import authenticate
+from django.core.validators import RegexValidator
+
+from BookClub.models import User
+
 
 class EditProfileForm(forms.ModelForm):
     """Form to enable a user to update their profile."""
@@ -10,7 +12,8 @@ class EditProfileForm(forms.ModelForm):
         """Form options."""
         model = User
         fields = ['username', 'email', 'public_bio']
-        widgets = { 'public_bio': forms.Textarea() }
+        widgets = {'public_bio': forms.Textarea()}
+
 
 class NewPasswordMixin(forms.Form):
     """Form mixing for new_password and password_confirmation fields."""
@@ -22,7 +25,7 @@ class NewPasswordMixin(forms.Form):
             regex=r'^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$',
             message='Password must contain an uppercase character, a lowercase '
                     'character and a number'
-            )]
+        )]
     )
     password_confirmation = forms.CharField(label='Password confirmation', widget=forms.PasswordInput())
 
@@ -43,7 +46,7 @@ class ChangePasswordForm(NewPasswordMixin):
 
     def __init__(self, user=None, **kwargs):
         """Construct new form instance with a user instance."""
-        
+
         super().__init__(**kwargs)
         self.user = user
 
@@ -67,4 +70,3 @@ class ChangePasswordForm(NewPasswordMixin):
             self.user.set_password(new_password)
             self.user.save()
         return self.user
-

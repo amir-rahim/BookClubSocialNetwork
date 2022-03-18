@@ -1,13 +1,13 @@
 """Test reject applicant view."""
+from django.contrib import messages
 from django.test import TestCase, tag
 from django.urls import reverse
+
 from BookClub.models import User, Club, ClubMembership
-from django.contrib import messages
 from BookClub.tests.helpers import LogInTester
-from django.core.exceptions import ObjectDoesNotExist
 
 
-@tag("club", "rejectapplicantview")
+@tag("views", "action_views", "reject_applicant")
 class RejectApplicantView(TestCase, LogInTester):
     """Test reject applicant view."""
 

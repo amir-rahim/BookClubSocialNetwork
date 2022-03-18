@@ -1,57 +1,53 @@
 {% extends 'base_content.html' %}
-
 {% block page_title %}
-Rate & Review Title
+    Rate & Review Title
 {% endblock page_title %}
-
 {% block page_subtitle %}
-This is a page to rate and review a title from library.
+    This is a page to rate and review a title from library.
 {% endblock page_subtitle %}
-
 {% block content %}
-
-<div class="columns">
-
-    <div class="column is-9">
-
-        <nav class="breadcrumb" aria-label="breadcrumbs" style="padding-left: 5px;">
-            <ul>
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="#">Library</a></li>
-                <li><a href="{% url 'book_view' book_id=book.pk %}">{{book.title}}</a></li>
-                <li><a href="#">Rate & Review</a></li>
-            </ul>
-        </nav>
-
-        <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
-            <div class="hero-body">
-                <div class="container">
-                    <h1 class="title">Review "{{book.title}}"</h1>
-                    <h2 class="subtitle">Rate and review this title.</h2>
+    <div class="columns">
+        <div class="column is-9">
+            <nav class="breadcrumb"
+                 aria-label="breadcrumbs"
+                 style="padding-left: 5px;">
+                <ul>
+                    <li>
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="#">Library</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'book_view' book_id=book.pk %}">{{ book.title }}</a>
+                    </li>
+                    <li>
+                        <a href="#">Rate & Review</a>
+                    </li>
+                </ul>
+            </nav>
+            <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
+                <div class="hero-body">
+                    <div class="container">
+                        <h1 class="title">Review "{{ book.title }}"</h1>
+                        <h2 class="subtitle">Rate and review this title.</h2>
+                    </div>
+                </div>
+            </section>
+            <div class="columns">
+                <div class="column is-12">
+                    <form class="" method="post">
+                        {% csrf_token %}
+                        {% include 'partials/bulma_form.html' with form=form %}
+                        <input type="submit" value="Submit Rating and Review" class="button is-link">
+                    </form>
                 </div>
             </div>
-        </section>
-
-        <div class="columns">
-
-            <div class="column is-12">
-                <form class="" method="post">
-                  {% csrf_token %}
-                  {% include 'partials/bulma_form.html' with form=form %}
-                  <input type="submit" value="Submit Rating and Review" class="button is-link">
-                </form>
-            </div>
-
         </div>
-
+        <div class="column is-3">
+            <figure class="image">
+                <img src="{{ book.imageL }}" alt="Book Cover">
+            </figure>
+        </div>
     </div>
-    <div class="column is-3">
-      <figure class="image">
-        <img src="{{book.imageL}}" alt="Book Cover">
-      </figure>
-
-    </div>
-
-</div>
-
 {% endblock %}
