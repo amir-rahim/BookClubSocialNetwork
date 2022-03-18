@@ -18,7 +18,8 @@ class PopularBooksMethods:
     sorted_median_ratings = []
     sorted_combination_scores = []
 
-    def __init__(self, min_ratings_threshold=300, retraining=False, retraining_and_saving=False, trainset=None):
+    def __init__(self, min_ratings_threshold=300, retraining=False, retraining_and_saving=False, trainset=None, print_status=True):
+        self.print_status = False
         if trainset is None:
             if (retraining or retraining_and_saving):
                 self.load_filtered_books_list(min_ratings_threshold)
@@ -80,7 +81,8 @@ class PopularBooksMethods:
 
     """Calculate popularity list of all books according to the average of their ratings"""
     def compute_sorted_average_ratings(self):
-        print("Computing popularity list from average ratings...")
+        if self.print_status:
+            print("Computing popularity list from average ratings...")
         average_ratings = {}
         # Get average rating for all books
         for isbn in self.filtered_books_list:
@@ -89,7 +91,8 @@ class PopularBooksMethods:
         self.average_ratings = average_ratings
         # Sort books according to the average rating
         self.sorted_average_ratings = sorted(average_ratings.items(), key=lambda item: item[1], reverse=True)
-        print("Done computing popularity list.")
+        if self.print_status:
+            print("Done computing popularity list.")
 
     """Get the median rating for the book with the given ISBN number"""
     def get_median_rating(self, isbn):
@@ -104,7 +107,8 @@ class PopularBooksMethods:
 
     """Calculate popularity list of all books according to the median of their ratings"""
     def compute_sorted_median_ratings(self):
-        print("Computing popularity list from median ratings...")
+        if self.print_status:
+            print("Computing popularity list from median ratings...")
         median_ratings = {}
         # Get median rating for all books
         for isbn in self.filtered_books_list:
@@ -113,11 +117,13 @@ class PopularBooksMethods:
         self.median_ratings = median_ratings
         # Sort books according to the median rating
         self.sorted_median_ratings = sorted(median_ratings.items(), key=lambda item: item[1], reverse=True)
-        print("Done computing popularity list.")
+        if self.print_status:
+            print("Done computing popularity list.")
 
     """Calculate popularity list of all books according to both the average and the median of their ratings"""
     def compute_sorted_combination_scores(self):
-        print("Computing popularity list from average and median ratings...")
+        if self.print_status:
+            print("Computing popularity list from average and median ratings...")
         combination_scores = {}
         # Get combinated score (from average and median) for all books
         for isbn in self.filtered_books_list:
@@ -125,7 +131,8 @@ class PopularBooksMethods:
             combination_scores[isbn] = combination_score
         # Sort books according to the combinated score
         self.sorted_combination_scores = sorted(combination_scores.items(), key=lambda item: item[1], reverse=True)
-        print("Done computing popularity list.")
+        if self.print_status:
+            print("Done computing popularity list.")
 
     """Get most popular books (up to 10) from the given popularity list, that the user has not read yet"""
     def get_recommendations_from_popularity_list(self, popularity_list, user_read_books=[]):
