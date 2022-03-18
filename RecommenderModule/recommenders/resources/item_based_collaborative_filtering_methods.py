@@ -121,9 +121,10 @@ class ItemBasedCollaborativeFilteringMethods:
         # Get top-rated items from similar users
         library = Library()
         final_recommendations = []
+        all_books_rated_isbn = [rating[0] for rating in all_books_rated]
         for item_id, rating_sum in sorted(candidates.items(), key=itemgetter(1), reverse=True):
             # Check if user has already read the book, and only recommend the book if it has some similarity
-            if (not item_id in all_books_rated) and (not math.isnan(rating_sum)) and rating_sum != 0:
+            if (not item_id in all_books_rated_isbn) and (not math.isnan(rating_sum)) and rating_sum != 0:
                 try:
                     book_isbn = self.trainset.to_raw_iid(item_id)
                     #print(book_isbn, rating_sum)
