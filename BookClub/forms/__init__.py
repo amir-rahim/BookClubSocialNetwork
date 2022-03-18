@@ -6,3 +6,4 @@ from .booklist_forms import *
 from .forum_forms import *
 from .vote_form import *
 from .poll import *
+from .bookshelf import *
