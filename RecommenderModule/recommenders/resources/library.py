@@ -72,6 +72,7 @@ class Library:
             except:
                 return None
 
+    """Get the ISBN value of all books that the members of the specified club have rated"""
     def get_all_books_rated_by_club(self, club_url_name):
         # Method only directly uses Django objects, because trainset does not involve the concept of clubs
         try:
