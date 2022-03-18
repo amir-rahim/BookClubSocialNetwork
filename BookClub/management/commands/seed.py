@@ -119,9 +119,10 @@ class Command(BaseCommand):
             curPost = ForumPost.objects.create(
                 title=self.faker.text(max_nb_chars=30),
                 content=self.faker.text(max_nb_chars=1024),
-                creator=user
+                creator=user,
+                forum=globalForum
             )
-            globalForum.add_post(curPost)
+            # globalForum.add_post(curPost)
             for x in range(1, random.randrange(0, 5)):
                 commentUser = User.objects.order_by('?')[0]
                 curComment = ForumComment.objects.create(

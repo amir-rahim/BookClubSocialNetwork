@@ -55,6 +55,7 @@ urlpatterns = [
     # '''Membership URLs'''
     path('club/', views.AvailableClubsView.as_view(), name='available_clubs'),
     path('memberships/', views.MyClubMembershipsView.as_view(), name='my_club_memberships'),
+    path('applications/', views.ApplicationListView.as_view(), name='applications'),
     path('create/', views.CreateClubView.as_view(), name='create_club'),
 
     path('club/<str:club_url_name>/', views.ClubDashboardView.as_view(), name='club_dashboard'),
@@ -126,7 +127,7 @@ urlpatterns = [
          views.DeleteBookListView.as_view(), name='delete_booklist'),
     path('user/<str:username>/lists/<int:booklist_id>/edit/',
          views.EditBookListView.as_view(), name='edit_booklist'),
-    path('user/<str:username>/lists/<int:booklist_id>',
+    path('user/<str:username>/lists/<int:booklist_id>/',
          views.UserBookListView.as_view(), name='user_booklist'),
     path('user/<str:username>/lists/<int:booklist_id>/<int:book_id>/delete', views.RemoveFromBookListView.as_view(), name='remove_book'),
     path('user/<str:username>/lists/create/',

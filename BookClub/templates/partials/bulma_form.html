@@ -8,15 +8,16 @@
                     {{ field.label }}
                 </label>
             </div>
-        {% elif field|widget_type == 'datetimeinput' %}
+        {% elif field|widget_type == 'datetimepickerinput' %}
             <div class="control">
                 <label for="{{ field.auto_id }}" class="label">{{ field.label }}</label>
                 {% if form.is_bound and field.errors %}
+                    error
                     {% render_field field class="input is-danger" %}
                 {% elif form.is_bound %}
                     {% render_field field class="input is-success" %}
                 {% else %}
-                    {% render_field field class="input" placeholder="YYYY-MM-DD HH-MM-SS" %}
+                    {% render_field field class="input" %}
                 {% endif %}
             </div>
         {% else %}

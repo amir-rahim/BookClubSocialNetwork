@@ -127,6 +127,11 @@ class MeetingTestCase(TestCase):
         self._assert_meeting_is_valid()
 
     # Function testing
+    def test_get_absolute_url(self):
+        url = self.meeting.get_absolute_url()
+        correct_url = f'/club/{self.club.club_url_name}/meetings/{self.meeting.id}/'
+        self.assertEqual(url, correct_url)
+
     def test_str_returns_title(self):
         self.assertEqual(str(self.meeting), self.meeting.get_title())
 

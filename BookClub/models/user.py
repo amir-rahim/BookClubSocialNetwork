@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from django.db import models
+from django.urls import reverse
 from libgravatar import Gravatar
 
 
@@ -29,3 +30,9 @@ class User(AbstractUser):
         gravatar_object = Gravatar(self.email)
         gravatar_url = gravatar_object.get_image(size=size, default='mp')
         return gravatar_url
+
+    def __str__(self):
+        return f'{self.username}'
+
+    def get_absolute_url(self):
+        return reverse('user_profile', kwargs={'username': self.username})

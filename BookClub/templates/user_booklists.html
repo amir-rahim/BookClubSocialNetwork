@@ -85,32 +85,30 @@
                         <table class="table is-fullwidth is-hoverable is-striped is-bordered">
                             <tbody>
                                 {% for list in booklists %}
-                                    <tr onclick="window.location='{% url 'user_booklist' user.username list.id %}';"
-                                        style="cursor:pointer;">
+                                    <tr>
                                         <td class="container">
-                                            {# <div class="box"> #}
                                             <p class="is-medium">
-                                                <strong><a href="#">{{ list.title }}</a></strong>
+                                                <strong><a href="{% url 'user_booklist' user.username list.id %}">{{ list.title }}</a></strong>
                                             </p>
                                             {% if list.description %}
                                                 <p>
                                                     {{ list.description }}
                                                 </p>
                                             {% endif %}
-                                            {# </div> #}
                                         </td>
                                         {% if self %}
-                                            <td style="width:8%; text-align:right;">
+                                        <td style="width:21%; text-align:right;">
+                                            <div class="buttons">
                                                 <form method="get"
-                                                      action="{% url 'edit_booklist' booklist_id=list.id username=request.user.username %}">
-                                                    <button class="button is-dark is-small" style="margin-right: 5px">
+                                                    action="{% url 'edit_booklist' booklist_id=list.id username=request.user.username %}">
+                                                    <button class="button is-dark" style="margin-right: 5px">
                                                         <span>Edit</span>
                                                     </button>
                                                 </form>
                                                 {% include 'partials/delete_button_and_modal.html' with delete_item=list delete_modal_id=list.pk %}
-                                            </td>
+                                            </div>
+                                        </td>
                                         {% endif %}
-                                        {# </td> #}
                                     </tr>
                                 {% empty %}
                                     <div class="box">

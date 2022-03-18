@@ -60,7 +60,7 @@ class MemberListTestCase(TestCase):
         messages_list = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.ERROR)
-        self.assertEqual(str(messages_list[0]),"This club is private and you are not a member.")
+        self.assertEqual(str(messages_list[0]),"This club is private")
     
     def test_invalid_club(self):
         self.client.login(username=self.jack.username, password="Password123")

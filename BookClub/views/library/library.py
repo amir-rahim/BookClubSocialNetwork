@@ -69,7 +69,7 @@ class AddToBookListView(LoginRequiredMixin, FormView):
         else:
             booklist.add_book(book)
             booklist.save()
-            messages.success(self.request, "The book has been saved to " + book.title)
+            messages.success(self.request, "The book has been saved to " + booklist.title)
         return super().form_valid(form)
 
     def get_success_url(self):

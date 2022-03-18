@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from BookClub.models import User, Club, ClubMembership, Book, Meeting
-import datetime
+import datetime, pytz
 from BookClub.tests.helpers import reverse_with_next
 
 
@@ -32,7 +32,7 @@ class AgendaViewTestCase(TestCase):
         self.meeting_today = Meeting.objects.create(
             organiser=self.user,
             club=self.club,
-            meeting_time=datetime.date.today(),
+            meeting_time=pytz.utc.localize(datetime.datetime.today()),
             created_on="2022-02-10",
             location="Volts House",
             title="Sebs complete guide to CS",
@@ -54,7 +54,7 @@ class AgendaViewTestCase(TestCase):
         self.meeting_not_joined_today = Meeting.objects.create(
             organiser=self.another_user,
             club=self.club,
-            meeting_time=datetime.date.today(),
+            meeting_time=pytz.utc.localize(datetime.datetime.today()),
             created_on="2022-02-10",
             location="Org",
             title="Fambit",
