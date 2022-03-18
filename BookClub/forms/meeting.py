@@ -17,7 +17,7 @@ class MeetingForm(ModelForm):
 
         widgets = {
             'description': Textarea,
-            'book' : BookSelectorInput()
+            'book' : BookSelectorInput(),
             'meeting_time': DateTimePickerInput
         }
         
