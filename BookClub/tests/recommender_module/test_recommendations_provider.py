@@ -1,6 +1,6 @@
 from django.test import TestCase, tag
 from BookClub.models import User, Book, BookReview
-from RecommenderModule import recommendations_provider
+from RecommenderModule import user_recommendations_provider
 from RecommenderModule.recommenders.resources.item_based_collaborative_filtering_methods import ItemBasedCollaborativeFilteringMethods
 
 @tag('recommenders')
@@ -18,16 +18,16 @@ class RecommendationsProviderTestCase(TestCase):
         self.book_review = BookReview.objects.get(pk=1)
 
     def test_get_popularity_recommendations(self):
-        recommendations = recommendations_provider.get_popularity_recommendations(self.user.username)
+        recommendations = user_recommendations_provider.get_user_popularity_recommendations(self.user.username)
         self.assertEqual(len(recommendations), 10)
         self.assertEqual(type(recommendations[0]), str)
 
     def test_get_popularity_recommendations_does_not_contain_books_read_by_user(self):
-        recommendations1 = recommendations_provider.get_popularity_recommendations(self.user.username)
+        recommendations1 = user_recommendations_provider.get_user_popularity_recommendations(self.user.username)
         self.book.ISBN = recommendations1[0]
         self.book.save()
         self.assertTrue(self.book.ISBN in recommendations1)
-        recommendations2 = recommendations_provider.get_popularity_recommendations(self.user.username)
+        recommendations2 = user_recommendations_provider.get_user_popularity_recommendations(self.user.username)
         self.assertEqual(len(recommendations2), 10)
         self.assertFalse(self.book.ISBN in recommendations2)
 
@@ -42,7 +42,7 @@ class RecommendationsProviderTestCase(TestCase):
         review1 = BookReview.objects.create(user=self.user, book=book1, rating=7)
         book2 = Book.objects.create(title="Book 2", ISBN=books[1], author="John Doe", publicationYear="2002-02-02", publisher="Penguin")
         review2 = BookReview.objects.create(user=self.user, book=book2, rating=8)
-        personalised_recommendations = recommendations_provider.get_personalised_recommendations(self.user.username)
+        personalised_recommendations = user_recommendations_provider.get_user_personalised_recommendations(self.user.username)
         self.assertEqual(len(personalised_recommendations), 10)
         self.assertEqual(type(personalised_recommendations[0]), str)
 
@@ -57,15 +57,15 @@ class RecommendationsProviderTestCase(TestCase):
         review1 = BookReview.objects.create(user=self.user, book=book1, rating=7)
         book2 = Book.objects.create(title="Book 2", ISBN=books[1], author="John Doe", publicationYear="2002-02-02", publisher="Penguin")
         review2 = BookReview.objects.create(user=self.user, book=book2, rating=8)
-        personalised_recommendations1 = recommendations_provider.get_personalised_recommendations(self.user.username)
+        personalised_recommendations1 = user_recommendations_provider.get_user_personalised_recommendations(self.user.username)
         book3 = Book.objects.create(title="Book 3", ISBN=personalised_recommendations1[0], author="John Doe", publicationYear="2002-02-02", publisher="Penguin")
         review3 = BookReview.objects.create(user=self.user, book=book3, rating=2)
         self.assertTrue(book3.ISBN in personalised_recommendations1)
-        personalised_recommendations2 = recommendations_provider.get_personalised_recommendations(self.user.username)
+        personalised_recommendations2 = user_recommendations_provider.get_user_personalised_recommendations(self.user.username)
         self.assertEqual(len(personalised_recommendations2), 10)
         self.assertFalse(book3.ISBN in personalised_recommendations2)
 
     def test_get_personalised_recommendations_wrong_user(self):
-        recommendations = recommendations_provider.get_personalised_recommendations("X")
+        recommendations = user_recommendations_provider.get_user_personalised_recommendations("X")
         self.assertEqual(len(recommendations), 0)
         self.assertEqual(recommendations, [])

@@ -20,5 +20,9 @@ class ItemBasedRecommender(AbstractRecommender):
         self.item_based_methods = ItemBasedCollaborativeFilteringMethods(trainset=trainset, retraining_and_saving=True, parameters=parameters)
 
     """Get the recommended books (up to 10) given a specified user_id, from all of the user's positively (> 6/10) rated books"""
-    def get_recommendations(self, user_id):
+    def get_user_recommendations(self, user_id):
         return self.item_based_methods.get_recommendations_positive_ratings_only_from_user_id(user_id, min_rating=6)
+
+    """Get the recommended books (up to 10) given a specified club_id, from all of the club's members' positively (> 6/10) rated books"""
+    def get_club_recommendations(self, club_id):
+        pass

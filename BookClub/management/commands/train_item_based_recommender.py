@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from RecommenderModule import recommendations_provider
+from RecommenderModule import user_recommendations_provider
 
 class Command(BaseCommand):
         """Train and save item-based collaborative filtering model for item-based recommender."""
@@ -20,4 +20,4 @@ class Command(BaseCommand):
             if min_support is not None:
                 parameters["min_support"] = min_support
             print("Started training item-based recommender...")
-            recommendations_provider.retrain_item_based_recommender(parameters=parameters)
+            user_recommendations_provider.retrain_item_based_recommender(parameters=parameters)

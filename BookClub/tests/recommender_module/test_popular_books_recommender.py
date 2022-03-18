@@ -16,7 +16,7 @@ class PopularBooksRecommenderTestCase(TestCase):
         self.user_id = self.trainset.to_raw_uid(4)
 
     def test_get_recommendations(self):
-        recommendations1 = self.popular_books_recommender.get_recommendations(self.user_id)
+        recommendations1 = self.popular_books_recommender.get_user_recommendations(self.user_id)
         self.assertEqual(len(recommendations1), 10)
         library = Library(trainset=self.trainset)
         user_read_books = library.get_all_books_rated_by_user(self.user_id)
@@ -24,5 +24,5 @@ class PopularBooksRecommenderTestCase(TestCase):
         self.assertEqual(recommendations1, recommendations2)
 
     def test_get_recommendations_wrong_user_id(self):
-        recommendations = self.popular_books_recommender.get_recommendations("X")
+        recommendations = self.popular_books_recommender.get_user_recommendations("X")
         self.assertEqual(len(recommendations), 10)

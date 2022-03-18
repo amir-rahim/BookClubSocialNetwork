@@ -15,11 +15,11 @@ class ItemBasedRecommenderTestCase(TestCase):
         self.user_id = trainset.to_raw_uid(4)
 
     def test_get_recommendations(self):
-        recommendations1 = self.item_based_recommender.get_recommendations(self.user_id)
+        recommendations1 = self.item_based_recommender.get_user_recommendations(self.user_id)
         self.assertEqual(len(recommendations1), 10)
         recommendations2 = self.item_based_methods.get_recommendations_positive_ratings_only_from_user_id(self.user_id)
         self.assertEqual(recommendations1, recommendations2)
 
     def test_get_recommendations_wrong_user_id(self):
-        recommendations = self.item_based_recommender.get_recommendations("X")
+        recommendations = self.item_based_recommender.get_user_recommendations("X")
         self.assertEqual(recommendations, [])

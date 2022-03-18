@@ -25,9 +25,13 @@ class PopularBooksRecommender(AbstractRecommender):
             self.popular_books_methods = PopularBooksMethods(trainset=trainset, retraining_and_saving=True)
 
     """Get most popular books (up to 10) according to their average rating, that the user has not read yet"""
-    def get_recommendations(self, user_id):
+    def get_user_recommendations(self, user_id):
         library = Library(self.trainset)
         user_read_books = library.get_all_books_rated_by_user(user_id)
         if self.popular_books_methods is None:
             self.popular_books_methods = PopularBooksMethods()
         return self.popular_books_methods.get_recommendations_from_median(user_read_books=user_read_books)
+
+    """Get most popular books (up to 10) according to their average rating, that no member of the club has read yet"""
+    def get_club_recommendations(self, club_id):
+        pass

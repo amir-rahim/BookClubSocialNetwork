@@ -3,9 +3,16 @@ from RecommenderModule.recommenders.item_based_recommender import ItemBasedRecom
 
 """Get the 10 most popular books recommended to the user (that the user has not read yet).
     Returns a list of ISBN numbers."""
-def get_popularity_recommendations(user_id):
+def get_user_popularity_recommendations(user_id):
     popularity_recommender = PopularBooksRecommender()
-    recommended_books = popularity_recommender.get_recommendations(user_id)
+    recommended_books = popularity_recommender.get_user_recommendations(user_id)
+    return recommended_books
+
+"""Get the 10 most popular books recommended to the club (that no member has read yet).
+    Returns a list of ISBN numbers."""
+def get_club_popularity_recommendations(club_id):
+    popularity_recommender = PopularBooksRecommender()
+    recommended_books = popularity_recommender.get_club_recommendations(club_id)
     return recommended_books
 
 """Retrain the popularity recommender with the current data."""
@@ -13,10 +20,18 @@ def retrain_popularity_recommender(min_ratings_threshold=300):
     popularity_recommender = PopularBooksRecommender()
     popularity_recommender.train_and_save(parameters={"min_ratings_threshold": min_ratings_threshold})
 
-"""Get (up to) 10 book recommendations, from books the user has rated."""
-def get_personalised_recommendations(user_id):
+"""Get (up to) 10 book recommendations, from books the user has rated.
+    Returns a list of ISBN numbers."""
+def get_user_personalised_recommendations(user_id):
     item_based_recommender = ItemBasedRecommender()
-    recommended_books = item_based_recommender.get_recommendations(user_id)
+    recommended_books = item_based_recommender.get_user_recommendations(user_id)
+    return recommended_books
+
+"""Get (up to) 10 book recommendations, from books the members of the club have rated.
+    Returns a list of ISBN numbers."""
+def get_club_personalised_recommendations(club_id):
+    item_based_recommender = ItemBasedRecommender()
+    recommended_books = item_based_recommender.get_club_recommendations(club_id)
     return recommended_books
 
 """Retrain the item-based recommender with the current data;
