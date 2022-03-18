@@ -51,7 +51,7 @@ class RecommendationsProviderTestCase(TestCase):
         books = []
         for book in trainset.all_items():
             books.append(trainset.to_raw_iid(book))
-            if len(books) == 10:
+            if len(books) == 2:
                 break
         book1 = Book.objects.create(title="Book 1", ISBN=books[0], author="John Doe", publicationYear="2002-02-02", publisher="Penguin")
         review1 = BookReview.objects.create(user=self.user, book=book1, rating=7)
