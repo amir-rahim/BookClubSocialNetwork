@@ -4,7 +4,7 @@ from RecommenderModule.recommenders.resources.data_provider import DataProvider
 from RecommenderModule.recommenders.resources.item_based_collaborative_filtering_methods import ItemBasedCollaborativeFilteringMethods
 
 @tag('recommenders')
-class RecommendationsProviderTestCase(TestCase):
+class ItemBasedRecommenderTestCase(TestCase):
 
     def setUp(self):
         data_provider = DataProvider(get_data_from_csv=True)
