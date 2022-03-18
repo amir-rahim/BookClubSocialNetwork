@@ -21,7 +21,7 @@ class DataProviderTestCase(TestCase):
         self.data_provider.get_ratings_from_django_database()
         ratings_df = self.data_provider.ratings_df
         self.assertEqual(type(ratings_df), pd.DataFrame)
-        self.assertEqual(len(ratings_df), 2)
+        self.assertEqual(len(ratings_df), 3)
         rating1 = ratings_df.iloc[0]
         self.assertEqual(rating1["User-ID"], "johndoe")
         self.assertEqual(rating1["ISBN"], "0195153448")
