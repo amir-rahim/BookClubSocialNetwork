@@ -19,6 +19,7 @@ class SignUpView(LoginProhibitedMixin, FormView):
 
     def form_valid(self, form):
         inactive_user = send_verification_email(self.request, form)
+        messages.add_message(self.request, messages.SUCCESS, "A verification link has been sent to your email to complete your registration.")
         return super().form_valid(form)
 
     def form_invalid(self, form):
