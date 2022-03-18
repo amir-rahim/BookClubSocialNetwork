@@ -1,4 +1,5 @@
 from datetime import date, datetime
+from re import S
 
 from django.test import TestCase, tag
 
@@ -68,3 +69,24 @@ class MeetingFormTestCase(TestCase):
         self.assertEqual(meeting.organiser, self.user)
         self.assertEqual(meeting.club, self.club)
         self.assertEqual(meeting.created_on, saving_date)
+        
+    def test_form_requires_book_if_book_meeting(self):
+        self.form_input['book'] = None
+        form = MeetingForm(data=self.form_input)
+        self.assertFalse(form.is_valid())
+        
+    def test_form_does_not_require_book_if_not_book_meeting(self):
+        self.form_input['book'] = None
+        self.form_input['type'] = Meeting.MeetingType.CLUB
+        form = MeetingForm(data=self.form_input)
+        self.assertTrue(form.is_valid())
+        
+        self.form_input['book'] = None
+        self.form_input['type'] = Meeting.MeetingType.OTHER
+        form = MeetingForm(data=self.form_input)
+        self.assertTrue(form.is_valid())
+        
+        self.form_input['book'] = None
+        self.form_input['type'] = Meeting.MeetingType.SOCIAL
+        form = MeetingForm(data=self.form_input)
+        self.assertTrue(form.is_valid())

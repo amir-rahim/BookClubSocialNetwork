@@ -131,4 +131,7 @@ urlpatterns = [
 
     # '''Agenda URLs'''
     path('agenda/', views.AgendaView.as_view(), name='agenda'),
+    
+    # '''Asyn Views'''
+    path('search_books/', views.BookSearchView.as_view(), name='async_book_search')
 ]
