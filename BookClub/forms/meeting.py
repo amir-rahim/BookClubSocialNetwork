@@ -1,6 +1,5 @@
 from django.forms import HiddenInput, ModelForm, Textarea, TextInput, ValidationError
-from BookClub.forms.widgets import BookSelectorInput
-
+from BookClub.forms.widgets import BookSelectorInput,DateTimePickerInput
 from BookClub.models.meeting import Meeting
 
 
@@ -18,9 +17,8 @@ class MeetingForm(ModelForm):
 
         widgets = {
             'description': Textarea,
-            'meeting_time': TextInput(attrs={'placeholder': 'YYYY/MM/DD HH:MM:SS'}),
             'book' : BookSelectorInput()
-            
+            'meeting_time': DateTimePickerInput
         }
         
     def clean(self):
