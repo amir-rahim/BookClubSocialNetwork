@@ -8,7 +8,8 @@
             ],
           "created_on": "2022-02-27T22:45:06.275Z",
           "title": "Lorem Ipsum",
-          "content": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrial standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+          "content": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrial standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+          "forum": 1
         }
   },
 
@@ -21,7 +22,8 @@
             ],
           "created_on": "2022-02-27T22:45:06.275Z",
           "title": "Fun Fact!",
-          "content": "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old."
+          "content": "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.",
+          "forum": 1
         }
   },
 
@@ -34,8 +36,8 @@
             ],
           "created_on": "2022-02-27T22:45:06.275Z",
           "title": "Latin Quote",
-          "content": "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
-
+          "content": "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...",
+          "forum": 1
         }
   },
 
@@ -48,8 +50,8 @@
             ],
           "created_on": "2022-02-27T22:45:06.275Z",
           "title": "Latin Quota",
-          "content": "... qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
-
+          "content": "... qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...",
+          "forum": 2
         }
   }
 ]

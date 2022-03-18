@@ -89,5 +89,18 @@
             "membership": -1,
             "joined_on": "2022-02-06"
         }
+    },
+    {
+
+        "model": "BookClub.ClubMembership",
+
+        "pk": 8,
+        "fields": {
+            "club": 1,
+            "user": 6,
+
+            "membership": 0,
+            "joined_on": "2022-02-06"
+        }
     }
 ]

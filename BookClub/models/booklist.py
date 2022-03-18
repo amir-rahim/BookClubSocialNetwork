@@ -1,18 +1,16 @@
 from django.db import models
 from django.urls import reverse
 
-from BookClub.models import User, Book
+from BookClub.models import User, Book, UserCreatedObject
 
 
-class BookList(models.Model):
+class BookList(UserCreatedObject):
     title = models.CharField(unique=False, blank=False, max_length=120)
     description = models.CharField(unique=False, blank=True, max_length=240)
-    creator = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE)
     books = models.ManyToManyField(Book, blank=True)
-    created_on = models.DateField(auto_now_add=True)
 
     def get_absolute_url(self):
-        return reverse('booklists_list', kwargs={'username': self.creator.username})
+        return reverse('user_booklist', kwargs={'username': self.creator.username, 'booklist_id': self.pk})
 
     def get_delete_url(self):
         return reverse('delete_booklist', kwargs={'username': self.creator.username, 'list_id': self.pk})

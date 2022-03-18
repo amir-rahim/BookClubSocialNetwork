@@ -42,3 +42,20 @@ class MyClubMembershipsView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['clubs'] = self.get_queryset()
         return context
+
+class ApplicationListView(LoginRequiredMixin, ListView):
+    model = Club
+    template_name = 'applications_list.html'
+    context_object_name = 'clubs'
+
+    def get_queryset(self):
+        subquery = ClubMembership.objects.filter(user=self.request.user.pk, club=OuterRef('pk'))
+        clubs = Club.objects.filter(
+            Q(Exists(subquery.filter(membership=ClubMembership.UserRoles.APPLICANT)))
+        )
+        return clubs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['clubs'] = self.get_queryset()
+        return context

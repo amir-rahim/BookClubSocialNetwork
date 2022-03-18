@@ -118,7 +118,7 @@ class CreateMeetingView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
                     return False
             else:
                 return True
-        except:
+        except ObjectDoesNotExist:
             messages.error(self.request, 'Club not found or you are not a member of this club')
             return False
 
@@ -144,7 +144,7 @@ class CreateMeetingView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def get_success_url(self):
         # Change to redirect to list of meetings
-        return reverse('create_meeting', kwargs={'club_url_name': self.kwargs['club_url_name']})
+        return reverse('meeting_list', kwargs={'club_url_name': self.kwargs['club_url_name']})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -163,7 +163,7 @@ class DeleteMeetingView(LoginRequiredMixin, View):
         messages.error(self.request, f"You are not allowed to delete the meeting!")
 
     def action(self, current_user, club, meeting):
-        delete_meeting(meeting)
+        meeting.delete()
         messages.success(self.request, "You have deleted the meeting.")
 
     def post(self, request, *args, **kwargs):

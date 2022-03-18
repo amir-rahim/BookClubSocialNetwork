@@ -2,9 +2,10 @@
 {% load votingtags %}
 {% getcontenttype content as contenttype %}
 {% if user.is_authenticated %}
-    {% has_user_voted content user as user_has_voted %}
+    {% get_votes_for_object content as votes%}
+    {% has_user_voted votes user as user_has_voted %}
     {% if user_has_voted %}
-        {% get_user_vote_type content user as vote_type %}
+        {% get_user_vote_type votes user as vote_type %}
     {% endif %}
 {% endif %}
 <form id="upvoteform"
