@@ -19,7 +19,8 @@ class ItemBasedCollaborativeFilteringMethods:
     min_support = 5
     model_function_name = 'pearson_baseline'
 
-    def __init__(self, parameters={}, retraining=False, retraining_and_saving=False, trainset=None):
+    def __init__(self, parameters={}, retraining=False, retraining_and_saving=False, trainset=None, print_status=True):
+        self.print_status = print_status
         self.initialise_parameters(parameters)
         self.library = Library(trainset=trainset)
         if (trainset == None):
@@ -60,7 +61,7 @@ class ItemBasedCollaborativeFilteringMethods:
             'user_based': False,
             'min_support': self.min_support
             }
-        model = KNNBasic(sim_options=sim_options)
+        model = KNNBasic(sim_options=sim_options, verbose=self.print_status)
         model.fit(self.trainset)
         self.similarities_matrix = model.sim
 
@@ -119,7 +120,6 @@ class ItemBasedCollaborativeFilteringMethods:
                 candidates[inner_id] += score * (rating / 5.0)
 
         # Get top-rated items from similar users
-        library = Library()
         final_recommendations = []
         all_books_rated_isbn = [rating[0] for rating in all_books_rated]
         for item_id, rating_sum in sorted(candidates.items(), key=itemgetter(1), reverse=True):
