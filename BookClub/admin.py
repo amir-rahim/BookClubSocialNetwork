@@ -45,7 +45,7 @@ class BookReviewAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for Books Reviews ."""
 
     list_display = [
-        'book', 'creator', 'book_rating' , 'title' , 'created_on',
+        'book', 'creator', 'book_rating' , 'title' , 'created_on','content'
     ]
 
 @admin.register(BookReviewComment)
