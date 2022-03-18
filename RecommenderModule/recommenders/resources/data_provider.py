@@ -2,7 +2,6 @@ from surprise import Dataset
 from surprise import Reader
 import pandas as pd
 from BookClub.models.review import BookReview
-from RecommenderModule.recommenders.resources.library import Library
 
 
 """This class loads the ratings dataset from the 'BX-Book-Ratings.csv' file and builds the train sets"""
@@ -17,7 +16,6 @@ class DataProvider:
     filtered_ratings_df = None
     filtered_ratings_dataset = None
     filtered_ratings_trainset = None
-    library = None
 
     """Constructor for the DataProvider class
         train_dataset_size_percentage (value between 0 and 1): (unfiltered dataset) percentage of dataset to use in training dataset (rest used in testing dataset)
@@ -40,16 +38,6 @@ class DataProvider:
             self.ratings_df = ratings_df
         else:
             self.get_ratings_from_django_database()
-        # Split data into train (70%) and test (30%) DataFrames
-        index_split = int(len(self.ratings_df)*self.train_dataset_size_percentage)
-        train_df = self.ratings_df.iloc[0:index_split, :]
-        self.train_df = train_df
-        test_df = self.ratings_df.iloc[index_split:, :]
-        self.test_df = test_df
-        # Create surprise dataset
-        reader = Reader(line_format='user item rating', sep=';', skip_lines=0, rating_scale=(0,10))
-        ratings_trainset = Dataset.load_from_df(train_df, reader)
-        self.ratings_trainset = ratings_trainset.build_full_trainset()
 
     """Get data from Django database as pandas DataFrame"""
     def get_ratings_from_django_database(self):
@@ -67,8 +55,8 @@ class DataProvider:
         ratings_counts = ratings_df["ISBN"].value_counts()
         # Get list of all books with at least {self.filtering_min_ratings_threshold} ratings
         filtered_books_list = []
-        for isbn in ratings_counts.keys():
-          if ratings_counts[isbn] >= self.filtering_min_ratings_threshold:
+        for isbn, count in ratings_counts.items():
+          if count >= self.filtering_min_ratings_threshold:
             filtered_books_list.append(isbn)
         return filtered_books_list
 
@@ -89,10 +77,6 @@ class DataProvider:
         self.filtered_ratings_dataset = filtered_ratings_dataset
         self.filtered_ratings_trainset = filtered_ratings_dataset.build_full_trainset()
 
-    """Get the non-filtered ratings train set"""
-    def get_ratings_trainset(self):
-        return self.ratings_trainset
-
     """Get the filtered ratings dataset object"""
     def get_filtered_ratings_dataset(self):
         return self.filtered_ratings_dataset
@@ -100,25 +84,3 @@ class DataProvider:
     """Get the filtered ratings train set"""
     def get_filtered_ratings_trainset(self):
         return self.filtered_ratings_trainset
-
-    """Get the ISBN value of all books the specified user has rated"""
-    def get_all_books_rated_by_user(self, user_id):
-        if (self.library == None):
-            self.import_library()
-        return self.library.get_all_books_rated_by_user(user_id)
-
-    """Get the rating the specified user made for the specified book"""
-    def get_rating_from_user_and_book(self, user_id, book_isbn):
-        if (self.library == None):
-            self.import_library()
-        return self.library.get_rating_from_user_and_book(user_id, book_isbn)
-
-    """Get all the ratings values for the specified book"""
-    def get_all_ratings_for_isbn(self, isbn):
-        if (self.library == None):
-            self.import_library()
-        return self.library.get_all_ratings_for_isbn_from_trainset(isbn)
-
-    """Import library object, using local trainset"""
-    def import_library(self):
-        self.library = Library(trainset=self.filtered_ratings_trainset)
