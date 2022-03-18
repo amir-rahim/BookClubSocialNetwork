@@ -1,5 +1,5 @@
-from django.forms import ModelForm, Textarea, TextInput
-
+from django.forms import DateTimeInput, ModelForm, Textarea, TextInput
+from BookClub.forms.widgets import DateTimePickerInput
 from BookClub.models.meeting import Meeting
 
 
@@ -17,5 +17,5 @@ class MeetingForm(ModelForm):
 
         widgets = {
             'description': Textarea,
-            'meeting_time': TextInput(attrs={'placeholder': 'YYYY/MM/DD HH:MM:SS'})
+            'meeting_time': DateTimePickerInput
         }
