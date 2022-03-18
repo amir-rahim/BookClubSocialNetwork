@@ -1,5 +1,4 @@
-import pandas as pd
-from BookClub.models import Book, User, BookReview
+from BookClub.models import Book, User, BookReview, Club, ClubMembership
 
 """This class acts as a library to recover information about books and ratings."""
 class Library:
@@ -11,7 +10,7 @@ class Library:
 
     """Get all the ratings values for the specified book"""
     def get_all_ratings_for_isbn_from_trainset(self, isbn):
-        if (self.trainset == None):
+        if self.trainset is None:
             print("No trainset provided")
             return []
         else:
@@ -50,7 +49,7 @@ class Library:
 
     """Get the rating the specified user made for the specified book"""
     def get_rating_from_user_and_book(self, user_id, book_isbn):
-        if (self.trainset == None): # Get from Django
+        if self.trainset is None: # Get from Django
 
             try:
                 user = User.objects.get(username=user_id)
@@ -72,3 +71,17 @@ class Library:
                 return None
             except:
                 return None
+
+    def get_all_books_rated_by_club(self, club_url_name):
+        # Method only directly uses Django objects, because trainset does not involve the concept of clubs
+        try:
+            club = Club.objects.get(club_url_name=club_url_name)
+            club_memberships = ClubMembership.objects.filter(club=club)
+            books = []
+            for membership in club_memberships:
+                user = membership.user
+                user_books = self.get_all_books_rated_by_user(user.username)
+                books.extend(user_books)
+            return books
+        except:
+            return []

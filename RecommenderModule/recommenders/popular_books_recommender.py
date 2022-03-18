@@ -33,5 +33,5 @@ class PopularBooksRecommender(AbstractRecommender):
         return self.popular_books_methods.get_recommendations_from_median(user_read_books=user_read_books)
 
     """Get most popular books (up to 10) according to their average rating, that no member of the club has read yet"""
-    def get_club_recommendations(self, club_id):
+    def get_club_recommendations(self, club_url_name):
         pass

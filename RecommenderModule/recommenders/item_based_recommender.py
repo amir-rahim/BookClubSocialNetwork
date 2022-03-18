@@ -24,5 +24,5 @@ class ItemBasedRecommender(AbstractRecommender):
         return self.item_based_methods.get_recommendations_positive_ratings_only_from_user_id(user_id, min_rating=6)
 
     """Get the recommended books (up to 10) given a specified club_id, from all of the club's members' positively (> 6/10) rated books"""
-    def get_club_recommendations(self, club_id):
+    def get_club_recommendations(self, club_url_name):
         pass
