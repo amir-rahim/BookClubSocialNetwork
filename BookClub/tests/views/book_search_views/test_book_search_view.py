@@ -4,6 +4,7 @@ from django.test import RequestFactory, TestCase, tag
 from django.urls import reverse
 from BookClub.models.book import Book
 from django.db.models import Q
+from BookClub.models.booklist import BookList
 
 from BookClub.models.user import User
 from BookClub.views.async_views.book_search import BookSearchView
@@ -24,6 +25,7 @@ class BookSearchTestCase(TestCase):
     fixtures = [
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_books.json',
+        'BookClub/tests/fixtures/booklists.json',
     ]
 
     def setUp(self):
@@ -31,6 +33,7 @@ class BookSearchTestCase(TestCase):
         self.user = User.objects.get(pk=1)
         self.book1 = Book.objects.get(pk=1)
         self.rf = RequestFactory()
+        self.booklist = BookList.objects.get(pk=1)
 
     def test_url(self):
         self.assertEqual(reverse('async_book_search'), '/search_books/')
@@ -147,9 +150,9 @@ class BookSearchTestCase(TestCase):
         
     def test_get_user_logged_in(self):
         self.client.login(username=self.user.username, password="Password123")
-        request = self.rf.get(self.url, data={})
-        request.user = self.user
-        view = BookSearchView()
-        view.request = request
-        view.get(request)
-        self.assertTrue(view.paginate_by, 20)
+        response = self.client.get(self.url)
+        self.assertContains(response, self.booklist.title)
+
+    def test_get_user_anonymous(self):
+        response = self.client.get(self.url)
+        self.assertNotContains(response, self.booklist.title)
