@@ -135,23 +135,23 @@ class PopularBooksMethods:
             print("Done computing popularity list.")
 
     """Get most popular books (up to 10) from the given popularity list, that the user has not read yet"""
-    def get_recommendations_from_popularity_list(self, popularity_list, user_read_books=[]):
+    def get_recommendations_from_popularity_list(self, popularity_list, read_books=[]):
         final_recommendations = []
         for (isbn, score) in popularity_list:
-            if (isbn not in user_read_books) and (score > 0):
+            if (isbn not in read_books) and (score > 0):
                 final_recommendations.append(isbn)
                 if len(final_recommendations) >= 10:
                     break
         return final_recommendations
 
     """Get most popular books (up to 10) according to their average rating, that the user has not read yet"""
-    def get_recommendations_from_average(self, user_read_books=[]):
-        return self.get_recommendations_from_popularity_list(self.sorted_average_ratings, user_read_books=user_read_books)
+    def get_recommendations_from_average(self, read_books=[]):
+        return self.get_recommendations_from_popularity_list(self.sorted_average_ratings, read_books=read_books)
 
     """Get most popular books (up to 10) according to their median rating, that the user has not read yet"""
-    def get_recommendations_from_median(self, user_read_books=[]):
-        return self.get_recommendations_from_popularity_list(self.sorted_median_ratings, user_read_books=user_read_books)
+    def get_recommendations_from_median(self, read_books=[]):
+        return self.get_recommendations_from_popularity_list(self.sorted_median_ratings, read_books=read_books)
 
     """Get most popular books (up to 10) according to their average and median rating, that the user has not read yet"""
-    def get_recommendations_from_average_and_median(self, user_read_books=[]):
-        return self.get_recommendations_from_popularity_list(self.sorted_combination_scores, user_read_books=user_read_books)
+    def get_recommendations_from_average_and_median(self, read_books=[]):
+        return self.get_recommendations_from_popularity_list(self.sorted_combination_scores, read_books=read_books)

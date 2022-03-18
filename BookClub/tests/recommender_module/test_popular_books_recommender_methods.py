@@ -63,7 +63,7 @@ class PopularBooksRecommenderMethodsTestCase(TestCase):
                 self.assertTrue(combination_scores_list[i-1][1] >= score)
             i += 1
 
-    def test_get_recommendations_from_average_no_user_read_books(self):
+    def test_get_recommendations_from_average_no_read_books(self):
         average_recommendations = self.popular_books_methods.get_recommendations_from_average()
         average_popularity_list = [pair[0] for pair in self.popular_books_methods.sorted_average_ratings]
         self.assertEqual(len(average_recommendations), 10)
@@ -72,15 +72,16 @@ class PopularBooksRecommenderMethodsTestCase(TestCase):
 
     def test_get_recommendations_from_average_does_not_contain_books_read_by_user(self):
         average_recommendations_1 = self.popular_books_methods.get_recommendations_from_average()
-        user_read_books = [average_recommendations_1[0], average_recommendations_1[1]]
-        self.assertTrue(user_read_books[0] in average_recommendations_1)
-        self.assertTrue(user_read_books[1] in average_recommendations_1)
-        average_recommendations_2 = self.popular_books_methods.get_recommendations_from_average(user_read_books=user_read_books)
+        read_books = [average_recommendations_1[0], average_recommendations_1[1]]
+        self.assertTrue(read_books[0] in average_recommendations_1)
+        self.assertTrue(read_books[1] in average_recommendations_1)
+        average_recommendations_2 = self.popular_books_methods.get_recommendations_from_average(
+            read_books=read_books)
         self.assertEqual(len(average_recommendations_2), 10)
-        self.assertFalse(user_read_books[0] in average_recommendations_2)
-        self.assertFalse(user_read_books[1] in average_recommendations_2)
+        self.assertFalse(read_books[0] in average_recommendations_2)
+        self.assertFalse(read_books[1] in average_recommendations_2)
 
-    def test_get_recommendations_from_median_no_user_read_books(self):
+    def test_get_recommendations_from_median_no_read_books(self):
         median_recommendations = self.popular_books_methods.get_recommendations_from_median()
         median_popularity_list = [pair[0] for pair in self.popular_books_methods.sorted_median_ratings]
         self.assertEqual(len(median_recommendations), 10)
@@ -89,15 +90,16 @@ class PopularBooksRecommenderMethodsTestCase(TestCase):
 
     def test_get_recommendations_from_median_does_not_contain_books_read_by_user(self):
         median_recommendations_1 = self.popular_books_methods.get_recommendations_from_median()
-        user_read_books = [median_recommendations_1[0], median_recommendations_1[1]]
-        self.assertTrue(user_read_books[0] in median_recommendations_1)
-        self.assertTrue(user_read_books[1] in median_recommendations_1)
-        median_recommendations_2 = self.popular_books_methods.get_recommendations_from_median(user_read_books=user_read_books)
+        read_books = [median_recommendations_1[0], median_recommendations_1[1]]
+        self.assertTrue(read_books[0] in median_recommendations_1)
+        self.assertTrue(read_books[1] in median_recommendations_1)
+        median_recommendations_2 = self.popular_books_methods.get_recommendations_from_median(
+            read_books=read_books)
         self.assertEqual(len(median_recommendations_2), 10)
-        self.assertFalse(user_read_books[0] in median_recommendations_2)
-        self.assertFalse(user_read_books[1] in median_recommendations_2)
+        self.assertFalse(read_books[0] in median_recommendations_2)
+        self.assertFalse(read_books[1] in median_recommendations_2)
 
-    def test_get_recommendations_from_average_and_median_no_user_read_books(self):
+    def test_get_recommendations_from_average_and_median_no_read_books(self):
         combination_recommendations = self.popular_books_methods.get_recommendations_from_average_and_median()
         combination_popularity_list = [pair[0] for pair in self.popular_books_methods.sorted_combination_scores]
         self.assertEqual(len(combination_recommendations), 10)
@@ -106,10 +108,11 @@ class PopularBooksRecommenderMethodsTestCase(TestCase):
 
     def test_get_recommendations_from_average_and_median_does_not_contain_books_read_by_user(self):
         combination_recommendations_1 = self.popular_books_methods.get_recommendations_from_average_and_median()
-        user_read_books = [combination_recommendations_1[0], combination_recommendations_1[1]]
-        self.assertTrue(user_read_books[0] in combination_recommendations_1)
-        self.assertTrue(user_read_books[1] in combination_recommendations_1)
-        combination_recommendations_2 = self.popular_books_methods.get_recommendations_from_average_and_median(user_read_books=user_read_books)
+        read_books = [combination_recommendations_1[0], combination_recommendations_1[1]]
+        self.assertTrue(read_books[0] in combination_recommendations_1)
+        self.assertTrue(read_books[1] in combination_recommendations_1)
+        combination_recommendations_2 = self.popular_books_methods.get_recommendations_from_average_and_median(
+            read_books=read_books)
         self.assertEqual(len(combination_recommendations_2), 10)
-        self.assertFalse(user_read_books[0] in combination_recommendations_2)
-        self.assertFalse(user_read_books[1] in combination_recommendations_2)
+        self.assertFalse(read_books[0] in combination_recommendations_2)
+        self.assertFalse(read_books[1] in combination_recommendations_2)
