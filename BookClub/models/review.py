@@ -26,6 +26,9 @@ class BookReviewComment(TextComment):
 
     book_review = models.ForeignKey('BookReview', blank = False, null = False, on_delete=models.CASCADE)
 
+    class Meta:
+        ordering = ['-created_on']
+        
     def get_delete_url(self):
         kwargs={
             'book_id': self.book_review.book.pk,
