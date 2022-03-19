@@ -150,7 +150,10 @@ except:
 import environ
 
 # Initialise environment variables
-env = environ.Env()
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
 environ.Env.read_env()
 
 # SMTP Configuration
@@ -158,8 +161,8 @@ environ.Env.read_env()
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = os.environ.get('EMAIL_USER', env('EMAIL_USER'))
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD', env('EMAIL_PASSWORD'))
+EMAIL_HOST_USER = env('EMAIL_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_PASSWORD')
 
 EMAIL_USE_TLS = True
 
