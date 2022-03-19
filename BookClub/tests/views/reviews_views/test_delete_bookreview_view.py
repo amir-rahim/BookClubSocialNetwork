@@ -18,7 +18,7 @@ class DeleteBookReview(TestCase, LogInTester):
 
     def setUp(self):
         self.bookreview = BookReview.objects.get(pk=1)
-        self.review_author = self.bookreview.user
+        self.review_author = self.bookreview.creator
         self.review_book = self.bookreview.book
 
         self.otherUser = User.objects.get(pk=6)
