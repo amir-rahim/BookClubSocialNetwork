@@ -4,11 +4,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views import View
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.list import ListView
 
-from BookClub.forms.review import ReviewForm
-from BookClub.models import Book, BookReview
+from django.http import Http404,HttpResponseRedirect
 
+from BookClub.forms import ReviewForm, BookReviewCommentForm
+from BookClub.models import Book, BookReview, BookReviewComment
 
 class CreateReviewView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     template_name = 'create_review.html'
@@ -27,15 +29,15 @@ class CreateReviewView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     def test_func(self):
         try:
             book = Book.objects.get(pk=self.kwargs['book_id'])
-            reviewed = BookReview.objects.filter(book=book, user=self.request.user).exists()
+            reviewed = BookReview.objects.filter(book=book, creator=self.request.user).exists()
             return not reviewed
-        except:
+        except Exception as e:
             return False
 
     def form_valid(self, form):
         user = self.request.user
         book = Book.objects.get(pk=self.kwargs['book_id'])
-        form.instance.user = user
+        form.instance.creator = user
         form.instance.book = book
         response = super().form_valid(form)
         messages.success(self.request, f"Successfully reviewed '{book.title}'!")
@@ -66,9 +68,9 @@ class EditReviewView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         try:
             book = Book.objects.get(pk=self.kwargs['book_id'])
-            book_review = BookReview.objects.get(book=book, user=self.request.user)
+            book_review = BookReview.objects.get(book=book, creator=self.request.user)
             return True
-        except:
+        except Exception as e:
             messages.error(self.request, "Book or review not found!")
             return False
 
@@ -85,7 +87,8 @@ class EditReviewView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def get_object(self):
         book = Book.objects.get(pk=self.kwargs['book_id'])
-        return BookReview.objects.get(book=book, user=self.request.user)
+        review = BookReview.objects.get(book=book, creator=self.request.user)
+        return review
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -98,10 +101,6 @@ class EditReviewView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class DeleteReviewView(LoginRequiredMixin, View):
     redirect_location = 'library_books'  # Need to change to review list view or somewhere else
-    """Checking whether the action is legal"""
-
-    def is_actionable(self, current_user, review):
-        return current_user == review.user
 
     """Handles no permssion and Reviews that don't exist"""
 
@@ -116,10 +115,10 @@ class DeleteReviewView(LoginRequiredMixin, View):
         try:
             book = Book.objects.get(id=self.kwargs['book_id'])
             current_user = self.request.user
-            review = BookReview.objects.get(book=book, user=current_user)
+            review = BookReview.objects.get(book=book, creator=current_user)
             self.action(review)
             return redirect(self.redirect_location)
-            
+
         except:
             self.is_not_actionable()
             return redirect(self.redirect_location)
@@ -127,3 +126,84 @@ class DeleteReviewView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         messages.error(self.request, "You are not allowed to delete this review or Review doesn\'t exist")
         return redirect(self.redirect_location)
+
+
+class ReviewDetailView(ListView):
+    """Review to display review details"""
+    model = BookReviewComment
+    paginate_by = 10
+    template_name = 'review_details.html'
+    context_object_name = 'comments'
+    pk_url_kwarg = 'review_id'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['review_comment_form'] = BookReviewCommentForm()
+        try:
+            review = BookReview.objects.get(pk=self.kwargs.get('review_id'))
+            context['review'] = review
+        except:
+            raise Http404("Given review id not found....")
+        return context
+
+    def get_queryset(self):
+        try:
+            review = BookReview.objects.get(pk=self.kwargs.get('review_id'))
+            comments = review.get_comments()
+        except:
+            comments = []
+        return comments
+
+
+class CreateCommentForReviewView(LoginRequiredMixin, CreateView):
+    model = BookReviewComment
+    form_class = BookReviewCommentForm
+    http_method_names = ['post']
+
+    def form_valid(self, form):
+        try:
+            review = BookReview.objects.get(pk=self.kwargs['review_id'])
+            form.instance.creator = self.request.user
+            form.instance.book_review = review
+            self.object = form.save()
+            return super().form_valid(form)
+        except:
+            messages.add_message(self.request, messages.ERROR,
+                                 "There was an error making that comment, try again!")
+            return HttpResponseRedirect(self.get_success_url())
+
+    def form_invalid(self, form):
+        messages.add_message(self.request, messages.ERROR,
+                             "There was an error making that comment, try again!")
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse('book_review', kwargs=self.kwargs)
+
+
+class DeleteCommentForReviewView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = BookReviewComment
+    http_method_names = ['post']
+    pk_url_kwarg = 'comment_id'
+
+    def handle_no_permission(self):
+        if not self.request.user.is_authenticated:
+            return super(LoginRequiredMixin, self).handle_no_permission()
+        else:
+            return redirect(self.get_success_url())
+
+    def test_func(self):
+        try:
+            comment = BookReviewComment.objects.get(pk=self.kwargs['comment_id'])
+            if comment.creator != self.request.user:
+                messages.add_message(self.request, messages.ERROR, 'Access denied!')
+                return False
+
+            return True
+        except:
+            messages.add_message(self.request, messages.ERROR, 'The comment you tried to delete was not found!')
+            return False
+
+    def get_success_url(self):
+        self.kwargs.pop('comment_id') 
+        return reverse('book_review', kwargs=self.kwargs)
