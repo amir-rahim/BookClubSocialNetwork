@@ -10,11 +10,10 @@ class UserToUserRelationship(models.Model):
         MUTUAL_FOLLOWING = 2
         
     class Meta:
-        models.UniqueConstraint(
-            fields=['source_user', 'target_user'], name='unique_relation')
+        models.UniqueConstraint(fields=['source_user', 'target_user'],name="Unique relationships")
         
-    source_user = models.ForeignKey('User', on_delete=models.CASCADE, related_name="source_user_relationships")
-    target_user = models.ForeignKey('User', on_delete=models.CASCADE, related_name="target_user_relationships")
+    source_user = models.ForeignKey('User', on_delete=models.CASCADE,related_name='user_relationships_source')
+    target_user = models.ForeignKey('User', on_delete=models.CASCADE,related_name='user_relationships_target')
     relationship_type = models.IntegerField(
         choices=UToURelationshipTypes.choices, blank=False, null=False)
     created_on = models.DateTimeField(auto_now_add=True, blank=False, null=False)

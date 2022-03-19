@@ -33,8 +33,8 @@ class UserToUserTestCase(TestCase):
             
     def _save_relationship(self, user1, user2, type):
         relationship = U2U.objects.create(
-            source_user=self.user1,
-            target_user = self.user2,
+            source_user=user1,
+            target_user =user2,
             relationship_type=type
         )
         return relationship
@@ -46,6 +46,8 @@ class UserToUserTestCase(TestCase):
         self._is_valid(relationship)
         
     def test_unique_constraint(self):
+        relationship = self._save_relationship(
+            self.user1, self.user2, U2U.UToURelationshipTypes.MUTUAL_FOLLOWING)
         with self.assertRaises(IntegrityError):
             relationship = self._save_relationship(
                 self.user1, self.user2, U2U.UToURelationshipTypes.MUTUAL_FOLLOWING)
