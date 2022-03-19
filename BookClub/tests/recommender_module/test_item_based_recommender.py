@@ -9,11 +9,11 @@ class ItemBasedRecommenderTestCase(TestCase):
 
     def setUp(self):
         data_provider = DataProvider(get_data_from_csv=True)
-        trainset = data_provider.get_filtered_ratings_trainset()
-        self.item_based_methods = ItemBasedCollaborativeFilteringMethods(trainset=trainset, print_status=False)
+        self.trainset = data_provider.get_filtered_ratings_trainset()
+        self.item_based_methods = ItemBasedCollaborativeFilteringMethods(trainset=self.trainset, print_status=False)
         self.item_based_recommender = ItemBasedRecommender()
         self.item_based_recommender.item_based_methods = self.item_based_methods
-        self.user_id = trainset.to_raw_uid(4)
+        self.user_id = self.trainset.to_raw_uid(4)
 
     def create_club(self):
         club = Club.objects.create(name="Club 1", club_url_name="club_1", description="Test club", is_private=False)

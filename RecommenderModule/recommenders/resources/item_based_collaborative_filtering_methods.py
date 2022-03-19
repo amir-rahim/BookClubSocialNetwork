@@ -136,7 +136,7 @@ class ItemBasedCollaborativeFilteringMethods:
 
     """Get the recommended books (up to 10) given a specified club_url_name, from all of the club's members' positively (> 6/10) rated books"""
     def get_recommendations_positive_ratings_only_from_club_url_name(self, club_url_name, min_rating=6):
-        raw_ratings = self.library.get_all_books_rated_by_club(club_url_name)
+        raw_ratings = self.library.get_all_ratings_by_club(club_url_name)
         inner_ratings = self.get_inner_ratings_from_raw_ratings(raw_ratings)
         positive_inner_ratings = self.get_inner_ratings_from_raw_ratings(raw_ratings, min_rating=min_rating)
         recommendations = self.get_recommendations_from_inner_ratings(positive_inner_ratings, all_books_rated=inner_ratings)
