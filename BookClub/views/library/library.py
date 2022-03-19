@@ -20,31 +20,17 @@ class BookListView(ListView):
     context_object_name = 'books'
     paginate_by = 20
 
-    def post(self, request):
-        if request.POST.get('q'):
-            request.session['query'] = request.POST['q']
-
-        return redirect(reverse('library_books', kwargs=self.kwargs))
-
-    def get_queryset(self):  # new
-        query = self.request.session.get('query')
-        try:
-            object_list = Book.objects.filter(
-                Q(title__icontains=query) | Q(author__icontains=query) | Q(publisher__icontains=query)
-            )
-        except:
-            object_list = Book.objects.all()
+    def get_queryset(self):
+        object_list = Book.objects.all()
         return object_list
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
+        context['lists'] = None
         if not user.is_anonymous:
             context['lists'] = BookList.objects.filter(creator=user)
-            context['user'] = user
-        else:
-            context['lists'] = None
-            context['user'] = None
+            
         return context
 
 
@@ -69,7 +55,7 @@ class AddToBookListView(LoginRequiredMixin, FormView):
         else:
             booklist.add_book(book)
             booklist.save()
-            messages.success(self.request, "The book has been saved to " + book.title)
+            messages.success(self.request, "The book has been saved to " + booklist.title)
         return super().form_valid(form)
 
     def get_success_url(self):

@@ -12,3 +12,9 @@ class BookReview(models.Model):
     review = models.CharField(verbose_name="Review:", max_length=1024, blank=True, null=False)
     user = models.ForeignKey('User', on_delete=models.CASCADE)
     createdOn = models.DateTimeField(verbose_name="Reviewed on:", auto_now=True, blank=False, null=False)
+
+    def __str__(self):
+        return f'{str(self.rating)}/10 rated review on "{str(self.book)}" by {self.user.username}'
+
+    def get_absolute_url(self):
+        pass # need to implement once detail view is done

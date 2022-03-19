@@ -1,0 +1,120 @@
+{% extends 'base_content.html' %}
+{% block page_title %}
+    Applications List
+{% endblock page_title %}
+{% block page_subtitle %}
+    My list of club applications
+{% endblock page_subtitle %}
+{% block content %}
+    <div class="columns">
+        <div class="column is-3">
+            <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+                <p class="menu-label">
+                    Clubs
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'available_clubs' %}">Available Clubs</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'my_club_memberships' %}">Memberships</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'applications' %}" class="is-active"><b>My Applications</b></a>
+                    </li>
+                    <li>
+                        <a href="{% url 'create_club' %}">Create Club</a>
+                    </li>
+                </ul>
+                <p class="menu-label">
+                    Useful Links
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'user_dashboard' %}">User Profile</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'library_dashboard' %}">Library</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'global_forum' %}">Global Forum</a>
+                    </li>
+                </ul>
+            </aside>
+        </div>
+        <div class="column is-9">
+            <nav class="breadcrumb"
+                 aria-label="breadcrumbs"
+                 style="padding-left: 5px;">
+                <ul>
+                    <li>
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'available_clubs' %}">Clubs</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'applications' %}">Applications</a>
+                    </li>
+                </ul>
+            </nav>
+            <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
+                <div class="hero-body">
+                    <div class="container">
+                        <h1 class="title">Applications</h1>
+                        <h2 class="subtitle">List of all the clubs you have applied to join.</h2>
+                    </div>
+                </div>
+            </section>
+            <!-- If the user has applied to any clubs-->
+            {% if clubs %}
+                <table class="table is-hoverable is-fullwidth"
+                       id="table-applications"
+                       data-toggle="table"
+                       data-pagination="true">
+                    <thead>
+                        <tr>
+                            <th scope="col">Club Name</th>
+                            <th scope="col">Tagline</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for club in clubs %}
+                            <!-- For each application, show the club details -->
+                            <tr onclick="window.location='{% url 'club_dashboard' club.club_url_name %}';">
+                                <td>{{ club.name }}</td>
+                                <td>{{ club.tagline }}</td>
+                                <td>{{ club.description }}</td>
+                                <td>
+                                    <button class="button is-fullwidth is-success">View</button>
+                                    <form method="post"
+                                            action="{% url 'leave_club' club_url_name=club.club_url_name %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="button is-fullwidth is-success">Cancel</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <!-- If the user has not applied to any clubs -->
+                <hr>
+                <p style="text-align: center">
+                    You have not applied to any clubs yet, find more <a href="{% url 'available_clubs' %}">here</a>.
+                </p>
+                <hr>
+            {% endif %}
+        </div>
+    </div>
+    <script>
+const dataTable = new simpleDatatables.DataTable("#table-applications", {
+    fixedHeight: true,
+    columns: [
+      {select: [1], sortable:false}
+    ]
+})
+    </script>
+{% endblock %}

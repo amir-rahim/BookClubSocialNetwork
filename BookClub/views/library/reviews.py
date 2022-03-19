@@ -7,7 +7,6 @@ from django.views import View
 from django.views.generic.edit import CreateView, UpdateView
 
 from BookClub.forms.review import ReviewForm
-from BookClub.helpers import delete_bookreview
 from BookClub.models import Book, BookReview
 
 
@@ -110,7 +109,7 @@ class DeleteReviewView(LoginRequiredMixin, View):
         messages.error(self.request, "You are not allowed to delete this review or Review doesn\'t exist")
 
     def action(self, review):
-        delete_bookreview(review)
+        review.delete()
         messages.success(self.request, "You have deleted the review")
 
     def post(self, request, *args, **kwargs):

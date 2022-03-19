@@ -32,13 +32,10 @@ urlpatterns = [
     path('log_out/', views.LogOutView.as_view(), name='log_out'),
     path('verification/', include('verify_email.urls')),
 
-    path('reset_password/', auth_views.PasswordResetView.as_view(template_name='reset_password.html', html_email_template_name="password_reset_email.html"), name='reset_password'),
-
-    path('reset_password_sent/', auth_views.PasswordResetDoneView.as_view(template_name='reset_password_sent.html'), name='password_reset_done'),
-
-    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='reset_password_form.html'), name='password_reset_confirm'),
-
-    path('reset_password_complete/', auth_views.PasswordResetCompleteView.as_view(template_name='reset_password_complete.html'), name='password_reset_complete'),
+    path('reset_password/', auth_views.PasswordResetView.as_view(template_name='reset_password/reset_password.html', html_email_template_name='reset_password/password_reset_email.html'), name='reset_password'),
+    path('reset_password_sent/', auth_views.PasswordResetDoneView.as_view(template_name='reset_password/reset_password_sent.html'), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='reset_password/reset_password_form.html'), name='password_reset_confirm'),
+    path('reset_password_complete/', auth_views.PasswordResetCompleteView.as_view(template_name='reset_password/reset_password_complete.html'), name='password_reset_complete'),
 
 
     # '''User URLs'''
@@ -66,6 +63,7 @@ urlpatterns = [
     # '''Membership URLs'''
     path('club/', views.AvailableClubsView.as_view(), name='available_clubs'),
     path('memberships/', views.MyClubMembershipsView.as_view(), name='my_club_memberships'),
+    path('applications/', views.ApplicationListView.as_view(), name='applications'),
     path('create/', views.CreateClubView.as_view(), name='create_club'),
 
     path('club/<str:club_url_name>/', views.ClubDashboardView.as_view(), name='club_dashboard'),
@@ -133,7 +131,7 @@ urlpatterns = [
          views.DeleteBookListView.as_view(), name='delete_booklist'),
     path('user/<str:username>/lists/<int:booklist_id>/edit/',
          views.EditBookListView.as_view(), name='edit_booklist'),
-    path('user/<str:username>/lists/<int:booklist_id>',
+    path('user/<str:username>/lists/<int:booklist_id>/',
          views.UserBookListView.as_view(), name='user_booklist'),
     path('user/<str:username>/lists/<int:booklist_id>/<int:book_id>/delete', views.RemoveFromBookListView.as_view(), name='remove_book'),
     path('user/<str:username>/lists/create/',
@@ -141,5 +139,7 @@ urlpatterns = [
 
     # '''Agenda URLs'''
     path('agenda/', views.AgendaView.as_view(), name='agenda'),
-
+    
+    # '''Asyn Views'''
+    path('search_books/', views.BookSearchView.as_view(), name='async_book_search')
 ]

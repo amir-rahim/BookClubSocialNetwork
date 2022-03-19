@@ -8,7 +8,7 @@ from django.views.generic import FormView, View
 from verify_email.email_handler import send_verification_email
 
 from BookClub.forms import LogInForm, SignUpForm
-from BookClub.helpers import LoginProhibitedMixin
+from BookClub.authentication_mixins import LoginProhibitedMixin
 
 
 class SignUpView(LoginProhibitedMixin, FormView):

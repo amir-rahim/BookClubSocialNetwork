@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "bulma-calendar": "^6.1.17"
+  }
+}

@@ -45,7 +45,7 @@ class AddBookViewTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "library_books.html")
         html_code = '<select required id="booklist" name="booklist">\n <option value="" selected disabled hidden>Choose here</option>\n</select>'
-        self.assertContains(response, html_code, html=True)
+        self.assertNotContains(response, html_code, html=True)
 
     def test_adds_book_to_book_list(self):
         self.client.login(username=self.user.username, password="Password123")
@@ -55,7 +55,7 @@ class AddBookViewTestCase(TestCase):
         self.assertTemplateUsed(response, "library_books.html")
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), 'The book has been saved to ' + self.book.title)
+        self.assertEqual(str(messages[0]), 'The book has been saved to ' + self.booklist.title)
 
     def test_cannot_add_same_book_twice(self):
         self.client.login(username=self.user.username, password="Password123")

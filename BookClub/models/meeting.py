@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.urls import reverse
 
 from BookClub.models import User, Club, Book
 
@@ -21,6 +22,9 @@ class Meeting(models.Model):
     members = models.ManyToManyField(User, related_name='meeting_attendees')
     type = models.CharField(max_length=1, choices=MeetingType.choices, blank=False)
     book = models.ForeignKey(Book, blank=True, null=True, on_delete=models.CASCADE)
+
+    def get_absolute_url(self):
+        return reverse('meeting_details', kwargs={'club_url_name': self.club.club_url_name, 'meeting_id': self.pk})
 
     def __str__(self):
         return self.title
