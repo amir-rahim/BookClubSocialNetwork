@@ -34,7 +34,7 @@ class PopularBooksRecommenderTestCase(TestCase):
         recommendations1 = self.popular_books_recommender.get_user_recommendations(self.user_id)
         self.assertEqual(len(recommendations1), 10)
         library = Library(trainset=self.trainset)
-        user_read_books = library.get_all_books_rated_by_user(self.user_id)
+        user_read_books = library.get_list_of_books_rated_by_user(self.user_id)
         recommendations2 = self.popular_books_methods.get_recommendations_from_median(read_books=user_read_books)
         self.assertEqual(recommendations1, recommendations2)
 

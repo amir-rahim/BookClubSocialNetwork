@@ -21,17 +21,17 @@ class Library:
                 ratings.append(rating)
             return ratings
 
-    """Get the ISBN value of all books the specified user has rated"""
-    def get_all_books_rated_by_user(self, user_id):
+    """Get a list of pairs (book_isbn, rating) of all books the specified user has rated"""
+    def get_all_ratings_by_user(self, user_id):
         if self.trainset is None: # Get from Django
 
             try:
                 user = User.objects.get(username=user_id)
                 user_reviews = BookReview.objects.filter(user=user)
-                books = []
+                ratings = []
                 for review in user_reviews:
-                    books.append(review.book.ISBN)
-                return books
+                    ratings.append((review.book.ISBN, review.rating))
+                return ratings
             except:
                 return []
 
@@ -40,40 +40,20 @@ class Library:
             try:
                 user_inner_id = self.trainset.to_inner_uid(user_id)
                 ratings_tuples = self.trainset.ur[user_inner_id]
-                books = []
+                ratings = []
                 for item_inner_id, rating in ratings_tuples:
-                    books.append(self.trainset.to_raw_iid(item_inner_id))
-                return books
+                    ratings.append((self.trainset.to_raw_iid(item_inner_id), rating))
+                return ratings
             except:
                 return []
 
-    """Get the rating the specified user made for the specified book"""
-    def get_rating_from_user_and_book(self, user_id, book_isbn):
-        if self.trainset is None: # Get from Django
-
-            try:
-                user = User.objects.get(username=user_id)
-                book = Book.objects.get(ISBN=book_isbn)
-                review = BookReview.objects.get(user=user, book=book)
-                return int(review.rating)
-            except:
-                return None
-
-        else:
-
-            try:
-                user_inner_id = self.trainset.to_inner_uid(user_id)
-                item_inner_id = self.trainset.to_inner_iid(book_isbn)
-                ratings_tuples = self.trainset.ur[user_inner_id]
-                for iid, rating in ratings_tuples:
-                    if (iid == item_inner_id):
-                        return rating
-                return None
-            except:
-                return None
+    """Get the ISBN value of all books the specified user has rated"""
+    def get_list_of_books_rated_by_user(self, user_id):
+        ratings = self.get_all_ratings_by_user(user_id)
+        return [rating[0] for rating in ratings]
 
     """Get the ISBN value of all books that the members of the specified club have rated"""
-    def get_all_books_rated_by_club(self, club_url_name):
+    def get_all_ratings_by_club(self, club_url_name):
         # Method only directly uses Django objects, because trainset does not involve the concept of clubs
         try:
             club = Club.objects.get(club_url_name=club_url_name)
@@ -81,8 +61,12 @@ class Library:
             books = []
             for membership in club_memberships:
                 user = membership.user
-                user_books = self.get_all_books_rated_by_user(user.username)
+                user_books = self.get_all_ratings_by_user(user.username)
                 books.extend(user_books)
             return books
         except:
             return []
+
+    def get_list_of_books_rated_by_club(self, club_url_name):
+        ratings = self.get_all_ratings_by_club(club_url_name)
+        return [rating[0] for rating in ratings]

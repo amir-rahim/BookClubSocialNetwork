@@ -16,8 +16,8 @@ class LibraryTestCase(TestCase):
     ]
 
     def setUp(self):
-        self.user = User.objects.get(pk=1)
-        self.book = Book.objects.get(pk=1)
+        self.user_id = User.objects.get(pk=1).username
+        self.book_isbn = Book.objects.get(pk=1).ISBN
         self.club = Club.objects.get(pk=1)
         self.library_django = Library()
 
@@ -43,71 +43,83 @@ class LibraryTestCase(TestCase):
         with self.assertRaises(ValueError):
             ratings = self.library_trainset.get_all_ratings_for_isbn_from_trainset("x")
 
-    def test_get_all_books_rated_by_user_django(self):
-        books = self.library_django.get_all_books_rated_by_user(self.user.username)
+    def test_get_all_ratings_by_user_django(self):
+        ratings = self.library_django.get_all_ratings_by_user(self.user_id)
+        self.assertEqual(len(ratings), 1)
+        self.assertEqual(ratings[0], ("0195153448", 1))
+
+    def test_get_all_ratings_by_user_django_wrong_user_id(self):
+        ratings = self.library_django.get_all_ratings_by_user("X")
+        self.assertEqual(ratings, [])
+
+    def test_get_all_ratings_by_user_trainset(self):
+        self.set_up_library_trainset()
+        ratings = self.library_trainset.get_all_ratings_by_user(self.user_trainset)
+        self.assertEqual(type(ratings), type([("0195153448", 1)]))
+        self.assertTrue((self.book_trainset, self.rating_trainset) in ratings)
+
+    def test_get_all_ratings_by_user_trainset_wrong_user_id(self):
+        self.set_up_library_trainset()
+        ratings = self.library_trainset.get_list_of_books_rated_by_user("X")
+        self.assertEqual(ratings, [])
+
+    def test_get_list_of_books_rated_by_user_django(self):
+        books = self.library_django.get_list_of_books_rated_by_user(self.user_id)
         self.assertEqual(len(books), 1)
         self.assertEqual(books[0], "0195153448")
 
-    def test_get_all_books_rated_by_user_django_wrong_user_id(self):
-        books = self.library_django.get_all_books_rated_by_user("x")
+    def test_get_list_of_books_rated_by_user_django_wrong_user_id(self):
+        books = self.library_django.get_list_of_books_rated_by_user("x")
         self.assertEqual(books, [])
-        self.assertEqual(len(books), 0)
 
-    def test_get_all_books_rated_by_user_trainset(self):
+    def test_get_list_of_books_rated_by_user_trainset(self):
         self.set_up_library_trainset()
-        books = self.library_trainset.get_all_books_rated_by_user(self.user_trainset)
+        books = self.library_trainset.get_list_of_books_rated_by_user(self.user_trainset)
         self.assertEqual(type(books), type([]))
         self.assertTrue(self.book_trainset in books)
 
-    def test_get_all_books_rated_by_user_trainset_wrong_user_id(self):
+    def test_get_list_of_books_rated_by_user_trainset_wrong_user_id(self):
         self.set_up_library_trainset()
-        books = self.library_django.get_all_books_rated_by_user("x")
+        books = self.library_trainset.get_list_of_books_rated_by_user("X")
         self.assertEqual(books, [])
-        self.assertEqual(len(books), 0)
 
-    def test_get_rating_from_user_and_book_django_right_user_right_book(self):
-        rating = self.library_django.get_rating_from_user_and_book(self.user.username, self.book.ISBN)
-        self.assertEqual(rating, 1)
-
-    def test_get_rating_from_user_and_book_django_wrong_user(self):
-        rating = self.library_django.get_rating_from_user_and_book("x", self.book.ISBN)
-        self.assertEqual(rating, None)
-
-    def test_get_rating_from_user_and_book_django_wrong_book(self):
-        rating = self.library_django.get_rating_from_user_and_book(self.user.username, "x")
-        self.assertEqual(rating, None)
-
-    def test_get_rating_from_user_and_book_trainset_right_user_right_book(self):
-        self.set_up_library_trainset()
-        rating = self.library_trainset.get_rating_from_user_and_book(self.user_trainset, self.book_trainset)
-        self.assertEqual(rating, self.rating_trainset)
-
-    def test_get_rating_from_user_and_book_trainset_wrong_user(self):
-        self.set_up_library_trainset()
-        rating = self.library_trainset.get_rating_from_user_and_book("x", self.book_trainset)
-        self.assertEqual(rating, None)
-
-    def test_get_rating_from_user_and_book_trainset_wrong_book(self):
-        self.set_up_library_trainset()
-        rating = self.library_trainset.get_rating_from_user_and_book(self.user_trainset, "x")
-        self.assertEqual(rating, None)
-
-    def test_get_all_books_rated_by_club(self):
-        books = self.library_django.get_all_books_rated_by_club(self.club.club_url_name)
-        self.assertEqual(len(books), 3)
+    def test_get_all_ratings_by_club(self):
+        club_ratings = self.library_django.get_all_ratings_by_club(self.club.club_url_name)
+        self.assertEqual(len(club_ratings), 3)
         club_memberships = ClubMembership.objects.filter(club=self.club)
         for membership in club_memberships:
             user = membership.user
-            user_books = self.library_django.get_all_books_rated_by_user(user)
-            for book in user_books:
-                self.assertTrue(book in books)
+            user_ratings = self.library_django.get_all_ratings_by_user(user.username)
+            for rating in user_ratings:
+                self.assertTrue(rating in club_ratings)
 
-    def test_get_all_books_rated_by_club_wrong_club(self):
-        books = self.library_django.get_all_books_rated_by_club("-")
+    def test_get_all_ratings_by_club_wrong_club_url_name(self):
+        ratings = self.library_django.get_all_ratings_by_club("-")
+        self.assertEqual(ratings, [])
+
+    def test_get_all_ratings_by_club_can_contain_duplicates(self):
+        ratings = self.library_django.get_all_ratings_by_club(self.club.club_url_name)
+        self.assertEqual(len(ratings), 3)
+        counter = Counter(ratings)
+        self.assertEqual(counter.get((self.book_isbn, 1)), 2)
+
+    def test_get_list_of_books_rated_by_club(self):
+        club_books = self.library_django.get_list_of_books_rated_by_club(self.club.club_url_name)
+        self.assertEqual(len(club_books), 3)
+        club_memberships = ClubMembership.objects.filter(club=self.club)
+        for membership in club_memberships:
+            user = membership.user
+            user_books = self.library_django.get_list_of_books_rated_by_user(user.username)
+            for book in user_books:
+                self.assertTrue(book in club_books)
+
+    def test_get_list_of_books_rated_by_club_wrong_club_url_name(self):
+        books = self.library_django.get_list_of_books_rated_by_club("-")
         self.assertEqual(books, [])
 
-    def test_get_all_books_rated_by_club_can_contain_duplicates(self):
-        books = self.library_django.get_all_books_rated_by_club(self.club.club_url_name)
+    def test_get_list_of_books_rated_by_club_can_contain_duplicates(self):
+        books = self.library_django.get_list_of_books_rated_by_club(self.club.club_url_name)
         self.assertEqual(len(books), 3)
         counter = Counter(books)
-        self.assertEqual(counter.get(self.book.ISBN), 2)
+        self.assertEqual(counter.get(self.book_isbn), 2)
+

@@ -28,6 +28,7 @@ def get_user_personalised_recommendations(user_id):
     return recommended_books
 
 """Get (up to) 10 book recommendations, from books the members of the club have rated.
+    The number of members having read the same book adds weighting in the recommendations.
     Returns a list of ISBN numbers."""
 def get_club_personalised_recommendations(club_url_name):
     item_based_recommender = ItemBasedRecommender()

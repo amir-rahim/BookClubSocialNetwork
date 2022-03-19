@@ -77,36 +77,34 @@ class ItemBasedCollaborativeFilteringMethods:
 
     """Get the recommended books (up to 10) given a specified user_id, from all of the user's rated books"""
     def get_recommendations_all_ratings_from_user_id(self, user_id):
-        user_ratings = self.get_trainset_user_book_ratings(user_id)
-        recommendations = self.get_recommendations_from_user_inner_ratings(user_ratings)
+        raw_ratings = self.library.get_all_ratings_by_user(user_id)
+        inner_ratings = self.get_inner_ratings_from_raw_ratings(raw_ratings)
+        recommendations = self.get_recommendations_from_inner_ratings(inner_ratings)
         return recommendations
 
     """Get the recommended books (up to 10) given a specified user_id, from all of the user's positively (> 6/10) rated books"""
     def get_recommendations_positive_ratings_only_from_user_id(self, user_id, min_rating=6):
-        user_read_books = self.library.get_all_books_rated_by_user(user_id)
-        user_ratings = self.get_trainset_user_book_ratings(user_id, items=user_read_books)
-        positive_user_ratings = self.get_trainset_user_book_ratings(user_id, min_rating=min_rating, items=user_read_books)
-        recommendations = self.get_recommendations_from_user_inner_ratings(positive_user_ratings, all_books_rated=user_ratings)
+        raw_ratings = self.library.get_all_ratings_by_user(user_id)
+        inner_ratings = self.get_inner_ratings_from_raw_ratings(raw_ratings)
+        positive_inner_ratings = self.get_inner_ratings_from_raw_ratings(raw_ratings, min_rating=min_rating)
+        recommendations = self.get_recommendations_from_inner_ratings(positive_inner_ratings, all_books_rated=inner_ratings)
         return recommendations
 
-    """Get all the ratings from the specified user, of books that are in the trainset, with a minimum rating value of {min_rating}"""
-    def get_trainset_user_book_ratings(self, user_id, min_rating=0, items=None):
-        if items is None:
-            items = self.library.get_all_books_rated_by_user(user_id)
-        inner_items = []
-        for item in items:
+    """Extract the inner ids of the ratings passed in the raw_ratings argument,for books with a minimum rating value of {min_rating}"""
+    def get_inner_ratings_from_raw_ratings(self, raw_ratings, min_rating=0):
+        inner_ratings = []
+        for book_isbn, rating in raw_ratings:
             try:
-                inner_item = self.trainset.to_inner_iid(item)
-                rating = self.library.get_rating_from_user_and_book(user_id, item)
+                inner_item = self.trainset.to_inner_iid(book_isbn)
                 if rating >= min_rating:
-                    inner_items.append((inner_item, rating))
+                    inner_ratings.append((inner_item, rating))
             except:
                 pass
-        return inner_items
+        return inner_ratings
 
-    """Get recommendations from trainset, corresponding similarities matrix and user's ratings
+    """Get recommendations from trainset, corresponding similarities matrix and a list of ratings
         as inner ratings (from similarities matrix)"""
-    def get_recommendations_from_user_inner_ratings(self, ratings, all_books_rated=None):
+    def get_recommendations_from_inner_ratings(self, ratings, all_books_rated=None):
 
         # Define all books rated (read) by the user
         if all_books_rated == None:
@@ -117,7 +115,7 @@ class ItemBasedCollaborativeFilteringMethods:
         for item_id, rating in ratings:
             similarity_row = self.similarities_matrix[item_id]
             for inner_id, score in enumerate(similarity_row):
-                candidates[inner_id] += score * (rating / 5.0)
+                candidates[inner_id] += score * (rating / 10.0)
 
         # Get top-rated items from similar users
         final_recommendations = []
@@ -135,3 +133,11 @@ class ItemBasedCollaborativeFilteringMethods:
                     pass
 
         return final_recommendations
+
+    """Get the recommended books (up to 10) given a specified club_url_name, from all of the club's members' positively (> 6/10) rated books"""
+    def get_recommendations_positive_ratings_only_from_club_url_name(self, club_url_name, min_rating=6):
+        raw_ratings = self.library.get_all_books_rated_by_club(club_url_name)
+        inner_ratings = self.get_inner_ratings_from_raw_ratings(raw_ratings)
+        positive_inner_ratings = self.get_inner_ratings_from_raw_ratings(raw_ratings, min_rating=min_rating)
+        recommendations = self.get_recommendations_from_inner_ratings(positive_inner_ratings, all_books_rated=inner_ratings)
+        return recommendations
