@@ -1,18 +1,29 @@
 from django.forms import ModelForm, Textarea
 
-from BookClub.models import BookReview
+from BookClub.models import BookReview, BookReviewComment
 
 
 class ReviewForm(ModelForm):
     class Meta:
         model = BookReview
 
-        fields = ['rating', 'review']
+        fields = ['book_rating', 'title', 'content']
 
         widgets = {
-            'review': Textarea,
+            'content': Textarea,
         }
 
         labels = {
-            'rating': 'Rating'
+            'book_rating': 'Rating'
+        }
+
+
+class BookReviewCommentForm(ModelForm):
+    class Meta:
+        model = BookReviewComment
+
+        fields = ['content']
+
+        widgets = {
+            'content': Textarea,
         }

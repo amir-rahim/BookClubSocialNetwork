@@ -102,6 +102,10 @@ urlpatterns = [
     path('library/books/<int:book_id>/create/', views.CreateReviewView.as_view(), name='create_review'),
     path('library/books/<int:book_id>/edit/', views.EditReviewView.as_view(), name='edit_review'),
     path('library/books/<int:book_id>/delete/', views.DeleteReviewView.as_view(), name='delete_review'),
+    path('library/books/<int:book_id>/review/<int:review_id>/', views.ReviewDetailView.as_view(), name='book_review'),
+    path('library/books/<int:book_id>/review/<int:review_id>/comment/', views.CreateCommentForReviewView.as_view(), name='comment_review'),
+    path('library/books/<int:book_id>/review/<int:review_id>/comment/<int:comment_id>/delete/',
+        views.DeleteCommentForReviewView.as_view(), name='delete_review_comment'),
 
     # '''Forum URLs'''
     path('forum/', views.ForumView.as_view(), name='global_forum'),
@@ -131,4 +135,7 @@ urlpatterns = [
 
     # '''Agenda URLs'''
     path('agenda/', views.AgendaView.as_view(), name='agenda'),
+    
+    # '''Asyn Views'''
+    path('search_books/', views.BookSearchView.as_view(), name='async_book_search')
 ]
