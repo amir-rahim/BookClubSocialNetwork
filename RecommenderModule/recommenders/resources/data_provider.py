@@ -44,7 +44,7 @@ class DataProvider:
         ratings_query = BookReview.objects.all()
         ratings_list = []
         for rating in ratings_query:
-            ratings_list.append([rating.user.username, rating.book.ISBN, rating.rating])
+            ratings_list.append([rating.user.username, rating.book.ISBN, rating.book_rating])
         ratings_df = pd.DataFrame.from_records(ratings_list, columns=["User-ID", "ISBN", "Book-Rating"])
         self.ratings_df = ratings_df
 

@@ -1,4 +1,4 @@
-from BookClub.models import Book, User, BookReview, Club, ClubMembership
+from BookClub.models import User, BookReview, Club, ClubMembership
 
 """This class acts as a library to recover information about books and ratings."""
 class Library:
@@ -30,7 +30,7 @@ class Library:
                 user_reviews = BookReview.objects.filter(user=user)
                 ratings = []
                 for review in user_reviews:
-                    ratings.append((review.book.ISBN, review.rating))
+                    ratings.append((review.book.ISBN, review.book_rating))
                 return ratings
             except:
                 return []
