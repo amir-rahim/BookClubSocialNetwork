@@ -151,16 +151,20 @@ except:
         import django_heroku
         django_heroku.settings(locals())
 
+import environ
+
+# Initialise environment variables
+env = environ.Env()
+environ.Env.read_env()
+
 # SMTP Configuration
 # For Django Email Backend
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-# EMAIL_HOST_USER = os.environ.get('')
-# EMAIL_HOST_PASSWORD = os.environ.get('')  # os.environ['password_key'] suggested
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_USER = env('EMAIL_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_PASSWORD')
+
 EMAIL_USE_TLS = True
 
 DEFAULT_FROM_EMAIL = 'noreply<no_reply@domain.com>'
