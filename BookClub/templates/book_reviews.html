@@ -86,6 +86,11 @@
                                     {% if review.creator == request.creator %}
                                         <td>
                                             <div class="buttons">
+                                                <form method="get" action="{% url 'book_review' book_id=review.book.id review_id=review.id %}">
+                                                    <button class="button is-info is-small" style="margin-right: 5px">
+                                                        <span>View</span>
+                                                    </button>
+                                                </form>
                                                 <form method="get" action="{% url 'edit_review' book.id %}">
                                                     <button class="button is-info is-small" style="margin-right: 5px">
                                                         <span>Edit</span>
@@ -100,7 +105,15 @@
                                             </div>
                                         </td>
                                     {% else %}
-                                        <td></td>
+                                        <td>
+                                            <div class="buttons">
+                                                <form method="get" action="{% url 'book_review' book_id=review.book.id review_id=review.id %}">
+                                                    <button class="button is-info is-small" style="margin-right: 5px">
+                                                        <span>View</span>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
                                     {% endif %}
                                 </tr>
                             {% endfor %}
