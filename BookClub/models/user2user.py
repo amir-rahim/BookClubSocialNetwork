@@ -3,17 +3,18 @@ from django.db import models
 
 from BookClub.models.user import User
 
-class User2UserRelationship(models.Model):
-    class U2URelationshipTypes(models.IntegerChoices):
-        FOLLOWING = '0'
-        FOLLOWEE = '1'
-        MUTUAL = '2'
+class UserToUserRelationship(models.Model):
+    class UToURelationshipTypes(models.IntegerChoices):
+        USER1_FOLLOWING = 0
+        USER2_FOLLOWING = 1
+        MUTUAL_FOLLOWING = 2
         
     class Meta:
-        unique_together= [['user1', 'user2']]
+        models.UniqueConstraint(
+            fields=['source_user', 'target_user'], name='unique_relation')
         
-    user1 = models.ForeignKey('User', on_delete=models.CASCADE)
-    user2 = models.ForeignKey('User', on_delete=models.CASCADE)
+    source_user = models.ForeignKey('User', on_delete=models.CASCADE, related_name="source_user_relationships")
+    target_user = models.ForeignKey('User', on_delete=models.CASCADE, related_name="target_user_relationships")
     relationship_type = models.IntegerField(
-        choices=U2URelationshipTypes, blank=False, null=False)
+        choices=UToURelationshipTypes.choices, blank=False, null=False)
     created_on = models.DateTimeField(auto_now_add=True, blank=False, null=False)

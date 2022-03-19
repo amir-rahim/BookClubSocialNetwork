@@ -11,3 +11,4 @@ from .rated_content import *
 from .forum import *
 from .option import *
 from .poll import *
+from .user2user import *
