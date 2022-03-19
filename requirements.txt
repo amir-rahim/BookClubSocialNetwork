@@ -12,3 +12,6 @@ requests
 gunicorn
 django-heroku
 django-bulma
+Django-Verify-Email
+django-crispy-forms
+django-environ
