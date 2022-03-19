@@ -31,6 +31,9 @@ jobs:
       run: |
         python manage.py test
     - name: Generate Report
+      env:
+        EMAIL_USER: ${{ secrets.EMAIL_USER }}
+        EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
       run: |
         coverage run --source='.' manage.py test
         coverage xml
