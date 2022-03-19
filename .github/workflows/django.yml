@@ -25,7 +25,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Run Tests
-      env: |
+      env:
         EMAIL_USER = ${{ secrets.EMAIL_USER }}
         EMAIL_PASSWORD = ${{ secrets.EMAIL_PASSWORD }}
       run: |
