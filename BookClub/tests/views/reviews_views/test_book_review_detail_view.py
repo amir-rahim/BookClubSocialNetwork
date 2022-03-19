@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.messages import get_messages
 from django.urls import reverse
 
-from BookClub.models import BookReview, Book, BookReviewComment, User
+from BookClub.models import BookReview, User
 from BookClub.tests.helpers import LogInTester, reverse_with_next
 
 @tag("review","book_review_view","book_review")
@@ -20,9 +20,7 @@ class BookReviewViewTestCase(TestCase,LogInTester):
         'BookClub/tests/fixtures/more_book_review_comments.json',
         'BookClub/tests/fixtures/more_book_reviews.json'
     ]
-# AB7CKBVQULE5
-# 3TPUKSV8C5X9
-# UT7C2TD8C5ZD
+
     def setUp(self):
         self.book_review = BookReview.objects.get(pk=1)
         self.another_book_review = BookReview.objects.get(pk=3)
@@ -57,7 +55,6 @@ class BookReviewViewTestCase(TestCase,LogInTester):
     def test_guest_can_see_review_content(self):
         response = self.client.get(self.main_review_url)
         self.assertContains(response,f'Review by {self.book_review.creator}')
-        #test for checking posted by x y time ago
         self.assertContains(response,f'Posted by: {self.book_review.creator}')
         self.assertContains(response,self.book_review.title)
         self.assertContains(response,self.book_review.content)
@@ -69,7 +66,6 @@ class BookReviewViewTestCase(TestCase,LogInTester):
         self.client.login(username=self.other_user.username,password="Password123")
         response = self.client.get(self.main_review_url)
         self.assertContains(response,f'Review by {self.book_review.creator}')
-        #test for checking posted by x y time ago
         self.assertContains(response,f'Posted by: {self.book_review.creator}')
         self.assertContains(response,self.book_review.title)
         self.assertContains(response,self.book_review.content)
@@ -79,7 +75,6 @@ class BookReviewViewTestCase(TestCase,LogInTester):
         self.client.login(username=self.creator_of_main_review.username,password="Password123")
         response = self.client.get(self.main_review_url)
         self.assertContains(response,f'Review by {self.book_review.creator}')
-        #test for checking posted by x y time ago
         self.assertContains(response,f'Posted by: {self.book_review.creator}')
         self.assertContains(response,self.book_review.title)
         self.assertContains(response,self.book_review.content)
