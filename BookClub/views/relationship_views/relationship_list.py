@@ -11,21 +11,19 @@ class FollowerListView(LoginRequiredMixin, TemplateView):
     def get_followers(self):
         user = self.kwargs.get('username')
         queryset = None
-        if user is not None:
-            user = User.objects.get(username=user)
-            followers = user.user_relationships_target.all().order_by(
-                '-created_on').values('source_user')
-            queryset = User.objects.filter(pk__in=followers)
+        user = User.objects.get(username=user)
+        followers = user.user_relationships_target.all().order_by(
+            '-created_on').values('source_user')
+        queryset = User.objects.filter(pk__in=followers)
         return queryset
 
     def get_followees(self):
         user = self.kwargs.get('username')
         queryset = None
-        if user is not None:
-            user = User.objects.get(username=user)
-            followees = user.user_relationships_source.all().order_by(
-                '-created_on').values('target_user')
-            queryset = User.objects.filter(pk__in=followees)
+        user = User.objects.get(username=user)
+        followees = user.user_relationships_source.all().order_by(
+            '-created_on').values('target_user')
+        queryset = User.objects.filter(pk__in=followees)
         return queryset
 
     def get_context_data(self, **kwargs):
