@@ -18,7 +18,7 @@ class RecommendationsProviderTestCase(TestCase):
         self.user = User.objects.get(pk=1)
         self.book = Book.objects.get(pk=1)
         self.book_review = BookReview.objects.get(pk=1)
-        self.club = Club.object.get(pk=1)
+        self.club = Club.objects.get(pk=1)
 
     def test_get_user_popularity_recommendations(self):
         recommendations = recommendations_provider.get_user_popularity_recommendations(self.user.username)

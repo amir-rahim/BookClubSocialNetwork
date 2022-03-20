@@ -27,7 +27,7 @@ class Library:
 
             try:
                 user = User.objects.get(username=user_id)
-                user_reviews = BookReview.objects.filter(user=user)
+                user_reviews = BookReview.objects.filter(creator=user)
                 ratings = []
                 for review in user_reviews:
                     ratings.append((review.book.ISBN, review.book_rating))
