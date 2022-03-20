@@ -10,7 +10,7 @@ class PopularBooksRecommender(AbstractRecommender):
 
     """Train the recommender to recommend books, using the current or given data;
         parameters may contain a value for 'min_ratings_threshold' """
-    def train(self, trainset=None, parameters={}):
+    def fit(self, trainset=None, parameters={}):
         if "min_ratings_threshold" in parameters.keys():
             self.popular_books_methods = PopularBooksMethods(min_ratings_threshold=parameters["min_ratings_threshold"], trainset=trainset, retraining=True)
         else:
@@ -18,7 +18,7 @@ class PopularBooksRecommender(AbstractRecommender):
 
     """Train the recommender to recommend books, using the current or given data, and save it to be re-used as default;
         parameters may contain a value for 'min_ratings_threshold' """
-    def train_and_save(self, trainset=None, parameters={}):
+    def fit_and_save(self, trainset=None, parameters={}):
         if "min_ratings_threshold" in parameters.keys():
             self.popular_books_methods = PopularBooksMethods(min_ratings_threshold=parameters["min_ratings_threshold"], trainset=trainset, retraining_and_saving=True)
         else:
