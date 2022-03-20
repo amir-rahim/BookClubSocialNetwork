@@ -47,9 +47,9 @@ class RecommendationsProviderTestCase(TestCase):
             if len(books) == 2:
                 break
         book1 = Book.objects.create(title="Book 1", ISBN=books[0], author="John Doe", publicationYear="2002-02-02", publisher="Penguin")
-        review1 = BookReview.objects.create(user=self.user, book=book1, book_rating=7)
+        review1 = BookReview.objects.create(creator=self.user, book=book1, book_rating=7)
         book2 = Book.objects.create(title="Book 2", ISBN=books[1], author="John Doe", publicationYear="2002-02-02", publisher="Penguin")
-        review2 = BookReview.objects.create(user=self.user, book=book2, book_rating=8)
+        review2 = BookReview.objects.create(creator=self.user, book=book2, book_rating=8)
         personalised_recommendations = recommendations_provider.get_user_personalised_recommendations(self.user.username)
         self.assertEqual(len(personalised_recommendations), 10)
         self.assertEqual(type(personalised_recommendations[0]), str)
@@ -62,12 +62,12 @@ class RecommendationsProviderTestCase(TestCase):
             if len(books) == 2:
                 break
         book1 = Book.objects.create(title="Book 1", ISBN=books[0], author="John Doe", publicationYear="2002-02-02", publisher="Penguin")
-        review1 = BookReview.objects.create(user=self.user, book=book1, book_rating=7)
+        review1 = BookReview.objects.create(creator=self.user, book=book1, book_rating=7)
         book2 = Book.objects.create(title="Book 2", ISBN=books[1], author="John Doe", publicationYear="2002-02-02", publisher="Penguin")
-        review2 = BookReview.objects.create(user=self.user, book=book2, book_rating=8)
+        review2 = BookReview.objects.create(creator=self.user, book=book2, book_rating=8)
         personalised_recommendations1 = recommendations_provider.get_user_personalised_recommendations(self.user.username)
         book3 = Book.objects.create(title="Book 3", ISBN=personalised_recommendations1[0], author="John Doe", publicationYear="2002-02-02", publisher="Penguin")
-        review3 = BookReview.objects.create(user=self.user, book=book3, book_rating=2)
+        review3 = BookReview.objects.create(creator=self.user, book=book3, book_rating=2)
         self.assertTrue(book3.ISBN in personalised_recommendations1)
         personalised_recommendations2 = recommendations_provider.get_user_personalised_recommendations(self.user.username)
         self.assertEqual(len(personalised_recommendations2), 10)
@@ -104,9 +104,9 @@ class RecommendationsProviderTestCase(TestCase):
             if len(books) == 2:
                 break
         book1 = Book.objects.create(title="Book 1", ISBN=books[0], author="John Doe", publicationYear="2002-02-02", publisher="Penguin")
-        review1 = BookReview.objects.create(user=self.user, book=book1, book_rating=7)
+        review1 = BookReview.objects.create(creator=self.user, book=book1, book_rating=7)
         book2 = Book.objects.create(title="Book 2", ISBN=books[1], author="John Doe", publicationYear="2002-02-02", publisher="Penguin")
-        review2 = BookReview.objects.create(user=self.user, book=book2, book_rating=8)
+        review2 = BookReview.objects.create(creator=self.user, book=book2, book_rating=8)
         personalised_recommendations = recommendations_provider.get_club_personalised_recommendations(self.club.club_url_name)
         self.assertEqual(len(personalised_recommendations), 10)
         self.assertEqual(type(personalised_recommendations[0]), str)
@@ -119,12 +119,12 @@ class RecommendationsProviderTestCase(TestCase):
             if len(books) == 2:
                 break
         book1 = Book.objects.create(title="Book 1", ISBN=books[0], author="John Doe", publicationYear="2002-02-02", publisher="Penguin")
-        review1 = BookReview.objects.create(user=self.user, book=book1, book_rating=7)
+        review1 = BookReview.objects.create(creator=self.user, book=book1, book_rating=7)
         book2 = Book.objects.create(title="Book 2", ISBN=books[1], author="John Doe", publicationYear="2002-02-02", publisher="Penguin")
-        review2 = BookReview.objects.create(user=self.user, book=book2, book_rating=8)
+        review2 = BookReview.objects.create(creator=self.user, book=book2, book_rating=8)
         personalised_recommendations1 = recommendations_provider.get_club_personalised_recommendations(self.club.club_url_name)
         book3 = Book.objects.create(title="Book 3", ISBN=personalised_recommendations1[0], author="John Doe", publicationYear="2002-02-02", publisher="Penguin")
-        review3 = BookReview.objects.create(user=self.user, book=book3, book_rating=2)
+        review3 = BookReview.objects.create(creator=self.user, book=book3, book_rating=2)
         self.assertTrue(book3.ISBN in personalised_recommendations1)
         personalised_recommendations2 = recommendations_provider.get_club_personalised_recommendations(self.club.club_url_name)
         self.assertEqual(len(personalised_recommendations2), 10)

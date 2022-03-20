@@ -35,6 +35,7 @@ class DataProvider:
         if get_data_from_csv:
             # Get data from csv as pandas DataFrame
             ratings_df = pd.read_csv(self.ratings_path, sep=';', encoding_errors="ignore")
+            ratings_df["User-ID"] = ratings_df["User-ID"].astype(str)
             self.ratings_df = ratings_df
         else:
             self.get_ratings_from_django_database()
