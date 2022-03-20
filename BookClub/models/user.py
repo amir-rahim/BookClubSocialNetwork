@@ -24,6 +24,7 @@ class User(AbstractUser):
 
     email = models.EmailField(unique=True, blank=False)
     public_bio = models.CharField(max_length=250, blank=False)
+    saved_booklists = models.ManyToManyField("BookList", blank=True)
 
     def gravatar(self, size=120):
         """Return a URL to the user's gravatar."""
@@ -36,3 +37,10 @@ class User(AbstractUser):
 
     def get_absolute_url(self):
         return reverse('user_profile', kwargs={'username': self.username})
+
+    def save_booklist(self, booklist):
+        self.saved_booklists.add(booklist)
+
+    def get_saved_booklists(self):
+        return self.saved_booklists.all()
+
