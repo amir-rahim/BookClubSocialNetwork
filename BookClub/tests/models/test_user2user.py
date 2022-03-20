@@ -46,11 +46,13 @@ class UserToUserTestCase(TestCase):
         self._is_valid(relationship)
         
     def test_unique_constraint(self):
-        relationship = self._save_relationship(
-            self.user1, self.user2, U2U.UToURelationshipTypes.MUTUAL_FOLLOWING)
         with self.assertRaises(IntegrityError):
             relationship = self._save_relationship(
                 self.user1, self.user2, U2U.UToURelationshipTypes.MUTUAL_FOLLOWING)
+            
+    def test_unique_constraint_flipped(self):
+        relationship = self._save_relationship(
+            self.user2, self.user1, U2U.UToURelationshipTypes.MUTUAL_FOLLOWING)
             
     def test_source_user_cannot_be_null(self):
         self.rel1.source_user = None

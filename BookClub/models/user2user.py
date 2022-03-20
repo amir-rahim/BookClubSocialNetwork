@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import UniqueConstraint
 
 from BookClub.models.user import User
 
@@ -10,7 +11,8 @@ class UserToUserRelationship(models.Model):
         MUTUAL_FOLLOWING = 2
         
     class Meta:
-        models.UniqueConstraint(fields=['source_user', 'target_user'],name="Unique relationships")
+        constraints = [
+            UniqueConstraint(fields=['source_user', 'target_user'], name='unique_booking')]
         
     source_user = models.ForeignKey('User', on_delete=models.CASCADE,related_name='user_relationships_source')
     target_user = models.ForeignKey('User', on_delete=models.CASCADE,related_name='user_relationships_target')
