@@ -6,10 +6,7 @@ from BookClub.models.user import User
 
 class UserToUserRelationship(models.Model):
     class UToURelationshipTypes(models.IntegerChoices):
-        USER1_FOLLOWING = 0
-        USER2_FOLLOWING = 1
-        MUTUAL_FOLLOWING = 2
-        
+        FOLLOWING = 1
     class Meta:
         constraints = [
             UniqueConstraint(fields=['source_user', 'target_user'], name='unique_booking')]
