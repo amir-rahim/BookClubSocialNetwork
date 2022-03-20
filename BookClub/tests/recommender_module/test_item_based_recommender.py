@@ -19,7 +19,7 @@ class ItemBasedRecommenderTestCase(TestCase):
         club = Club.objects.create(name="Club 1", club_url_name="club_1", description="Test club", is_private=False)
         user1 = User.objects.create(username=self.user_id, email=f"{self.user_id}@kcl.ac.uk", public_bio=f"Hello, I am user {self.user_id}")
         club_membership1 = ClubMembership.objects.create(user=user1, club=club, membership=2)
-        user2_id = self.trainset.to_raw_uid(5)
+        user2_id = self.trainset.to_raw_uid(6)
         user2 = User.objects.create(username=user2_id, email=f"{user2_id}@kcl.ac.uk", public_bio=f"Hi, I am {user2_id}")
         club_membership2 = ClubMembership.objects.create(user=user2, club=club, membership=0)
         return club
