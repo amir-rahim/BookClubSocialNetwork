@@ -114,8 +114,8 @@ class Command(BaseCommand):
                 else:
                     b = BookReview(
                         book=self.getBook(record['ISBN']),
-                        user=self.getUser(record['User-ID']),
-                        rating=record['Book-Rating']
+                        creator=self.getUser(record['User-ID']),
+                        book_rating=record['Book-Rating']
                     )
                     model_instances.append(b)
             except Exception as e:
@@ -129,7 +129,7 @@ class Command(BaseCommand):
 
 
     def getBook(self, isbn):
-        return Book.objects.get(ISBN = isbn)
+        return Book.objects.get(ISBN=isbn)
 
     def getUser(self, userId):
         return User.objects.get(pk=userId)

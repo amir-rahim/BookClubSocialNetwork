@@ -41,37 +41,37 @@ class RecommendationsProviderTestCase(TestCase):
 
     def test_get_user_personalised_recommendations(self):
         trainset = ItemBasedCollaborativeFilteringMethods().trainset
-        books = []
+        i = 0
         for book in trainset.all_items():
-            books.append(trainset.to_raw_iid(book))
-            if len(books) == 2:
+            book_isbn = trainset.to_raw_iid(book)
+            book1 = Book.objects.create(title=f"Book {i}", ISBN=book_isbn, author="John Doe",
+                                        publicationYear="2002-02-02", publisher="Penguin")
+            review1 = BookReview.objects.create(creator=self.user, book=book1, book_rating=7)
+            i += 1
+            if i >= 10:
                 break
-        book1 = Book.objects.create(title="Book 1", ISBN=books[0], author="John Doe", publicationYear="2002-02-02", publisher="Penguin")
-        review1 = BookReview.objects.create(creator=self.user, book=book1, book_rating=7)
-        book2 = Book.objects.create(title="Book 2", ISBN=books[1], author="John Doe", publicationYear="2002-02-02", publisher="Penguin")
-        review2 = BookReview.objects.create(creator=self.user, book=book2, book_rating=8)
         personalised_recommendations = recommendations_provider.get_user_personalised_recommendations(self.user.username)
         self.assertEqual(len(personalised_recommendations), 10)
         self.assertEqual(type(personalised_recommendations[0]), str)
 
     def test_get_user_personalised_recommendations_does_not_contain_books_read_by_user(self):
         trainset = ItemBasedCollaborativeFilteringMethods().trainset
-        books = []
+        i = 0
         for book in trainset.all_items():
-            books.append(trainset.to_raw_iid(book))
-            if len(books) == 2:
+            book_isbn = trainset.to_raw_iid(book)
+            book1 = Book.objects.create(title=f"Book {i}", ISBN=book_isbn, author="John Doe",
+                                        publicationYear="2002-02-02", publisher="Penguin")
+            review1 = BookReview.objects.create(creator=self.user, book=book1, book_rating=7)
+            i += 1
+            if i >= 10:
                 break
-        book1 = Book.objects.create(title="Book 1", ISBN=books[0], author="John Doe", publicationYear="2002-02-02", publisher="Penguin")
-        review1 = BookReview.objects.create(creator=self.user, book=book1, book_rating=7)
-        book2 = Book.objects.create(title="Book 2", ISBN=books[1], author="John Doe", publicationYear="2002-02-02", publisher="Penguin")
-        review2 = BookReview.objects.create(creator=self.user, book=book2, book_rating=8)
         personalised_recommendations1 = recommendations_provider.get_user_personalised_recommendations(self.user.username)
-        book3 = Book.objects.create(title="Book 3", ISBN=personalised_recommendations1[0], author="John Doe", publicationYear="2002-02-02", publisher="Penguin")
-        review3 = BookReview.objects.create(creator=self.user, book=book3, book_rating=2)
-        self.assertTrue(book3.ISBN in personalised_recommendations1)
+        book2 = Book.objects.create(title="Book 3", ISBN=personalised_recommendations1[0], author="John Doe", publicationYear="2002-02-02", publisher="Penguin")
+        review2 = BookReview.objects.create(creator=self.user, book=book2, book_rating=2)
+        self.assertTrue(book2.ISBN in personalised_recommendations1)
         personalised_recommendations2 = recommendations_provider.get_user_personalised_recommendations(self.user.username)
         self.assertEqual(len(personalised_recommendations2), 10)
-        self.assertFalse(book3.ISBN in personalised_recommendations2)
+        self.assertFalse(book2.ISBN in personalised_recommendations2)
 
     def test_get_user_personalised_recommendations_wrong_user_id(self):
         recommendations = recommendations_provider.get_user_personalised_recommendations("X")
@@ -98,37 +98,36 @@ class RecommendationsProviderTestCase(TestCase):
 
     def test_get_club_personalised_recommendations(self):
         trainset = ItemBasedCollaborativeFilteringMethods().trainset
-        books = []
+        i = 0
         for book in trainset.all_items():
-            books.append(trainset.to_raw_iid(book))
-            if len(books) == 2:
+            book_isbn = trainset.to_raw_iid(book)
+            book1 = Book.objects.create(title=f"Book {i}", ISBN=book_isbn, author="John Doe",
+                                        publicationYear="2002-02-02", publisher="Penguin")
+            review1 = BookReview.objects.create(creator=self.user, book=book1, book_rating=7)
+            i += 1
+            if i >= 10:
                 break
-        book1 = Book.objects.create(title="Book 1", ISBN=books[0], author="John Doe", publicationYear="2002-02-02", publisher="Penguin")
-        review1 = BookReview.objects.create(creator=self.user, book=book1, book_rating=7)
-        book2 = Book.objects.create(title="Book 2", ISBN=books[1], author="John Doe", publicationYear="2002-02-02", publisher="Penguin")
-        review2 = BookReview.objects.create(creator=self.user, book=book2, book_rating=8)
         personalised_recommendations = recommendations_provider.get_club_personalised_recommendations(self.club.club_url_name)
         self.assertEqual(len(personalised_recommendations), 10)
         self.assertEqual(type(personalised_recommendations[0]), str)
 
     def test_get_club_personalised_recommendations_does_not_contain_books_read_by_members(self):
         trainset = ItemBasedCollaborativeFilteringMethods().trainset
-        books = []
+        i = 0
         for book in trainset.all_items():
-            books.append(trainset.to_raw_iid(book))
-            if len(books) == 2:
+            book_isbn = trainset.to_raw_iid(book)
+            book1 = Book.objects.create(title=f"Book {i}", ISBN=book_isbn, author="John Doe", publicationYear="2002-02-02", publisher="Penguin")
+            review1 = BookReview.objects.create(creator=self.user, book=book1, book_rating=7)
+            i += 1
+            if i >= 10:
                 break
-        book1 = Book.objects.create(title="Book 1", ISBN=books[0], author="John Doe", publicationYear="2002-02-02", publisher="Penguin")
-        review1 = BookReview.objects.create(creator=self.user, book=book1, book_rating=7)
-        book2 = Book.objects.create(title="Book 2", ISBN=books[1], author="John Doe", publicationYear="2002-02-02", publisher="Penguin")
-        review2 = BookReview.objects.create(creator=self.user, book=book2, book_rating=8)
         personalised_recommendations1 = recommendations_provider.get_club_personalised_recommendations(self.club.club_url_name)
-        book3 = Book.objects.create(title="Book 3", ISBN=personalised_recommendations1[0], author="John Doe", publicationYear="2002-02-02", publisher="Penguin")
-        review3 = BookReview.objects.create(creator=self.user, book=book3, book_rating=2)
-        self.assertTrue(book3.ISBN in personalised_recommendations1)
+        book2 = Book.objects.create(title="Book 3", ISBN=personalised_recommendations1[0], author="John Doe", publicationYear="2002-02-02", publisher="Penguin")
+        review2 = BookReview.objects.create(creator=self.user, book=book2, book_rating=2)
+        self.assertTrue(book2.ISBN in personalised_recommendations1)
         personalised_recommendations2 = recommendations_provider.get_club_personalised_recommendations(self.club.club_url_name)
         self.assertEqual(len(personalised_recommendations2), 10)
-        self.assertFalse(book3.ISBN in personalised_recommendations2)
+        self.assertFalse(book2.ISBN in personalised_recommendations2)
 
     def test_get_club_personalised_recommendations_wrong_club_url_name(self):
         recommendations = recommendations_provider.get_club_personalised_recommendations("-")
