@@ -44,3 +44,5 @@ class User(AbstractUser):
     def get_saved_booklists(self):
         return self.saved_booklists.all()
 
+    def remove_from_saved_booklists(self, booklist):
+        self.saved_booklists.remove(booklist)
