@@ -133,6 +133,8 @@ urlpatterns = [
     
     # '''Bookshelf URLs'''
     path('bookshelf/', views.BookShelfView.as_view(), name='bookshelf'),
-    path('bookshelf/add/<int:book_id>/', views.AddToBookShelfView.as_view(), name='add_to_bookshelf'),
+    path('bookshelf/<int:book_id>/add/', views.AddToBookShelfView.as_view(), name='add_to_bookshelf'),
+    path('bookshelf/<int:book_id>/update/', views.UpdateBookShelfView.as_view(), name='update_from_bookshelf'),
+    path('bookshelf/<int:book_id>/remove/', views.RemoveFromBookShelfView.as_view(), name='remove_from_bookshelf'),
     
 ]
