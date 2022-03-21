@@ -195,7 +195,7 @@ class SavedBooklistsListView(LoginRequiredMixin, ListView):
         # Add in a QuerySet of all the books
         creator = User.objects.get(username=self.kwargs['username'])
         context['creator'] = creator
-        #context['self'] = self.request.user == creator
+        context['self'] = self.request.user == creator
         #context['base_delete_url'] = reverse_lazy('delete_booklist', kwargs={'username': creator.username})
         return context
 
@@ -222,6 +222,47 @@ class SaveBookListView(LoginRequiredMixin, View):
 
         messages.success(self.request, "You have saved the book list.")
         current_user.save_booklist(booklist)
+
+    def post(self, *args, **kwargs):
+
+        try:
+            creator = User.objects.get(username=kwargs['username'])
+            booklist = BookList.objects.get(id=kwargs['booklist_id'])
+            current_user = self.request.user
+        except:
+            messages.error(self.request, "Error, invalid booklist.")
+            return redirect(self.redirect_location, username=self.kwargs['username'], booklist_id = self.kwargs['booklist_id'])
+
+        if self.is_actionable(current_user, booklist):
+            self.action(current_user, booklist)
+        else:
+            self.is_not_actionable()
+
+        return redirect(self.redirect_location, username=self.kwargs['username'], booklist_id = self.kwargs['booklist_id'])
+
+class RemoveSavedBookListView(LoginRequiredMixin, View):
+    """Users can remove a saved booklist"""
+
+    redirect_location = 'user_booklist'
+
+    def get(self, *args, **kwargs):
+        return redirect(self.redirect_location, username=self.kwargs['username'], booklist_id = self.kwargs['booklist_id'])
+
+    def is_actionable(self, current_user, booklist):
+        """Check if user can save the book list"""
+
+        return (current_user != booklist.creator) and (User.objects.filter(username=current_user.username, saved_booklists=booklist).exists())
+
+    def is_not_actionable(self):
+        """If user cannot remove saved the book list"""
+
+        messages.info(self.request, "You cannot remove this book list from saved.")
+
+    def action(self, current_user, booklist):
+        """User removes saved book list"""
+
+        messages.success(self.request, "You have removed the book list from saved.")
+        current_user.remove_from_saved_booklists(booklist)
 
     def post(self, *args, **kwargs):
 
