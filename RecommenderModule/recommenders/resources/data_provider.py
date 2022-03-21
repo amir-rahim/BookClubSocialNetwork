@@ -2,7 +2,7 @@ from surprise import Dataset
 from surprise import Reader
 import pandas as pd
 from BookClub.models.review import BookReview
-
+import time
 
 """This class loads the ratings dataset from the 'BX-Book-Ratings.csv' file and builds the train sets"""
 class DataProvider:
@@ -42,12 +42,18 @@ class DataProvider:
 
     """Get data from Django database as pandas DataFrame"""
     def get_ratings_from_django_database(self):
+        tic = time.time()
         ratings_query = BookReview.objects.all()
         ratings_list = []
+        toc = time.time()
+        print('Done in {:.4f} seconds'.format(toc-tic))
+        tic = time.time()
         for rating in ratings_query:
             ratings_list.append([rating.creator.username, rating.book.ISBN, rating.book_rating])
         ratings_df = pd.DataFrame.from_records(ratings_list, columns=["User-ID", "ISBN", "Book-Rating"])
         self.ratings_df = ratings_df
+        toc = time.time()
+        print('Done in {:.4f} seconds'.format(toc-tic))
 
     """Filter the book dataset to keep only books with at least {self.filtering_min_ratings_threshold} ratings"""
     def get_filtered_books_list(self):
