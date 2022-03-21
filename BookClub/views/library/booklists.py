@@ -26,9 +26,11 @@ class BooklistListView(ListView):
         context = super().get_context_data(**kwargs)
         # Add in a QuerySet of all the books
         creator = User.objects.get(username=self.kwargs['username'])
+        user = self.request.user
         context['creator'] = creator
         context['self'] = self.request.user == creator
         context['base_delete_url'] = reverse_lazy('delete_booklist', kwargs={'username': creator.username})
+        context['saved_booklists'] = user.get_saved_booklists()
         return context
 
 
