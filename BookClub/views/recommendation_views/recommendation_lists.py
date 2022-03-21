@@ -15,7 +15,7 @@ class RecommendationBaseView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         if self.kwargs.get('club_url_name'):
             club = get_club_from_url_name(self.kwargs.get('club_url_name'))
-            context['club'] = club
+            context['current_club'] = club
         return context
     
     def get_template_names(self):
@@ -24,7 +24,8 @@ class RecommendationBaseView(LoginRequiredMixin, TemplateView):
             return "recommendation_base_club.html"
         return "recommendation_base_user.html"
     
-class RecommendationUserListView(TemplateView):
+
+class RecommendationUserListView(LoginRequiredMixin, TemplateView):
     model = Book
     template_name = "partials/recommendation_list_view.html"
     context_object_name = "recommendations"
@@ -38,7 +39,6 @@ class RecommendationUserListView(TemplateView):
             if len(isbns) < 3:
                 isbns = get_user_popularity_recommendations(
                     self.request.user.username)
-
             recommendations.recommendations = isbns
             recommendations.modified = False
             recommendations.save()
@@ -55,7 +55,7 @@ class RecommendationUserListView(TemplateView):
         data_dict = {"html_from_view" : html}
         return JsonResponse(data=data_dict, safe=False)
     
-class RecommendationClubListView(TemplateView):
+class RecommendationClubListView(LoginRequiredMixin, TemplateView):
     model = Book
     template_name = "partials/recommendation_list_view.html"
     context_object_name = "recommendations"

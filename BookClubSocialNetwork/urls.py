@@ -19,6 +19,8 @@ from BookClub import views
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.views.generic.base import RedirectView
 
+from BookClub.models.recommendations import UserRecommendations
+
 urlpatterns = [
     # '''Core URLs'''
     path('admin/', admin.site.urls),
@@ -57,6 +59,7 @@ urlpatterns = [
     path('memberships/', views.MyClubMembershipsView.as_view(), name='my_club_memberships'),
     path('applications/', views.ApplicationListView.as_view(), name='applications'),
     path('create/', views.CreateClubView.as_view(), name='create_club'),
+    path('club/<str:club_url_name>/recommendations', views.RecommendationBaseView.as_view(), name='club_recommendations'),
 
     path('club/<str:club_url_name>/', views.ClubDashboardView.as_view(), name='club_dashboard'),
     path('club/<str:club_url_name>/members/', views.MembersListView.as_view(), name='member_list'),
@@ -89,6 +92,7 @@ urlpatterns = [
     path('club/<str:club_url_name>/meetings/create/', views.CreateMeetingView.as_view(), name='create_meeting'),
     path('club/<str:club_url_name>/meetings/<int:meeting_id>/delete/', views.DeleteMeetingView.as_view(),
          name='delete_meeting'),
+    
 
 
     # '''Library URLs'''
@@ -97,6 +101,8 @@ urlpatterns = [
     path('library/books/add_to_book_list/', views.AddToBookListView.as_view(), name='add_to_book_list'),
     path('library/books/<int:book_id>/', views.BookDetailView.as_view(), name='book_view'),  # book view
     path('library/books/<int:book_id>/reviews/', views.BookReviewListView.as_view(), name='book_reviews'),
+    path('library/recommendations', views.RecommendationBaseView.as_view(),
+         name='user_recommendations'),
 
     # '''Review URLs'''
     path('library/books/<int:book_id>/create/', views.CreateReviewView.as_view(), name='create_review'),
@@ -137,5 +143,8 @@ urlpatterns = [
     path('agenda/', views.AgendaView.as_view(), name='agenda'),
     
     # '''Asyn Views'''
-    path('search_books/', views.BookSearchView.as_view(), name='async_book_search')
+    path('search_books/', views.BookSearchView.as_view(), name='async_book_search'),
+    path('user_recommendations/', views.RecommendationUserListView.as_view(), name='async_user_recommendations'),
+    path('club_recommendations/<str:club_url_name>/', views.RecommendationClubListView.as_view(), name='async_club_recommendations'),
+    
 ]
