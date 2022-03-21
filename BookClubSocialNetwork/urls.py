@@ -128,6 +128,10 @@ urlpatterns = [
     path('user/<str:username>/lists/<int:booklist_id>/<int:book_id>/delete', views.RemoveFromBookListView.as_view(), name='remove_book'),
     path('user/<str:username>/lists/create/',
          views.CreateBookListView.as_view(), name='create_booklist'),
+    path('user/<str:username>/saved_lists/', 
+         views.SavedBooklistsListView.as_view(), name='saved_booklists'),
+    path('user/<str:username>/lists/<int:booklist_id>/save/', 
+         views.SaveBookListView.as_view(), name='save_booklist'),
 
     # '''Agenda URLs'''
     path('agenda/', views.AgendaView.as_view(), name='agenda'),
