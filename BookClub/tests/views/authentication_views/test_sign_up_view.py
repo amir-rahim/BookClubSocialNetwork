@@ -80,7 +80,7 @@ class SignUpViewTestCase(TestCase, LogInTester):
 
         self.assertEqual(test_user.email, 'janetdoe@example.org')
 
-        self.assertTrue(self._is_logged_in())
+        self.assertFalse(self._is_logged_in())
 
     def test_post_sign_up_redirects_when_logged_in(self):
         self.client.login(username=self.user.username, password='Password123')
