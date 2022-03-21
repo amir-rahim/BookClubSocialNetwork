@@ -101,7 +101,7 @@ urlpatterns = [
     path('library/books/add_to_book_list/', views.AddToBookListView.as_view(), name='add_to_book_list'),
     path('library/books/<int:book_id>/', views.BookDetailView.as_view(), name='book_view'),  # book view
     path('library/books/<int:book_id>/reviews/', views.BookReviewListView.as_view(), name='book_reviews'),
-    path('library/recommendations', views.RecommendationBaseView.as_view(),
+    path('library/recommendations/', views.RecommendationBaseView.as_view(),
          name='user_recommendations'),
 
     # '''Review URLs'''
