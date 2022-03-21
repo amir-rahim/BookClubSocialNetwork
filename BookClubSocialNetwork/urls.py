@@ -132,6 +132,8 @@ urlpatterns = [
          views.SavedBooklistsListView.as_view(), name='saved_booklists'),
     path('user/<str:username>/lists/<int:booklist_id>/save/', 
          views.SaveBookListView.as_view(), name='save_booklist'),
+    path('user/<str:username>/lists/<int:booklist_id>/remove_saved_booklist/', 
+         views.RemoveSavedBookListView.as_view(), name='remove_saved_booklist'),
 
     # '''Agenda URLs'''
     path('agenda/', views.AgendaView.as_view(), name='agenda'),
