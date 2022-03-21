@@ -20,14 +20,14 @@ class CreateBooklistViewTestcase(TestCase):
     def setUp(self):
         super(TestCase, self).setUp()
         self.user = User.objects.get(username='johndoe')
-        self.url = reverse('create_booklist', kwargs={'username': self.user.username})
+        self.url = reverse('create_booklist')
         self.data = {
             'title': 'Booklist 1',
             'description': 'Booklist of John',
         }
 
     def test_create_booklist_url(self):
-        self.assertEqual(self.url, f'/user/{self.user.username}/lists/create/')
+        self.assertEqual(self.url, f'/library/lists/create/')
 
     def test_post_create_booklist_redirects_when_not_logged_in(self):
         booklist_count_before = BookList.objects.count()
@@ -81,7 +81,7 @@ class CreateBooklistViewTestcase(TestCase):
         booklist = BookList.objects.get(title=self.data['title'])
         after_count = BookList.objects.count()
         self.assertEqual(after_count, before_count + 1)
-        response_url = reverse('user_booklist', kwargs={'username': self.user.username, 'booklist_id': booklist.pk})
+        response_url = reverse('user_booklist', kwargs={'booklist_id': booklist.pk})
         self.assertRedirects(response, response_url, status_code=302, target_status_code=200)
         self.assertTemplateUsed(response, 'booklist.html')
         self.assertEqual(booklist.title, self.data['title'])

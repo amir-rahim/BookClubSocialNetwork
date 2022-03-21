@@ -20,10 +20,10 @@ class UserBookListViewTestCase(TestCase, LogInTester):
         self.other_user = User.objects.get(pk=2)
         self.booklist = BookList.objects.get(pk=1)
 
-        self.url = reverse('user_booklist', kwargs={'username': self.user.username, 'booklist_id': self.booklist.id})
+        self.url = reverse('user_booklist', kwargs={'booklist_id': self.booklist.id})
 
     def test_url(self):
-        self.assertEqual(self.url, f'/user/{self.user.username}/lists/{self.booklist.id}/')
+        self.assertEqual(self.url, f'/library/lists/{self.booklist.id}/')
 
     def test_get_template(self):
         self.client.login(username=self.user.username, password="Password123")
@@ -59,7 +59,7 @@ class UserBookListViewTestCase(TestCase, LogInTester):
                                            created_on=timezone.now()
                                            )
         response = self.client.get(
-            reverse('user_booklist', kwargs={'username': self.user.username, 'booklist_id': booklist.id}))
+            reverse('user_booklist', kwargs={'booklist_id': booklist.id}))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'booklist.html')
         self.assertContains(response, "There are no books in this list.")

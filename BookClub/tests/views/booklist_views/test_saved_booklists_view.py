@@ -20,10 +20,10 @@ class SavedBookListsViewTestCase(TestCase, LogInTester):
         self.booklist_to_save = BookList.objects.get(pk = 1)
         self.own_booklist = BookList.objects.get(pk = 2)
 
-        self.url = reverse('saved_booklists', kwargs={'username': self.user.username})
+        self.url = reverse('saved_booklists')
 
     def test_url(self):
-        self.assertEqual(self.url, f'/user/{self.user.username}/saved_lists/')
+        self.assertEqual(self.url, f'/library/lists/saved/')
 
     def test_get_template(self):
         self.client.login(username=self.user.username, password="Password123")
@@ -81,7 +81,7 @@ class SavedBookListsViewTestCase(TestCase, LogInTester):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'saved_booklists.html')
-        self.assertEqual(response.context['self'], True)
+        self.assertEqual(response.context['own'], True)
         self.assertContains(response, 'Remove from saved')
 
     def test_user_can_view_other_users_saved_booklists_list(self):
@@ -107,5 +107,4 @@ class SavedBookListsViewTestCase(TestCase, LogInTester):
         response_lists = list(response.context['booklists'])
         self.assertEqual(len(response_lists), 0)
         self.assertContains(response, "No saved lists.")
-        self.assertContains(response, "You can save other user's lists by visiting their profiles.")
 
