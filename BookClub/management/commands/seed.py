@@ -16,7 +16,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('count', type=int, nargs='?', default=10)
 
-    def generateUser():
+    def generateUser(self):
         faker = Faker('en_GB')
 
         user = User.objects.create_user(
