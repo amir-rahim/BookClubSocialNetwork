@@ -3,65 +3,96 @@
     User Dashboard
 {% endblock page_title %}
 {% block page_subtitle %}
-    This is the User Dashboard, the main home page for your user profile!
+    This is the User Dashboard, the page for a user profile!
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
         <div class="column is-3">
             <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
-                <p class="menu-label">
-                    Profile
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'user_dashboard' %}" class="is-active"><b>Profile Dashboard</b></a>
-                    </li>
-                    <li>
-                        <a href="{% url 'edit_profile' %}">Edit Profile</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'password_change' %}">Change Password</a>
-                    </li>
-                    <li>
-                        <a href="#">Profile Settings</a>
-                    </li>
-                </ul>
-                <p class="menu-label">
-                    Clubs
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'create_club' %}">Create Club</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'available_clubs' %}">Available Clubs</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'applications' %}">My Applications</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'my_club_memberships' %}">Memberships</a>
-                    </li>
-                </ul>
-                <p class="menu-label">
-                    Book Lists
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'booklists_list' user.username %}">My Book Lists</a>
-                    </li>
-                </ul>
-                <p class="menu-label">
-                    Agenda
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'agenda' %}">View Agenda</a>
-                    </li>
-                </ul>
+                {% if own_profile %}
+                    <p class="menu-label">
+                        Profile
+                    </p>
+                    <ul class="menu-list">
+                        <li>
+                            <a href="{% url 'user_dashboard' %}" class="is-active"><b>Profile Dashboard</b></a>
+                        </li>
+                        <li>
+                            <a href="{% url 'edit_profile' %}">Edit Profile</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'password_change' %}">Change Password</a>
+                        </li>
+                    </ul>
+                    <p class="menu-label">
+                        Clubs
+                    </p>
+                    <ul class="menu-list">
+                        <li>
+                            <a href="{% url 'create_club' %}">Create Club</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'available_clubs' %}">Available Clubs</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'applications' %}">Applications</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'my_club_memberships' %}">Memberships</a>
+                        </li>
+                    </ul>
+                    <p class="menu-label">
+                        Book Lists
+                    </p>
+                    <ul class="menu-list">
+                        <li>
+                            <a href="{% url 'booklists_list' %}">My Book Lists</a>
+                        </li>
+                    </ul>
+                    <p class="menu-label">
+                        Agenda
+                    </p>
+                    <ul class="menu-list">
+                        <li>
+                            <a href="{% url 'agenda' %}">View Agenda</a>
+                        </li>
+                    </ul>
+                {% else %}
+                    <p class="menu-label">
+                        {{ username }}'s Profile
+                    </p>
+                    <ul class="menu-list">
+                        <li>
+                            <a class="is-active"><b>Profile Dashboard</b></a>
+                        </li>
+                        <li>
+                            <a href="{% url 'user_following' username %}">Following</a>
+                        </li>
+                    </ul>
+                    <p class="menu-label">
+                        {{ username }}'s Clubs
+                    </p>
+                    <ul class="menu-list">
+                        <li>
+                            <a href="{% url 'user_memberships' username %}">Club Memberships</a>
+                        </li>
+                    </ul>
+                    <p class="menu-label">
+                        {{ username }}'s Book lists
+                    </p>
+                    <ul class="menu-list">
+                        <li>
+                            <a href="{% url 'booklists_list' username %}">Book Lists</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'saved_booklists' username %}">Saved Book Lists</a>
+                        </li>
+                    </ul>
+                {% endif %}
             </aside>
         </div>
         <div class="column is-9">
+        {% if own_profile %}
             <nav class="breadcrumb"
                  aria-label="breadcrumbs"
                  style="padding-left: 5px;">
@@ -77,11 +108,28 @@
                     </li>
                 </ul>
             </nav>
+        {% else %}
+            <nav class="breadcrumb"
+                 aria-label="breadcrumbs"
+                 style="padding-left: 5px;">
+                <ul>
+                    <li>
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'user_profile' username %}">Profile</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'user_profile' username %}">{{ username }}</a>
+                    </li>
+                </ul>
+            </nav>
+        {% endif %}
             <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
                 <div class="hero-body">
                     <div class="container">
-                        <h1 class="title">{{ user.username }}'s Dashboard</h1>
-                        <h2 class="subtitle">Welcome to your profile page!</h2>
+                        <h1 class="title">{{ username }}'s Dashboard</h1>
+                        <h2 class="subtitle">This is the profile page!</h2>
                     </div>
                 </div>
             </section>
@@ -103,9 +151,11 @@
                                         <p class="subtitle is-5">
                                             <b>Username: </b> {{ username }}
                                         </p>
+                                        {% if own_profile %}
                                         <p class="subtitle is-5">
                                             <b>Email: </b> {{ email }}
                                         </p>
+                                        {% endif %}
                                         <p class="subtitle is-5">
                                             <b>Public Bio: </b> {{ public_bio }}
                                         </p>
@@ -125,7 +175,11 @@
                             </p>
                         </div>
                         <div class="card-footer">
-                            <a class="card-footer-item" href="{% url 'user_following' username %}">View All</a>
+                            {% if own_profile %}
+                                <a class="card-footer-item" href="{% url 'user_following' username %}">View All</a>
+                            {% else %}
+                                <a class="card-footer-item" href="{% url 'user_following' username %}">View All</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -137,15 +191,25 @@
                             </p>
                         </div>
                         <div class="card-footer">
-                            <a class="card-footer-item" href="{% url 'my_club_memberships' %}">View All</a>
+                            {% if own_profile %}
+                                <a class="card-footer-item" href="{% url 'my_club_memberships' %}">View All</a>
+                            {% else %}
+                                <a class="card-footer-item" href="{% url 'user_memberships' username %}">View All</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
             <div class="tile is-ancestor has-text-centered">
+                {% if own_profile %}
+                <div class="tile is-parent"
+                     onclick="window.location='{% url 'booklists_list' %}';"
+                     style="cursor:pointer;">
+                {% else %}
                 <div class="tile is-parent"
                      onclick="window.location='{% url 'booklists_list' user.username %}';"
                      style="cursor:pointer;">
+                {% endif %}
                     <article class="tile is-child box">
                         <p class="title">
                             20
@@ -155,7 +219,11 @@
                         </p>
                     </article>
                 </div>
-                <div class="tile is-parent">
+                {% if own_profile %}
+                <div class="tile is-parent" onclick="window.location='{% url 'user_following' username %}';" style="cursor:pointer;">
+                {% else %}
+                <div class="tile is-parent" onclick="window.location='{% url 'user_following' username %}';" style="cursor:pointer;">
+                {% endif %}
                     <article class="tile is-child box">
                         <p class="title">
                             69k
@@ -165,17 +233,25 @@
                         </p>
                     </article>
                 </div>
-                <div class="tile is-parent">
+                {% if own_profile %}
+                <div class="tile is-parent" onclick="window.location='{% url 'my_club_memberships' %}';" style="cursor:pointer;">
+                {% else %}
+                <div class="tile is-parent" onclick="window.location='{% url 'user_memberships' username %}';" style="cursor:pointer;">
+                {% endif %}
                     <article class="tile is-child box">
                         <p class="title">
-                            5
+                            {{ user.get_clubs.count }}
                         </p>
                         <p class="subtitle">
                             Clubs Joined
                         </p>
                     </article>
                 </div>
-                <div class="tile is-parent">
+                {% if own_profile %}
+                <div class="tile is-parent" onclick="window.location='#';" style="cursor:pointer;">
+                {% else %}
+                <div class="tile is-parent" onclick="window.location='#';" style="cursor:pointer;">
+                {% endif %}
                     <article class="tile is-child box">
                         <p class="title">
                             +19
@@ -195,9 +271,13 @@
                             </p>
                         </div>
                         <div class="card-footer">
-                            <a class="card-footer-item" href="#">Read List</a>
-                            <a class="card-footer-item"
-                               href="{% url 'booklists_list' user.username %}">View All</a>
+                            {% if own_profile %}
+                                <a class="card-footer-item" href="{% url 'saved_booklists' %}">Saved Lists</a>
+                                <a class="card-footer-item" href="{% url 'booklists_list' %}">View All</a>
+                            {% else %}
+                                <a class="card-footer-item" href="{% url 'saved_booklists' user.username %}">Saved Lists</a>
+                                <a class="card-footer-item" href="{% url 'booklists_list' user.username %}">View All</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -209,7 +289,11 @@
                             </p>
                         </div>
                         <div class="card-footer">
-                            <a class="card-footer-item" href="#">View All</a>
+                            {% if own_profile %}
+                                <a class="card-footer-item" href="#">View All</a>
+                            {% else %}
+                                <a class="card-footer-item" href="#">View All</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -219,7 +303,7 @@
                     <div class="tile is-parent">
                         <article class="tile is-child box">
                             <p class="title">
-                                20
+                                0
                             </p>
                             <p class="subtitle">
                                 Currently Reading
@@ -229,7 +313,7 @@
                     <div class="tile is-parent">
                         <article class="tile is-child box">
                             <p class="title">
-                                69k
+                                0
                             </p>
                             <p class="subtitle">
                                 Completed Books
@@ -239,7 +323,7 @@
                     <div class="tile is-parent">
                         <article class="tile is-child box">
                             <p class="title">
-                                5
+                                0
                             </p>
                             <p class="subtitle">
                                 On-hold
@@ -249,7 +333,7 @@
                     <div class="tile is-parent">
                         <article class="tile is-child box">
                             <p class="title">
-                                +19
+                                0
                             </p>
                             <p class="subtitle">
                                 Plan to Read
