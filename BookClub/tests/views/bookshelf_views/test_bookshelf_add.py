@@ -3,9 +3,10 @@ from django.test import TestCase, tag
 from django.urls import reverse
 
 from BookClub.models import Book, User
+from BookClub.tests.helpers import reverse_with_next
 
 
-@tag("bookshelf", "book")
+@tag("views", "bookshelf", "add_bookshelf")
 class AddBookShelfViewTestCase(TestCase):
     fixtures = [
         'BookClub/tests/fixtures/default_books.json',
@@ -23,7 +24,22 @@ class AddBookShelfViewTestCase(TestCase):
     """Test add books to bookshelf"""
 
     def test_url(self):
-        self.assertEquals(self.url, "/bookshelf/add/1/")
+        self.assertEquals(self.url, "/bookshelf/1/add/")
+
+    def test_redirect_when_not_logged_in(self):
+        redirect_url = reverse_with_next('login', self.url)
+        response = self.client.post(self.url, self.data, follow=True)
+        self.assertRedirects(response, redirect_url,
+                             status_code=302, target_status_code=200, fetch_redirect_response=True
+                             )
+
+    def test_get_url(self):
+        self.client.login(username=self.user_none.username, password="Password123")
+        redirect_url = reverse('library_books')
+        response = self.client.get(self.url, follow=True)
+        self.assertRedirects(response, redirect_url,
+                             status_code=302, target_status_code=200, fetch_redirect_response=True
+                             )
 
     def test_adds_book_to_bookshelf(self):
         self.client.login(username=self.user_none.username, password="Password123")
@@ -62,4 +78,15 @@ class AddBookShelfViewTestCase(TestCase):
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]), 'You cannot add that book!')
+
+    def test_book_not_found(self):
+        self.client.login(username=self.user.username, password="Password123")
+        # Add non-existent status
+        url = reverse('add_to_bookshelf', kwargs={"book_id": 555555})
+        response = self.client.post(url, self.data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), 'Error, book or bookshelf not found.')
+
 
