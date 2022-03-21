@@ -127,8 +127,8 @@ class UserBookListView(ListView):
     def get_context_data(self, **kwargs):
         booklist = BookList.objects.get(pk=self.kwargs['booklist_id'])
         context = super().get_context_data(**kwargs)
-        context['booklist'] = BookList.objects.get(pk=self.kwargs['booklist_id'])
-        context['user'] = self.request.user
+        context['booklist'] = booklist
+        context['user'] = User.objects.get(username=self.kwargs['username'])
         context['number_of_books'] = len(booklist.get_books())
         return context
 
