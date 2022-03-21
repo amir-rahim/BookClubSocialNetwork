@@ -1,20 +1,44 @@
 from django.db import models
+from django.urls import reverse
+from BookClub.models.rated_content import *
 
-
-class BookReview(models.Model):
+class BookReview(TextPost):
     class Meta:
-        unique_together = ['book', 'user']
+        unique_together =['book', 'creator']
 
-    RATINGS = [(0, 0), (1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6), (7, 7), (8, 8), (9, 9), (10, 10)]
+    RATINGS = [(0,0), (1,1), (2,2), (3,3), (4,4), (5,5), (6,6), (7,7), (8,8), (9,9), (10,10)]
 
     book = models.ForeignKey('Book', on_delete=models.CASCADE)
-    rating = models.IntegerField(verbose_name='Ratings', choices=RATINGS, default=0, blank=False, null=False)
-    review = models.CharField(verbose_name="Review:", max_length=1024, blank=True, null=False)
-    user = models.ForeignKey('User', on_delete=models.CASCADE)
-    createdOn = models.DateTimeField(verbose_name="Reviewed on:", auto_now=True, blank=False, null=False)
+    book_rating = models.IntegerField(verbose_name='Rating', choices=RATINGS, default=0, blank=False, null=False)
+
+    def get_comments(self):
+        return self.bookreviewcomment_set.all()
+
+    def get_delete_url(self):
+        return reverse('delete_review', kwargs={'book_id': self.book.pk})
 
     def __str__(self):
-        return f'{str(self.rating)}/10 rated review on "{str(self.book)}" by {self.user.username}'
+        return f'{self.book_rating}/10 rating & review by {str(self.creator)} on "{str(self.book)}"'
 
-    def get_absolute_url(self):
-        pass # need to implement once detail view is done
+    def str(self):
+        return self.__str__()
+class BookReviewComment(TextComment):
+
+    book_review = models.ForeignKey('BookReview', blank = False, null = False, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['-created_on']
+        
+    def get_delete_url(self):
+        kwargs={
+            'book_id': self.book_review.book.pk,
+            'review_id': self.book_review.pk,
+            'comment_id': self.pk
+        }
+        return reverse('delete_review_comment', kwargs=kwargs)
+
+    def __str__(self):
+        return f'Comment by {str(self.creator)} on {str(self.book_review)}'
+
+    def str(self):
+        return self.__str__()

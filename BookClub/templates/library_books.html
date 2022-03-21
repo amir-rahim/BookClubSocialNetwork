@@ -157,17 +157,7 @@
                     <hr>
                 {% endif %}
             </div>
+            {% include 'partials/book_search.html' %}
         </div>
-        <script>
-const dataTable = new simpleDatatables.DataTable("#table-books", {
-    fixedHeight: true,
-    columns: [
-      {select: [1], sortable:false}
-    ]
-})
-
-
-
-
-        </script>
-    {% endblock content %}
+    </div>
+{% endblock content %}

@@ -14,10 +14,11 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from BookClub import views
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.views.generic.base import RedirectView
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     # '''Core URLs'''
@@ -29,6 +30,13 @@ urlpatterns = [
     path('login/', views.LogInView.as_view(), name='login'),
     path('sign_up/', views.SignUpView.as_view(), name='sign_up'),
     path('log_out/', views.LogOutView.as_view(), name='log_out'),
+    path('verification/', include('verify_email.urls')),
+
+    path('reset_password/', auth_views.PasswordResetView.as_view(template_name='reset_password/reset_password.html', html_email_template_name='reset_password/password_reset_email.html'), name='reset_password'),
+    path('reset_password_sent/', auth_views.PasswordResetDoneView.as_view(template_name='reset_password/reset_password_sent.html'), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='reset_password/reset_password_form.html'), name='password_reset_confirm'),
+    path('reset_password_complete/', auth_views.PasswordResetCompleteView.as_view(template_name='reset_password/reset_password_complete.html'), name='password_reset_complete'),
+
 
     # '''User URLs'''
     path('user/', views.UserDashboardView.as_view(), name='user_dashboard'),
@@ -102,6 +110,10 @@ urlpatterns = [
     path('library/books/<int:book_id>/create/', views.CreateReviewView.as_view(), name='create_review'),
     path('library/books/<int:book_id>/edit/', views.EditReviewView.as_view(), name='edit_review'),
     path('library/books/<int:book_id>/delete/', views.DeleteReviewView.as_view(), name='delete_review'),
+    path('library/books/<int:book_id>/review/<int:review_id>/', views.ReviewDetailView.as_view(), name='book_review'),
+    path('library/books/<int:book_id>/review/<int:review_id>/comment/', views.CreateCommentForReviewView.as_view(), name='comment_review'),
+    path('library/books/<int:book_id>/review/<int:review_id>/comment/<int:comment_id>/delete/',
+        views.DeleteCommentForReviewView.as_view(), name='delete_review_comment'),
 
     # '''Forum URLs'''
     path('forum/', views.ForumView.as_view(), name='global_forum'),
@@ -137,4 +149,7 @@ urlpatterns = [
     path('bookshelf/<int:book_id>/update/', views.UpdateBookShelfView.as_view(), name='update_from_bookshelf'),
     path('bookshelf/<int:book_id>/remove/', views.RemoveFromBookShelfView.as_view(), name='remove_from_bookshelf'),
     
+    # '''Asyn Views'''
+    path('search_books/', views.BookSearchView.as_view(), name='async_book_search')
+  
 ]

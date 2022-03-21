@@ -30,7 +30,7 @@ class BookDetailView(DetailView):
                 context['reviews'] = reviews[:3]
                 sum = 0
                 for review in reviews:
-                    sum += review.rating
+                    sum += review.book_rating
                 avg = sum / len(reviews)
                 avg = round(avg, 2)
                 context['average'] = avg

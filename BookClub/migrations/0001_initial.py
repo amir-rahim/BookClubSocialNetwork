@@ -13,8 +13,8 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('contenttypes', '0002_remove_content_type_name'),
         ('auth', '0012_alter_user_first_name_max_length'),
+        ('contenttypes', '0002_remove_content_type_name'),
     ]
 
     operations = [
@@ -34,6 +34,19 @@ class Migration(migrations.Migration):
             options={
                 'ordering': ['-id'],
             },
+        ),
+        migrations.CreateModel(
+            name='BookReview',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('rating', models.IntegerField(auto_created=True, default=0)),
+                ('created_on', models.DateTimeField(auto_now_add=True)),
+                ('title', models.CharField(max_length=30)),
+                ('content', models.CharField(max_length=1024)),
+                ('slug', models.SlugField(max_length=30)),
+                ('book_rating', models.IntegerField(choices=[(0, 0), (1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6), (7, 7), (8, 8), (9, 9), (10, 10)], default=0, verbose_name='Rating')),
+                ('book', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='BookClub.book')),
+            ],
         ),
         migrations.CreateModel(
             name='Club',
@@ -193,12 +206,26 @@ class Migration(migrations.Migration):
             name='BookReview',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('rating', models.IntegerField(choices=[(0, 0), (1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6), (7, 7), (8, 8), (9, 9), (10, 10)], default=0, verbose_name='Ratings')),
-                ('review', models.CharField(blank=True, max_length=1024, verbose_name='Review:')),
-                ('createdOn', models.DateTimeField(auto_now=True, verbose_name='Reviewed on:')),
-                ('book', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='BookClub.book')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('rating', models.IntegerField(auto_created=True, default=0)),
+                ('created_on', models.DateTimeField(auto_now_add=True)),
+                ('content', models.CharField(max_length=240)),
+                ('book_review', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='BookClub.bookreview')),
+                ('creator', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('votes', models.ManyToManyField(blank=True, to='BookClub.Vote')),
             ],
+            options={
+                'ordering': ['-created_on'],
+            },
+        ),
+        migrations.AddField(
+            model_name='bookreview',
+            name='creator',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+        ),
+        migrations.AddField(
+            model_name='bookreview',
+            name='votes',
+            field=models.ManyToManyField(blank=True, to='BookClub.Vote'),
         ),
         migrations.CreateModel(
             name='BookList',
@@ -220,6 +247,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name='bookreview',
-            unique_together={('book', 'user')},
+            unique_together={('book', 'creator')},
         ),
     ]

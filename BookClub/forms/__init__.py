@@ -7,3 +7,4 @@ from .forum_forms import *
 from .vote_form import *
 from .poll import *
 from .bookshelf import *
+from .review import *
