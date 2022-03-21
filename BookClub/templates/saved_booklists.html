@@ -9,6 +9,7 @@
     <div class="columns">
         <div class="column is-3">
             <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+                {% if own %}
                 <ul class="menu-list">
                     <li>
                         <a href="{% url 'library_dashboard' %}">Dashboard</a>
@@ -22,23 +23,20 @@
                         <a href="{% url 'library_books' %}">View Library</a>
                     </li>
                 </ul>
-                {% if user.is_authenticated %}
-                    <p class="menu-label">
-                        Book Lists
-                    </p>
-                    <ul class="menu-list">
-                            <li>
-                                <a href="{% url 'booklists_list' username=user.username %}">{{ user.get_username }} Book Lists</a>
-                            </li>
-                            <li>
-                                <a href="{% url 'saved_booklists' username=creator.username %}"
-                                class="is-active"><b>Saved Book Lists</b></a>
-                            </li>
-                            <li>
-                                <a href="{% url 'create_booklist' username=user.username %}">Create Book Lists</a>
-                            </li>
-                    </ul>
-                {% endif %}
+                <p class="menu-label">
+                    Book Lists
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'booklists_list' %}">{{ user.get_username }} Book Lists</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'saved_booklists' %}" class="is-active"><b>Saved Book Lists</b></a>
+                    </li>
+                    <li>
+                        <a href="{% url 'create_booklist' %}">Create Book Lists</a>
+                    </li>
+                </ul>
                 <p class="menu-label">
                     Recommender
                 </p>
@@ -47,19 +45,50 @@
                         <a href="#">AI Recommended Books</a>
                     </li>
                 </ul>
-                {% if user.is_authenticated %}
-                    <p class="menu-label">
-                        Reviews
-                    </p>
-                    <ul class="menu-list">
-                        <li>
-                            <a href="{% url 'library_books' %}">View Personal Reviews</a>
-                        </li>
-                    </ul>
+                <p class="menu-label">
+                    Reviews
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'library_books' %}">View Personal Reviews</a>
+                    </li>
+                </ul>
+                {% else %}
+                <p class="menu-label">
+                    {{ creator.username }}'s Profile
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'user_profile' creator.username %}">Profile Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'user_following' creator.username %}">Following</a>
+                    </li>
+                </ul>
+                <p class="menu-label">
+                    {{ creator.username }}'s Clubs
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'user_memberships' creator.username %}">Club Memberships</a>
+                    </li>
+                </ul>
+                <p class="menu-label">
+                    {{ creator.username }}'s Book lists
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'booklists_list' creator.username %}">Book Lists</a>
+                    </li>
+                    <li>
+                        <a class="is-active" href="{% url 'saved_booklists' creator.username %}"><b>Saved Book Lists</b></a>
+                    </li>
+                </ul>
                 {% endif %}
             </aside>
         </div>
         <div class="column is-9">
+            {% if own %}
             <nav class="breadcrumb"
                  aria-label="breadcrumbs"
                  style="padding-left: 5px;">
@@ -71,10 +100,27 @@
                         <a href="{% url 'user_dashboard' %}">{{ creator.username }}</a>
                     </li>
                     <li>
+                        <a href="{% url 'booklists_list' %}">Book Lists</a>
+                    </li>
+                </ul>
+            </nav>
+            {% else %}
+            <nav class="breadcrumb"
+                 aria-label="breadcrumbs"
+                 style="padding-left: 5px;">
+                <ul>
+                    <li>
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'user_profile' username=creator.username %}">{{ creator.username }}</a>
+                    </li>
+                    <li>
                         <a href="{% url 'booklists_list' user.username %}">Book Lists</a>
                     </li>
                 </ul>
             </nav>
+            {% endif %}
             <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
                 <div class="hero-body">
                     <div class="container">
@@ -101,7 +147,7 @@
                                     <tr>
                                         <td class="container">
                                             <p class="is-medium">
-                                                <strong><a href="{% url 'user_booklist' creator.username list.id %}">{{ list.title }}</a></strong>
+                                                <strong><a href="{% url 'user_booklist' list.id %}">{{ list.title }}</a></strong>
                                             </p>
                                         </td>
                                         <td class="container">
@@ -114,23 +160,20 @@
                                                 </p>
                                             {% endif %}
                                         </td>
-                                        {% if self %}
+                                        {% if own %}
                                             <td>
                                                 <form method="post"
-                                                    action="{% url 'remove_saved_booklist' username=creator.username booklist_id=list.id %}">
+                                                    action="{% url 'remove_saved_booklist' booklist_id=list.id %}">
                                                     {% csrf_token %}
                                                     <button type="submit" class="button is-info">Remove from saved</button>
                                                 </form>
                                             </td>
-                        
-                                        {% else %}
-                                            
                                         {% endif %}
                                     </tr>
                                 {% empty %}
                                     <div class="box">
                                         No saved lists.
-                                        {% if self %}
+                                        {% if own %}
                                         You can save other user's lists by visiting their profiles.
                                         {% endif %}
                                     </div>

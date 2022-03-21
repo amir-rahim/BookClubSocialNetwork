@@ -14,10 +14,10 @@
                 </p>
                 <ul class="menu-list">
                     <li>
-                        <a href="{% url 'booklists_list' user.username %}">My Book Lists</a>
+                        <a href="{% url 'booklists_list' %}">My Book Lists</a>
                     </li>
                     <li>
-                        <a href="{% url 'create_booklist' user.username %}">Create Book List</a>
+                        <a href="{% url 'create_booklist' %}">Create Book List</a>
                     </li>
                     <li>
                         <a>Saved Lists</a>
@@ -37,7 +37,7 @@
                         <a href="{% url 'user_dashboard' %}">{{ user.username }}</a>
                     </li>
                     <li>
-                        <a href="{% url 'booklists_list' user.username %}">Book Lists</a>
+                        <a href="{% url 'booklists_list' %}">Book Lists</a>
                     </li>
                     <li>
                         <a>Edit</a>
@@ -55,7 +55,7 @@
             <div class="columns">
                 <div class="column is-12">
                     <form class=""
-                          action="{% url 'edit_booklist' booklist_id=id username=request.user.username %}"
+                          action="{% url 'edit_booklist' booklist_id=id %}"
                           method="post">
                         {% csrf_token %}
                         {% include 'partials/bulma_form.html' with form=form %}

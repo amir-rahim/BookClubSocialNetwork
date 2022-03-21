@@ -26,10 +26,7 @@
                     </p>
                     <ul class="menu-list">
                         <li>
-                            <a class="is-active"><b>Manage Club</b></a>
-                        </li>
-                        <li>
-                            <a>Club Settings</a>
+                            <a class="is-active" href="{% url 'edit_club' club.club_url_name %}"><b>Manage Club</b></a>
                         </li>
                     </ul>
                 {% endif %}
@@ -38,10 +35,10 @@
                 </p>
                 <ul class="menu-list">
                     <li>
-                        <a>Forum</a>
+                        <a href="{% url 'club_forum' club.club_url_name %}">Forum</a>
                     </li>
                     <li>
-                        <a>Members Reviews</a>
+                        <a href="#">Members Reviews</a>
                     </li>
                 </ul>
                 <p class="menu-label">
