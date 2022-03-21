@@ -1,0 +1,61 @@
+<aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+    <p class="menu-label">
+        Club Views
+    </p>
+    <ul class="menu-list">
+        <li>
+            <a class="is-active"
+               href="{% url 'club_dashboard' current_club.club_url_name %}"><b>Dashboard</b></a>
+        </li>
+        <li>
+            <a href="{% url 'member_list' current_club.club_url_name %}">Member List</a>
+        </li>
+        <li>
+            <a href="{% url 'applicant_list' current_club.club_url_name %}">Applicant List</a>
+        </li>
+        <li>
+            <a href="{% url 'club_recommendations' current_club.club_url_name %}">Recommendations</a>
+        </li>
+    </ul>
+    {% if user == current_club.get_club_owner %}
+        <p class="menu-label">
+            Club Administration
+        </p>
+        <ul class="menu-list">
+            <li>
+                <a href="{% url 'edit_club' current_club.club_url_name %}">Manage Club</a>
+            </li>
+            <li>
+                <a>Club Settings</a>
+            </li>
+        </ul>
+    {% endif %}
+    <p class="menu-label">
+        Forum & Reviews
+    </p>
+    <ul class="menu-list">
+        <li>
+            <a href="{% url 'club_forum' current_club.club_url_name %}">Forum</a>
+        </li>
+        <li>
+            <a href="#">Members Reviews</a>
+        </li>
+    </ul>
+    <p class="menu-label">
+        Meetings
+    </p>
+    <ul class="menu-list">
+        <li>
+            <a href="{% url 'meeting_list' current_club.club_url_name %}">All Meetings</a>
+        </li>
+        <li>
+            <a href="{% url 'create_meeting' current_club.club_url_name %}">Create a Meeting</a>
+        </li>
+        <li>
+            <a href="#">Joined Upcoming Meetings</a>
+        </li>
+        <li>
+            <a href="#">Prior Meetings</a>
+        </li>
+    </ul>
+</aside>
