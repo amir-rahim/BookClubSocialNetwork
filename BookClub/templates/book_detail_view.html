@@ -125,18 +125,18 @@ View this book's details and reviews here.
                                 <div class="box">
                                     <header>
                                         <p class="card-header-title is-vcentered">
-                                            <span class="has-text-grey-light">Posted by: {{ review.user }} - {{ review.createdOn | timesince }} ago</span>
+                                            <span class="has-text-grey-light">Posted by: {{ review.creator }} - {{ review.created_on | timesince }} ago</span>
                                         </p>
                                     </header>
                                     <div class="card-content">
                                         <div class="content">
                                             <span class="has-text-black"><b>Rating:</b> {{ review.rating }}/10</span>
                                             <br/>
-                                            <span class="has-text-grey"><b>Review:</b> {{ review.review }}</span>
+                                            <span class="has-text-grey"><b>Review:</b> {{ review.content }}</span>
                                         </div>
                                     </div>
                                     <footer class="card-footer">
-                                        <a class="card-footer-item" href="#">
+                                        <a class="card-footer-item" href="{% url 'book_review' book_id=review.book.id review_id=review.id %}">
                                             View
                                         </a>
                                     </footer>
@@ -174,7 +174,6 @@ View this book's details and reviews here.
                                 </header>
                                 <div class="card-content">
                                     <div class="content">
-                                        
                                         <form action="{% url 'add_to_bookshelf' book_id=book.id %}" method="post">
                                             {% csrf_token %}
                                             <div class="field has-addons">
@@ -307,9 +306,7 @@ View this book's details and reviews here.
                                     </a>
                                 </footer>
                             </div>
-
                         {% else %}
-
                             <div class="card">
                                 <header class="card-header">
                                     <p class="card-header-title is-vcentered">
@@ -330,7 +327,6 @@ View this book's details and reviews here.
                                     </a>
                                 </footer>
                             </div>
-
                         {% endif %}
                     </section>
                 </div>
