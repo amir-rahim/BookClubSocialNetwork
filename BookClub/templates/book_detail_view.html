@@ -165,7 +165,7 @@ View this book's details and reviews here.
                     </section>
                     <section class="tab-content">
                         {% if user.is_authenticated %}
-
+                            {% if not in_bookshelf %}
                             <div class="card">
                                 <header class="card-header">
                                     <p class="card-header-title is-vcentered">
@@ -174,11 +174,12 @@ View this book's details and reviews here.
                                 </header>
                                 <div class="card-content">
                                     <div class="content">
+                                        
                                         <form action="{% url 'add_to_bookshelf' book_id=book.id %}" method="post">
                                             {% csrf_token %}
                                             <div class="field has-addons">
-                                                <div class="control">
-                                                    <div class="select">
+                                                <div class="control is-expanded">
+                                                    <div class="select is-fullwidth">
                                                         <select required id="status" name="status">
                                                             <option value="" selected disabled hidden>
                                                                 Choose here
@@ -211,6 +212,59 @@ View this book's details and reviews here.
                                     </a>
                                 </footer>
                             </div>
+                            {% else %}
+                            <div class="card">
+                                <header class="card-header">
+                                    <p class="card-header-title is-vcentered">
+                                        <span class="has-text-black"><b>Update in your Bookshelf: </b></span>
+                                    </p>
+                                </header>
+                                <div class="card-content">
+                                    <form action="{% url 'update_from_bookshelf' book_id=book.id %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="field has-addons">
+                                            <div class="control is-expanded">
+                                                <div class="select is-fullwidth">
+                                                    <select required id="status" name="status">
+                                                        <option value="" selected disabled hidden>
+                                                            Choose here
+                                                        </option>
+                                                        <option value="0">
+                                                            To Read
+                                                        </option>
+                                                        <option value="1">
+                                                            Reading
+                                                        </option>
+                                                        <option value="2">
+                                                            On Hold
+                                                        </option>
+                                                        <option value="3">
+                                                            Completed
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="control">
+                                                <input type="submit" value="Update" class="button is-info"/>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <form action="{% url 'remove_from_bookshelf' book_id=book.id %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="field">
+                                            <div class="control is-fullwidth">
+                                                <input type="submit" value="Delete" class="button is-danger"/>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <footer class="card-footer">
+                                    <a class="card-footer-item" href="{% url 'bookshelf' %}">
+                                        View your bookshelf
+                                    </a>
+                                </footer>
+                            </div>
+                            {% endif %}
 
                             <br/>
 
@@ -226,8 +280,8 @@ View this book's details and reviews here.
                                             {% csrf_token %}
                                             <input type="hidden" id="book" name="book" value="{{ book.id }}"/>
                                             <div class="field has-addons">
-                                                <div class="control">
-                                                    <div class="select">
+                                                <div class="control is-expanded">
+                                                    <div class="select is-fullwidth">
                                                         <select required id="booklist" name="booklist">
                                                             <option value="" selected disabled hidden>
                                                                 Choose here
