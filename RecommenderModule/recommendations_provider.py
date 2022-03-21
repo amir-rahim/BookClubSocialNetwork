@@ -1,5 +1,6 @@
 from RecommenderModule.recommenders.popular_books_recommender import PopularBooksRecommender
 from RecommenderModule.recommenders.item_based_recommender import ItemBasedRecommender
+from RecommenderModule.recommenders.resources.library import Library
 
 """Get the 10 most popular books recommended to the user (that the user has not read yet).
     Returns a list of ISBN numbers."""
@@ -40,3 +41,8 @@ def get_club_personalised_recommendations(club_url_name):
 def retrain_item_based_recommender(parameters={}):
     item_based_recommender = ItemBasedRecommender()
     item_based_recommender.fit_and_save(parameters=parameters)
+
+"""Get the ISBN value of all books in the item-based trainset"""
+def get_list_of_all_books_in_item_based_trainset():
+    library = Library()
+    return library.get_list_of_all_books_in_trainset()

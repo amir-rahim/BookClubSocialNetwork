@@ -3,6 +3,7 @@ from BookClub.models import User, Book, Club, ClubMembership
 from RecommenderModule.recommenders.resources.library import Library
 from RecommenderModule.recommenders.resources.data_provider import DataProvider
 from collections import Counter
+import joblib
 
 @tag('recommenders')
 class LibraryTestCase(TestCase):
@@ -123,3 +124,36 @@ class LibraryTestCase(TestCase):
         counter = Counter(books)
         self.assertEqual(counter.get(self.book_isbn), 2)
 
+    def test_import_item_based_trainset(self):
+        self.assertTrue(self.library_django.trainset is None)
+        self.library_django.import_item_based_trainset()
+        trainset1 = self.library_django.trainset
+        self.assertFalse(trainset1 is None)
+        self.assertTrue(trainset1.n_items > 0)
+        path_to_item_based_trainset = "RecommenderModule/recommenders/resources/item_based_model/trainset.sav"
+        trainset2 = joblib.load(path_to_item_based_trainset)
+        self.assertEqual(trainset1.all_items(), trainset2.all_items())
+
+    def test_get_list_of_all_books_in_trainset_with_trainset_provided(self):
+        self.set_up_library_trainset()
+        books1 = self.library_trainset.get_list_of_all_books_in_trainset()
+        self.assertFalse(books1 is None)
+        self.assertNotEqual(books1, [])
+        trainset = self.library_trainset.trainset
+        self.assertEqual(len(books1), trainset.n_items)
+        books2 = []
+        for inner_id in trainset.all_items():
+            books2.append(trainset.to_raw_iid(inner_id))
+        self.assertEqual(books1, books2)
+
+    def test_get_list_of_all_books_in_trainset_from_imported_item_based_trainset(self):
+        books1 = self.library_django.get_list_of_all_books_in_trainset()
+        self.assertFalse(books1 is None)
+        self.assertNotEqual(books1, [])
+        path_to_item_based_trainset = "RecommenderModule/recommenders/resources/item_based_model/trainset.sav"
+        trainset = joblib.load(path_to_item_based_trainset)
+        self.assertEqual(len(books1), trainset.n_items)
+        books2 = []
+        for inner_id in trainset.all_items():
+            books2.append(trainset.to_raw_iid(inner_id))
+        self.assertEqual(books1, books2)
