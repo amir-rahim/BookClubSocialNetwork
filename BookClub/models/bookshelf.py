@@ -4,6 +4,9 @@ from BookClub.models import User, Book
 
 
 class BookShelf(models.Model):
+    class Meta:
+        ordering = ['-id']
+
     class ListType(models.IntegerChoices):
         TO_READ = 0
         READING = 1
