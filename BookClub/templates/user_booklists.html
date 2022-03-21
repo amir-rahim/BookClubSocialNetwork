@@ -82,14 +82,29 @@
             <div class="columns">
                 <div class="column is-12">
                     <div class="container">
-                        <table class="table is-fullwidth is-hoverable is-striped is-bordered">
+                        <table class="table is-fullwidth is-hoverable">
+                            {% if booklists %}
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Book List</th>
+                                        <th scope="col">Creator</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                            {% endif %}
                             <tbody>
                                 {% for list in booklists %}
                                     <tr>
                                         <td class="container">
                                             <p class="is-medium">
-                                                <strong><a href="{% url 'user_booklist' user.username list.id %}">{{ list.title }}</a></strong>
+                                                <strong><a href="{% url 'user_booklist' creator.username list.id %}">{{ list.title }}</a></strong>
                                             </p>
+                                        </td>
+                                        <td class="container">
+                                            {{ creator.username }}
+                                        </td>
+                                        <td class="container">
                                             {% if list.description %}
                                                 <p>
                                                     {{ list.description }}
@@ -97,17 +112,35 @@
                                             {% endif %}
                                         </td>
                                         {% if self %}
-                                        <td style="width:21%; text-align:right;">
-                                            <div class="buttons">
-                                                <form method="get"
-                                                    action="{% url 'edit_booklist' booklist_id=list.id username=request.user.username %}">
-                                                    <button class="button is-dark" style="margin-right: 5px">
-                                                        <span>Edit</span>
-                                                    </button>
-                                                </form>
-                                                {% include 'partials/delete_button_and_modal.html' with delete_item=list delete_modal_id=list.pk %}
-                                            </div>
-                                        </td>
+                                            <td style="width:21%; text-align:right;">
+                                                <div class="buttons">
+                                                    <form method="get"
+                                                        action="{% url 'edit_booklist' booklist_id=list.id username=request.user.username %}">
+                                                        <button class="button is-dark" style="margin-right: 5px">
+                                                            <span>Edit</span>
+                                                        </button>
+                                                    </form>
+                                                    {% include 'partials/delete_button_and_modal.html' with delete_item=list delete_modal_id=list.pk %}
+                                                </div>
+                                            </td>
+                                        {% else %}
+                                            {% if not list in saved_booklists %}
+                                                <td>
+                                                    <form method="post"
+                                                        action="{% url 'save_booklist' username=creator.username booklist_id=list.id %}">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="button is-info">Save</button>
+                                                    </form>
+                                                </td>
+                                            {% else %}
+                                                <td>
+                                                    <form method="post"
+                                                        action="{% url 'remove_saved_booklist' username=creator.username booklist_id=list.id %}">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="button is-info">Remove from saved</button>
+                                                    </form>
+                                                </td>
+                                            {% endif %}
                                         {% endif %}
                                     </tr>
                                 {% empty %}
