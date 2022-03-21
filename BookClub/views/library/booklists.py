@@ -177,3 +177,24 @@ class RemoveFromBookListView(LoginRequiredMixin, ListView):
 
         return redirect(self.redirect_location, username=self.kwargs['username'],
                         booklist_id=self.kwargs['booklist_id'])
+
+class SavedBooklistsListView(LoginRequiredMixin, ListView):
+    http_method_names = ['get']
+    model = BookList
+    context_object_name = 'booklists'
+    template_name = 'saved_booklists.html'
+
+    def get_queryset(self):
+        user = get_object_or_404(User, username=self.kwargs['username'])
+        saved_booklists = user.get_saved_booklists()
+        return saved_booklists
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        creator = User.objects.get(username=self.kwargs['username'])
+        context['creator'] = creator
+        #context['self'] = self.request.user == creator
+        #context['base_delete_url'] = reverse_lazy('delete_booklist', kwargs={'username': creator.username})
+        return context
