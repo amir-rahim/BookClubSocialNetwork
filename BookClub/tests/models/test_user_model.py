@@ -87,3 +87,8 @@ class UserModelTestCase(TestCase):
     def test_get_saved_booklists(self):
         self.user.saved_booklists.add(self.booklist)
         self.assertQuerysetEqual(self.user.saved_booklists.all(),self.user.get_saved_booklists())
+
+    def test_remove_from_saved_booklists_works_correctly(self):
+        self.user.save_booklist(self.booklist)
+        self.user.remove_from_saved_booklists(self.booklist)
+        self.assertFalse(self.user.saved_booklists.all().filter(pk=self.booklist.id))
