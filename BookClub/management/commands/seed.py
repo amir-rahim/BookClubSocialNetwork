@@ -51,8 +51,9 @@ class Command(BaseCommand):
             except IntegrityError as e:
                 print("Integrity error was found, attempting again")
                 print(str(e))
+                continue
 
-        call_command('importbooks', 5)
+        #call_command('importbooks', 5)
         id1 = Book.objects.all()[0].id
         print(id1)
         self.add_reviews_to(id1)
@@ -63,7 +64,7 @@ class Command(BaseCommand):
         self.create_global_forum()
 
     def create_club(self):
-        genOwner = Command.generateUser()
+        genOwner = self.generateUser()
         name = self.faker.sentence(nb_words=1)
         club = Club.objects.create(
             name=name,
