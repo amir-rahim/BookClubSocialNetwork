@@ -126,9 +126,13 @@ urlpatterns = [
     path('user/<str:username>/lists/<int:booklist_id>/',
          views.UserBookListView.as_view(), name='user_booklist'),
     path('user/<str:username>/lists/<int:booklist_id>/<int:book_id>/delete', views.RemoveFromBookListView.as_view(), name='remove_book'),
-    path('user/<str:username>/lists/create/',
-         views.CreateBookListView.as_view(), name='create_booklist'),
+    
 
     # '''Agenda URLs'''
     path('agenda/', views.AgendaView.as_view(), name='agenda'),
+    
+    # '''Bookshelf URLs'''
+    path('bookshelf/', views.BookShelfView.as_view(), name='bookshelf'),
+    path('bookshelf/add/<int:book_id>/', views.AddToBookShelfView.as_view(), name='add_to_bookshelf'),
+    
 ]
