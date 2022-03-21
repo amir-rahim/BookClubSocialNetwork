@@ -1,0 +1,145 @@
+{% extends 'base_content.html' %}
+{% block page_title %}
+    Book Lists
+{% endblock page_title %}
+{% block page_subtitle %}
+    View all book lists you've created
+{% endblock page_subtitle %}
+{% block content %}
+    <div class="columns">
+        <div class="column is-3">
+            <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'library_dashboard' %}">Dashboard</a>
+                    </li>
+                </ul>
+                <p class="menu-label">
+                    Our Book Library
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'library_books' %}">View Library</a>
+                    </li>
+                </ul>
+                {% if user.is_authenticated %}
+                    <p class="menu-label">
+                        Book Lists
+                    </p>
+                    <ul class="menu-list">
+                            <li>
+                                <a href="{% url 'booklists_list' username=user.username %}">{{ user.get_username }} Book Lists</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'saved_booklists' username=creator.username %}"
+                                class="is-active"><b>Saved Book Lists</b></a>
+                            </li>
+                            <li>
+                                <a href="{% url 'create_booklist' username=user.username %}">Create Book Lists</a>
+                            </li>
+                    </ul>
+                {% endif %}
+                <p class="menu-label">
+                    Recommender
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="#">AI Recommended Books</a>
+                    </li>
+                </ul>
+                {% if user.is_authenticated %}
+                    <p class="menu-label">
+                        Reviews
+                    </p>
+                    <ul class="menu-list">
+                        <li>
+                            <a href="{% url 'library_books' %}">View Personal Reviews</a>
+                        </li>
+                    </ul>
+                {% endif %}
+            </aside>
+        </div>
+        <div class="column is-9">
+            <nav class="breadcrumb"
+                 aria-label="breadcrumbs"
+                 style="padding-left: 5px;">
+                <ul>
+                    <li>
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'user_dashboard' %}">{{ creator.username }}</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'booklists_list' user.username %}">Book Lists</a>
+                    </li>
+                </ul>
+            </nav>
+            <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
+                <div class="hero-body">
+                    <div class="container">
+                        <h1 class="title">Saved Book Lists</h1>
+                    </div>
+                </div>
+            </section>
+            <div class="columns">
+                <div class="column is-12">
+                    <div class="container">
+                        <table class="table is-fullwidth is-hoverable">
+                            {% if booklists %}
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Book List</th>
+                                        <th scope="col">Creator</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                            {% endif %}
+                            <tbody>
+                                {% for list in booklists %}
+                                    <tr>
+                                        <td class="container">
+                                            <p class="is-medium">
+                                                <strong><a href="{% url 'user_booklist' creator.username list.id %}">{{ list.title }}</a></strong>
+                                            </p>
+                                        </td>
+                                        <td class="container">
+                                            {{ creator.username }}
+                                        </td>
+                                        <td class="container">
+                                            {% if list.description %}
+                                                <p>
+                                                    {{ list.description }}
+                                                </p>
+                                            {% endif %}
+                                        </td>
+                                        {% if self %}
+                                            <td>
+                                                <form method="post"
+                                                    action="{% url 'remove_saved_booklist' username=creator.username booklist_id=list.id %}">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="button is-info">Remove from saved</button>
+                                                </form>
+                                            </td>
+                        
+                                        {% else %}
+                                            
+                                        {% endif %}
+                                    </tr>
+                                {% empty %}
+                                    <div class="box">
+                                        No saved lists.
+                                        {% if self %}
+                                        You can save other user's lists by visiting their profiles.
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
