@@ -1,13 +1,14 @@
 from django.db import models
 from django.urls import reverse
 
-from BookClub.models import User, Book, UserCreatedObject
+from BookClub.models import Book, UserCreatedObject
 
 
 class BookList(UserCreatedObject):
     title = models.CharField(unique=False, blank=False, max_length=120)
     description = models.CharField(unique=False, blank=True, max_length=240)
     books = models.ManyToManyField(Book, blank=True)
+    private = models.BooleanField(default=False, blank=False, null=False)
 
     def get_absolute_url(self):
         return reverse('user_booklist', kwargs={'username': self.creator.username, 'booklist_id': self.pk})
@@ -26,3 +27,6 @@ class BookList(UserCreatedObject):
 
     def remove_book(self, book):
         self.books.remove(book)
+
+    def toggle_privacy(self):
+        self.private = not self.private
