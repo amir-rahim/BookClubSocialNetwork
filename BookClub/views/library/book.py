@@ -1,7 +1,7 @@
 """Book Related Views"""
 from django.views.generic import DetailView, ListView
 
-from BookClub.models import Book, BookReview, BookList
+from BookClub.models import Book, BookReview, BookList, BookShelf
 
 
 class BookDetailView(DetailView):
@@ -36,6 +36,9 @@ class BookDetailView(DetailView):
                     context['more'] = True
             else:
                 reviews = None
+
+        context['in_bookshelf'] = BookShelf.objects.filter(user=self.request.user, book=book).exists()
+        
         return context
 
 
