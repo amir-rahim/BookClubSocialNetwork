@@ -70,8 +70,8 @@ class DeleteBookListView(TestCase, LogInTester):
         before_count = BookList.objects.count()
 
         url = reverse('delete_booklist', kwargs={'username': 'johndoe',
-                                                 'list_id': 5})
-        self.assertFalse(BookList.objects.filter(pk=5, creator=self.user).exists())
+                                                 'list_id': 55})
+        self.assertFalse(BookList.objects.filter(pk=55, creator=self.user).exists())
 
         redirect_url = reverse('booklists_list', kwargs={'username': 'johndoe'})
         response = self.client.post(url, follow=True)
