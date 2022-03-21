@@ -75,13 +75,14 @@ class SavedBookListsViewTestCase(TestCase, LogInTester):
         for userlist in lists_by_other_users:
             self.assertIn(userlist, response_lists)
 
-    # def test_user_viewing_own_saved_booklists_is_recognized(self):
-    #     self.client.login(username=self.user.username, password='Password123')
-    #     response = self.client.get(self.url)
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertTemplateUsed(response, 'user_booklists.html')
-    #     self.assertEqual(response.context['self'], True)
-    #     self.assertContains(response, '<span>Remove</span>')
+    def test_user_viewing_own_saved_booklists_is_recognized(self):
+        self.client.login(username=self.user.username, password='Password123')
+        self.user.save_booklist(self.booklist_to_save)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'saved_booklists.html')
+        self.assertEqual(response.context['self'], True)
+        self.assertContains(response, 'Remove from saved')
 
     def test_user_can_view_other_users_saved_booklists_list(self):
         self.client.login(username=self.user.username, password='Password123')
@@ -98,12 +99,13 @@ class SavedBookListsViewTestCase(TestCase, LogInTester):
 
     def test_user_without_saved_booklists_viewing_own_saved_booklists(self):
         self.client.login(username=self.user.username, password='Password123')
-        url = reverse('saved_booklists', kwargs={'username': self.creator.username})
+        url = reverse('saved_booklists', kwargs={'username': self.user.username})
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'saved_booklists.html')
         response_lists = list(response.context['booklists'])
         self.assertEqual(len(response_lists), 0)
-        self.assertContains(response, "No saved lists. You can save other user's lists by visiting their profiles.")
+        self.assertContains(response, "No saved lists.")
+        self.assertContains(response, "You can save other user's lists by visiting their profiles.")
 
