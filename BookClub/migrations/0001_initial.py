@@ -17,6 +17,14 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
+            name='AbstractRecommendations',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('recommendations', models.JSONField(default=list)),
+                ('modified', models.BooleanField(default=True)),
+            ],
+        ),
+        migrations.CreateModel(
             name='Book',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -229,6 +237,22 @@ class Migration(migrations.Migration):
             options={
                 'abstract': False,
             },
+        ),
+        migrations.CreateModel(
+            name='UserRecommendations',
+            fields=[
+                ('abstractrecommendations_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='BookClub.abstractrecommendations')),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='recommendations', to=settings.AUTH_USER_MODEL)),
+            ],
+            bases=('BookClub.abstractrecommendations',),
+        ),
+        migrations.CreateModel(
+            name='ClubRecommendations',
+            fields=[
+                ('abstractrecommendations_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='BookClub.abstractrecommendations')),
+                ('club', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='recommendations', to='BookClub.club')),
+            ],
+            bases=('BookClub.abstractrecommendations',),
         ),
         migrations.AddConstraint(
             model_name='clubmembership',

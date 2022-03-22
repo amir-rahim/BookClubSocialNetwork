@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand
+from django.contrib.auth.hashers import make_password
 import random
 
 from faker import Faker
@@ -79,7 +80,7 @@ class Command(BaseCommand):
             u = User(
                 username=faker.unique.user_name(),
                 email=faker.unique.email(),
-                password="Password123",
+                password='pbkdf2_sha256$260000$qw2y9qdBlYmFUZVdkUqlOO$nuzhHvRnVDDOAo70OL14IEqk+bASVNTLjWS1N+c40VU=',
             )
             model_instances.append(u)
 
@@ -98,7 +99,6 @@ class Command(BaseCommand):
         data = DataFrame(pd.read_csv(file_path, header=0, encoding= "ISO-8859-1", sep=';'))
 
         df_records = data.to_dict('records')
-        u = 0
         bc = 0
         i = 0
         model_instances = [ ]
@@ -109,8 +109,6 @@ class Command(BaseCommand):
                     print(i)
                 if Book.objects.filter(ISBN=record['ISBN']).count() == 0:
                     bc += 1
-                elif User.objects.filter(pk = record['User-ID']).count() == 0:
-                    u += 1
                 else:
                     b = BookReview(
                         book=self.getBook(record['ISBN']),
@@ -123,8 +121,6 @@ class Command(BaseCommand):
                 continue
 
         BookReview.objects.bulk_create(model_instances)
-
-        print(u)
         print(bc)
 
 

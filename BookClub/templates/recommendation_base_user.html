@@ -1,9 +1,9 @@
 {% extends 'base_content.html' %}
 {% block page_title %}
-    Library Books
+    Recommendations
 {% endblock page_title %}
 {% block page_subtitle %}
-    This is our Library, you can look at our books and click and see further details and reviews!
+    View your personalised recommendations here!
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
@@ -40,7 +40,7 @@
                 </p>
                 <ul class="menu-list">
                     <li>
-                        <a href="{% url 'user_recommendations' %}">AI Recommended Books</a>
+                        <a href="#">AI Recommended Books</a>
                     </li>
                 </ul>
                 {% if user.is_authenticated %}
@@ -79,7 +79,35 @@
                     </div>
                 </div>
             </section>
-            {% include 'partials/book_search.html' %}
+            <div id="replaceable-content">
+                <p class="is-centered" style="margin-bottom:100px;">
+                <strong>Getting your personalised book recommendations</strong>
+                </p>
+                <progress class="progress is-primary" max="100">30%</progress>
+                
+            </div>
         </div>
+        
     </div>
+    <script>
+        const view = "/user_recommendations/"
+        const replaceablecontent = $("#replaceable-content")
+        var request_parameters = {}
+        
+        $(document).ready(function(){
+            $.getJSON(view, request_parameters).done(response => {
+            replaceablecontent.fadeTo('fast', 0).promise().then(() => {
+                replaceablecontent.html(response['html_from_view'])
+                replaceablecontent.fadeTo('fast', 1)
+            }).then( () => {
+                var carousels = bulmaCarousel.attach('.carousel', {
+                    pagination: false,
+                    slidesToShow: 3, 
+                    slidesToScroll: 1,
+                    infinite: true,
+                });
+            });
+            });
+        });
+    </script>
 {% endblock content %}
