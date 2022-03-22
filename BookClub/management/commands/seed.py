@@ -18,7 +18,7 @@ class Command(BaseCommand):
 
     def generateUser(self):
         faker = Faker('en_GB')
-
+    
         user = User.objects.create_user(
             username=faker.user_name(),
             email=faker.email(),
@@ -82,12 +82,12 @@ class Command(BaseCommand):
         ran_moderator = random.randrange(1, 3)
 
         for x in range(ran_applicant):
-            club.add_applicant(Command.generateUser())
+            club.add_applicant(self.generateUser())
         for y in range(ran_member):
-            club.add_member(Command.generateUser())
+            club.add_member(self.generateUser())
         # 1 officer
         for z in range(ran_moderator):
-            club.add_moderator(Command.generateUser())
+            club.add_moderator(self.generateUser())
 
     def add_reviews_to(self, pk):
         try:
