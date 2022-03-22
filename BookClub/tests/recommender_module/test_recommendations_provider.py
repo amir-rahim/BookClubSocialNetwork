@@ -2,6 +2,7 @@ from django.test import TestCase, tag
 from BookClub.models import User, Book, BookReview, Club
 from RecommenderModule import recommendations_provider
 from RecommenderModule.recommenders.resources.item_based_collaborative_filtering_methods import ItemBasedCollaborativeFilteringMethods
+import joblib
 
 @tag('recommenders')
 class RecommendationsProviderTestCase(TestCase):
@@ -132,3 +133,14 @@ class RecommendationsProviderTestCase(TestCase):
     def test_get_club_personalised_recommendations_wrong_club_url_name(self):
         recommendations = recommendations_provider.get_club_personalised_recommendations("-")
         self.assertEqual(recommendations, [])
+
+    def test_get_list_of_all_books_in_item_based_trainset(self):
+        books1 = recommendations_provider.get_list_of_all_books_in_item_based_trainset()
+        self.assertFalse(books1 is None)
+        self.assertNotEqual(books1, [])
+        path_to_item_based_trainset = "RecommenderModule/recommenders/resources/item_based_model/trainset.sav"
+        trainset = joblib.load(path_to_item_based_trainset)
+        books2 = []
+        for inner_id in trainset.all_items():
+            books2.append(trainset.to_raw_iid(inner_id))
+        self.assertEqual(books1, books2)

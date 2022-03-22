@@ -1,9 +1,11 @@
 from BookClub.models import User, BookReview, Club, ClubMembership
+import joblib
 
 """This class acts as a library to recover information about books and ratings."""
 class Library:
 
     trainset = None
+    path_to_item_based_trainset = "RecommenderModule/recommenders/resources/item_based_model/trainset.sav"
 
     def __init__(self, trainset=None):
         self.trainset = trainset
@@ -67,6 +69,23 @@ class Library:
         except:
             return []
 
+    """Get the ISBN value of all books the members of a specified club have rated"""
     def get_list_of_books_rated_by_club(self, club_url_name):
         ratings = self.get_all_ratings_by_club(club_url_name)
         return [rating[0] for rating in ratings]
+
+    """Import the item-based trainset from the trainset.sav file, using joblib"""
+    def import_item_based_trainset(self):
+        try:
+            self.trainset = joblib.load(self.path_to_item_based_trainset)
+        except:
+            print("File trainset.sav is missing.")
+
+    """Get the ISBN value of all books in the (item-based) trainset"""
+    def get_list_of_all_books_in_trainset(self):
+        if self.trainset is None:
+            self.import_item_based_trainset()
+        books = []
+        for inner_id in self.trainset.all_items():
+            books.append(self.trainset.to_raw_iid(inner_id))
+        return books
