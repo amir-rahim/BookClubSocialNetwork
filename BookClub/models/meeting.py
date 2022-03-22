@@ -8,7 +8,7 @@ from BookClub.models import User, Club, Book
 class Meeting(models.Model):
     
     class Meta:
-        ordering=['-created_on']
+        ordering=['-meeting_time']
     class MeetingType(models.TextChoices):
         BOOK = 'B'
         CLUB = 'C'
