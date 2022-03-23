@@ -20,6 +20,12 @@ def get_club_from_url_name(url_name):
         return club[0]
     else:
         raise ObjectDoesNotExist()
+    
+    
+def get_memberships(user):
+    if user.is_authenticated:
+        return user.memberships_set().values_list('club__pk')
+    return []
 
 
 
