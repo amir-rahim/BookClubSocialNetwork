@@ -158,6 +158,9 @@ class Migration(migrations.Migration):
                 ('members', models.ManyToManyField(related_name='meeting_attendees', to=settings.AUTH_USER_MODEL)),
                 ('organiser', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='meeting_organiser', to=settings.AUTH_USER_MODEL)),
             ],
+            options={
+                'ordering': ['-meeting_time'],
+            },
         ),
         migrations.CreateModel(
             name='ForumPost',
