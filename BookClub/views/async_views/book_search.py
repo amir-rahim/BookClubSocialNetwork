@@ -8,7 +8,7 @@ from django.contrib.postgres.search import SearchVector
 from BookClub.models import *
 from BookClub.views.async_views.search_query_builder import SearchQueries
 
-class BookSearchView(TemplateView):
+class SearchView(TemplateView):
     
     paginate_by = 20
     
