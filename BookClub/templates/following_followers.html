@@ -1,0 +1,82 @@
+{% extends 'base_content.html' %}
+{% block page_title %}
+    User Profile
+{% endblock page_title %}
+{% block page_subtitle %}
+    This is the User Profile, this is where you can view other profiles!
+{% endblock page_subtitle %}
+{% block content %}
+    <div class="columns">
+        <div class="column is-3">
+            <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+                <p class="menu-label">
+                    Profile
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'user_profile' user.username %}">Profile Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'user_following' user.username %}" class="is-active"><b>Following</b></a>
+                    </li>
+                </ul>
+                <p class="menu-label">
+                    Clubs
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'user_memberships' user.username %}">Club Memberships</a>
+                    </li>
+                </ul>
+                <p class="menu-label">
+                    Books
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'user_memberships' user.username %}">Book Lists</a>
+                    </li>
+                </ul>
+            </aside>
+        </div>
+        <div class="column is-9">
+            <nav class="breadcrumb"
+                 aria-label="breadcrumbs"
+                 style="padding-left: 5px;">
+                <ul>
+                    <li>
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'user_dashboard' %}">Profile</a>
+                    </li>
+                    <li>
+                        <a>{{ displayed_user.username }}</a>
+                    </li>
+                    <li>
+                        <a>Followers</a>
+                    </li>
+                </ul>
+            </nav>
+            <div id="tabs-with-content">
+                <div class="tabs">
+                    <ul>
+                        <li class="is-active">
+                            <a>Followers</a>
+                        </li>
+                        <li>
+                            <a>Following</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <section class="tab-content">
+                        {% include 'partials/follower_list.html' with followers=followers %}
+                    </section>
+                    <section class="tab-content">
+                        <div class="box">{% include 'partials/followee_list.html' with followees=followees %}</div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
