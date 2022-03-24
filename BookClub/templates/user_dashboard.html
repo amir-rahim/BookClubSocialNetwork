@@ -212,7 +212,7 @@
                 {% endif %}
                     <article class="tile is-child box">
                         <p class="title">
-                            20
+                            {{ booklist_count }}
                         </p>
                         <p class="subtitle">
                             Book Lists
@@ -238,9 +238,10 @@
                 {% else %}
                 <div class="tile is-parent" onclick="window.location='{% url 'user_memberships' username %}';" style="cursor:pointer;">
                 {% endif %}
+                     style="cursor:pointer;">
                     <article class="tile is-child box">
                         <p class="title">
-                            {{ user.get_clubs.count }}
+                            {{ club_count }}
                         </p>
                         <p class="subtitle">
                             Clubs Joined
@@ -254,10 +255,10 @@
                 {% endif %}
                     <article class="tile is-child box">
                         <p class="title">
-                            +19
+                            {{ reputation }}
                         </p>
                         <p class="subtitle">
-                            Review Score
+                            Reputation
                         </p>
                     </article>
                 </div>

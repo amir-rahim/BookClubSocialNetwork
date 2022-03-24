@@ -1,15 +1,10 @@
 from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.shortcuts import redirect
 
-from BookClub.models.club import Club
-from BookClub.models.club_membership import ClubMembership
-from BookClub.models.user import User
-
-
-
+from BookClub.models import User, ClubMembership, Club, ForumPost, ForumComment, BookReviewComment, BookReview
 
 """
 Helpers for checking the authentication level of the user.
@@ -85,7 +80,7 @@ def has_membership(club, user):
         return ClubMembership.objects.filter(user=user, club=club).exists()
     else:
         return False
-    
+
 def has_membership_with_access(club, user):
     if user.is_authenticated:
         return ClubMembership.objects.exclude(membership=ClubMembership.UserRoles.APPLICANT).filter(user=user, club=club).exists()
@@ -97,3 +92,21 @@ def create_membership(club, user, membership):
     new_membership = ClubMembership(
         user=user, club=club, membership=membership)
     new_membership.save()
+
+
+def get_user_reputation(user):
+    forum_post_rating = ForumPost.objects.filter(creator=user).aggregate(Sum('rating'))
+    forum_comment_rating = ForumComment.objects.filter(creator=user).aggregate(Sum('rating'))
+    review_rating = BookReview.objects.filter(creator=user).aggregate(Sum('rating'))
+    review_comment_rating = BookReviewComment.objects.filter(creator=user).aggregate(Sum('rating'))
+
+    return ((forum_post_rating["rating__sum"] or 0) + (forum_comment_rating["rating__sum"] or 0)
+            + (review_rating["rating__sum"] or 0) + (review_comment_rating["rating__sum"] or 0))
+
+def get_club_reputation(club):
+    members = ClubMembership.objects.filter(club=club, membership__gte=ClubMembership.UserRoles.MEMBER)
+    rep = 0
+    for user in members:
+        rep += get_user_reputation(user.user)
+
+    return rep

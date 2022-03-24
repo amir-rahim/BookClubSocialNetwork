@@ -93,7 +93,7 @@
             </div>
             <div class="tile is-ancestor has-text-centered">
                 <div class="tile is-parent"
-                     onclick="location.href='{% url 'member_list' current_club.club_url_name  %}'"
+                     onclick="location.href='{% url 'member_list' current_club.club_url_name %}'"
                      style="cursor: pointer">
                     <article class="tile is-child box">
                         <p class="title">
@@ -104,20 +104,24 @@
                         </p>
                     </article>
                 </div>
-                <div class="tile is-parent">
+                <div class="tile is-parent"
+                     onclick="location.href='{% url 'meeting_list' current_club.club_url_name %}'"
+                     style="cursor: pointer">
                     <article class="tile is-child box">
                         <p class="title">
-                            *meetings*
+                            {{ current_club.get_number_of_meetings }}
                         </p>
                         <p class="subtitle">
                             Meetings
                         </p>
                     </article>
                 </div>
-                <div class="tile is-parent">
+                <div class="tile is-parent"
+                     onclick="location.href='{% url 'club_forum' current_club.club_url_name %}'"
+                     style="cursor: pointer">
                     <article class="tile is-child box">
                         <p class="title">
-                            *posts*
+                            {{ current_club.get_number_of_posts }}
                         </p>
                         <p class="subtitle">
                             Blog Posts
@@ -127,10 +131,10 @@
                 <div class="tile is-parent">
                     <article class="tile is-child box">
                         <p class="title">
-                            *review score*
+                            {{ reputation }}
                         </p>
                         <p class="subtitle">
-                            Overall Review Score
+                            Overall Member Reputation
                         </p>
                     </article>
                 </div>

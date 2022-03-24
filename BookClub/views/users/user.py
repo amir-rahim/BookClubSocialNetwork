@@ -7,7 +7,8 @@ from django.shortcuts import redirect, reverse
 from django.views.generic import FormView, TemplateView, UpdateView, View
 
 from BookClub.forms.user_forms import EditProfileForm, ChangePasswordForm
-from BookClub.models import User, ClubMembership, Club
+from BookClub.models import User, ClubMembership, Club, BookList
+from BookClub.helpers import *
 
 
 class UserDashboardView(LoginRequiredMixin, TemplateView):
@@ -29,6 +30,9 @@ class UserDashboardView(LoginRequiredMixin, TemplateView):
         context['gravatar'] = user.gravatar
         context['username'] = user.username
         context['public_bio'] = user.public_bio
+        context['booklist_count'] = BookList.objects.filter(creator=user).count()
+        context['club_count'] = ClubMembership.objects.filter(user=user).count()
+        context['reputation'] = get_user_reputation(user)
         return context
 
 
