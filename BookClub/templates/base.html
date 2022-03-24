@@ -41,7 +41,7 @@
 				});
 			  });
 
-		
+
         </script>
         <style>
             .card-equal-height {
@@ -66,6 +66,7 @@
     <body>
         {% block body %}{% endblock %}
     </body>
+    {% block js %}{% endblock %}
     <script>
         document.addEventListener('DOMContentLoaded', () => {
           // Functions to open and close a modal
@@ -219,6 +220,6 @@
 		}
 	});
 	});
-		
+
     </script>
 </html>
