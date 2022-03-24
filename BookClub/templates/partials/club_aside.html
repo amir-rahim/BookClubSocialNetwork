@@ -1,0 +1,61 @@
+<aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+    <p class="menu-label">
+        Club Views
+    </p>
+    <ul class="menu-list">
+        <li>
+            <a id="{% url 'club_dashboard' current_club.club_url_name %}"
+               href="{% url 'club_dashboard' current_club.club_url_name %}">Dashboard</a>
+        </li>
+        <li>
+            <a id="{% url 'member_list' current_club.club_url_name %}" href="{% url 'member_list' current_club.club_url_name %}">Member List</a>
+        </li>
+        <li>
+            <a id="{% url 'applicant_list' current_club.club_url_name %}" href="{% url 'applicant_list' current_club.club_url_name %}">Applicant List</a>
+        </li>
+        <li>
+            <a id="{% url 'club_recommendations' current_club.club_url_name %}" href="{% url 'club_recommendations' current_club.club_url_name %}">Recommendations</a>
+        </li>
+    </ul>
+    {% if user == current_club.get_club_owner %}
+        <p class="menu-label">
+            Club Administration
+        </p>
+        <ul class="menu-list">
+            <li>
+                <a id="{% url 'edit_club' current_club.club_url_name %}" href="{% url 'edit_club' current_club.club_url_name %}">Manage Club</a>
+            </li>
+        </ul>
+    {% endif %}
+    <p class="menu-label">
+        Forum & Reviews
+    </p>
+    <ul class="menu-list">
+        <li>
+            <a id="{% url 'club_forum' current_club.club_url_name %}" href="{% url 'club_forum' current_club.club_url_name %}">Forum</a>
+        </li>
+        <li>
+            <a href="#">Members Reviews</a>
+        </li>
+    </ul>
+    <p class="menu-label">
+        Meetings
+    </p>
+    <ul class="menu-list">
+        <li>
+            <a id="{% url 'meeting_list' current_club.club_url_name %}" href="{% url 'meeting_list' current_club.club_url_name %}">All Meetings</a>
+        </li>
+        <li>
+            <a id="{% url 'create_meeting' current_club.club_url_name %}" href="{% url 'create_meeting' current_club.club_url_name %}">Create a Meeting</a>
+        </li>
+    </ul>
+</aside>
+<script>
+    $(window).on("load", function() {
+        active = $('a[href="{{ request.path }}"')
+        active.addClass("is-active")
+        activehtml = active.html()
+        activehtml = "<b>"+activehtml+"</b>"
+        active.html(activehtml)
+    })
+</script>

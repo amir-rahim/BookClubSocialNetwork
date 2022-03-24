@@ -9,7 +9,10 @@
         <link rel="stylesheet" href="{% static 'bulma/css/mystyles.css' %}"/>
         <link rel="stylesheet"
               href="{% static 'bulma-calendar/css/bulma-calendar.min.css' %}"/>
+        <link rel="stylesheet"
+              href="{% static 'bulma-carousel/css/bulma-carousel.min.css' %}"/>
         <script src="{% static 'bulma-calendar/js/bulma-calendar.min.js' %}"></script>
+        <script src="{% static 'bulma-carousel/js/bulma-carousel.min.js' %}"></script>
         <script src="https://kit.fontawesome.com/4c481256fb.js" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script>
@@ -47,6 +50,10 @@
 		
         </script>
         <style>
+
+            .carousel{
+              overflow: hidden;
+            }
             .card-equal-height {
                 display: flex;
                 flex-direction: column;
@@ -55,19 +62,18 @@
             .card-equal-height .card-footer {
                 margin-top: auto;
             }
-            .card{
-                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-                border-radius: 0.5rem;
-            }
 
         </style>
         <title>
-            {% block page_title %}{% endblock page_title %}
+            {% block page_title %}
+            {% endblock page_title %}
         | Novella</title>
-        {% block head %}{% endblock head %}
+        {% block head %}
+        {% endblock head %}
     </head>
     <body>
-        {% block body %}{% endblock body %}
+        {% block body %}
+        {% endblock body %}
     </body>
     <script>
       // Initialize all input of type date
@@ -98,8 +104,29 @@
           });
         }
 
+        var carousels = bulmaCarousel.attach('.carousel', {
+          pagination: false,
+          slidesToShow: 3, 
+          slidesToScroll: 1,
+          infinite: true,
+      });
 
+      // Loop on each carousel initialized
+      for(var i = 0; i < carousels.length; i++) {
+        // Add listener to  event
+        carousels[i].on('before:show', state => {
+          console.log(state);
+        });
+      }
 
+      // Access to bulmaCarousel instance of an element
+      var element = document.querySelector('#my-element');
+      if (element && element.bulmaCarousel) {
+        // bulmaCarousel instance is available as element.bulmaCarousel
+        element.bulmaCarousel.on('before-show', function(state) {
+          console.log(state);
+        });
+      }
 
         document.addEventListener('DOMContentLoaded', () => {
           // Functions to open and close a modal

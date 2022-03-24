@@ -1,0 +1,113 @@
+{% extends 'base_content.html' %}
+{% block page_title %}
+    Recommendations
+{% endblock page_title %}
+{% block page_subtitle %}
+    View your personalised recommendations here!
+{% endblock page_subtitle %}
+{% block content %}
+    <div class="columns">
+        <div class="column is-3">
+            <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'library_dashboard' %}">Dashboard</a>
+                    </li>
+                </ul>
+                <p class="menu-label">
+                    Our Book Library
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'library_books' %}" class="is-active"><b>View Library</b></a>
+                    </li>
+                </ul>
+                {% if user.is_authenticated %}
+                    <p class="menu-label">
+                        Book Lists
+                    </p>
+                    <ul class="menu-list">
+                        <li>
+                            <a href="{% url 'booklists_list' username=user.username %}">{{ user.get_username }} Book Lists</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'create_booklist' username=user.username %}">Create Book Lists</a>
+                        </li>
+                    </ul>
+                {% endif %}
+                <p class="menu-label">
+                    Recommender
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="#">AI Recommended Books</a>
+                    </li>
+                </ul>
+                {% if user.is_authenticated %}
+                    <p class="menu-label">
+                        Reviews
+                    </p>
+                    <ul class="menu-list">
+                        <li>
+                            <a href="{% url 'library_books' %}">View Personal Reviews</a>
+                        </li>
+                    </ul>
+                {% endif %}
+            </aside>
+        </div>
+        <div class="column is-9">
+            <nav class="breadcrumb"
+                 aria-label="breadcrumbs"
+                 style="padding-left: 5px;">
+                <ul>
+                    <li>
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'library_dashboard' %}">Library</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'library_books' %}">Books</a>
+                    </li>
+                </ul>
+            </nav>
+            <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
+                <div class="hero-body">
+                    <div class="container">
+                        <h1 class="title">Books</h1>
+                        <h2 class="subtitle">View our table of books below.</h2>
+                    </div>
+                </div>
+            </section>
+            <div id="replaceable-content">
+                <p class="is-centered" style="margin-bottom:100px;">
+                <strong>Getting your personalised book recommendations</strong>
+                </p>
+                <progress class="progress is-primary" max="100">30%</progress>
+                
+            </div>
+        </div>
+        
+    </div>
+    <script>
+        const view = "/user_recommendations/"
+        const replaceablecontent = $("#replaceable-content")
+        var request_parameters = {}
+        
+        $(document).ready(function(){
+            $.getJSON(view, request_parameters).done(response => {
+            replaceablecontent.fadeTo('fast', 0).promise().then(() => {
+                replaceablecontent.html(response['html_from_view'])
+                replaceablecontent.fadeTo('fast', 1)
+            }).then( () => {
+                var carousels = bulmaCarousel.attach('.carousel', {
+                    pagination: false,
+                    slidesToShow: 3, 
+                    slidesToScroll: 1,
+                    infinite: true,
+                });
+            });
+            });
+        });
+    </script>
+{% endblock content %}
