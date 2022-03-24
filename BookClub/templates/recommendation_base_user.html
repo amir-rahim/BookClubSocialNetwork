@@ -28,10 +28,10 @@
                     </p>
                     <ul class="menu-list">
                         <li>
-                            <a href="{% url 'booklists_list' username=user.username %}">{{ user.get_username }} Book Lists</a>
+                            <a href="{% url 'booklists_list' %}">{{ user.get_username }} Book Lists</a>
                         </li>
                         <li>
-                            <a href="{% url 'create_booklist' username=user.username %}">Create Book Lists</a>
+                            <a href="{% url 'create_booklist' %}">Create Book Lists</a>
                         </li>
                     </ul>
                 {% endif %}
