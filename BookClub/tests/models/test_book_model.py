@@ -1,3 +1,4 @@
+from genericpath import getsize
 from django.forms import ValidationError
 from django.test import TestCase, tag
 
@@ -12,9 +13,11 @@ class BookTestCase(TestCase):
 
     def setUp(self):
         self.book = Book.objects.get(pk=1)
+        self.small = "http://images.amazon.com/images/P/0195153448.01.THUMBZZZ.jpg"
+        self.medium = "http://images.amazon.com/images/P/0195153448.01.MZZZZZZZ.jpg"
+        self.large = "http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg"
         self.data = {
-            "title": "TestBook",
-
+            "title": "TestBook"
         }
 
     def assertValid(self):
@@ -74,3 +77,12 @@ class BookTestCase(TestCase):
         url = self.book.get_absolute_url()
         correct_url = '/library/books/1/'
         self.assertEqual(url, correct_url)
+
+    def test_get_s_size(self):
+        self.assertEqual(1378, self.book.get_s_size())
+
+    def test_get_m_size(self):
+        self.assertEqual(3978, self.book.get_m_size())
+
+    def test_get_l_size(self):
+        self.assertEqual(31578, self.book.get_l_size())

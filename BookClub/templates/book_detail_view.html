@@ -3,7 +3,7 @@
     {{ book.title }}
 {% endblock page_title %}
 {% block page_subtitle %}
-    This is the detail view for {{ book.title }}
+View this book's details and reviews here.
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
@@ -13,35 +13,13 @@
             <div class="card">
                 <div class="card-image">
                     <figure class="image">
-                        {% if book.imageL %}
-                            <img src="{{ book.imageL }}" alt="Book Cover">
+                        {% if book.get_l_size > 50 %}
+                            <img src="//images.weserv.nl/?url={{ book.imageL }}" alt="Book Cover">
                         {% else %}
                             <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
                                  alt="Book Cover">
                         {% endif %}
                     </figure>
-                </div>
-            </div>
-            <hr class="solid">
-            <div class="card">
-                <div class="card-content">
-                    <p class="subtitle">
-                        <b>Published in: </b>
-                        {% if book.getPublicationYear == 1 %}
-                            Information not available
-                        {% else %}
-                            {{ book.getPublicationYear }}
-                        {% endif %}
-                    </p>
-                    <p class="subtitle">
-                        <b>Published by: </b> {{ book.publisher }}
-                    </p>
-                    <p class="subtitle">
-                        <b>ISBN: </b>{{ book.ISBN }}
-                    </p>
-                    <p class="subtitle">
-                        <b>Author: </b>{{ book.author }}
-                    </p>
                 </div>
             </div>
         </div>
@@ -82,42 +60,59 @@
                         <li>
                             <a>
                                 <span class="icon is-small"><i class="fa-solid fa-book-open-reader" aria-hidden="true"></i></span>
-                                <span>Preview</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a>
-                                <span class="icon is-small"><i class="fa-solid fa-link" aria-hidden="true"></i></span>
-                                <span>Key Links</span>
+                                <span>Actions</span>
                             </a>
                         </li>
                     </ul>
                 </div>
                 <div>
                     <section class="tab-content">
+                        <div class="columns">
+                            <div class="column is-6">
+                                <div class="box">
+                                <b>Author:</b>
+                                    <p>
+                                        {{ book.author }}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="column is-6">
+                                <div class="box">
+                                <b>Publisher:</b>
+                                    <p>
+                                        {{ book.publisher }} 
+                                        {% if book.getPublicationYear != 1 %}
+                                            ({{ book.getPublicationYear }})
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                         <div class="box">
                             <b>Description:</b>
                             <p id="description">
                             </p>
                         </div>
-                        <div class="box">
-                            <b>Genre:</b>
-                            <p id="genre">
-                            </p>
+                        <div class="columns">
+                            <div class="column is-6">
+                                <div class="box">
+                                    <b>Genre:</b>
+                                    <p id="genre">
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="column is-6">
+                                <div class="box">
+                                    <b>Page Count:</b>
+                                    <p id="pageCount">
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                         <div class="box">
-                            <b>Page Count:</b>
-                            <p id="pageCount">
-                            </p>
-                        </div>
-                        <div class="box">
-                            <b>On Sale?:</b>
-                            <p id="saleability">
-                            </p>
-                        </div>
-                        <div class="box">
-                            <b>Ebook Available?:</b>
-                            <p id="ebook">
+                            <b>Book ISBN:</b>
+                            <p>
+                                {{ book.ISBN }}
                             </p>
                         </div>
                     </section>
@@ -128,20 +123,23 @@
                             </div>
                             {% for review in reviews %}
                                 <div class="box">
+                                    <header>
+                                        <p class="card-header-title is-vcentered">
+                                            <span class="has-text-grey-light">Posted by: {{ review.creator }} - {{ review.created_on | timesince }} ago</span>
+                                        </p>
+                                    </header>
                                     <div class="card-content">
-                                        <p>
-                                            <b>Review by: </b> {{ review.creator }}
-                                        </p>
-                                        <p>
-                                            <b>Created on: </b>{{ review.created_on }}
-                                        </p>
-                                        <p>
-                                            <b>Review:</b> {{ review.content }}
-                                        </p>
-                                        <p>
-                                            <b>Rating: </b>{{ review.book_rating }}
-                                        </p>
+                                        <div class="content">
+                                            <span class="has-text-black"><b>Rating:</b> {{ review.rating }}/10</span>
+                                            <br/>
+                                            <span class="has-text-grey"><b>Review:</b> {{ review.content }}</span>
+                                        </div>
                                     </div>
+                                    <footer class="card-footer">
+                                        <a class="card-footer-item" href="{% url 'book_review' book_id=review.book.id review_id=review.id %}">
+                                            View
+                                        </a>
+                                    </footer>
                                 </div>
                             {% endfor %}
                             <div class="box">
@@ -166,36 +164,183 @@
                         {% endif %}
                     </section>
                     <section class="tab-content">
-                        <script type="text/javascript" src="//books.google.com/books/previewlib.js"></script>
-                        <script type="text/javascript">GBS_insertEmbeddedViewer('ISBN:8401474736',600,500);</script>
-                    </section>
-                    <section class="tab-content">
+                        {% if user.is_authenticated %}
+                            {% if not in_bookshelf %}
+                            <div class="card">
+                                <header class="card-header">
+                                    <p class="card-header-title is-vcentered">
+                                        <span class="has-text-black"><b>Add to your Bookshelf: </b></span>
+                                    </p>
+                                </header>
+                                <div class="card-content">
+                                    <div class="content">
+                                        <form action="{% url 'add_to_bookshelf' book_id=book.id %}" method="post">
+                                            {% csrf_token %}
+                                            <div class="field has-addons">
+                                                <div class="control is-expanded">
+                                                    <div class="select is-fullwidth">
+                                                        <select required id="status" name="status">
+                                                            <option value="" selected disabled hidden>
+                                                                Choose here
+                                                            </option>
+                                                            <option value="0">
+                                                                To Read
+                                                            </option>
+                                                            <option value="1">
+                                                                Reading
+                                                            </option>
+                                                            <option value="2">
+                                                                On Hold
+                                                            </option>
+                                                            <option value="3">
+                                                                Completed
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="control">
+                                                    <input type="submit" value="Add" class="button is-link"/>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <footer class="card-footer">
+                                    <a class="card-footer-item" href="{% url 'bookshelf' %}">
+                                        View your bookshelf
+                                    </a>
+                                </footer>
+                            </div>
+                            {% else %}
+                            <div class="card">
+                                <header class="card-header">
+                                    <p class="card-header-title is-vcentered">
+                                        <span class="has-text-black"><b>Update in your Bookshelf: </b></span>
+                                    </p>
+                                </header>
+                                <div class="card-content">
+                                    <form action="{% url 'update_from_bookshelf' book_id=book.id %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="field has-addons">
+                                            <div class="control is-expanded">
+                                                <div class="select is-fullwidth">
+                                                    <select required id="status" name="status">
+                                                        <option value="" selected disabled hidden>
+                                                            Choose here
+                                                        </option>
+                                                        <option value="0">
+                                                            To Read
+                                                        </option>
+                                                        <option value="1">
+                                                            Reading
+                                                        </option>
+                                                        <option value="2">
+                                                            On Hold
+                                                        </option>
+                                                        <option value="3">
+                                                            Completed
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="control">
+                                                <input type="submit" value="Update" class="button is-info"/>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <form action="{% url 'remove_from_bookshelf' book_id=book.id %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="field">
+                                            <div class="control is-fullwidth">
+                                                <input type="submit" value="Delete" class="button is-danger"/>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <footer class="card-footer">
+                                    <a class="card-footer-item" href="{% url 'bookshelf' %}">
+                                        View your bookshelf
+                                    </a>
+                                </footer>
+                            </div>
+                            {% endif %}
+
+                            <br/>
+
+                            <div class="card">
+                                <header class="card-header">
+                                    <p class="card-header-title is-vcentered">
+                                        <span class="has-text-black"><b>Add to a Booklist: </b></span>
+                                    </p>
+                                </header>
+                                <div class="card-content">
+                                    <div class="content">
+                                        <form action="{% url 'add_to_book_list' %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" id="book" name="book" value="{{ book.id }}"/>
+                                            <div class="field has-addons">
+                                                <div class="control is-expanded">
+                                                    <div class="select is-fullwidth">
+                                                        <select required id="booklist" name="booklist">
+                                                            <option value="" selected disabled hidden>
+                                                                Choose here
+                                                            </option>
+                                                            {% for list in lists %}
+                                                                <option value="{{ list.id }}">
+                                                                    {{ list.title }}
+                                                                </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="control">
+                                                    <input type="submit" value="Add" class="button is-link"/>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <footer class="card-footer">
+                                    <a class="card-footer-item" href="{% url 'booklists_list' username=user.username %}">
+                                        View your booklists
+                                    </a>
+                                </footer>
+                            </div>
+                        {% else %}
+                            <div class="card">
+                                <header class="card-header">
+                                    <p class="card-header-title is-vcentered">
+                                        <span class="has-text-black"><b>Sign in or sign up to do more!</b></span>
+                                    </p>
+                                </header>
+                                <div class="card-content">
+                                    <div class="content">
+                                        <span>Track your reading or create your own booklists when you sign up!</span>
+                                    </div>
+                                </div>
+                                <footer class="card-footer">
+                                    <a class="card-footer-item" href="{% url 'login' %}">
+                                        Log In
+                                    </a>
+                                    <a class="card-footer-item" href="{% url 'sign_up' %}">
+                                        Sign Up
+                                    </a>
+                                </footer>
+                            </div>
+                        {% endif %}
                     </section>
                 </div>
             </div>
         </div>
     </div>
-    <style>
-        #tabs-with-content .tabs:not(:last-child) {
-          margin-bottom: 0;
-        }
-
-        #tabs-with-content .tab-content {
-          padding: 1rem;
-          display: none;
-        }
-
-        #tabs-with-content .tab-content.is-active {
-          display: block;
-        }
-    </style>
     <script>
         window.onload = function() {
-            if (String({{ book.ISBN }}).length < 10) {
-                var url = "https://www.googleapis.com/books/v1/volumes?q=isbn:0" + String({{ book.ISBN }});
+
+            if ("{{ book.ISBN }}".length <= 9) {
+                var url = "https://www.googleapis.com/books/v1/volumes?q=isbn:0" + "{{ book.ISBN }}";
             }
             else {
-                var url = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + String({{ book.ISBN }});
+                var url = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + "{{ book.ISBN }}";
             }
 
             const xhttp = new XMLHttpRequest();
@@ -217,20 +362,7 @@
                         var pageCount = data[key].volumeInfo.pageCount;
                         var pageCountElement = document.getElementById("pageCount");
                         pageCountElement.innerHTML = String(pageCount);
-
-                        var saleability = data[key].saleInfo.saleability;
-                        var saleabilityElement = document.getElementById("saleability");
-                        saleabilityElement.innerHTML = String(saleability);
-
-                        var ebook = data[key].saleInfo.isEbook;
-                        var ebookElement = document.getElementById("ebook");
-                        ebookElement.innerHTML = String(ebook);
                     }
-
-
-                    {#var ebook = data.saleInfo.isEbook;#}
-                    {#var saleability = data.saleInfo.saleability;#}
-                    {#var webReaderLink = data.accessInfo.webReaderLink;#}
 
                 } catch (exception) {
                     console.log(exception);
@@ -240,40 +372,5 @@
             xhttp.send();
         }
 
-        let tabsWithContent = (function () {
-          let tabs = document.querySelectorAll('.tabs li');
-          let tabsContent = document.querySelectorAll('.tab-content');
-
-          let deactvateAllTabs = function () {
-            tabs.forEach(function (tab) {
-              tab.classList.remove('is-active');
-            });
-          };
-
-          let hideTabsContent = function () {
-            tabsContent.forEach(function (tabContent) {
-              tabContent.classList.remove('is-active');
-            });
-          };
-
-          let activateTabsContent = function (tab) {
-            tabsContent[getIndex(tab)].classList.add('is-active');
-          };
-
-          let getIndex = function (el) {
-            return [...el.parentElement.children].indexOf(el);
-          };
-
-          tabs.forEach(function (tab) {
-            tab.addEventListener('click', function () {
-              deactvateAllTabs();
-              hideTabsContent();
-              tab.classList.add('is-active');
-              activateTabsContent(tab);
-            });
-          })
-
-          tabs[0].click();
-        })();
 </script>
 {% endblock %}

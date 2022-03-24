@@ -894,3 +894,5 @@ FodyWeavers.xsd
 isbns.csv
 subjects full.csv
 subjects.csv
+RecommenderModule/recommenders/resources/item_based_model/similarities_matrix.sav
+RecommenderModule/recommenders/resources/item_based_model/trainset.sav

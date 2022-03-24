@@ -91,6 +91,16 @@
                 </div>
             </div>
             <div class="columns">
+              <div class="column is-12">
+                  <div class="card">
+                      <div class="card-content">
+                        <button class="" type="button" name="follow-button" id="follow-button" onclick="followButtonClick()">
+                       </button>
+                      </div>
+                  </div>
+              </div>
+            </div>
+            <div class="columns">
                 <div class="column is-6">
                     <div class="card">
                         <div class="card-content">
@@ -241,4 +251,82 @@
             </section>
         </div>
     </div>
+{% endblock %}
+
+{% block js %}
+  <script type="text/javascript">
+
+    const follow_view_url = "{% url 'follow_user' username%}";
+
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+              const cookie = cookies[i].trim();
+              // Does this cookie string begin with the name we want?
+              if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      return cookieValue;
+    }
+
+    function followButtonRefresh(data){
+      if (data == null) {
+        let request = new XMLHttpRequest();
+        request.onreadystatechange = function() {
+          if(this.readyState == 4 && this.status == 200) {
+            data = JSON.parse(this.response);
+          }
+        }
+        request.open("GET", follow_view_url, false);
+        request.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        request.send();
+      }
+
+      const button = document.getElementById('follow-button');
+      const buttonIsFollowingHTML = '<span class="icon is-small"><i class="fas fa-check"></i></span><span>Following</span>';
+      const buttonToFollowHTML = '<span class="icon is-small"><i class="fas fa-plus"></i></span><span>Follow</span>';
+      const buttonErrorHTML = '<span class="icon is-small"><i class="fas fa-circle-exclamation"></i></span><span>Follow Functionality Unavailable</span>';
+
+      if (data) {
+        if (data['is_followed'] == true) {
+          button.className = 'is-link';
+          button.innerHTML = buttonIsFollowingHTML;
+        }
+        else{
+          button.className = 'is-info';
+          button.innerHTML = buttonToFollowHTML;
+        }
+      }
+      else{
+        button.className = 'is-warning';
+        button.innerHTML = buttonErrorHTML;
+      }
+
+      button.classList.add('button', 'is-fullwidth');
+
+
+    }
+
+    function followButtonClick(){
+      let request = new XMLHttpRequest();
+      request.onreadystatechange = function() {
+        if(this.readyState == 4 && this.status == 200) {
+          data = JSON.parse(this.response);
+          followButtonRefresh(data);
+        }
+      }
+      request.open("POST", follow_view_url);
+      request.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+      request.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+      request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      request.send();
+    }
+
+    followButtonRefresh(null);
+  </script>
 {% endblock %}
