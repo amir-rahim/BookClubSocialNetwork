@@ -33,7 +33,7 @@ class SearchView(TemplateView):
         
     def get_queryset(self, query=None, content_type = None):
         content_type = ContentType.objects.get(pk=content_type)
-        model = Book
+        model = content_type.model_class()
         Qs = self.get_query(model, query)
         obs = model.objects.filter(Qs)
         return obs
@@ -51,6 +51,8 @@ class SearchView(TemplateView):
     
     def get_template_names(self):
         select = self.request.GET.get('select')
+        content_type = self.request.GET.get('content_type', None)
+        
         if select:
             return ['partials/book_select_list.html']
         
