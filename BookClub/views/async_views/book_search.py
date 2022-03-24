@@ -17,7 +17,7 @@ class BookSearchView(TemplateView):
         select = request.GET.get('select', False)
         page = request.GET.get('page', 1)
         query = request.GET.get('q', None)
-        content_type = request.GET.get('c', None)
+        content_type = request.GET.get('content_type', None)
         
         objects = self.get_queryset(content_type=content_type, query=query)
         
@@ -25,24 +25,17 @@ class BookSearchView(TemplateView):
             self.paginate_by = 5
             
         context['page_obj'] = self.get_pagination(objects, page)
-        context['lists'] = None
-        
-        user = self.request.user
-        if not user.is_anonymous:
-            context['lists'] = BookList.objects.filter(creator=user)        
-
+            
         html = render_to_string(
             template_name=self.get_template_names(), context=context, request=request)
         data_dict = {"html_from_view" : html}
         return JsonResponse(data=data_dict, safe=False)
         
     def get_queryset(self, query=None, content_type = None):
-        #content_type = ContentType.objects.get(pk=content_type)
-        model = Meeting
+        content_type = ContentType.objects.get(pk=content_type)
+        model = Book
         Qs = self.get_query(model, query)
-        print(Qs)
         obs = model.objects.filter(Qs)
-        print(obs)
         return obs
     
     def get_pagination(self, object_list, page=1):
