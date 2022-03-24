@@ -9,8 +9,9 @@ class UserToUserRelationship(models.Model):
         FOLLOWING = 1
     class Meta:
         constraints = [
-            UniqueConstraint(fields=['source_user', 'target_user'], name='unique_booking')]
-        
+            UniqueConstraint(fields=['source_user', 'target_user'], name='unique_relationship')
+        ]
+
     source_user = models.ForeignKey('User', on_delete=models.CASCADE,related_name='user_relationships_source')
     target_user = models.ForeignKey('User', on_delete=models.CASCADE,related_name='user_relationships_target')
     relationship_type = models.IntegerField(
