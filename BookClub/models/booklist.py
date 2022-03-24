@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 
-from BookClub.models import User, Book, UserCreatedObject
+from BookClub.models import Book, UserCreatedObject
 
 
 class BookList(UserCreatedObject):
