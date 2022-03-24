@@ -84,7 +84,6 @@ class MemberListTestCase(TestCase):
         self.assertTemplateUsed(response, 'club_members.html')
         self.assertContains(response, "Club Administration")
         self.assertContains(response, "Manage Club")
-        self.assertContains(response, "Club Settings")
 
     def test_mod_has_no_admin_options(self):
         self.client.login(username=self.user.username, password="Password123")
@@ -93,7 +92,6 @@ class MemberListTestCase(TestCase):
         self.assertTemplateUsed(response, 'club_members.html')
         self.assertNotContains(response, "Club Administration")
         self.assertNotContains(response, "Manage Club")
-        self.assertNotContains(response, "Club Settings")
 
     def test_member_has_no_admin_options(self):
         self.client.login(username=self.jack.username, password="Password123")
@@ -102,7 +100,6 @@ class MemberListTestCase(TestCase):
         self.assertTemplateUsed(response, 'club_members.html')
         self.assertNotContains(response, "Club Administration")
         self.assertNotContains(response, "Manage Club")
-        self.assertNotContains(response, "Club Settings")
 
     def test_can_see_owner(self):
         self.client.login(username=self.user.username, password="Password123")
@@ -135,34 +132,6 @@ class MemberListTestCase(TestCase):
         self.assertTemplateUsed(response, 'club_members.html')
         for applicant in self.applicants:
             self.assertNotContains(response, applicant.username)
-
-    def test_owner_can_see_delete_club_button(self):
-        self.client.login(username=self.jane.username, password="Password123")
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'club_members.html')
-        self.assertContains(response, "Delete Club")
-
-    def test_mod_cannot_see_delete_button(self):
-        self.client.login(username=self.user.username, password="Password123")
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'club_members.html')
-        self.assertNotContains(response, "Delete Club")
-
-    def test_member_cannot_see_delete_button(self):
-        self.client.login(username=self.jack.username, password="Password123")
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'club_members.html')
-        self.assertNotContains(response, "Delete Club")
-
-    def test_applicant_cannot_see_delete_button(self):
-        self.client.login(username=self.applicants[0].username, password="Password123")
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'club_members.html')
-        self.assertNotContains(response, "Delete Club")
 
     def test_owner_is_visible(self):
         self.client.login(username=self.jack.username, password="Password123")

@@ -89,7 +89,6 @@ class ClubDashboardViewTest(TestCase):
         self.assertTemplateUsed(response, "club_dashboard.html")
         self.assertContains(response, "Club Administration")
         self.assertContains(response, "Manage Club")
-        self.assertContains(response, "Club Settings")
 
     def test_mod_has_no_admin_options(self):
         self.client.login(username=self.user.username, password="Password123")
@@ -99,7 +98,6 @@ class ClubDashboardViewTest(TestCase):
         self.assertTemplateUsed(response, "club_dashboard.html")
         self.assertNotContains(response, "Club Administration")
         self.assertNotContains(response, "Manage Club")
-        self.assertNotContains(response, "Club Settings")
 
     def test_member_has_no_admin_options(self):
         self.client.login(username=self.jack.username, password="Password123")
@@ -109,7 +107,6 @@ class ClubDashboardViewTest(TestCase):
         self.assertTemplateUsed(response, "club_dashboard.html")
         self.assertNotContains(response, "Club Administration")
         self.assertNotContains(response, "Manage Club")
-        self.assertNotContains(response, "Club Settings")
 
     def test_applicant_cannot_see_private_clubs(self):
         self.client.login(username=self.jack.username, password="Password123")

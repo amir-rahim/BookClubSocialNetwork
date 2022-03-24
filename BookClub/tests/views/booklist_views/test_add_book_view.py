@@ -26,7 +26,6 @@ class AddBookViewTestCase(TestCase):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "library_books.html")
-        self.assertContains(response, 'Log in')
 
     def test_user_can_see_list_of_book_lists(self):
         self.client.login(username=self.user.username, password="Password123")

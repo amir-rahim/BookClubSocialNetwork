@@ -32,7 +32,7 @@ class BookDetailViewTestCase(TestCase):
 
     def test_redirect_invalid_book(self):
         url = reverse('book_view', kwargs={'book_id' : 99999})
-        response = self.client.get(url)  
+        response = self.client.get(url)
         self.assertTemplateNotUsed(response, 'book_detail_view.html')
         self.assertEqual(response.status_code, 404)
 
@@ -69,10 +69,11 @@ class BookDetailViewTestCase(TestCase):
 
     def test_displays_1_review_message(self):
         review = BookReview.objects.create(
-            user=self.user1,
+            creator=self.user1,
             book=self.book,
-            rating=random.randrange(0, 10),
-            review="Material Gworl1"
+            title="I literally picked a random number",
+            book_rating=random.randrange(0, 10),
+            content="Material Gworl1"
         )
 
         response = self.client.get(self.url)
@@ -88,20 +89,22 @@ class BookDetailViewTestCase(TestCase):
         self.assertContains(response, self.book.getPublicationYear())
         self.assertContains(response, self.book.publisher)
         self.assertContains(response, self.book.imageL)
-        self.assertContains(response, "Material Gworl1")
+        self.assertContains(response, 'Material Gworl1')
 
     def test_displays_2_review_message(self):
         review = BookReview.objects.create(
-            user=self.user1,
+            creator=self.user1,
             book=self.book,
-            rating=random.randrange(0, 10),
-            review="Material Gworl1"
+            title="Random rating Uno",
+            book_rating=random.randrange(0, 10),
+            content="Material Gworl1"
         )
         review = BookReview.objects.create(
-            user=self.user2,
+            creator=self.user2,
             book=self.book,
-            rating=random.randrange(0, 10),
-            review="Material Gworl2"
+            title="Random rating Dos",
+            book_rating=random.randrange(0, 10),
+            content="Material Gworl2"
         )
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
@@ -116,26 +119,29 @@ class BookDetailViewTestCase(TestCase):
         self.assertContains(response, self.book.getPublicationYear())
         self.assertContains(response, self.book.publisher)
         self.assertContains(response, self.book.imageL)
-        self.assertContains(response, "Material Gworl2")
+        self.assertContains(response, 'Material Gworl2')
 
     def test_displays_3_review_message(self):
         review = BookReview.objects.create(
-            user=self.user1,
+            creator=self.user1,
             book=self.book,
-            rating=random.randrange(0, 10),
-            review="Material Gworl1"
+            title="Random rating Uno",
+            book_rating=random.randrange(0, 10),
+            content="Material Gworl1"
         )
         review = BookReview.objects.create(
-            user=self.user2,
+            creator=self.user2,
             book=self.book,
-            rating=random.randrange(0, 10),
-            review="Material Gworl2"
+            title="Random rating Dos",
+            book_rating=random.randrange(0, 10),
+            content="Material Gworl2"
         )
         review = BookReview.objects.create(
-            user=self.user3,
+            creator=self.user3,
             book=self.book,
-            rating=random.randrange(0, 10),
-            review="Material Gworl3"
+            title="Random rating Tres",
+            book_rating=random.randrange(0, 10),
+            content="Material Gworl3"
         )
 
         response = self.client.get(self.url)
@@ -155,28 +161,32 @@ class BookDetailViewTestCase(TestCase):
 
     def test_displays_3_review_messages_when_more_than_3_reviews(self):
         review = BookReview.objects.create(
-            user=self.user1,
+            creator=self.user1,
             book=self.book,
-            rating=random.randrange(0, 10),
-            review="Material Gworl1"
+            title="Random rating Uno",
+            book_rating=random.randrange(0, 10),
+            content="Material Gworl1"
         )
         review = BookReview.objects.create(
-            user=self.user2,
+            creator=self.user2,
             book=self.book,
-            rating=random.randrange(0, 10),
-            review="Material Gworl2"
+            title="Random rating Dos",
+            book_rating=random.randrange(0, 10),
+            content="Material Gworl2"
         )
         review = BookReview.objects.create(
-            user=self.user3,
+            creator=self.user3,
             book=self.book,
-            rating=random.randrange(0, 10),
-            review="Material Gworl3"
+            title="Random rating Tres",
+            book_rating=random.randrange(0, 10),
+            content="Material Gworl3"
         )
         review = BookReview.objects.create(
-            user=self.user4,
+            creator=self.user4,
             book=self.book,
-            rating=random.randrange(0, 10),
-            review="Material Gworl4"
+            title="Random rating Quatro",
+            book_rating=random.randrange(0, 10),
+            content="Material Gworl4"
         )
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
@@ -191,4 +201,7 @@ class BookDetailViewTestCase(TestCase):
         self.assertContains(response, self.book.getPublicationYear())
         self.assertContains(response, self.book.publisher)
         self.assertContains(response, self.book.imageL)
+        self.assertContains(response, 'Material Gworl1')
+        self.assertContains(response, 'Material Gworl2')
+        self.assertContains(response, "Material Gworl3")
         self.assertNotContains(response, "Material Gworl4")

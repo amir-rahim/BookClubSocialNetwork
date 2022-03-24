@@ -8,60 +8,7 @@
 {% block content %}
     <div class="columns">
         <div class="column is-3">
-            <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
-                <p class="menu-label">
-                    Club Views
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'club_dashboard' current_club.club_url_name %}">Dashboard</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'member_list' current_club.club_url_name %}">Member List</a>
-                    </li>
-                </ul>
-                {% if user == current_club.get_club_owner %}
-                    <p class="menu-label">
-                        Club Administration
-                    </p>
-                    <ul class="menu-list">
-                        <li>
-                            <a>Manage Club</a>
-                        </li>
-                        <li>
-                            <a>Club Settings</a>
-                        </li>
-                    </ul>
-                {% endif %}
-                <p class="menu-label">
-                    Forum & Reviews
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a>Forum</a>
-                    </li>
-                    <li>
-                        <a>Members Reviews</a>
-                    </li>
-                </ul>
-                <p class="menu-label">
-                    Meetings
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'meeting_list' current_club.club_url_name %}">All Meetings</a>
-                    </li>
-                    <li>
-                        <a class="is-active"><b>Create a Meeting</b></a>
-                    </li>
-                    <li>
-                        <a>Joined Upcoming Meetings</a>
-                    </li>
-                    <li>
-                        <a>Prior Meetings</a>
-                    </li>
-                </ul>
-            </aside>
+            {% include 'partials/club_aside.html' with current_club=current_club %}
         </div>
         <div class="column is-9">
             <nav class="breadcrumb"
@@ -99,8 +46,9 @@
                           method="post">
                         {% csrf_token %}
                         {% include 'partials/bulma_form.html' with form=form %}
-                        <input type="submit" value="Create meeting" class="button is-link">
+                        <input type="submit" value="Create meeting" class="button is-link"/>
                     </form>
+                    
                 </div>
             </div>
         </div>
