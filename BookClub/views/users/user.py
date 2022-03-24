@@ -7,7 +7,8 @@ from django.shortcuts import reverse
 from django.views.generic import FormView, TemplateView, UpdateView
 
 from BookClub.forms.user_forms import EditProfileForm, ChangePasswordForm
-from BookClub.models import User, ClubMembership, Club
+from BookClub.models import User, ClubMembership, Club, BookList
+from BookClub.helpers import *
 
 
 class UserDashboardView(LoginRequiredMixin, TemplateView):
@@ -22,6 +23,9 @@ class UserDashboardView(LoginRequiredMixin, TemplateView):
         context['username'] = user.username
         context['email'] = user.email
         context['public_bio'] = user.public_bio
+        context['booklist_count'] = BookList.objects.filter(creator=user).count()
+        context['club_count'] = ClubMembership.objects.filter(user=user).count()
+        context['reputation'] = get_user_reputation(user)
         return context
 
 
