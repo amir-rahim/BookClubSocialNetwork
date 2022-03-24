@@ -144,15 +144,19 @@ urlpatterns = [
     path('user/<str:username>/lists/<int:booklist_id>/',
          views.UserBookListView.as_view(), name='user_booklist'),
     path('user/<str:username>/lists/<int:booklist_id>/<int:book_id>/delete', views.RemoveFromBookListView.as_view(), name='remove_book'),
-    path('user/<str:username>/lists/create/',
-         views.CreateBookListView.as_view(), name='create_booklist'),
+    
 
     # '''Agenda URLs'''
     path('agenda/', views.AgendaView.as_view(), name='agenda'),
+    
+    # '''Bookshelf URLs'''
+    path('bookshelf/', views.BookShelfView.as_view(), name='bookshelf'),
+    path('bookshelf/<int:book_id>/add/', views.AddToBookShelfView.as_view(), name='add_to_bookshelf'),
+    path('bookshelf/<int:book_id>/update/', views.UpdateBookShelfView.as_view(), name='update_from_bookshelf'),
+    path('bookshelf/<int:book_id>/remove/', views.RemoveFromBookShelfView.as_view(), name='remove_from_bookshelf'),
     
     # '''Asyn Views'''
     path('search_books/', views.BookSearchView.as_view(), name='async_book_search'),
     path('user_recommendations/', views.RecommendationUserListView.as_view(), name='async_user_recommendations'),
     path('club_recommendations/<str:club_url_name>/', views.RecommendationClubListView.as_view(), name='async_club_recommendations'),
-    
 ]

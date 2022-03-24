@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+import urllib
 
 
 class Book(models.Model):
@@ -23,4 +24,22 @@ class Book(models.Model):
 
     def getPublicationYear(self):
         date = self.publicationYear
-        return date.year
+        return date.year    
+
+    def get_s_size(self):
+        file = urllib.request.urlopen(self.imageS)
+        size = file.headers.get("content-length")
+        file.close()
+        return int(size)
+
+    def get_m_size(self):
+        file = urllib.request.urlopen(self.imageM)
+        size = file.headers.get("content-length")
+        file.close()
+        return int(size)
+
+    def get_l_size(self):
+        file = urllib.request.urlopen(self.imageL)
+        size = file.headers.get("content-length")
+        file.close()
+        return int(size)

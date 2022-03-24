@@ -18,4 +18,8 @@ from BookClub.views.async_views.vote import *
 from BookClub.views.async_views.book_search import *
 from BookClub.views.clubs.polls import *
 from BookClub.views.meetings.agenda import *
+from BookClub.views.bookshelf.bookshelf import *
+from BookClub.views.bookshelf.add_to_bookshelf import *
+from BookClub.views.bookshelf.update_in_bookshelf import *
+from BookClub.views.bookshelf.remove_from_bookshelf import *
 from BookClub.views.recommendation_views.recommendation_lists import *

@@ -8,6 +8,53 @@
 {% block content %}
     <div class="columns">
         <div class="column is-3">
+            <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
+                <div class="hero-body">
+                    <nav class="level">
+                        <div class="level-item has-text-centered">
+                            <div>
+                                <p class="heading">
+                                    Posts
+                                </p>
+                                <p class="title">
+                                    {{ posts.count }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="level-item has-text-centered">
+                            <div>
+                                <p class="heading">
+                                    Replies
+                                </p>
+                                <p class="title">
+                                    {{ replies }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="level-item has-text-centered">
+                            <div>
+                                <p class="heading">
+                                    Votes Cast
+                                </p>
+                                <p class="title">
+                                    {{ votes }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="level-item has-text-centered">
+                            <div>
+                                <p class="heading">
+                                    Users
+                                </p>
+                                <p class="title">
+                                    {{ usercount }}
+                                </p>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </section>
+            <hr class="solid">
             <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
                 <ul class="menu-list">
                     <li>
@@ -64,53 +111,6 @@
                     </button>
                 </div>
             </div>
-            <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
-                <div class="hero-body">
-                    <nav class="level">
-                        <div class="level-item has-text-centered">
-                            <div>
-                                <p class="heading">
-                                    Posts
-                                </p>
-                                <p class="title">
-                                    {{ forum.posts.count }}
-                                </p>
-                            </div>
-                        </div>
-                        <div class="level-item has-text-centered">
-                            <div>
-                                <p class="heading">
-                                    Replies
-                                </p>
-                                <p class="title">
-                                    {{ replies }}
-                                </p>
-                            </div>
-                        </div>
-                        <div class="level-item has-text-centered">
-                            <div>
-                                <p class="heading">
-                                    Votes Cast
-                                </p>
-                                <p class="title">
-                                    {{ votes }}
-                                </p>
-                            </div>
-                        </div>
-                        <div class="level-item has-text-centered">
-                            <div>
-                                <p class="heading">
-                                    Users
-                                </p>
-                                <p class="title">
-                                    {{ usercount }}
-                                </p>
-                            </div>
-                        </div>
-                    </nav>
-                </div>
-            </section>
-            <hr class="solid"/>
             {% if posts %}
                 {% for post in posts %}
                     <br />

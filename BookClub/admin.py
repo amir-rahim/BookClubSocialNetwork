@@ -125,3 +125,11 @@ class OptionAdmin(admin.ModelAdmin):
     list_display = [
         'poll', 'text', 'book'
     ]
+
+@admin.register(BookShelf)
+class BookShelfAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for Book Shelf."""
+
+    list_display = [
+        'user', 'book', 'status'
+    ]

@@ -6,7 +6,7 @@ from BookClub.tests.helpers import reverse_with_next
 
 
 @tag('forum', 'delete_comment')
-class DeletePostViewTestCase(TestCase):
+class DeleteCommentViewTestCase(TestCase):
     """Tests of the Edit Posts view."""
 
     fixtures = [
@@ -27,9 +27,9 @@ class DeletePostViewTestCase(TestCase):
         self.my_post = ForumPost.objects.get(pk=1)
         self.club_post = ForumPost.objects.get(pk=4)
 
-        self.my_comment = ForumPost.objects.get(pk=1)
-        self.other_comment = ForumPost.objects.get(pk=2)
-        self.club_comment = ForumPost.objects.get(pk=1)
+        self.my_comment = ForumComment.objects.get(pk=1)
+        self.other_comment = ForumComment.objects.get(pk=2)
+        self.club_comment = ForumComment.objects.get(pk=3)
 
         self.my_url = reverse('delete_forum_comment',
                               kwargs={'post_id': self.my_post.id,
