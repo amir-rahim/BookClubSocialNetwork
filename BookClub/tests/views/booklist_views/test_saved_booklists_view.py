@@ -48,7 +48,7 @@ class SavedBookListsViewTestCase(TestCase, LogInTester):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'saved_booklists.html')
-        # self.assertTemplateUsed(response, 'partials/delete_button_and_modal.html')
+       
 
     def test_not_contains_booklists_created_by_user(self):
         self.client.login(username=self.user.username, password='Password123')
@@ -56,7 +56,7 @@ class SavedBookListsViewTestCase(TestCase, LogInTester):
         self.user.save_booklist(self.own_booklist)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'saved_booklists.html')
-        # self.assertTemplateUsed(response, 'partials/delete_button_and_modal.html')
+        
         response_lists = list(response.context['booklists'])
         user_lists = list(BookList.objects.filter(creator=self.user))
 
