@@ -13,6 +13,15 @@ class UserAdmin(admin.ModelAdmin):
     ]
 
 
+@admin.register(UserToUserRelationship)
+class UserAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for User to User relationships."""
+
+    list_display = [
+        'source_user', 'target_user', 'relationship_type'
+    ]
+
+
 @admin.register(Club)
 class ClubAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for clubs."""
