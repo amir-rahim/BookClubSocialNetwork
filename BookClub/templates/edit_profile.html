@@ -121,13 +121,34 @@
                                                 Warning: This will delete your account permanently
                                             </div>
                                         </article>
+
                                         <div class="control has-text-centered">
-                                            <button class="button is-danger is-outlined center" onclick="deleteAccountButton()">
+                                            <button class="js-modal-trigger button is-danger is-outlined center" data-target="modal-delete-user-confirmation">
                                                 <span>Delete Account</span>
                                                 <span class="icon is-small">
                                                   <i class="fas fa-times"></i>
                                                 </span>
                                             </button>
+                                        </div>
+
+                                        <div id="modal-delete-user-confirmation" class="modal">
+                                            <div class="modal-background"></div>
+                                          
+                                            <div class="modal-card">
+                                                <header class="modal-card-head">
+                                                    <p class="modal-card-title">Delete Account</p>
+                                                    <button class="delete" aria-label="close"></button>
+                                                </header>
+                                                <section class="modal-card-body">
+                                                    Are you sure you want to permanently delete your account?
+                                                </section>
+                                                <footer class="modal-card-foot">
+                                                    <button class="button is-danger" onclick="window.location='{% url 'delete_user_account' %}'">Delete Account</button>
+                                                    <button class="button">Cancel</button>
+                                                </footer>
+                                            </div>
+                                        
+                                            <button class="modal-close is-large" aria-label="close"></button>
                                         </div>
                                     </div>
                                 </div>
@@ -138,12 +159,4 @@
             </div>
         </div>
     </div>
-
-    <script>
-        function deleteAccountButton() {
-            if(confirm('Are you sure you want to permanently delete your account?')) {
-                window.location='{% url 'delete_user_account' %}'
-            }
-        }
-    </script>
 {% endblock %}
