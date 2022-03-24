@@ -1,10 +1,22 @@
 [{
-    "model": "BookClub.UserToUserRelationship",
-    "pk": 1,
-    "fields": {
-        "created_on": "2022-02-27T22:45:06.275Z",
-        "target_user": 2,
-        "source_user": 1,
-        "relationship_type": 1
+        "model": "BookClub.UserToUserRelationship",
+        "pk": 1,
+        "fields": {
+            "created_on": "2022-02-27T22:45:06.275Z",
+            "target_user": 2,
+            "source_user": 1,
+            "relationship_type": 1
+        }
+    },
+    {
+        "model": "BookClub.UserToUserRelationship",
+        "pk": 2,
+        "fields": {
+            "created_on": "2022-02-27T22:45:06.275Z",
+            "target_user": 1,
+            "source_user": 2,
+            "relationship_type": 1
+        }
+
     }
-}]
+]

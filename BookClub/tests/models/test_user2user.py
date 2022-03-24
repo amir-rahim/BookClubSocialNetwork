@@ -17,6 +17,7 @@ class UserToUserTestCase(TestCase):
         self.user1 = User.objects.get(pk=1)
         self.user2 = User.objects.get(pk=2)
         self.rel1 = U2U.objects.get(pk=1)
+        self.rel2 = U2U.objects.get(pk=2)
 
     def _is_valid(self, relationship):
         try:
@@ -51,6 +52,7 @@ class UserToUserTestCase(TestCase):
                 self.user1, self.user2, U2U.UToURelationshipTypes.FOLLOWING)
             
     def test_unique_constraint_flipped(self):
+        self.rel2.delete()
         relationship = self._save_relationship(
             self.user2, self.user1, U2U.UToURelationshipTypes.FOLLOWING)
             

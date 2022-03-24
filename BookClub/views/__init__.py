@@ -18,3 +18,4 @@ from BookClub.views.forum.vote import *
 from BookClub.views.clubs.polls import *
 from BookClub.views.meetings.agenda import *
 from BookClub.views.async_views.u2u_views import *
+from BookClub.views.relationship_views.relationship_list import *

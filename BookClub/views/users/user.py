@@ -62,22 +62,6 @@ class UserProfileMembershipsView(LoginRequiredMixin, TemplateView):
         context['clubs'] = self.get_queryset()
         return context
 
-
-class UserProfileFollowingView(LoginRequiredMixin, TemplateView):
-    """Class based view for user profile following page"""
-    model = User
-    template_name = 'user_profile_following.html'
-
-    def get_context_data(self, **kwargs):
-        user = User.objects.get(username=self.kwargs['username'])
-        context = super(UserProfileFollowingView, self).get_context_data(**kwargs)
-        context['gravatar'] = user.gravatar
-        context['username'] = user.username
-        context['public_bio'] = user.public_bio
-        context['following'] = list()  # to be updated with following when implemented
-        return context
-
-
 class EditProfileView(LoginRequiredMixin, UpdateView):
     """Class based view for editing user profile"""
     model = User
