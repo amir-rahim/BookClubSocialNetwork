@@ -274,10 +274,6 @@
       return cookieValue;
     }
 
-    function getFollowState(){
-
-    }
-
     function followButtonRefresh(data){
       if (data == null) {
         let request = new XMLHttpRequest();
@@ -294,17 +290,25 @@
       const button = document.getElementById('follow-button');
       const buttonIsFollowingHTML = '<span class="icon is-small"><i class="fas fa-check"></i></span><span>Following</span>';
       const buttonToFollowHTML = '<span class="icon is-small"><i class="fas fa-plus"></i></span><span>Follow</span>';
+      const buttonErrorHTML = '<span class="icon is-small"><i class="fas fa-circle-exclamation"></i></span><span>Follow Functionality Unavailable</span>';
 
-      if (data['is_followed'] == true) {
-        button.className = 'is-link';
-        button.innerHTML = buttonIsFollowingHTML;
+      if (data) {
+        if (data['is_followed'] == true) {
+          button.className = 'is-link';
+          button.innerHTML = buttonIsFollowingHTML;
+        }
+        else{
+          button.className = 'is-info';
+          button.innerHTML = buttonToFollowHTML;
+        }
       }
       else{
-        button.className = 'is-info';
-        button.innerHTML = buttonToFollowHTML;
+        button.className = 'is-warning';
+        button.innerHTML = buttonErrorHTML;
       }
 
       button.classList.add('button', 'is-fullwidth');
+
 
     }
 
