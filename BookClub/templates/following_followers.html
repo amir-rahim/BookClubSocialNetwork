@@ -73,7 +73,7 @@
                         {% include 'partials/follower_list.html' with followers=followers %}
                     </section>
                     <section class="tab-content">
-                        <div class="box">{% include 'partials/followee_list.html' with followees=followees %}</div>
+                        {% include 'partials/followee_list.html' with followees=followees %}
                     </section>
                 </div>
             </div>

@@ -10,10 +10,10 @@ class BookList(UserCreatedObject):
     books = models.ManyToManyField(Book, blank=True)
 
     def get_absolute_url(self):
-        return reverse('user_booklist', kwargs={'username': self.creator.username, 'booklist_id': self.pk})
+        return reverse('user_booklist', kwargs={'booklist_id': self.pk})
 
     def get_delete_url(self):
-        return reverse('delete_booklist', kwargs={'username': self.creator.username, 'list_id': self.pk})
+        return reverse('delete_booklist', kwargs={'booklist_id': self.pk})
 
     def __str__(self):
         return f"Book List '{self.title}' with {self.books.count()} titles"

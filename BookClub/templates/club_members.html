@@ -76,7 +76,7 @@
                                     </div>
                                     <hr class="solid">
                                     <div class="buttons">
-                                        <button class="button is-warning is-small" style="margin-right: 5px">View</button>
+                                        <button onclick="window.location='{% url 'user_profile' owner.username %}';" class="button is-warning is-small" style="margin-right: 5px">View</button>
                                     </div>
                                 </div>
                             </div>
@@ -115,7 +115,7 @@
                                             </div>
                                             <hr class="solid">
                                             <div class="buttons">
-                                                <button class="button is-warning is-small" style="margin-right: 5px">View</button>
+                                                <button onclick="window.location='{% url 'user_profile' moderator.username %}';" class="button is-warning is-small" style="margin-right: 5px">View</button>
                                                 {% if request_user.membership == 2 %}
                                                     <form method="post"
                                                           action="{% url 'transfer_ownership' club_url_name=club.club_url_name %}">
@@ -195,7 +195,7 @@
                                             </div>
                                             <hr class="solid">
                                             <div class="buttons">
-                                                <button class="button is-warning is-small">View</button>
+                                                <button onclick="window.location='{% url 'user_profile' member.username %}';" class="button is-warning is-small">View</button>
                                                 {% if request_user.membership == 2 %}
                                                     <form method="post"
                                                           action="{% url 'promote_member' club_url_name=club.club_url_name %}">
