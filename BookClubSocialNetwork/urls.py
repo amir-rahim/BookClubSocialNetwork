@@ -39,6 +39,7 @@ urlpatterns = [
     path('profile/<str:username>/', views.UserProfileView.as_view(), name='user_profile'),
     path('profile/<str:username>/memberships/', views.UserProfileMembershipsView.as_view(), name='user_memberships'),
     path('profile/<str:username>/following/', views.UserProfileFollowingView.as_view(), name='user_following'),
+    path('profile/<str:username>/follow/', views.FollowUserView.as_view(), name='follow_user'),
 
     # '''Action URLs'''
     path('join_club/<str:club_url_name>/', views.JoinClubView.as_view(), name='join_club'),
