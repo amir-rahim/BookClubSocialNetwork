@@ -148,7 +148,7 @@
                      style="cursor:pointer;">
                     <article class="tile is-child box">
                         <p class="title">
-                            20
+                            {{ booklist_count }}
                         </p>
                         <p class="subtitle">
                             Book Lists
@@ -165,10 +165,12 @@
                         </p>
                     </article>
                 </div>
-                <div class="tile is-parent">
+                <div class="tile is-parent"
+                     onclick="window.location='{% url 'my_club_memberships' %}';"
+                     style="cursor:pointer;">
                     <article class="tile is-child box">
                         <p class="title">
-                            5
+                            {{ club_count }}
                         </p>
                         <p class="subtitle">
                             Clubs Joined
@@ -178,10 +180,10 @@
                 <div class="tile is-parent">
                     <article class="tile is-child box">
                         <p class="title">
-                            +19
+                            {{ reputation }}
                         </p>
                         <p class="subtitle">
-                            Review Score
+                            Reputation
                         </p>
                     </article>
                 </div>
