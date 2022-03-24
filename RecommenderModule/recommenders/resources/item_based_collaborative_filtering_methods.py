@@ -125,7 +125,6 @@ class ItemBasedCollaborativeFilteringMethods:
             if (not item_id in all_books_rated_isbn) and (not math.isnan(rating_sum)) and rating_sum != 0:
                 try:
                     book_isbn = self.trainset.to_raw_iid(item_id)
-                    #print(book_isbn, rating_sum)
                     final_recommendations.append(book_isbn)
                     if (len(final_recommendations) >= 10): # Get the top 10 recommendations
                         break
