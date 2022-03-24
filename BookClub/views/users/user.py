@@ -18,9 +18,6 @@ class UserDashboardView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(UserDashboardView, self).get_context_data(**kwargs)
-        context['gravatar'] = user.gravatar
-        context['username'] = user.username
-        
         if self.kwargs.get('username') is not None:
             user = User.objects.get(username=self.kwargs['username'])
             context['own_profile'] = False
@@ -29,7 +26,9 @@ class UserDashboardView(LoginRequiredMixin, TemplateView):
             user = self.request.user
             context['own_profile'] = True
             context['email'] = user.email
-        
+
+        context['gravatar'] = user.gravatar
+        context['username'] = user.username
         context['public_bio'] = user.public_bio
         context['booklist_count'] = BookList.objects.filter(creator=user).count()
         context['club_count'] = ClubMembership.objects.filter(user=user).count()
