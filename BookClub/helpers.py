@@ -30,6 +30,9 @@ def get_rank(user, club):
         return rank
     except ObjectDoesNotExist:
         return None
+    
+def get_clubs_user_is_member_of(user):
+    return ClubMembership.objects.filter(user=user).values_list('club__pk')
 
 
 def set_rank(user, club, rank):
