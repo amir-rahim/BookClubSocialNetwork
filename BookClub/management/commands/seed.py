@@ -16,9 +16,9 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('count', type=int, nargs='?', default=10)
 
-    def generateUser():
+    def generateUser(self):
         faker = Faker('en_GB')
-
+    
         user = User.objects.create_user(
             username=faker.user_name(),
             email=faker.email(),
@@ -51,8 +51,9 @@ class Command(BaseCommand):
             except IntegrityError as e:
                 print("Integrity error was found, attempting again")
                 print(str(e))
+                continue
 
-        call_command('importbooks', 5)
+        #call_command('importbooks', 5)
         id1 = Book.objects.all()[0].id
         print(id1)
         self.add_reviews_to(id1)
@@ -63,7 +64,7 @@ class Command(BaseCommand):
         self.create_global_forum()
 
     def create_club(self):
-        genOwner = Command.generateUser()
+        genOwner = self.generateUser()
         name = self.faker.sentence(nb_words=1)
         club = Club.objects.create(
             name=name,
@@ -81,12 +82,12 @@ class Command(BaseCommand):
         ran_moderator = random.randrange(1, 3)
 
         for x in range(ran_applicant):
-            club.add_applicant(Command.generateUser())
+            club.add_applicant(self.generateUser())
         for y in range(ran_member):
-            club.add_member(Command.generateUser())
+            club.add_member(self.generateUser())
         # 1 officer
         for z in range(ran_moderator):
-            club.add_moderator(Command.generateUser())
+            club.add_moderator(self.generateUser())
 
     def add_reviews_to(self, pk):
         try:
@@ -97,17 +98,18 @@ class Command(BaseCommand):
 
         for i in range(1, random.randrange(2, 20)):
             user = User.objects.order_by('?')[0]
-            curReviews = BookReview.objects.filter(user=user, book=book)
+            curReviews = BookReview.objects.filter(creator=user, book=book)
             while (curReviews.count() != 0):
                 user = User.objects.order_by('?')[0]
-                curReviews = BookReview.objects.filter(user=user, book=book)
+                curReviews = BookReview.objects.filter(creator=user, book=book)
 
             if (curReviews.count() == 0):
                 review = BookReview.objects.create(
-                    user=user,
+                    creator=user,
                     book=book,
-                    rating=random.randrange(0, 10),
-                    review="Material Gworl"
+                    title="Book Title",
+                    book_rating=random.randrange(0, 10),
+                    content="Material Gworl"
                 )
 
     def create_global_forum(self):

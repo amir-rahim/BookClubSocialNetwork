@@ -8,49 +8,56 @@
                     {{ field.label }}
                 </label>
             </div>
+        {% elif field|widget_type == "bookselectorinput" %}
+            <label for="{{ field.auto_id }}" class="label">{{ field.label }}</label>
+            {% render_field field class="input" %}
         {% elif field|widget_type == 'datetimeinput' %}
             <div class="control">
                 <label for="{{ field.auto_id }}" class="label">{{ field.label }}</label>
-                {% if form.is_bound and field.errors %}
-                    {% render_field field class="input is-danger" %}
-                {% elif form.is_bound %}
-                    {% render_field field class="input is-success" %}
-                {% else %}
-                    {% render_field field class="input" placeholder="YYYY-MM-DD HH-MM-SS" %}
-                {% endif %}
-            </div>
-        {% else %}
-            <label for="{{ field.auto_id }}" class="label">{{ field.label }}</label>
-            <div class="control">
-                {% if field|widget_type == 'textarea' %}
+            {% elif field|widget_type == 'datetimepickerinput' %}
+                <div class="control">
+                    <label for="{{ field.auto_id }}" class="label">{{ field.label }}</label>
                     {% if form.is_bound and field.errors %}
-                        {% render_field field class="textarea is-danger" %}
-                    {% elif form.is_bound %}
-                        {% render_field field class="textarea is-success" %}
-                    {% else %}
-                        {% render_field field class="textarea" %}
-                    {% endif %}
-                {% elif field|widget_type == 'select' %}
-                    <div class="select">{% render_field field %}</div>
-                {% elif field|widget_type == 'textinput' %}
-                    {% if form.is_bound and field.errors %}
+                        error
                         {% render_field field class="input is-danger" %}
                     {% elif form.is_bound %}
                         {% render_field field class="input is-success" %}
                     {% else %}
                         {% render_field field class="input" %}
                     {% endif %}
-                {% endif %}
-            </div>
-        {% endif %}
-        {% if form.is_bound %}
-            {% if field.errors %}
-                <div class="help is-danger">{{ field.errors }}</div>
+                </div>
             {% else %}
-                <p class="help is-success">
-                    Looks good!
-                </p>
+                <label for="{{ field.auto_id }}" class="label">{{ field.label }}</label>
+                <div class="control">
+                    {% if field|widget_type == 'textarea' %}
+                        {% if form.is_bound and field.errors %}
+                            {% render_field field class="textarea is-danger" %}
+                        {% elif form.is_bound %}
+                            {% render_field field class="textarea is-success" %}
+                        {% else %}
+                            {% render_field field class="textarea" %}
+                        {% endif %}
+                    {% elif field|widget_type == 'select' %}
+                        <div class="select">{% render_field field %}</div>
+                    {% elif field|widget_type == 'textinput' %}
+                        {% if form.is_bound and field.errors %}
+                            {% render_field field class="input is-danger" %}
+                        {% elif form.is_bound %}
+                            {% render_field field class="input is-success" %}
+                        {% else %}
+                            {% render_field field class="input" %}
+                        {% endif %}
+                    {% endif %}
+                </div>
             {% endif %}
-        {% endif %}
-    </div>
-{% endfor %}
+            {% if form.is_bound %}
+                {% if field.errors %}
+                    <div class="help is-danger">{{ field.errors }}</div>
+                {% else %}
+                    <p class="help is-success">
+                        Looks good!
+                    </p>
+                {% endif %}
+            {% endif %}
+        </div>
+    {% endfor %}

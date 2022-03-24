@@ -45,7 +45,15 @@ class BookReviewAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for Books Reviews ."""
 
     list_display = [
-        'book', 'user', 'rating', 'review', 'createdOn'
+        'book', 'creator', 'book_rating' , 'title' , 'created_on','content'
+    ]
+
+@admin.register(BookReviewComment)
+class BookReviewCommentAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for Books Review Comments ."""
+
+    list_display = [
+        'book_review','creator','created_on','content'
     ]
 
 
@@ -116,4 +124,12 @@ class OptionAdmin(admin.ModelAdmin):
 
     list_display = [
         'poll', 'text', 'book'
+    ]
+
+@admin.register(BookShelf)
+class BookShelfAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for Book Shelf."""
+
+    list_display = [
+        'user', 'book', 'status'
     ]
