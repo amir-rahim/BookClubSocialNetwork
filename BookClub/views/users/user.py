@@ -16,23 +16,16 @@ class UserDashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'user_dashboard.html'
 
     def get_context_data(self, **kwargs):
-        user = self.request.user
         context = super(UserDashboardView, self).get_context_data(**kwargs)
-        context['gravatar'] = user.gravatar
-        context['username'] = user.username
-        context['email'] = user.email
-        context['public_bio'] = user.public_bio
-        return context
+        if self.kwargs.get('username') is not None:
+            user = User.objects.get(username=self.kwargs['username'])
+            context['own_profile'] = False
+            context['email'] = ''
+        else:
+            user = self.request.user
+            context['own_profile'] = True
+            context['email'] = user.email
 
-
-class UserProfileView(LoginRequiredMixin, TemplateView):
-    """Class based view for user profile"""
-    model = User
-    template_name = 'user_profile.html'
-
-    def get_context_data(self, **kwargs):
-        user = User.objects.get(username=self.kwargs['username'])
-        context = super(UserProfileView, self).get_context_data(**kwargs)
         context['gravatar'] = user.gravatar
         context['username'] = user.username
         context['public_bio'] = user.public_bio

@@ -11,24 +11,32 @@ from BookClub.forms import CreateBookListForm
 from BookClub.models import User, BookList, Book
 
 
-class BooklistListView(ListView):
+class BooklistListView(LoginRequiredMixin, ListView):
     http_method_names = ['get']
     model = BookList
     context_object_name = 'booklists'
     template_name = 'user_booklists.html'
 
     def get_queryset(self):
-        user = get_object_or_404(User, username=self.kwargs['username'])
+        if self.kwargs.get('username') is not None:
+            user = get_object_or_404(User, username=self.kwargs['username'])
+        else:
+            user = get_object_or_404(User, username=self.request.user)
         return BookList.objects.filter(creator=user)
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         # Add in a QuerySet of all the books
-        creator = User.objects.get(username=self.kwargs['username'])
+        if self.kwargs.get('username') is not None:
+            creator = User.objects.get(username=self.kwargs['username'])
+            context['own'] = False
+        else:
+            creator = self.request.user
+            context['own'] = True
         context['creator'] = creator
-        context['self'] = self.request.user == creator
         context['base_delete_url'] = reverse_lazy('delete_booklist', kwargs={'username': creator.username})
+        context['saved_booklists'] = creator.get_saved_booklists()
         return context
 
 
@@ -58,7 +66,7 @@ class EditBookListView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         try:
             booklist = BookList.objects.get(pk=self.kwargs['booklist_id'])
-            user = User.objects.get(username=self.kwargs['username'])
+            user = booklist.creator
             if self.request.user == user:
                 return True
             else:
@@ -72,12 +80,12 @@ class EditBookListView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         if not self.request.user.is_authenticated:
             return super(LoginRequiredMixin, self).handle_no_permission()
         else:
-            return redirect(self.redirect_location, self.kwargs['username'])
+            return redirect(self.redirect_location)
 
     def get_success_url(self):
         """Return redirect URL after successful update."""
         messages.success(self.request, "You have updated the book list!")
-        return reverse(self.redirect_location, kwargs={'username': self.kwargs['username']})
+        return reverse(self.redirect_location)
 
     def get_object(self):
         return BookList.objects.get(id=self.kwargs['booklist_id'])
@@ -96,24 +104,24 @@ class DeleteBookListView(LoginRequiredMixin, View):
     def http_method_not_allowed(self, request, *args, **kwargs):
         messages.add_message(self.request, messages.ERROR,
                              "Non-existing page was requested, so we redirected you here...")
-        return redirect('booklists_list', username=self.kwargs['username'])
+        return redirect('booklists_list')
 
     def post(self, *args, **kwargs):
         user = self.request.user
         try:
-            booklist = BookList.objects.get(pk=self.kwargs['list_id'])
+            booklist = BookList.objects.get(pk=self.kwargs['booklist_id'])
             if booklist.creator == user:
                 booklist.delete()
                 messages.success(self.request, f"Booklist '{booklist.title}' successfully deleted!")
-                return redirect('booklists_list', username=self.kwargs['username'])
+                return redirect('booklists_list')
             else:
                 raise PermissionDenied
         except ObjectDoesNotExist:
             messages.add_message(self.request, messages.ERROR, "Non-existing list was targeted")
-            return redirect('booklists_list', username=self.kwargs['username'])
+            return redirect('booklists_list')
 
 
-class UserBookListView(ListView):
+class UserBookListView(LoginRequiredMixin, ListView):
     http_method_names = ['get']
     model = BookList
     context_object_name = 'books'
@@ -127,7 +135,7 @@ class UserBookListView(ListView):
     def get_context_data(self, **kwargs):
         booklist = BookList.objects.get(pk=self.kwargs['booklist_id'])
         context = super().get_context_data(**kwargs)
-        context['booklist'] = BookList.objects.get(pk=self.kwargs['booklist_id'])
+        context['booklist'] = booklist
         context['user'] = self.request.user
         context['number_of_books'] = len(booklist.get_books())
         return context
@@ -139,13 +147,12 @@ class RemoveFromBookListView(LoginRequiredMixin, ListView):
     redirect_location = 'user_booklist'
 
     def get(self, request, *args, **kwargs):
-        return redirect(self.redirect_location, username=self.kwargs['username'],
-                        booklist_id=self.kwargs['booklist_id'])
+        return redirect(self.redirect_location, booklist_id=self.kwargs['booklist_id'])
 
     def is_actionable(self, booklist, book):
         """Check if user can remove a book"""
 
-        return ((booklist.get_books().filter(pk=book.id)) and (self.request.user == booklist.creator))
+        return (booklist.get_books().filter(pk=book.id)) and (self.request.user == booklist.creator)
 
     def is_not_actionable(self):
         """If user cannot remove book"""
@@ -165,13 +172,13 @@ class RemoveFromBookListView(LoginRequiredMixin, ListView):
             book = Book.objects.get(id=self.kwargs['book_id'])
         except:
             messages.error(self.request, "Error, book or booklist not found.")
-            return redirect(self.redirect_location, username=self.kwargs['username'],
-                            booklist_id=self.kwargs['booklist_id'])
+            return redirect(self.redirect_location, booklist_id=self.kwargs['booklist_id'])
 
         if self.is_actionable(booklist, book):
             self.action(booklist, book)
         else:
             self.is_not_actionable()
 
-        return redirect(self.redirect_location, username=self.kwargs['username'],
-                        booklist_id=self.kwargs['booklist_id'])
+        return redirect(self.redirect_location, booklist_id=self.kwargs['booklist_id'])
+
+

@@ -11,6 +11,7 @@ from BookClub.views.meetings.edit_meeting import *
 from BookClub.views.library.library import *
 from BookClub.views.library.book import *
 from BookClub.views.library.booklists import *
+from BookClub.views.library.saved_booklists import *
 from BookClub.views.meetings.meetings import *
 from BookClub.views.library.reviews import *
 from BookClub.views.forum.forum import *

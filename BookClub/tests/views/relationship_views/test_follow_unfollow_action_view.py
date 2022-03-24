@@ -76,7 +76,7 @@ class FollowUserViewTestCase(TestCase, LogInTester):
         self.assertRedirects(response, redirect_url,
                              status_code=302, target_status_code=200, fetch_redirect_response=True
                              )
-        self.assertTemplateUsed(response, 'user_profile.html')
+        self.assertTemplateUsed(response, 'user_dashboard.html')
         user2_followers_count_after = UserToUserRelationship.objects.filter(target_user=self.users[2]).count()
         self.assertEqual(user2_followers_count_after, user2_followers_count_before)
 
@@ -88,7 +88,7 @@ class FollowUserViewTestCase(TestCase, LogInTester):
         self.assertRedirects(response, redirect_url,
                              status_code=302, target_status_code=200, fetch_redirect_response=True
                              )
-        self.assertTemplateUsed(response, 'user_profile.html')
+        self.assertTemplateUsed(response, 'user_dashboard.html')
         user2_followers_count_after = UserToUserRelationship.objects.filter(target_user=self.users[2]).count()
         self.assertEqual(user2_followers_count_after, user2_followers_count_before)
 
