@@ -112,10 +112,23 @@
                                                 </div>
                                                 <div class="control">
                                                     <button class="button is-block is-info is-large is-fullwidth">Save Change</button>
-                                                </div>
+                                                </div>                                             
                                             </div>
                                         </form>
                                         <br>
+                                        <article class="message is-danger">
+                                            <div class="message-body">
+                                                Warning: This will delete your account permanently
+                                            </div>
+                                        </article>
+                                        <div class="control has-text-centered">
+                                            <button class="button is-danger is-outlined center" onclick="deleteAccountButton()">
+                                                <span>Delete Account</span>
+                                                <span class="icon is-small">
+                                                  <i class="fas fa-times"></i>
+                                                </span>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -125,4 +138,12 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function deleteAccountButton() {
+            if(confirm('Are you sure you want to permanently delete your account?')) {
+                window.location='{% url 'delete_user_account' %}'
+            }
+        }
+    </script>
 {% endblock %}
