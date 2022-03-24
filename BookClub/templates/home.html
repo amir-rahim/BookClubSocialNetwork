@@ -20,10 +20,11 @@
                         <p class="title">
                             Library
                         </p>
-                        <div class="content">"Our collection of books!"</div>
+                        <div class="content">See our collection of books, community-made reviews & booklists and our recommendations!</div>
                     </div>
                     <div class="card-footer">
-                        <a class="card-footer-item" href="{% url 'library_books' %}">View Library</a>
+                        <a class="card-footer-item" href="{% url 'library_dashboard' %}">View Library</a>
+                        <a class="card-footer-item" href="{% url 'library_books' %}">See Our Books</a>
                     </div>
                 </div>
             </div>
@@ -39,11 +40,11 @@
                         <p class="title">
                             Clubs
                         </p>
-                        <div class="content">View our collections of book clubs.</div>
+                        <div class="content">Look and join our communities of clubs, for meetings, forums and recommendations.</div>
                     </div>
                     <div class="card-footer">
                         <a class="card-footer-item" href="{% url 'my_club_memberships' %}">Memberships</a>
-                        <a class="card-footer-item" href="{% url 'available_clubs' %}">Join</a>
+                        <a class="card-footer-item" href="{% url 'available_clubs' %}">Join Clubs</a>
                     </div>
                 </div>
             </div>
@@ -59,10 +60,10 @@
                         <p class="title">
                             Agenda
                         </p>
-                        <div class="content">View your Agenda of your meetings and upcoming events for your clubs.</div>
+                        <div class="content">Check your Agenda for your meetings and upcoming events for clubs.</div>
                     </div>
                     <div class="card-footer">
-                        <a class="card-footer-item" href="#">View Calendar</a>
+                        <a class="card-footer-item" href="{% url 'agenda' %}">View Agenda</a>
                     </div>
                 </div>
             </div>
@@ -78,7 +79,7 @@
                         <p class="title">
                             Forum
                         </p>
-                        <div class="content">Add to our public forum, giving your thoughts.</div>
+                        <div class="content">Post to our public forum, giving the community your thoughts, opinions and questions.</div>
                     </div>
                     <div class="card-footer">
                         <a class="card-footer-item" href="{% url 'global_forum' %}">View Forum</a>
@@ -89,7 +90,7 @@
                 <div class="card large card-equal-height">
                     <div class="card-image">
                         <figure class="image is-16by9">
-                            <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1031&q=80t"
+                            <img src="https://images.unsplash.com/photo-1474403078171-7f199e9d1335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1471&q=80"
                                  alt="Image">
                         </figure>
                     </div>
@@ -97,7 +98,7 @@
                         <p class="title">
                             User Profile
                         </p>
-                        <div class="content">View your user profile.</div>
+                        <div class="content">View your user profile and make changes to your profile.</div>
                     </div>
                     <div class="card-footer">
                         <a class="card-footer-item"  href="{% url 'user_dashboard' %}">Dashboard</a>
@@ -109,17 +110,18 @@
                 <div class="card large card-equal-height">
                     <div class="card-image">
                         <figure class="image is-16by9">
-                            <img src="https://images.unsplash.com/photo-1588064643233-49210b27b82e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
+                            <img src="https://images.unsplash.com/photo-1628046903351-992bd4b583e6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
                                  alt="Image">
                         </figure>
                     </div>
                     <div class="card-content">
                         <p class="title">
-                            Contact Us
+                            Bookshelf
                         </p>
+                        <div class="content">Track your reading progress here.</div>
                     </div>
                     <div class="card-footer">
-                        <a class="card-footer-item" href="#">Contact Form</a>
+                        <a class="card-footer-item" href="{% url 'bookshelf' %}">Visit your Bookshelf</a>
                     </div>
                 </div>
             </div>
