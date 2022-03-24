@@ -6,6 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.postgres.search import SearchVector
 from BookClub.models import *
+from BookClub.views.async_views.search_query_builder import SearchQueries
 
 class BookSearchView(TemplateView):
     
@@ -13,7 +14,7 @@ class BookSearchView(TemplateView):
     
     def get(self, request, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        select = request.GET.get('select')
+        select = request.GET.get('select', False)
         page = request.GET.get('page', 1)
         query = request.GET.get('q', None)
         content_type = request.GET.get('c', None)
@@ -37,9 +38,12 @@ class BookSearchView(TemplateView):
         
     def get_queryset(self, query=None, content_type = None):
         #content_type = ContentType.objects.get(pk=content_type)
-        model = Book
-        Qs = self.build_query(model, query)
-        return model.objects.filter(Qs)
+        model = Meeting
+        Qs = self.get_query(model, query)
+        print(Qs)
+        obs = model.objects.filter(Qs)
+        print(obs)
+        return obs
     
     def get_pagination(self, object_list, page=1):
         paginator = Paginator(object_list, self.paginate_by)
@@ -59,23 +63,10 @@ class BookSearchView(TemplateView):
         
         return ['partials/book_search_list.html']
     
-    def build_query(self, model, query):
+    def get_query(self, model, query):
         q_objects = Q()
-        if(issubclass(model, UserCreatedObject)):
-            q_objects.add(Q(creator__username__icontains=query), Q.OR)
-        if(issubclass(model, BookList)):
-            q_objects.add(Q(title__icontains=query), Q.OR)
-            q_objects.add(Q(description__icontains=query), Q.OR)
-        if(issubclass(model, ClubMembership)):
-            q_objects.add(Q(user__username__icontains=query), Q.OR)
-            q_objects.add(Q(club__name__icontains=query), Q.OR)
-        if(issubclass(model, Club)):
-            q_objects.add(Q(club__name__icontains=query), Q.OR)
-            q_objects.add(Q(description__icontains=query), Q.OR)
-            q_objects.add(Q(tagline__icontains=query), Q.OR)
-            q_objects.add(Q(rules__icontains=query), Q.OR)
-        if(issubclass(model, Book)):
-            q_objects.add(Q(title__icontains=query), Q.OR)
-            q_objects.add(Q(author__icontains=query), Q.OR)
-            q_objects.add(Q(publisher__icontains=query), Q.OR)
+        for query_class in SearchQueries:
+            q_objects = query_class.value(query=query, q_objects=q_objects, model=model,).build_query(user=self.request.user)
         return q_objects
+    
+        
