@@ -108,6 +108,5 @@ def get_club_reputation(club):
     rep = 0
     for user in members:
         rep += get_user_reputation(user.user)
-        print(user.user)
 
     return rep
