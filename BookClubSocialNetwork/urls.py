@@ -44,13 +44,16 @@ urlpatterns = [
     path('user/', views.UserDashboardView.as_view(), name='user_dashboard'),
     path('edit_profile/', views.EditProfileView.as_view(), name='edit_profile'),
     path('password_change/', views.ChangePasswordView.as_view(), name='password_change'),
+    path('delete_account/', views.DeleteUserAccountView.as_view(), name='delete_user_account'),
 
     # '''User Profile URLs'''
     path('profile/<str:username>/', views.UserDashboardView.as_view(), name='user_profile'),
     path('profile/<str:username>/memberships/', views.UserProfileMembershipsView.as_view(), name='user_memberships'),
-    path('profile/<str:username>/following/', views.UserProfileFollowingView.as_view(), name='user_following'),
     path('profile/<str:username>/lists/', views.BooklistListView.as_view(), name='booklists_list'),
     path('profile/<str:username>/saved_lists/', views.SavedBooklistsListView.as_view(), name='saved_booklists'),
+    path('profile/<str:username>/following/', views.FollowerListView.as_view(), name='user_following'),
+    path('profile/<str:username>/follow/', views.FollowUserView.as_view(), name='follow_user'),
+
 
     # '''Action URLs'''
     path('join_club/<str:club_url_name>/', views.JoinClubView.as_view(), name='join_club'),

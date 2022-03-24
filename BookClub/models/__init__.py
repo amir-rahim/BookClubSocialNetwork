@@ -12,4 +12,5 @@ from .review import *
 from .forum import *
 from .option import *
 from .poll import *
+from .user2user import *
 from .recommendations import *
