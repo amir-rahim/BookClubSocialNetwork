@@ -75,7 +75,7 @@ class ContentBasedRecommenderMethodsTestCase(TestCase):
         similarity = self.content_based_methods.compute_publication_year_similarity(publication_year_1, publication_year_2)
         self.assertEqual(similarity, 1)
 
-    def test_get_content_similarity_between_books(self):
+    def test_get_content_similarity_between_books_using_publication_year(self):
         book_content_dict_1 = {
             "book_isbn": "014029192X",
             "categories": [1, 2, 3],
@@ -90,6 +90,22 @@ class ContentBasedRecommenderMethodsTestCase(TestCase):
         categories_similarity = self.content_based_methods.compute_categories_similarity([1, 2, 3], [3, 2, 4, 5])
         publication_year_similarity = self.content_based_methods.compute_publication_year_similarity(2000, 1987)
         similarity2 = categories_similarity * publication_year_similarity
+        self.assertEqual(similarity1, similarity2)
+
+    def test_get_content_similarity_between_books_not_using_publication_year(self):
+        book_content_dict_1 = {
+            "book_isbn": "014029192X",
+            "categories": [1, 2, 3],
+            "publication_year": 2000
+        }
+        book_content_dict_2 = {
+            "book_isbn": "033030058X",
+            "categories": [3, 2, 4, 5],
+            "publication_year": 1987
+        }
+        self.content_based_methods.using_publication_year = False
+        similarity1 = self.content_based_methods.get_content_similarity_between_books(book_content_dict_1, book_content_dict_2)
+        similarity2 = self.content_based_methods.compute_categories_similarity([1, 2, 3], [3, 2, 4, 5])
         self.assertEqual(similarity1, similarity2)
 
     def test_get_positive_ratings_from_all_ratings(self):

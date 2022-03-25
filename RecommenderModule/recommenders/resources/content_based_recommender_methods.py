@@ -14,8 +14,10 @@ class ContentBasedRecommenderMethods:
     content_based_data_provider = None
     book_content_list = []
     similarities_dictionary = {}
+    using_publication_year = True
 
-    def __init__(self, retraining=False, retraining_and_saving=False, trainset=None, get_data_from_csv=False):
+    def __init__(self, parameters={}, retraining=False, retraining_and_saving=False, trainset=None, get_data_from_csv=False):
+        self.initialise_parameters(parameters)
         self.library = Library(trainset=trainset)
         if retraining or retraining_and_saving:
             self.build_book_content_list(trainset, get_data_from_csv)
@@ -28,6 +30,11 @@ class ContentBasedRecommenderMethods:
             except:
                 self.__init__(retraining_and_saving=True, trainset=trainset, get_data_from_csv=get_data_from_csv)
 
+
+    """Store the values of the parameters into class attributes"""
+    def initialise_parameters(self, parameters):
+        if "using_publication_year" in parameters.keys():
+            self.using_publication_year = parameters["using_publication_year"]
 
     """Build the list containing a dictionary for each book in the filtered book depository dataset, 
         which contains: 'book_isbn', 'categories' (genres) and 'publication_year' """
@@ -55,10 +62,11 @@ class ContentBasedRecommenderMethods:
     """Get the overall similarity value (between 0 and 1) between the contents of 2 books"""
     def get_content_similarity_between_books(self, book_content_dict_1, book_content_dict_2):
         categories_similarity = self.compute_categories_similarity(book_content_dict_1["categories"], book_content_dict_2["categories"])
-        publication_year_similarity = self.compute_publication_year_similarity(book_content_dict_1["publication_year"], book_content_dict_2["publication_year"])
-        similarity = categories_similarity * publication_year_similarity
-        return similarity
-
+        if self.using_publication_year:
+            publication_year_similarity = self.compute_publication_year_similarity(book_content_dict_1["publication_year"], book_content_dict_2["publication_year"])
+            similarity = categories_similarity * publication_year_similarity
+            return similarity
+        return categories_similarity
     """Calculate the similarity value (between 0 and 1) between the categories of 2 books"""
     def compute_categories_similarity(self, categories1, categories2):
         common_categories = [category for category in categories1 if category in categories2]
