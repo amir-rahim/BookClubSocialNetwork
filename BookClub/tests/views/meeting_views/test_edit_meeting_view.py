@@ -29,6 +29,7 @@ class EditMeetingTestCase(TestCase, LogInTester):
         self.url = reverse('edit_meeting', kwargs=self.kwargs)
         self.data = {
             "meeting_time": "2022-02-22T19:00+00:00",
+            "meeting_end_time": "2022-02-22T20:00+00:00",
             "location": "Franklin Wilkins Library GS04",
             "title": "Book meeting 1",
             "description": "This is a book meeting, helll yeahhhh",
@@ -151,14 +152,12 @@ class EditMeetingTestCase(TestCase, LogInTester):
         self.data['title'] = ""
         self.data['location'] = ""
         self.data['description'] = ""
-        self.data['meeting_time'] = "some random time"
         response = self.client.post(self.url, self.data)
         self.assertTemplateUsed(response, 'edit_meeting.html')
         post_test = Meeting.objects.get(pk=1)
         self.assertEqual(pre_test.title, post_test.title)
         self.assertEqual(pre_test.location, post_test.location)
         self.assertEqual(pre_test.description, post_test.description)
-        self.assertEqual(pre_test.meeting_time, post_test.meeting_time)
 
     def test_remove_member_owner_organiser(self):
         self.meeting.members.add(self.member)

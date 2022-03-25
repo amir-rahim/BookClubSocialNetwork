@@ -89,6 +89,7 @@ class MeetingListTest(TestCase):
             organiser=self.member,
             club=self.club,
             meeting_time="2022-02-22T21:00+00:00",
+            meeting_end_time="2022-02-22T22:00+00:00",
             created_on="2022-02-10",
             location="Franklin Wilkins Library GS05",
             title="Book meeting 3",
