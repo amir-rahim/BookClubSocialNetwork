@@ -43,7 +43,7 @@
                 </p>
                 <ul class="menu-list">
                     <li>
-                        <a href="#">AI Recommended Books</a>
+                        <a href="{% url 'user_recommendations' %}">AI Recommended Books</a>
                     </li>
                 </ul>
                 {% if user.is_authenticated %}
@@ -52,7 +52,8 @@
                     </p>
                     <ul class="menu-list">
                         <li>
-                            <a href="{% url 'library_books' %}">View Personal Reviews</a>
+                            <a href="{% url 'personal_reviews' %}">View Personal Reviews</a>
+                            <a href="{% url 'community_reviews' %}">View Community Reviews</a>
                         </li>
                     </ul>
                 {% endif %}
@@ -106,6 +107,9 @@
                                         <a href="{% url 'booklists_list' %}">View Book Lists</a>
                                     </li>
                                     <li>
+                                        <a href="{% url 'saved_booklists' %}">Saved Book Lists</a>
+                                    </li>
+                                    <li>
                                         <a href="{% url 'create_booklist' %}">Create Book Lists</a>
                                     </li>
                                 </ul>
@@ -146,10 +150,10 @@
                             <div class="container">
                                 <ul>
                                     <li>
-                                        <a href="{% url 'library_books' %}">View Personal Reviews</a>
+                                        <a href="{% url 'personal_reviews' %}">View Personal Reviews</a>
                                     </li>
                                     <li>
-                                        <a href="{% url 'library_books' %}">View Members Reviews</a>
+                                        <a href="{% url 'community_reviews' %}">View Community Reviews</a>
                                     </li>
                                 </ul>
                             </div>

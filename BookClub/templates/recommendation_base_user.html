@@ -19,7 +19,7 @@
                 </p>
                 <ul class="menu-list">
                     <li>
-                        <a href="{% url 'library_books' %}" class="is-active"><b>View Library</b></a>
+                        <a href="{% url 'library_books' %}">View Library</a>
                     </li>
                 </ul>
                 {% if user.is_authenticated %}
@@ -31,6 +31,9 @@
                             <a href="{% url 'booklists_list' %}">{{ user.get_username }} Book Lists</a>
                         </li>
                         <li>
+                            <a href="{% url 'saved_booklists' %}">Saved Book Lists</a>
+                        </li>
+                        <li>
                             <a href="{% url 'create_booklist' %}">Create Book Lists</a>
                         </li>
                     </ul>
@@ -40,7 +43,7 @@
                 </p>
                 <ul class="menu-list">
                     <li>
-                        <a href="#">AI Recommended Books</a>
+                        <a href="{% url 'user_recommendations' %}" class="is-active"><b>AI Recommended Books</b></a>
                     </li>
                 </ul>
                 {% if user.is_authenticated %}
@@ -49,7 +52,8 @@
                     </p>
                     <ul class="menu-list">
                         <li>
-                            <a href="{% url 'library_books' %}">View Personal Reviews</a>
+                            <a href="{% url 'personal_reviews' %}">View Personal Reviews</a>
+                            <a href="{% url 'community_reviews' %}">View Community Reviews</a>
                         </li>
                     </ul>
                 {% endif %}
@@ -74,8 +78,8 @@
             <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
                 <div class="hero-body">
                     <div class="container">
-                        <h1 class="title">Books</h1>
-                        <h2 class="subtitle">View our table of books below.</h2>
+                        <h1 class="title">AI Recommendations</h1>
+                        <h2 class="subtitle">Scroll through to see you generated recommendations based off your reviews.</h2>
                     </div>
                 </div>
             </section>
