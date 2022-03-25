@@ -63,7 +63,7 @@ class SearchView(TemplateView):
             return "CLUBTEMPLATE"
         
         if model == BookList:
-            return "BOOKLISTTEMPLATE"
+            return ['partials/booklist_search_list.html']
         
         if model == BookReview:
             return "REVIEWTEMPLATE"
