@@ -1,0 +1,61 @@
+{% if page_obj %}
+<div class="table-container">
+    <table class="table is-hoverable is-fullwidth"
+           id="table-booklists"
+           data-toggle="table"
+           data-pagination="true">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Tagline</th>
+                <th scope="col">Description</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for club in page_obj %}
+                <tr>
+                    <td>
+                      {{club.name}}
+                    </td>
+                    <td>{{ club.tagline }}</td>
+                    <td>{{ club.description }}</td>
+
+                    <td>
+                        <a class="button is-fullwidth is-link"
+                                href="{club.get_absolute_url}">View</button>
+                        {% if club.user_is_member %}
+                            <form class="" action="{% url 'leave_club' club_url_name=club.club_url_name %}" method="post">
+                              {% csrf_token %}
+                              <button type="submit" class="button is-fullwidth is-danger">Leave</button>
+                            </form>
+                        {% else %}
+                          {% if club.is_private == True %}
+                              <form method="post"
+                                    action="{% url 'join_club' club_url_name=club.club_url_name %}">
+                                  {% csrf_token %}
+                                  <button type="submit" class="button is-fullwidth is-success">Apply</button>
+                              </form>
+                          {% else %}
+                              <form method="post"
+                                    action="{% url 'join_club' club_url_name=club.club_url_name %}">
+                                  {% csrf_token %}
+                                  <button type="submit" class="button is-fullwidth is-info">Join</button>
+                              </form>
+                          {% endif %}
+                        {% endif %}
+                    </td>
+
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% include 'partials/pagination_ajax.html' %}
+{% else %}
+    <hr>
+    <p style="text-align: center">
+        There are no available books at the moment.
+    </p>
+    <hr>
+{% endif %}
