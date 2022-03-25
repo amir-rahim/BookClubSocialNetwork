@@ -10,7 +10,7 @@
         <div class="column is-3">
             <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
                 <p class="menu-label">
-                    Profile
+                    {{ username }}'s Profile
                 </p>
                 <ul class="menu-list">
                     <li>
@@ -21,19 +21,22 @@
                     </li>
                 </ul>
                 <p class="menu-label">
-                    Clubs
+                    {{ username }}'s Clubs
                 </p>
                 <ul class="menu-list">
                     <li>
-                        <a class="is-active"><b>Club Memberships</b></a>
+                        <a class="is-active" href="{% url 'user_memberships' username %}"><b>Club Memberships</b></a>
                     </li>
                 </ul>
                 <p class="menu-label">
-                    Books
+                    {{ username }}'s Book lists
                 </p>
                 <ul class="menu-list">
                     <li>
-                        <a href="{% url 'booklists_list' username=username %}">Book Lists</a>
+                        <a href="{% url 'booklists_list' username %}">Book Lists</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'saved_booklists' username %}">Saved Book Lists</a>
                     </li>
                 </ul>
             </aside>

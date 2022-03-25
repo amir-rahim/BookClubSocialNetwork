@@ -27,10 +27,10 @@ class EditBookListViewTestCase(TestCase, LogInTester):
             'description': 'New description',
         }
 
-        self.url = reverse('edit_booklist', kwargs={'username': self.user.username, 'booklist_id': self.booklist.id})
+        self.url = reverse('edit_booklist', kwargs={'booklist_id': self.booklist.id})
 
     def test_edit_booklist_url(self):
-        self.assertEqual(self.url, f'/user/{self.user.username}/lists/{self.booklist.id}/edit/')
+        self.assertEqual(self.url, f'/library/lists/{self.booklist.id}/edit/')
 
     def test_post_edit_booklist_redirects_when_not_logged_in(self):
         redirect_url = reverse_with_next('login', self.url)
@@ -41,7 +41,7 @@ class EditBookListViewTestCase(TestCase, LogInTester):
     def test_edit_booklist_redirects_when_trying_to_edit_another_users_booklist(self):
         self.client.login(username=self.another_user.username, password="Password123")
         self.assertTrue(self._is_logged_in())
-        redirect_url = reverse('booklists_list', kwargs={'username': self.user.username})
+        redirect_url = reverse('booklists_list')
         response = self.client.post(self.url, self.data, follow=True)
         messages_list = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
@@ -59,7 +59,7 @@ class EditBookListViewTestCase(TestCase, LogInTester):
         messages_list = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.SUCCESS)
-        redirect_url = reverse('booklists_list', kwargs={'username': self.user.username})
+        redirect_url = reverse('booklists_list')
         self.assertTemplateUsed(response, 'user_booklists.html')
         self.assertEqual(self.booklist.creator.id, self.user.id)
         self.assertEqual(self.booklist.title, self.data['title'])
@@ -75,7 +75,7 @@ class EditBookListViewTestCase(TestCase, LogInTester):
         messages_list = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.SUCCESS)
-        redirect_url = reverse('booklists_list', kwargs={'username': self.user.username})
+        redirect_url = reverse('booklists_list')
         self.assertTemplateUsed(response, 'user_booklists.html')
         self.assertEqual(self.booklist.creator.id, self.user.id)
         self.assertEqual(self.booklist.title, self.data['title'])
@@ -91,7 +91,7 @@ class EditBookListViewTestCase(TestCase, LogInTester):
         messages_list = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.SUCCESS)
-        redirect_url = reverse('booklists_list', kwargs={'username': self.user.username})
+        redirect_url = reverse('booklists_list')
         self.assertTemplateUsed(response, 'user_booklists.html')
         self.assertEqual(self.booklist.creator.id, self.user.id)
         self.assertEqual(self.booklist.title, self.data['title'])
@@ -116,9 +116,9 @@ class EditBookListViewTestCase(TestCase, LogInTester):
     def test_no_booklist_to_edit(self):
         self.client.login(username=self.user.username, password="Password123")
         self.assertTrue(self._is_logged_in())
-        self.url = reverse('edit_booklist', kwargs={'username': self.user.username, 'booklist_id': self.booklist.id+9999})
+        self.url = reverse('edit_booklist', kwargs={'booklist_id': self.booklist.id+9999})
         response = self.client.post(self.url, self.data, follow=True)
-        redirect_url = reverse('booklists_list', kwargs={'username': self.user.username})
+        redirect_url = reverse('booklists_list')
         messages_list = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.ERROR)

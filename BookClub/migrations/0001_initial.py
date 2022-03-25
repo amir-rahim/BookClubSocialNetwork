@@ -13,8 +13,8 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('contenttypes', '0002_remove_content_type_name'),
         ('auth', '0012_alter_user_first_name_max_length'),
+        ('contenttypes', '0002_remove_content_type_name'),
     ]
 
     operations = [
@@ -77,9 +77,6 @@ class Migration(migrations.Migration):
                 ('slug', models.SlugField(max_length=30)),
                 ('associated_with', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='BookClub.club')),
             ],
-            options={
-                'unique_together': {('title', 'associated_with')},
-            },
         ),
         migrations.CreateModel(
             name='User',
@@ -121,6 +118,16 @@ class Migration(migrations.Migration):
             options={
                 'unique_together': {('creator', 'object_id', 'content_type')},
             },
+        ),
+        migrations.CreateModel(
+            name='UserToUserRelationship',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('relationship_type', models.IntegerField(choices=[(1, 'Following')])),
+                ('created_on', models.DateTimeField(auto_now_add=True)),
+                ('source_user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='user_relationships_source', to=settings.AUTH_USER_MODEL)),
+                ('target_user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='user_relationships_target', to=settings.AUTH_USER_MODEL)),
+            ],
         ),
         migrations.CreateModel(
             name='Poll',
@@ -278,6 +285,14 @@ class Migration(migrations.Migration):
                 ('club', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='recommendations', to='BookClub.club')),
             ],
             bases=('BookClub.abstractrecommendations',),
+        ),
+        migrations.AddConstraint(
+            model_name='usertouserrelationship',
+            constraint=models.UniqueConstraint(fields=('source_user', 'target_user'), name='unique_relationship'),
+        ),
+        migrations.AlterUniqueTogether(
+            name='forum',
+            unique_together={('title', 'associated_with')},
         ),
         migrations.AddConstraint(
             model_name='clubmembership',

@@ -17,11 +17,10 @@ class DeleteBookListView(TestCase, LogInTester):
     def setUp(self):
         self.user = User.objects.get(username='johndoe')
         self.booklist = BookList.objects.get(pk=1)
-        self.url = reverse('delete_booklist', kwargs={'username': self.user.username,
-                                                      'list_id': self.booklist.pk})
+        self.url = reverse('delete_booklist', kwargs={'booklist_id': self.booklist.pk})
 
     def test_url(self):
-        correct_url = '/user/johndoe/list/1/delete/'
+        correct_url = '/library/lists/1/delete/'
         self.assertEqual(self.url, correct_url)
 
     def test_redirects_on_get_request_when_not_logged_in(self):
@@ -38,7 +37,7 @@ class DeleteBookListView(TestCase, LogInTester):
         self.client.login(username='johndoe', password='Password123')
         self.assertTrue(self._is_logged_in())
 
-        redirect_url = reverse('booklists_list', kwargs={'username': 'johndoe'})
+        redirect_url = reverse('booklists_list')
         response = self.client.get(self.url, follow=True)
         self.assertRedirects(response, redirect_url,
                              status_code=302, target_status_code=200, fetch_redirect_response=True
@@ -54,8 +53,7 @@ class DeleteBookListView(TestCase, LogInTester):
         self.client.login(username='johndoe', password='Password123')
         self.assertTrue(self._is_logged_in())
 
-        url = reverse('delete_booklist', kwargs={'username': 'janedoe',
-                                                 'list_id': 2})
+        url = reverse('delete_booklist', kwargs={'booklist_id': 2})
 
         before_count = BookList.objects.count()
         response = self.client.post(url)
@@ -69,11 +67,10 @@ class DeleteBookListView(TestCase, LogInTester):
         self.assertTrue(self._is_logged_in())
         before_count = BookList.objects.count()
 
-        url = reverse('delete_booklist', kwargs={'username': 'johndoe',
-                                                 'list_id': 5})
+        url = reverse('delete_booklist', kwargs={'booklist_id': 5})
         self.assertFalse(BookList.objects.filter(pk=5, creator=self.user).exists())
 
-        redirect_url = reverse('booklists_list', kwargs={'username': 'johndoe'})
+        redirect_url = reverse('booklists_list')
         response = self.client.post(url, follow=True)
         self.assertRedirects(response, redirect_url,
                              status_code=302, target_status_code=200, fetch_redirect_response=True
@@ -95,7 +92,7 @@ class DeleteBookListView(TestCase, LogInTester):
         list_pk = self.booklist.pk
         self.assertTrue(BookList.objects.filter(creator=self.user, pk=list_pk).exists())
 
-        redirect_url = reverse('booklists_list', kwargs={'username': 'johndoe'})
+        redirect_url = reverse('booklists_list')
         response = self.client.post(self.url, follow=True)
         self.assertRedirects(response, redirect_url,
                              status_code=302, target_status_code=200, fetch_redirect_response=True

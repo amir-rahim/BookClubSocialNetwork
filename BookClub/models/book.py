@@ -24,7 +24,7 @@ class Book(models.Model):
 
     def getPublicationYear(self):
         date = self.publicationYear
-        return date.year    
+        return date.year
 
     def get_s_size(self):
         file = urllib.request.urlopen(self.imageS)
@@ -43,3 +43,6 @@ class Book(models.Model):
         size = file.headers.get("content-length")
         file.close()
         return int(size)
+
+    def get_short_description(self):
+        return f'"{self.title}" by {self.author}'

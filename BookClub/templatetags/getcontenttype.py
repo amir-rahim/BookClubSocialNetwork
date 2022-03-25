@@ -10,3 +10,10 @@ def getcontenttype(context, content, **kwargs):
         content.__class__).pk
     
     return contenttypepk
+
+@register.simple_tag(takes_context=True)
+def get_content_type_from_queryset(context, queryset, **kwargs):
+    
+    if len(queryset) > 0:
+        content = queryset[0]
+        return getcontenttype(context, content)

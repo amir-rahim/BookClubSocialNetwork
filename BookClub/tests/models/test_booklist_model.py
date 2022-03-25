@@ -141,7 +141,7 @@ class BookListTestCase(TestCase):
     # Check helper methods
     def test_get_delete_url(self):
         url_from_model = self.bookList.get_delete_url()
-        correct_url = '/user/johndoe/list/1/delete/'
+        correct_url = '/library/lists/1/delete/'
         self.assertEqual(url_from_model, correct_url)
 
     def test_string_function_returns_correct_value(self):
@@ -167,5 +167,10 @@ class BookListTestCase(TestCase):
 
     def test_get_absolute_url(self):
         url = self.bookList.get_absolute_url()
-        correct_url = '/user/johndoe/lists/1/'
+        correct_url = '/library/lists/1/'
         self.assertEqual(url, correct_url)
+
+    def test_get_short_contents(self):
+        short_contents = self.bookList.get_short_contents()
+        correct_short_contents = '"Classical Mythology" by Mark P. O. Morford; "The Greek Myths: The Compl...'
+        self.assertEqual(short_contents, correct_short_contents)

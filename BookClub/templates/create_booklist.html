@@ -28,10 +28,13 @@
                     </p>
                     <ul class="menu-list">
                         <li>
-                            <a href="{% url 'booklists_list' username=user.username %}">{{ user.get_username }} Book Lists</a>
+                            <a href="{% url 'booklists_list' %}">{{ user.get_username }} Book Lists</a>
                         </li>
                         <li>
-                            <a href="{% url 'create_booklist' username=user.username %}"
+                            <a href="{% url 'saved_booklists' %}">Saved Book Lists</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'create_booklist' %}"
                                class="is-active"><b>Create Book Lists</b></a>
                         </li>
                     </ul>
@@ -68,10 +71,10 @@
                         <a href="{% url 'user_dashboard' %}">{{ user.username }}</a>
                     </li>
                     <li>
-                        <a href="{% url 'booklists_list' user.username %}">Book Lists</a>
+                        <a href="{% url 'booklists_list' %}">Book Lists</a>
                     </li>
                     <li>
-                        <a href="{% url 'create_booklist' user.username %}">Create</a>
+                        <a href="{% url 'create_booklist' %}">Create</a>
                     </li>
                 </ul>
             </nav>
@@ -86,7 +89,7 @@
             <div class="box">
                 <div class="card-content">
                     <form class=""
-                          action="{% url 'create_booklist' user.username %}"
+                          action="{% url 'create_booklist' %}"
                           method="post">
                         {% csrf_token %}
                         {% include 'partials/bulma_form.html' with form=form %}
