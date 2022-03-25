@@ -148,7 +148,7 @@ class CreateMeetingViewTestCase(TestCase):
 
     def test_owner_create_wrong_meeting(self):
         self.client.login(username=self.owner.username, password='Password123')
-        self.data['meeting_time'] = 'aaaa'
+        self.data['meeting_time'] = "2022-02-26 17:30:00"
         before_count = Meeting.objects.count()
         response = self.client.post(self.url, self.data)
         after_count = Meeting.objects.count()
@@ -164,7 +164,7 @@ class CreateMeetingViewTestCase(TestCase):
 
     def test_moderator_create_wrong_meeting(self):
         self.client.login(username=self.moderator.username, password='Password123')
-        self.data['meeting_time'] = 'aaaa'
+        self.data['meeting_time'] = "2022-02-26 17:30:00"
         before_count = Meeting.objects.count()
         response = self.client.post(self.url, self.data)
         after_count = Meeting.objects.count()
