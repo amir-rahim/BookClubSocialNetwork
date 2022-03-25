@@ -19,9 +19,9 @@ class Evaluator:
     def get_train_test_datasets(self, min_ratings_threshold=None):
         if self.trainset is None:
             if min_ratings_threshold is None:
-                data_provider = DataProvider(get_data_from_csv=True, print_status=True)
+                data_provider = DataProvider(get_data_from_csv=True, print_status=False)
             else:
-                data_provider = DataProvider(get_data_from_csv=True, print_status=True, filtering_min_ratings_threshold=min_ratings_threshold)
+                data_provider = DataProvider(get_data_from_csv=True, print_status=False, filtering_min_ratings_threshold=min_ratings_threshold)
             dataset = data_provider.get_filtered_ratings_dataset()
             evaluation_data_provider = EvaluationDataProvider(dataset)
             return evaluation_data_provider.get_loocv_datasets()
