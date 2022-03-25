@@ -133,3 +133,11 @@ class BookShelfAdmin(admin.ModelAdmin):
     list_display = [
         'user', 'book', 'status'
     ]
+
+@admin.register(FeaturedBooks)
+class FeaturedBooksAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for Featured Books."""
+
+    list_display = [
+        'club'
+    ]
