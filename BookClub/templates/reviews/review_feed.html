@@ -1,0 +1,161 @@
+{% extends 'base_content.html' %}
+{% block page_title %}
+    Club Memberships
+{% endblock page_title %}
+{% block page_subtitle %}
+    Find the Book Club memberships here
+{% endblock page_subtitle %}
+{% block content %}
+    <div class="columns">
+        <div class="column is-3">
+            <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'library_dashboard' %}">Dashboard</a>
+                    </li>
+                </ul>
+                <p class="menu-label">
+                    Our Book Library
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'library_books' %}">View Library</a>
+                    </li>
+                </ul>
+                {% if user.is_authenticated %}
+                    <p class="menu-label">
+                        Book Lists
+                    </p>
+                    <ul class="menu-list">
+                        <li>
+                            <a href="{% url 'booklists_list' %}">{{ user.get_username }} Book Lists</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'saved_booklists' %}">Saved Book Lists</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'create_booklist' %}">Create Book Lists</a>
+                        </li>
+                    </ul>
+                {% endif %}
+                <p class="menu-label">
+                    Recommender
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'user_recommendations' %}">AI Recommended Books</a>
+                    </li>
+                </ul>
+                {% if user.is_authenticated %}
+                    <p class="menu-label">
+                        Reviews
+                    </p>
+                    <ul class="menu-list">
+                        <li>
+                            {% if current_user %}
+                                <a href="{% url 'personal_reviews' %}" class="is-active"><b>View Personal Reviews</b></a>
+                                <a href="{% url 'community_reviews' %}">View Community Reviews</a>
+                            {% else %}
+                                <a href="{% url 'personal_reviews' %}">View Personal Reviews</a>
+                                <a href="{% url 'community_reviews' %}" class="is-active"><b>View Community Reviews</b></a>
+                            {% endif %}
+                        </li>
+                    </ul>
+                {% endif %}
+            </aside>
+        </div>
+        <div class="column is-9">
+            <nav class="breadcrumb"
+                 aria-label="breadcrumbs"
+                 style="padding-left: 5px;">
+                <ul>
+                    <li>
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'library_dashboard' %}">Library</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'library_dashboard' %}">Reviews</a>
+                    </li>
+                    {% if current_user %}
+                        <li>
+                            <a href="{% url 'personal_reviews' %}">Personal</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{% url 'community_reviews' %}">Community</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
+                <div class="hero-body">
+                    <div class="container">
+                        {% if current_user %}
+                            <h1 class="title">Personal Reviews</h1>
+                        {% else %}
+                            <h1 class="title">Community Reviews</h1>
+                        {% endif %}
+                        <h2 class="subtitle">Feed of reviews that have been recently posted.</h2>
+                    </div>
+                </div>
+            </section>
+            {% if reviews %}
+                <!-- If there are reviews to show -->
+                {% for post in reviews %}
+                    <br />
+                    <div class="card">
+                        <header class="card-header">
+                            <div class="card-header-title">
+                                <p class="subtitle">
+                                    <b>{{ post.title }}</b>
+                                </p>
+                            </div>
+                            <div class="card-header-icon">{% include 'partials/voting.html' with content=post %}</div>
+                        </header>
+                        <div class="card-content">
+                            <div class="content">
+                                Book: {{ post.book.title }} - Rating: {{ post.book_rating }}/10
+                                <br/>
+                                <span class="has-text-grey">{{ post.content |truncatechars:240 }}</span>
+                            </div>
+                        </div>
+                        <footer class="card-footer">
+                            <p class="card-footer-item">
+                                <span class="is-small has-text-grey-light">Posted by: {{ post.creator }}</span>
+                            </p>
+                            <p class="card-footer-item has-text-grey-light">
+                                {{ post.created_on | timesince }} ago
+                            </p>
+                            <a href="{% url 'book_review' book_id=post.book.id review_id=post.id %}" class="card-footer-item">
+                                {% if post.get_comments.count > 0 %}
+                                    See {{ post.get_comments.count }} comments
+                                {% else %}
+                                    Be the first to comment!
+                                {% endif %}
+                            </a>
+                        </footer>
+                    </div>
+                {% endfor %}
+                <br />
+                {% include 'partials/pagination.html' %}
+            {% else %}
+                <!-- If there is no reviews to show -->
+                <div class="box">
+                <p style="text-align: center">
+                    There are no reviews, you can find books in the library <a href="{% url 'library_books' %}">here</a>.
+                </p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <script>
+const dataTable = new simpleDatatables.DataTable("#table-clubs", {
+    fixedHeight: true,
+    columns: [
+      {select: [1], sortable:false}
+    ]
+})
+    </script>
+{% endblock %}
