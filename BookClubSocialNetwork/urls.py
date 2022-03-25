@@ -44,11 +44,16 @@ urlpatterns = [
     path('user/', views.UserDashboardView.as_view(), name='user_dashboard'),
     path('edit_profile/', views.EditProfileView.as_view(), name='edit_profile'),
     path('password_change/', views.ChangePasswordView.as_view(), name='password_change'),
+    path('delete_account/', views.DeleteUserAccountView.as_view(), name='delete_user_account'),
 
     # '''User Profile URLs'''
-    path('profile/<str:username>/', views.UserProfileView.as_view(), name='user_profile'),
+    path('profile/<str:username>/', views.UserDashboardView.as_view(), name='user_profile'),
     path('profile/<str:username>/memberships/', views.UserProfileMembershipsView.as_view(), name='user_memberships'),
-    path('profile/<str:username>/following/', views.UserProfileFollowingView.as_view(), name='user_following'),
+    path('profile/<str:username>/lists/', views.BooklistListView.as_view(), name='booklists_list'),
+    path('profile/<str:username>/saved_lists/', views.SavedBooklistsListView.as_view(), name='saved_booklists'),
+    path('profile/<str:username>/following/', views.FollowerListView.as_view(), name='user_following'),
+    path('profile/<str:username>/follow/', views.FollowUserView.as_view(), name='follow_user'),
+
 
     # '''Action URLs'''
     path('join_club/<str:club_url_name>/', views.JoinClubView.as_view(), name='join_club'),
@@ -73,7 +78,6 @@ urlpatterns = [
     path('club/<str:club_url_name>/members/', views.MembersListView.as_view(), name='member_list'),
     path('club/<str:club_url_name>/edit/', views.EditClubView.as_view(), name='edit_club'),
     path('club/<str:club_url_name>/applicants/', views.ApplicantListView.as_view(), name='applicant_list'),
-    path('club/<str:club_url_name>/edit/', views.EditClubView.as_view(), name='edit_club'),
     path('club/<str:club_url_name>/polls/create/', views.CreateClubPollView.as_view(), name='create_club_poll'),
 
     # '''Club Forum URLs'''
@@ -90,9 +94,9 @@ urlpatterns = [
          views.DeleteForumPostView.as_view(), name='delete_forum_post'),
 
     # '''Meeting URLs'''
-    path('club/<str:club_url_name>/meetings/<int:meeting_id>/edit/',views.EditMeetingView.as_view(), name='edit_meeting'),
+    path('club/<str:club_url_name>/meetings/<int:meeting_id>/edit/', views.EditMeetingView.as_view(), name='edit_meeting'),
     path('club/<str:club_url_name>/meetings/<int:meeting_id>/edit/remove_member/<int:member_id>', views.RemoveMeetingMember.as_view(), name='remove_meeting_member'),
-    path('club/<str:club_url_name>/meetings/',views.MeetingListView.as_view(),name='meeting_list'),
+    path('club/<str:club_url_name>/meetings/',views.MeetingListView.as_view(), name='meeting_list'),
     path('club/<str:club_url_name>/meetings/<int:meeting_id>/join/', views.JoinMeetingView.as_view(), name='join_meeting'),
     path('club/<str:club_url_name>/meetings/<int:meeting_id>/leave/', views.LeaveMeetingView.as_view(), name='leave_meeting'),
     path('club/<str:club_url_name>/meetings/<int:meeting_id>/', views.MeetingDetailsView.as_view(), name='meeting_details'),
@@ -101,7 +105,6 @@ urlpatterns = [
     path('club/<str:club_url_name>/meetings/<int:meeting_id>/delete/', views.DeleteMeetingView.as_view(),
          name='delete_meeting'),
     
-
 
     # '''Library URLs'''
     path('library/', views.library_dashboard, name='library_dashboard'),
@@ -133,26 +136,30 @@ urlpatterns = [
     path('forum/downvote/', views.CreateVoteView.as_view(), name='downvote'),
 
     # '''Book List URLs'''
-    path('user/<str:username>/lists/',
-         views.BooklistListView.as_view(), name='booklists_list'),
-    path('user/<str:username>/lists/create/',
-         views.CreateBookListView.as_view(), name='create_booklist'),
-    path('user/<str:username>/list/<int:list_id>/delete/',
-         views.DeleteBookListView.as_view(), name='delete_booklist'),
-    path('user/<str:username>/lists/<int:booklist_id>/edit/',
-         views.EditBookListView.as_view(), name='edit_booklist'),
-    path('user/<str:username>/lists/<int:booklist_id>/',
-         views.UserBookListView.as_view(), name='user_booklist'),
-    path('user/<str:username>/lists/<int:booklist_id>/<int:book_id>/delete', views.RemoveFromBookListView.as_view(), name='remove_book'),
-    path('user/<str:username>/lists/create/',
-         views.CreateBookListView.as_view(), name='create_booklist'),
+    path('library/lists/', views.BooklistListView.as_view(), name='booklists_list'),
+    path('library/lists/create/', views.CreateBookListView.as_view(), name='create_booklist'),
+
+    path('library/lists/<int:booklist_id>/', views.UserBookListView.as_view(), name='user_booklist'),
+    path('library/lists/<int:booklist_id>/delete/', views.DeleteBookListView.as_view(), name='delete_booklist'),
+    path('library/lists/<int:booklist_id>/edit/', views.EditBookListView.as_view(), name='edit_booklist'),
+    path('library/lists/<int:booklist_id>/<int:book_id>/delete/', views.RemoveFromBookListView.as_view(), name='remove_book'),
+
+    path('library/lists/saved/', views.SavedBooklistsListView.as_view(), name='saved_booklists'),
+    path('library/lists/<int:booklist_id>/save/', views.SaveBookListView.as_view(), name='save_booklist'),
+    path('library/lists/<int:booklist_id>/remove_saved_booklist/', views.RemoveSavedBookListView.as_view(), name='remove_saved_booklist'),
+
 
     # '''Agenda URLs'''
     path('agenda/', views.AgendaView.as_view(), name='agenda'),
+    
+    # '''Bookshelf URLs'''
+    path('bookshelf/', views.BookShelfView.as_view(), name='bookshelf'),
+    path('bookshelf/<int:book_id>/add/', views.AddToBookShelfView.as_view(), name='add_to_bookshelf'),
+    path('bookshelf/<int:book_id>/update/', views.UpdateBookShelfView.as_view(), name='update_from_bookshelf'),
+    path('bookshelf/<int:book_id>/remove/', views.RemoveFromBookShelfView.as_view(), name='remove_from_bookshelf'),
     
     # '''Asyn Views'''
     path('search_books/', views.SearchView.as_view(), name='async_book_search'),
     path('user_recommendations/', views.RecommendationUserListView.as_view(), name='async_user_recommendations'),
     path('club_recommendations/<str:club_url_name>/', views.RecommendationClubListView.as_view(), name='async_club_recommendations'),
-    
 ]
