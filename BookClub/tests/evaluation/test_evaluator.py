@@ -5,7 +5,7 @@ from RecommenderModule.evaluation.evaluator import Evaluator
 class EvaluatorTestCase(TestCase):
 
     def setUp(self):
-        self.evaluator = Evaluator()
+        self.evaluator = Evaluator(print_status=False)
 
     def test_make_combinations_from_dict_single_parameter(self):
         parameters_dict = {

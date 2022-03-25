@@ -58,3 +58,14 @@ class EvaluationMetricsTestCase(TestCase):
         }
         novelty = self.evaluation_metrics.get_novelty(test_recommendations)
         self.assertEqual(novelty, 21/6)
+
+    def test_get_correct_recommendations_rate_100_percent_rate(self):
+        test_recommendations = self.build_test_recommendations()
+        for key in test_recommendations.keys():
+            test_recommendations[key].insert(0, "XXXXXXXXXX")
+            break
+        correct_recommendations_rate = self.evaluation_metrics.get_correct_recommendations_rate(test_recommendations)
+        recommendations_length = 0
+        for user_recommendations in test_recommendations.values():
+            recommendations_length += len(user_recommendations)
+        self.assertEqual(correct_recommendations_rate, (recommendations_length-1)/recommendations_length)

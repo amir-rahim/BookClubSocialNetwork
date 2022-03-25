@@ -10,18 +10,18 @@ class Evaluator:
     testset = []
     evaluation_metrics = None
 
-    def __init__(self, min_ratings_threshold=None):
-        self.trainset, self.testset = self.get_train_test_datasets(min_ratings_threshold)
+    def __init__(self, min_ratings_threshold=None, print_status=True):
+        self.trainset, self.testset = self.get_train_test_datasets(min_ratings_threshold, print_status)
         self.evaluation_metrics = EvaluationMetrics(self.trainset, self.testset)
 
 
     """Get the LeaveOneOut train and test datasets."""
-    def get_train_test_datasets(self, min_ratings_threshold=None):
+    def get_train_test_datasets(self, min_ratings_threshold=None, print_status=True):
         if self.trainset is None:
             if min_ratings_threshold is None:
-                data_provider = DataProvider(get_data_from_csv=True, print_status=False)
+                data_provider = DataProvider(get_data_from_csv=True, print_status=print_status)
             else:
-                data_provider = DataProvider(get_data_from_csv=True, print_status=False, filtering_min_ratings_threshold=min_ratings_threshold)
+                data_provider = DataProvider(get_data_from_csv=True, print_status=print_status, filtering_min_ratings_threshold=min_ratings_threshold)
             dataset = data_provider.get_filtered_ratings_dataset()
             evaluation_data_provider = EvaluationDataProvider(dataset)
             return evaluation_data_provider.get_loocv_datasets()
@@ -66,15 +66,17 @@ class Evaluator:
         hit_rate = self.evaluation_metrics.get_hit_rate(recommendations)
         average_reciprocal_hit_rate = self.evaluation_metrics.get_average_reciprocal_hit_rate(recommendations)
         novelty = self.evaluation_metrics.get_novelty(recommendations)
-        self.print_evaluations(hit_rate, average_reciprocal_hit_rate, novelty)
+        correct_recommendations_rate = self.evaluation_metrics.get_correct_recommendations_rate(recommendations)
+        self.print_evaluations(hit_rate, average_reciprocal_hit_rate, novelty, correct_recommendations_rate)
 
 
     """Print the results of the evaluation of the recommender system"""
-    def print_evaluations(self, hit_rate, average_reciprocal_hit_rate, novelty):
+    def print_evaluations(self, hit_rate, average_reciprocal_hit_rate, novelty, correct_recommendations_rate):
         print()
-        print(f" -> hit_rate:{hit_rate}")
-        print(f" -> average_reciprocal_hit_rate:{average_reciprocal_hit_rate}")
-        print(f" -> novelty:{novelty}")
+        print(f" -> hit_rate: {hit_rate}")
+        print(f" -> average_reciprocal_hit_rate: {average_reciprocal_hit_rate}")
+        print(f" -> novelty: {novelty}")
+        print(f" -> correct_recommendations_rate: {correct_recommendations_rate}")
         print()
 
     """Create a list of all possible combinations of parameters, from the parameters_dict argument

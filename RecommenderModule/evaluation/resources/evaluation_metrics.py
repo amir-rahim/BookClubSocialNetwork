@@ -34,7 +34,7 @@ class EvaluationMetrics:
 
             # We increment the number of hits if the book has been recommended to the user
             try:
-                if (book_id in recommendations[user_id]):
+                if book_id in recommendations[user_id]:
                     hits += 1
             except:
                 pass
@@ -57,7 +57,7 @@ class EvaluationMetrics:
                 # with a weighting corresponding to its rank in the recommendations
                 rank = 1
                 for recommended_book in recommendations[user_id]:
-                    if (book_id == recommended_book):
+                    if book_id == recommended_book:
                         hits += (1/rank)
                         break
                     rank += 1
@@ -87,3 +87,29 @@ class EvaluationMetrics:
         if total == 0:
             return 0
         return sum / total
+
+    """Get the rate of correct recommendatinos of an algorithm, given the recommendations produced from
+            the dataset's LOOCV train set and the left-out LOOCV test set.
+            The rate is calculated as the number of recommended books that are correctly part of the testset
+            out of the total number of books recommended."""
+    def get_correct_recommendations_rate(self, recommendations):
+
+        hits = 0
+        total = 0
+
+        for user in recommendations.keys():
+            user_recommendations = recommendations[user]
+            total += len(user_recommendations)
+
+        for user_id, book_id, rating in self.testset:
+
+            # We increment the number of hits if the book has been recommended to the user
+            try:
+                if book_id in recommendations[user_id]:
+                    hits += 1
+            except:
+                pass
+
+        if total == 0:
+            return 0
+        return hits / total
