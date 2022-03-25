@@ -22,10 +22,10 @@
                     </td>
                     <td>{{ club.tagline }}</td>
                     <td>{{ club.description }}</td>
-                    
+
                     <td>
                         <a class="button is-fullwidth is-link"
-                                href="{club.get_absolute_url}">View</button>
+                                href="{{club.get_absolute_url}}">View</button>
                         {% if ismember %}
                             <form class="" action="{% url 'leave_club' club_url_name=club.club_url_name %}" method="post">
                               {% csrf_token %}
