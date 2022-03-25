@@ -1,0 +1,29 @@
+{% for user in page_obj %}
+    <div class="columns">
+        <div class="column is-12">
+            <div class="card">
+                <div class="card-content">
+                    <div class="media">
+                        <div class="media-left">
+                            <figure class="image is-64x64">
+                                <img class="is-rounded"
+                                     src="{{ member.gravatar }}"
+                                     alt="Placeholder image">
+                            </figure>
+                        </div>
+                        <div class="media-content">
+                            <div class="content">
+                                <p class="text">
+                                    <b>Name: </b> {{ user.username }}
+                                </p>
+                                <p class="text">
+                                    <b>Public Bio: </b> {{ user.public_bio }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
