@@ -63,20 +63,20 @@ class Evaluator:
     """Compute all evaluations for the given recommendations, 
         and then print them through the print_evaluations() method."""
     def evaluate(self, recommendations):
-        hit_rate = self.evaluation_metrics.get_hit_rate(recommendations)
-        average_reciprocal_hit_rate = self.evaluation_metrics.get_average_reciprocal_hit_rate(recommendations)
-        novelty = self.evaluation_metrics.get_novelty(recommendations)
-        correct_recommendations_rate = self.evaluation_metrics.get_correct_recommendations_rate(recommendations)
-        self.print_evaluations(hit_rate, average_reciprocal_hit_rate, novelty, correct_recommendations_rate)
+        evaluations = {
+            "hit_rate": self.evaluation_metrics.get_hit_rate(recommendations),
+            "average_reciprocal_hit_rate": self.evaluation_metrics.get_average_reciprocal_hit_rate(recommendations),
+            "novelty": self.evaluation_metrics.get_novelty(recommendations),
+            "correct_recommendations_rate": self.evaluation_metrics.get_correct_recommendations_rate(recommendations),
+        }
+        self.print_evaluations(evaluations)
 
 
     """Print the results of the evaluation of the recommender system"""
-    def print_evaluations(self, hit_rate, average_reciprocal_hit_rate, novelty, correct_recommendations_rate):
+    def print_evaluations(self, evaluations={}):
         print()
-        print(f" -> hit_rate: {hit_rate}")
-        print(f" -> average_reciprocal_hit_rate: {average_reciprocal_hit_rate}")
-        print(f" -> novelty: {novelty}")
-        print(f" -> correct_recommendations_rate: {correct_recommendations_rate}")
+        for name, value in evaluations.items():
+            print(f" -> {name}: {value}")
         print()
 
     """Create a list of all possible combinations of parameters, from the parameters_dict argument
