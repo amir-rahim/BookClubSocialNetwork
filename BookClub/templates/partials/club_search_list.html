@@ -1,59 +1,59 @@
 {% if page_obj %}
-{% load get_membership %}
-<div class="table-container">
-    <table class="table is-hoverable is-fullwidth"
-           id="table-booklists"
-           data-toggle="table"
-           data-pagination="true">
-        <thead>
-            <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Tagline</th>
-                <th scope="col">Description</th>
-                <th scope="col">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for club in page_obj %}
-                {% is_member club user as ismember%}
+    {% load get_membership %}
+    <div class="table-container">
+        <table class="table is-hoverable is-fullwidth"
+               id="table-booklists"
+               data-toggle="table"
+               data-pagination="true">
+            <thead>
                 <tr>
-                    <td>
-                      {{club.name}}
-                    </td>
-                    <td>{{ club.tagline }}</td>
-                    <td>{{ club.description }}</td>
-
-                    <td>
-                        <a class="button is-fullwidth is-link"
-                                href="{{club.get_absolute_url}}">View</button>
-                        {% if ismember %}
-                            <form class="" action="{% url 'leave_club' club_url_name=club.club_url_name %}" method="post">
-                              {% csrf_token %}
-                              <button type="submit" class="button is-fullwidth is-danger">Leave</button>
-                            </form>
-                        {% else %}
-                          {% if club.is_private == True %}
-                              <form method="post"
-                                    action="{% url 'join_club' club_url_name=club.club_url_name %}">
-                                  {% csrf_token %}
-                                  <button type="submit" class="button is-fullwidth is-success">Apply</button>
-                              </form>
-                          {% else %}
-                              <form method="post"
-                                    action="{% url 'join_club' club_url_name=club.club_url_name %}">
-                                  {% csrf_token %}
-                                  <button type="submit" class="button is-fullwidth is-info">Join</button>
-                              </form>
-                          {% endif %}
-                        {% endif %}
-                    </td>
-
+                    <th scope="col">Name</th>
+                    <th scope="col">Tagline</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Public/Private</th>
+                    <th scope="col">Action</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-{% include 'partials/pagination_ajax.html' %}
+            </thead>
+            <tbody>
+                {% for club in page_obj %}
+                    {% is_member club user as ismember %}
+                    <tr>
+                        <td>{{ club.name }}</td>
+                        <td>{{ club.tagline }}</td>
+                        <td>{{ club.description }}</td>
+                        <td>
+                            {% if club.is_private %}
+                                Private
+                            {% else %}
+                                Public
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div>
+                                <button class="button is-fullwidth is-link"
+                                   href="{{ club.get_absolute_url }}">View
+                                </button>
+                                {% if club.is_private == True %}
+                                    <form method="post"
+                                          action="{% url 'join_club' club_url_name=club.club_url_name %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="button is-fullwidth is-success">Apply</button>
+                                    </form>
+                                {% else %}
+                                    <form method="post"
+                                          action="{% url 'join_club' club_url_name=club.club_url_name %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="button is-fullwidth is-info">Join</button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% include 'partials/pagination_ajax.html' %}
 {% else %}
     <hr>
     <p style="text-align: center">
