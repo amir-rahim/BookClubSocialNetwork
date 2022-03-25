@@ -151,7 +151,7 @@ urlpatterns = [
     path('agenda/', views.AgendaView.as_view(), name='agenda'),
     
     # '''Asyn Views'''
-    path('search_books/', views.BookSearchView.as_view(), name='async_book_search'),
+    path('search_books/', views.SearchView.as_view(), name='async_book_search'),
     path('user_recommendations/', views.RecommendationUserListView.as_view(), name='async_user_recommendations'),
     path('club_recommendations/<str:club_url_name>/', views.RecommendationClubListView.as_view(), name='async_club_recommendations'),
     
