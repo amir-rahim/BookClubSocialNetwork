@@ -17,7 +17,7 @@ class SearchView(TemplateView):
         context = super().get_context_data(*args, **kwargs)
         select = request.GET.get('select', False)
         page = request.GET.get('page', 1)
-        query = request.GET.get('q', None)
+        query = request.GET.get('q', "")
         content_type = request.GET.get('content_type', None)
         
         objects = self.get_queryset(content_type=content_type, query=query)
@@ -33,7 +33,7 @@ class SearchView(TemplateView):
         data_dict = {"html_from_view" : html}
         return JsonResponse(data=data_dict, safe=False)
         
-    def get_queryset(self, query=None, content_type = None):
+    def get_queryset(self, query="", content_type = None):
         content_type = ContentType.objects.get(pk=content_type)
         model = content_type.model_class()
         Qs = self.get_query(model, query)
@@ -54,12 +54,16 @@ class SearchView(TemplateView):
     def get_template_names(self):
         select = self.request.GET.get('select')
         content_type = self.request.GET.get('content_type', None)
+        model = ContentType.objects.get(pk=content_type).model_class()
+        if model == Book:
+            if select:
+                return ['partials/book_select_list.html']
+            return ['partials/book_search_list.html']
         
-        if select:
-            return ['partials/book_select_list.html']
-        if self.test:
-            return ['partials/object_search_list.html']
-        return ['partials/book_search_list.html']
+        if model == Meeting:
+            if self.test:
+                return ['partials/object_search_list.html']
+        
     
     def get_query(self, model, query):
         q_objects = Q()
