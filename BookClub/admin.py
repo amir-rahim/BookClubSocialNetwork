@@ -139,5 +139,5 @@ class FeaturedBooksAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for Featured Books."""
 
     list_display = [
-        'club'
+        'club', 'book', 'reason'
     ]
