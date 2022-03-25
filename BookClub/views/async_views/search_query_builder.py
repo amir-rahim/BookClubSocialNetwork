@@ -79,79 +79,18 @@ class ClubQuery(SearchQuery):
     def query(self, **kwargs):
         user = kwargs.get('user', None)
         user_clubs = get_clubs_user_is_member_of(user)
-        self.q_objects.add(Q(name__icontains=self.query_string), Q.OR)
-        self.q_objects.add(Q(description__icontains=self.query_string), Q.OR)
-        self.q_objects.add(Q(tagline__icontains=self.query_string), Q.OR)
-        self.q_objects.add(
-            Q(rules__icontains=self.query_string, pk__in=user_clubs), Q.OR)
-        self.q_objects.add(
-            Q(clubmembership__user__username__icontains=self.query_string, pk__in=user_clubs), Q.OR)
-        return self.q_objects
-
-
-class TextPostQuery(SearchQuery):
-
-    match_models = TextPost
-    exclude_models = ForumPost
-
-    def query(self, **kwargs):
-        self.q_objects.add(Q(content__icontains=self.query_string), Q.OR)
-        self.q_objects.add(Q(title__icontains=self.query_string), Q.OR)
-        return self.q_objects
-
-
-class TextCommentQuery(SearchQuery):
-
-    match_models = TextComment
-    exclude_models = ForumComment
-
-    def query(self, **kwargs):
-        self.q_objects.add(Q(content__icontains=self.query_string), Q.OR)
-        return self.q_objects
-
-
-class ForumCommentQuery(SearchQuery):
-
-    match_models = ForumComment
-
-    def query(self, **kwargs):
-        user = kwargs.get('user', None)
-        user_clubs = get_clubs_user_is_member_of(user)
-        self.q_objects.add(Q(content__icontains=self.query_string,
-                           post__forum__associated_with__pk__in=user_clubs), Q.OR)
-        self.q_objects.add(Q(content__icontains=self.query_string, 
-                           post__forum__associated_with__isnull=True), Q.OR)
-        return self.q_objects
-
-
-class ForumPostQuery(SearchQuery):
-
-    match_models = ForumPost
-
-    def query(self, **kwargs):
-        user = kwargs.get('user', None)
-        user_clubs = get_clubs_user_is_member_of(user)
-        self.q_objects.add(Q(content__icontains=self.query_string,
-                             forum__associated_with__pk__in=user_clubs), Q.OR)
-        self.q_objects.add(Q(title__icontains=self.query_string,
-                           forum__associated_with__pk__in=user_clubs), Q.OR)
-        self.q_objects.add(Q(title__icontains=self.query_string,
-                           forum__associated_with__isnull=True), Q.OR)
+        self.q_objects.add(Q((Q(name__icontains=self.query_string), Q.AND, ~Q(pk__in=user_clubs))), Q.OR)
+        self.q_objects.add(Q(description__icontains=self.query_string, pk__not__in=user_clubs), Q.OR)
+        self.q_objects.add(Q(tagline__icontains=self.query_string, pk__not__in=user_clubs), Q.OR)
         return self.q_objects
     
-class MeetingsQuery(SearchQuery):
     
-    match_models = Meeting
+class UserQuery(SearchQuery):
+    
+    match_models = User
     
     def query(self, **kwargs):
-        user = kwargs.get('user', None)
-        user_clubs = get_clubs_user_is_member_of(user)
-        self.q_objects.add(Q(organiser__username__icontains=self.query_string, club__pk__in=user_clubs), Q.OR)
-        self.q_objects.add(Q(club__name__icontains=self.query_string, club__pk__in=user_clubs), Q.OR)
-        self.q_objects.add(Q(location__icontains=self.query_string, club__pk__in=user_clubs), Q.OR)
-        self.q_objects.add(Q(title__icontains=self.query_string, club__pk__in=user_clubs), Q.OR)
-        self.q_objects.add(Q(description__icontains=self.query_string, club__pk__in=user_clubs), Q.OR)
-        self.q_objects.add(Q(book__title__icontains=self.query_string, club__pk__in=user_clubs), Q.OR)
+        self.q_objects.add(Q(username__icontains=self.query_string), Q.OR)
         return self.q_objects
 
 
@@ -161,8 +100,4 @@ class SearchQueries(Enum):
     USERCREATEDOBJECT = UserCreatedObjectQuery
     BOOKLIST = BookListQuery
     CLUB = ClubQuery
-    TEXTPOST = TextPostQuery
-    TEXTCOMMENT = TextCommentQuery
-    FORUMPOST = ForumPostQuery
-    FORUMCOMMENT = ForumCommentQuery
-    MEETING = MeetingsQuery
+    USER = UserQuery
