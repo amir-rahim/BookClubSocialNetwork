@@ -6,7 +6,10 @@
            placeholder="Search"/>
 </div>
 <div id="replaceable_content" class="column is-12">
-        {% include 'partials/book_search_list.html'%}
+        <p id="loading" class="is-centered" style="margin-bottom:100px;">
+            <strong>Loading</strong>
+        </p>
+        <progress class="progress is-primary" max="100">30%</progress>
 </div>
 {% load getcontenttype %}
 {% get_content_type_from_queryset content as content_type %}
@@ -34,5 +37,11 @@
         }
         scheduled_function = setTimeout(call_search, delay_by_in_ms, view, request_parameters)
     })
-
+    
+    $('#loading').ready(
+        function() {
+            call_search(view, request_parameters)
+        }
+    )
+    
 </script>

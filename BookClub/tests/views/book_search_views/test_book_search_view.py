@@ -36,6 +36,7 @@ class BookSearchTestCase(TestCase):
         self.rf = RequestFactory()
         self.booklist = BookList.objects.get(pk=1)
         self.bookcontentpk = ContentType.objects.get_for_model(Book).id
+        self.bookcontenttype = ContentType.objects.get_for_model(Book)
         self.url = reverse('async_book_search')
 
     def test_url(self):
@@ -47,7 +48,7 @@ class BookSearchTestCase(TestCase):
 
         view = SearchView()
         view.request = request
-        self.assertEqual(view.get_template_names(), [
+        self.assertEqual(view.get_template_names(self.bookcontenttype), [
                          'partials/book_select_list.html'])
 
     def test_select_is_none_get_templates(self):
@@ -57,7 +58,7 @@ class BookSearchTestCase(TestCase):
 
         view = SearchView()
         view.request = request
-        self.assertEqual(view.get_template_names(), [
+        self.assertEqual(view.get_template_names(self.bookcontenttype), [
                          'partials/book_search_list.html'])
 
     def test_get_pagination_empty_list(self):
@@ -126,7 +127,7 @@ class BookSearchTestCase(TestCase):
         view = SearchView()
         view.request = request
 
-        object_list = view.get_queryset("", self.bookcontentpk)
+        object_list = view.get_queryset("", self.bookcontenttype)
         self.assertEqual(len(object_list), Book.objects.all().count())
 
     def test_get_queryset_query_is_set(self):
@@ -136,7 +137,7 @@ class BookSearchTestCase(TestCase):
         view = SearchView()
         view.request = request
         query = "book"
-        object_list = view.get_queryset(query, self.bookcontentpk)
+        object_list = view.get_queryset(query, self.bookcontenttype)
         self.assertEqual(len(object_list), Book.objects.filter(
             Q(title__icontains=query) | Q(author__icontains=query) | Q(
                 publisher__icontains=query)
