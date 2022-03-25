@@ -11,7 +11,7 @@ from django.views.generic.edit import UpdateView
 
 from BookClub.forms import ClubForm
 from BookClub.helpers import create_membership, get_club_from_url_name, has_membership_with_access, has_owner_rank
-from BookClub.models import Club, ClubMembership
+from BookClub.models import Club, ClubMembership, FeaturedBooks 
 from BookClub.authentication_mixins import PrivateClubMixin
 
 
@@ -43,6 +43,7 @@ class ClubDashboardView(LoginRequiredMixin, PrivateClubMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context['owner'] = context['current_club'].get_club_owner()
         context['user'] = self.request.user
+        context['featured_books'] = FeaturedBooks.objects.filter(club=context['current_club'])
         return context
 
 
