@@ -1,7 +1,7 @@
 from django.test import TestCase, tag
 from RecommenderModule.evaluation.evaluator import Evaluator
 
-@tag('evaluator')
+@tag('evaluation')
 class EvaluatorTestCase(TestCase):
 
     def setUp(self):
