@@ -22,9 +22,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-%af@p+7sw$$0+onbzcj6xugj7v2f*k=oco%h@&wsadm@3wglvk'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True # set to False on deployment to display user friendly 404
 
 ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['.localhost'] # Uncomment this to see the user-friendly 404, and add current domain name to the list
+                # e.g. 'novella-books.herokuapp.com'
 
 # Application definition
 
