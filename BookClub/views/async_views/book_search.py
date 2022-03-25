@@ -1,3 +1,4 @@
+import time
 from django.http import JsonResponse
 from django.views.generic import TemplateView  
 from django.db.models import Q
@@ -11,7 +12,6 @@ from BookClub.views.async_views.search_query_builder import SearchQueries
 class SearchView(TemplateView):
     
     paginate_by = 20
-    test = True
     
     def get(self, request, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -19,22 +19,20 @@ class SearchView(TemplateView):
         page = request.GET.get('page', 1)
         query = request.GET.get('q', "")
         content_type = request.GET.get('content_type', None)
+        content_type = ContentType.objects.get(pk=content_type)
         
         objects = self.get_queryset(content_type=content_type, query=query)
         
         if select:
             self.paginate_by = 5
-        if self.test:
-            self.paginate_by = 3
         context['page_obj'] = self.get_pagination(objects, page)
             
         html = render_to_string(
-            template_name=self.get_template_names(), context=context, request=request)
+            template_name=self.get_template_names(content_type=content_type), context=context, request=request)
         data_dict = {"html_from_view" : html}
         return JsonResponse(data=data_dict, safe=False)
         
     def get_queryset(self, query="", content_type = None):
-        content_type = ContentType.objects.get(pk=content_type)
         model = content_type.model_class()
         Qs = self.get_query(model, query)
         obs = model.objects.filter(Qs)
@@ -48,21 +46,37 @@ class SearchView(TemplateView):
             page_obj = paginator.page(1)
         except EmptyPage:
             page_obj = paginator.page(paginator.num_pages)
-        
         return page_obj
     
-    def get_template_names(self):
+    def get_template_names(self, content_type=None, **kwargs):
         select = self.request.GET.get('select')
-        content_type = self.request.GET.get('content_type', None)
-        model = ContentType.objects.get(pk=content_type).model_class()
+        model = content_type.model_class()
         if model == Book:
             if select:
                 return ['partials/book_select_list.html']
             return ['partials/book_search_list.html']
         
         if model == Meeting:
-            if self.test:
-                return ['partials/object_search_list.html']
+            return "MEETINGTEMPLATE"
+        
+        if model == Club:
+            return "CLUBTEMPLATE"
+        
+        if model == BookList:
+            return "BOOKLISTTEMPLATE"
+        
+        if model == BookReview:
+            return "REVIEWTEMPLATE"
+        
+        if model == BookReviewComment:
+            return "BOOKREVIEWCOMMENTTEMPLATE]"
+        
+        if model == ForumPost:
+            return "FORUMPOSTTEMPLATE"
+        
+        if model == ForumComment:
+            return "FORUMCOMMENT"
+    
         
     
     def get_query(self, model, query):
