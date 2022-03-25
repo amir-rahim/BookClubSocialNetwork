@@ -6,9 +6,10 @@
            placeholder="Search"/>
 </div>
 <div id="replaceable_content" class="column is-12">
-    {% include 'partials/book_search_list.html' %}
+        {% include 'partials/book_search_list.html'%}
 </div>
-
+{% load getcontenttype %}
+{% get_content_type_from_queryset content as content_type %}
 <script>
     const user_input = $("#user_input")
     const books_div = $("#replaceable_content")
@@ -33,4 +34,5 @@
         }
         scheduled_function = setTimeout(call_search, delay_by_in_ms, view, request_parameters)
     })
+
 </script>
