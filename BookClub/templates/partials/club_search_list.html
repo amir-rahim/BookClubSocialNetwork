@@ -1,4 +1,5 @@
 {% if page_obj %}
+{% load get_membership %}
 <div class="table-container">
     <table class="table is-hoverable is-fullwidth"
            id="table-booklists"
@@ -14,17 +15,18 @@
         </thead>
         <tbody>
             {% for club in page_obj %}
+                {% is_member club user as ismember%}
                 <tr>
                     <td>
                       {{club.name}}
                     </td>
                     <td>{{ club.tagline }}</td>
                     <td>{{ club.description }}</td>
-
+                    
                     <td>
                         <a class="button is-fullwidth is-link"
                                 href="{club.get_absolute_url}">View</button>
-                        {% if club.user_is_member %}
+                        {% if ismember %}
                             <form class="" action="{% url 'leave_club' club_url_name=club.club_url_name %}" method="post">
                               {% csrf_token %}
                               <button type="submit" class="button is-fullwidth is-danger">Leave</button>
