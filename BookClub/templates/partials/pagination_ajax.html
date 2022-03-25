@@ -23,23 +23,25 @@
     next_page.on('click', function(){
         {% if page_obj.has_next %}
         var page_num = {{ page_obj.next_page_number }}
-        {% endif %}
+        
         request_parameters['page'] = page_num
         if (scheduled_function){
             clearTimeout(scheduled_function)
         }
-        scheduled_function = setTimeout(call_book_search, 100, view, request_parameters)
+        scheduled_function = setTimeout(call_search, 100, view, request_parameters)
+        {% endif %}
     })
 
     prev_page.on('click', function(){
         {% if page_obj.has_previous %}
         var page_num = {{ page_obj.previous_page_number }}
-        {% endif %}
+        
         request_parameters['page'] = page_num
         if (scheduled_function){
             clearTimeout(scheduled_function)
         }
-        scheduled_function = setTimeout(call_book_search, 100, view, request_parameters)
+        scheduled_function = setTimeout(call_search, 100, view, request_parameters)
+        {% endif %}
     })
 
     first_page.on('click', function(){
@@ -48,7 +50,7 @@
         if (scheduled_function){
             clearTimeout(scheduled_function)
         }
-        scheduled_function = setTimeout(call_book_search, 100, view, request_parameters)
+        scheduled_function = setTimeout(call_search, 100, view, request_parameters)
     })
 
     last_page.on('click', function(){
@@ -57,6 +59,6 @@
         if (scheduled_function){
             clearTimeout(scheduled_function)
         }
-        scheduled_function = setTimeout(call_book_search, 100, view, request_parameters)
+        scheduled_function = setTimeout(call_search, 100, view, request_parameters)
     })
 </script>
