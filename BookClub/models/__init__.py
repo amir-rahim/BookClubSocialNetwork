@@ -13,3 +13,4 @@ from .forum import *
 from .option import *
 from .poll import *
 from .recommendations import *
+from .featured_books import *
