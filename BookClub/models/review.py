@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from BookClub.models.rated_content import *
+from BookClub.models.recommendations import UserRecommendations
 
 class BookReview(TextPost):
     class Meta:
@@ -22,6 +23,11 @@ class BookReview(TextPost):
 
     def str(self):
         return self.__str__()
+    
+    def save(self, **kwargs):
+        super().save(**kwargs)
+        if UserRecommendations.objects.filter(user=self.creator).exists():
+            UserRecommendations.objects.get(user=self.creator).modified = True
 class BookReviewComment(TextComment):
 
     book_review = models.ForeignKey('BookReview', blank = False, null = False, on_delete=models.CASCADE)

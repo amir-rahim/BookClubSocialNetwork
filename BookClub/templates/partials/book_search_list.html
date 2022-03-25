@@ -1,79 +1,76 @@
 {% if page_obj %}
-    <div class="table-container">
-        <table class="table is-hoverable is-fullwidth"
-               id="table-books"
-               data-toggle="table"
-               data-pagination="true">
-            <thead>
+<div class="table-container">
+    <table class="table is-hoverable is-fullwidth"
+           id="table-books"
+           data-toggle="table"
+           data-pagination="true">
+        <thead>
+            <tr>
+                <th scope="col">Cover</th>
+                <th scope="col">Title</th>
+                <th scope="col">Author</th>
+                <th scope="col">Publisher</th>
+                {% if user.is_authenticated and user.booklist_set.count > 0 %}
+                <th scope="col">Add to List</th>
+                {% endif %}
+                <th scope="col">View</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in page_obj %}
                 <tr>
-                    <th scope="col">Cover</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Author</th>
-                    <th scope="col">Publisher</th>
-                    {% if not user.is_authenticated or user.booklist_set.count > 0 %}<th scope="col">Add to List</th>{% endif %}
-                    <th scope="col"></th>
-                    <th scope="col">View</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for book in page_obj %}
-                    <tr>
+                    <td>
+                        {% if book.get_m_size > 50 %}
+                            <img src="//images.weserv.nl/?url={{ book.imageM }}" alt=""/>
+                        {% else %}
+                            <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=97&w=160"
+                                 alt=""/>
+                        {% endif %}
+                    </td>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.author }}</td>
+                    <td>{{ book.publisher }}</td>
+                    {% if user.is_authenticated and user.booklist_set.count > 0 %}
                         <td>
-                            {% if book.imageM %}
-                                <img src="{{ book.imageM }}" alt=""/>
-                            {% else %}
-                                <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-                                     alt=""/>
-                            {% endif %}
-                        </td>
-                        <td>{{ book.title }}</td>
-                        <td>{{ book.author }}</td>
-                        <td>{{ book.publisher }}</td>
-                        <td>
-                            {% if not user.is_authenticated %}
-                                <p>
-                                    <a href="{% url 'login' %}">Log in</a>
-                                </p>
-                            </td>
-                        {% elif user.is_authenticated and user.booklist_set.count > 0 %}
                             <form action="{% url 'add_to_book_list' %}" method="post">
-                                {% csrf_token %}
+                            {% csrf_token %}
                                 <input type="hidden" id="book" name="book" value="{{ book.id }}"/>
-                                <div class="control">
-                                    <div class="select">
-                                        <select required id="booklist" name="booklist">
-                                            <option value="" selected disabled hidden>
-                                                Choose here
-                                            </option>
-                                            {% for list in lists %}
-                                                <option value="{{ list.id }}">
-                                                    {{ list.title }}
+                                <div class="field has-addons">
+                                    <div class="control">
+                                        <div class="select">
+                                            <select required id="booklist" name="booklist">
+                                                <option value="" selected disabled hidden>
+                                                    Choose here
                                                 </option>
-                                            {% endfor %}
-                                        </select>
+                                                {% for list in lists %}
+                                                    <option value="{{ list.id }}">
+                                                        {{ list.title }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
-                                <td>
                                     <div class="control">
                                         <input type="submit" value="Add" class="button is-link"/>
                                     </div>
-                                </td>
+                                </div>
                             </form>
-                        {% endif %}
-                        <td>
-                            <button class="button is-fullwidth is-link"
-                                    onclick="window.location='{% url 'book_view' book.id %}';">View</button>
                         </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% include 'partials/pagination_ajax.html' with page_obj=page_obj %}
+                    {% endif %}
+                    <td>
+                        <button class="button is-fullwidth is-link"
+                                onclick="window.location='{% url 'book_view' book.id %}';">View</button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% include 'partials/pagination.html' %}
 {% else %}
-    <hr />
+    <hr>
     <p style="text-align: center">
         There are no available books at the moment.
     </p>
-    <hr />
+    <hr>
 {% endif %}

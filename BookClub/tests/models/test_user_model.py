@@ -1,16 +1,22 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase, tag
 
-from BookClub.models import User
+from BookClub.models import User, BookList
 
 
 @tag('models', 'user')
 class UserModelTestCase(TestCase):
 
-    fixtures = ['BookClub/tests/fixtures/default_users.json']
+    fixtures = [
+        'BookClub/tests/fixtures/default_books.json',
+        'BookClub/tests/fixtures/default_users.json',
+        'BookClub/tests/fixtures/booklists.json'
+    ]
+    
 
     def setUp(self):
         self.user = User.objects.get(username='johndoe')
+        self.booklist = BookList.objects.get(pk=1)
 
     def test_valid_user(self):
         self._assert_user_is_valid()
@@ -65,3 +71,24 @@ class UserModelTestCase(TestCase):
     def test_get_absolute_url(self):
         return_url = self.user.get_absolute_url()
         correct_url = '/profile/johndoe/'
+        self.assertEqual(return_url, correct_url)
+
+    def test_save_booklist_works_correctly(self):
+        self.user.save_booklist(self.booklist)
+        self.assertTrue(self.user.saved_booklists.all().filter(pk=self.booklist.id))
+
+    def test_save_booklist_does_not_save_same_book_twice(self):
+        self.user.save_booklist(self.booklist)
+        before_count = self.user.saved_booklists.all().count()
+        self.user.save_booklist(self.booklist)
+        after_count = self.user.saved_booklists.all().count()
+        self.assertEqual(before_count, after_count)
+
+    def test_get_saved_booklists(self):
+        self.user.saved_booklists.add(self.booklist)
+        self.assertQuerysetEqual(self.user.saved_booklists.all(),self.user.get_saved_booklists())
+
+    def test_remove_from_saved_booklists_works_correctly(self):
+        self.user.save_booklist(self.booklist)
+        self.user.remove_from_saved_booklists(self.booklist)
+        self.assertFalse(self.user.saved_booklists.all().filter(pk=self.booklist.id))
