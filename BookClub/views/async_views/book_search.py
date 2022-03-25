@@ -50,10 +50,13 @@ class SearchView(TemplateView):
     
     def get_template_names(self, content_type=None, **kwargs):
         select = self.request.GET.get('select')
+        check = self.request.GET.get('check')
         model = content_type.model_class()
         if model == Book:
             if select:
                 return ['partials/book_select_list.html']
+            if check:
+                return ['partials/book_check_list.html']
             return ['partials/book_search_list.html']
         
         if model == Meeting:
