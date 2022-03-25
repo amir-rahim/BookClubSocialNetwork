@@ -1,14 +1,10 @@
-{% for user in page_obj %}
-    <div class="columns">
-        <div class="column is-12">
+        {% for user in page_obj %}
             <div class="card">
                 <div class="card-content">
                     <div class="media">
                         <div class="media-left">
                             <figure class="image is-64x64">
-                                <img class="is-rounded"
-                                     src="{{ member.gravatar }}"
-                                     alt="Placeholder image">
+                                <img class="is-rounded" src="{{ user.gravatar }}" alt="Placeholder image">
                             </figure>
                         </div>
                         <div class="media-content">
@@ -16,14 +12,14 @@
                                 <p class="text">
                                     <b>Name: </b> {{ user.username }}
                                 </p>
-                                <p class="text">
-                                    <b>Public Bio: </b> {{ user.public_bio }}
-                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+
+    
+{% empty %}
+No users found
 {% endfor %}
+{% include 'partials/pagination_ajax.html' %}

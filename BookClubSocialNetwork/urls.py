@@ -42,6 +42,7 @@ urlpatterns = [
 
     # '''User URLs'''
     path('user/', views.UserDashboardView.as_view(), name='user_dashboard'),
+    path('search_users/', views.GlobalUserListView.as_view(), name='global_user_search'),
     path('edit_profile/', views.EditProfileView.as_view(), name='edit_profile'),
     path('password_change/', views.ChangePasswordView.as_view(), name='password_change'),
     path('delete_account/', views.DeleteUserAccountView.as_view(), name='delete_user_account'),
