@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+{% load bulma_tags %}
+{% load static %}
+<html lang="en" class="has-navbar-fixed-top">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="{% static 'favicon.ico' %}" />
+        <link rel="stylesheet" href="{% static 'bulma/css/mystyles.css' %}">
+        <script src="https://kit.fontawesome.com/4c481256fb.js" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <title>
+            {% block error_name %}{% endblock %}
+        | Novella</title>
+    </head>
+    <body>
+      <section class="hero is-fullheight">
+          <div class="hero-body is-link">
+              <div class="container has-text-centered">
+                  <div class="column is-6 is-offset-3">
+                      <h3 class="title has-text-black">{% block error_title %}{% endblock %}</h3>
+                      <hr>
+                      <p class="subtitle has-text-black">
+                          {% block error_subtitle %} {% endblock %}
+                      </p>
+                      <div class="box">
+                        {% block error_body %}
+
+                        {% endblock %}
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </section>
+    </body>
+
+    {% block js %}{% endblock %}
+</html>
