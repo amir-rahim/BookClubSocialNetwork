@@ -1,5 +1,6 @@
 from RecommenderModule.recommenders.popular_books_recommender import PopularBooksRecommender
 from RecommenderModule.recommenders.item_based_recommender import ItemBasedRecommender
+from RecommenderModule.recommenders.content_based_recommender import ContentBasedRecommender
 from RecommenderModule.recommenders.resources.library import Library
 
 """Get the 10 most popular books recommended to the user (that the user has not read yet).
@@ -46,3 +47,8 @@ def retrain_item_based_recommender(parameters={}):
 def get_list_of_all_books_in_item_based_trainset():
     library = Library()
     return library.get_list_of_all_books_in_trainset()
+
+"""Retrain the content-based recommender with the current data"""
+def retrain_content_based_recommender():
+    content_based_recommender = ContentBasedRecommender()
+    content_based_recommender.fit_and_save()
