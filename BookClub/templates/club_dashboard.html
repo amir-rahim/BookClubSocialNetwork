@@ -6,10 +6,15 @@
     This is the Club Dashboard, the main home page for each club!
 {% endblock page_subtitle %}
 {% block content %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.4/dist/css/bulma-carousel.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.4/dist/js/bulma-carousel.min.js"></script>
+    <script defer src="scripts.js"></script>
+
     <div class="columns">
         <div class="column is-3">
             {% include 'partials/club_aside.html' %}
         </div>
+
         <div class="column is-9">
             <nav class="breadcrumb"
                  aria-label="breadcrumbs"
@@ -91,6 +96,48 @@
                     </div>
                 </div>
             </div>
+
+            {% if featured_books %}
+            <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
+                <div class="hero-body">
+                    <div class="container">
+                        {% comment %} <h1 class="title">Featured Books</h1> {% endcomment %}
+                        <h2 class="subtitle">Featured Books</h2>
+                    </div>
+                </div>
+            </section>
+
+            <div class="container is-clipped">
+               <div id="slider">
+
+                    {% for featured in featured_books %}
+                        <div class="card card-equal-height">
+                            <div class="card-image">
+                            <figure class="image is-3by4 is-covered">
+                                {% if featured.book.get_l_size > 50 %}
+                                    <img src="//images.weserv.nl/?url={{ featured.book.imageL }}" alt=""/>
+                                        {% else %}
+                                    <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?h=160&w=108"
+                                    alt=""/>
+                            {% endif %}
+                            </figure>
+                            </div>
+                            <div class="card-content">
+                                <div class="item__title">
+                                    {{ featured.book.title }} - by {{ featured.book.author }}
+                                </div>
+                                <div class="item__description">
+                                    {{ featured.reason }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %} 
+
+                </div>
+            </div>
+            <br>
+            {% endif %}
+
             <div class="tile is-ancestor has-text-centered">
                 <div class="tile is-parent"
                      onclick="location.href='{% url 'member_list' current_club.club_url_name  %}'"
@@ -137,4 +184,16 @@
             </div>
         </div>
     </div>
+
+    <script>
+        bulmaCarousel.attach('#slider', {
+            slidesToScroll: 1,
+            slidesToShow: 3,
+            infinite: true,
+            navigationSwipe: true,
+            autoplay: true,
+            pauseOnHover: true,
+        });
+    </script>
+
 {% endblock %}
