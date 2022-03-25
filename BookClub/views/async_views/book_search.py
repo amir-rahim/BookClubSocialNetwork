@@ -25,7 +25,6 @@ class SearchView(TemplateView):
         if select:
             self.paginate_by = 5
         context['page_obj'] = self.get_pagination(objects, page)
-
         html = render_to_string(
             template_name=self.get_template_names(content_type=content_type), context=context, request=request)
         data_dict = {"html_from_view": html}
@@ -64,7 +63,7 @@ class SearchView(TemplateView):
             return ['partials/user_search_list.html']
 
         if model == Club:
-            return "CLUBTEMPLATE"
+            return ['partials/club_search_list.html']
 
         if model == BookList:
             return ['partials/booklist_search_list.html']
