@@ -23,7 +23,7 @@
 
                     <td>
                         <a class="button is-fullwidth is-link"
-                                href="{club.get_absolute_url}">View</button>
+                                href="{{club.get_absolute_url}}">View</button>
                         {% if club.user_is_member %}
                             <form class="" action="{% url 'leave_club' club_url_name=club.club_url_name %}" method="post">
                               {% csrf_token %}
