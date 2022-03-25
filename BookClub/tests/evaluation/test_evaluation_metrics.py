@@ -69,3 +69,9 @@ class EvaluationMetricsTestCase(TestCase):
         for user_recommendations in test_recommendations.values():
             recommendations_length += len(user_recommendations)
         self.assertEqual(correct_recommendations_rate, (recommendations_length-1)/recommendations_length)
+
+    def test_get_recommendations_eligible_users_rate(self):
+        test_recommendations = self.build_test_recommendations()
+        all_users = self.trainset.n_users
+        recommendation_eligible_users_rate = self.evaluation_metrics.get_recommendation_eligible_users_rate(test_recommendations)
+        self.assertEqual(recommendation_eligible_users_rate, len(test_recommendations) / all_users)

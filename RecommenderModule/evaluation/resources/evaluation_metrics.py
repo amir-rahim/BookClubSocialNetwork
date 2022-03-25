@@ -113,3 +113,12 @@ class EvaluationMetrics:
         if total == 0:
             return 0
         return hits / total
+
+
+    """Get the rate of users that can get recommendations using the evaluated recommender algorithm,
+        given the recommendations produced from the dataset's LOOCV train set and the left-out LOOCV test set.
+        The rate is calculated as the number of users given recommendations divided by the total number of users in the testset"""
+    def get_recommendation_eligible_users_rate(self, recommendations):
+        eligible_users_number = len([(user, user_recommendations) for (user, user_recommendations) in recommendations.items() if user_recommendations != []])
+        all_users_number = self.trainset.n_users
+        return eligible_users_number / all_users_number

@@ -68,6 +68,7 @@ class Evaluator:
             "average_reciprocal_hit_rate": self.evaluation_metrics.get_average_reciprocal_hit_rate(recommendations),
             "novelty": self.evaluation_metrics.get_novelty(recommendations),
             "correct_recommendations_rate": self.evaluation_metrics.get_correct_recommendations_rate(recommendations),
+            "recommendation_eligible_users_rate": self.evaluation_metrics.get_recommendation_eligible_users_rate(recommendations),
         }
         self.print_evaluations(evaluations)
 
