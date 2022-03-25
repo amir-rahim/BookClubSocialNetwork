@@ -5,9 +5,10 @@ from django.urls import reverse
 from BookClub.models.book import Book
 from django.db.models import Q
 from BookClub.models.booklist import BookList
+from django.contrib.contenttypes.models import ContentType
 
 from BookClub.models.user import User
-from BookClub.views.async_views.book_search import BookSearchView
+from BookClub.views.async_views.book_search import SearchView
 # testcases:
 # select is none, select is something
 # page is none, page is something
@@ -29,37 +30,41 @@ class BookSearchTestCase(TestCase):
     ]
 
     def setUp(self):
-        self.url = reverse('async_book_search')
+        
         self.user = User.objects.get(pk=1)
         self.book1 = Book.objects.get(pk=1)
         self.rf = RequestFactory()
         self.booklist = BookList.objects.get(pk=1)
+        self.bookcontentpk = ContentType.objects.get_for_model(Book).id
+        self.url = reverse('async_book_search')
 
     def test_url(self):
         self.assertEqual(reverse('async_book_search'), '/search_books/')
 
     def test_select_is_set_get_templates(self):
-        request = self.rf.get(self.url, data={'select': True})
+        request = self.rf.get(self.url, data={'select': True,'content_type': self.bookcontentpk})
         request.user = self.user
 
-        view = BookSearchView()
+        view = SearchView()
         view.request = request
         self.assertEqual(view.get_template_names(), [
                          'partials/book_select_list.html'])
 
     def test_select_is_none_get_templates(self):
-        request = self.rf.get(self.url, data={})
+        request = self.rf.get(
+            self.url, data={'content_type': self.bookcontentpk})
         request.user = self.user
 
-        view = BookSearchView()
+        view = SearchView()
         view.request = request
         self.assertEqual(view.get_template_names(), [
                          'partials/book_search_list.html'])
 
     def test_get_pagination_empty_list(self):
-        request = self.rf.get(self.url, data={})
+        request = self.rf.get(
+            self.url, data={'content_type': self.bookcontentpk})
         request.user = self.user
-        view = BookSearchView()
+        view = SearchView()
         view.request = request
         paginate_by = 5
         object_list = []
@@ -71,9 +76,10 @@ class BookSearchTestCase(TestCase):
         self.assertEqual(page_obj.has_next(), False)
 
     def test_get_pagination_book_in_list(self):
-        request = self.rf.get(self.url, data={})
+        request = self.rf.get(
+            self.url, data={'content_type': self.bookcontentpk})
         request.user = self.user
-        view = BookSearchView()
+        view = SearchView()
         view.request = request
         object_list = [self.book1]
 
@@ -84,9 +90,10 @@ class BookSearchTestCase(TestCase):
         self.assertEqual(page_obj.has_next(), False)
 
     def test_get_pagination_page_not_integer(self):
-        request = self.rf.get(self.url, data={})
+        request = self.rf.get(
+            self.url, data={'content_type': self.bookcontentpk})
         request.user = self.user
-        view = BookSearchView()
+        view = SearchView()
         view.request = request
         object_list = [self.book1]
 
@@ -98,9 +105,10 @@ class BookSearchTestCase(TestCase):
         self.assertEqual(page_obj.has_next(), False)
 
     def test_get_pagination_page_empty_page(self):
-        request = self.rf.get(self.url, data={})
+        request = self.rf.get(
+            self.url, data={'content_type': self.bookcontentpk})
         request.user = self.user
-        view = BookSearchView()
+        view = SearchView()
         view.request = request
         object_list = [self.book1]
 
@@ -112,47 +120,53 @@ class BookSearchTestCase(TestCase):
         self.assertEqual(page_obj.has_next(), False)
 
     def test_get_queryset_query_is_none(self):
-        request = self.rf.get(self.url, data={})
+        request = self.rf.get(
+            self.url, data={'content_type': self.bookcontentpk})
         request.user = self.user
-        view = BookSearchView()
+        view = SearchView()
         view.request = request
 
-        object_list = view.get_queryset()
+        object_list = view.get_queryset("", self.bookcontentpk)
         self.assertEqual(len(object_list), Book.objects.all().count())
 
     def test_get_queryset_query_is_set(self):
-        request = self.rf.get(self.url, data={})
+        request = self.rf.get(
+            self.url, data={'content_type': self.bookcontentpk})
         request.user = self.user
-        view = BookSearchView()
+        view = SearchView()
         view.request = request
         query = "book"
-        object_list = view.get_queryset(query)
+        object_list = view.get_queryset(query, self.bookcontentpk)
         self.assertEqual(len(object_list), Book.objects.filter(
             Q(title__icontains=query) | Q(author__icontains=query) | Q(
                 publisher__icontains=query)
         ).count())
         
     def test_get_select_is_set_paginate_by_is_set_to_5(self):
-        request = self.rf.get(self.url, data={"select":"True"})
+        request = self.rf.get(
+            self.url, data={"select": "True", 'content_type': self.bookcontentpk})
         request.user = self.user
-        view = BookSearchView()
+        view = SearchView()
         view.request = request
         view.get(request)
         self.assertTrue(view.paginate_by, 5)
         
     def test_get_select_is_none_paginate_by_is_set_to_20(self):
-        request = self.rf.get(self.url, data={})
+        request = self.rf.get(
+            self.url, data={'content_type': self.bookcontentpk})
         request.user = self.user
-        view = BookSearchView()
+        view = SearchView()
         view.request = request
         view.get(request)
         self.assertTrue(view.paginate_by, 20)
         
     def test_get_user_logged_in(self):
         self.client.login(username=self.user.username, password="Password123")
-        response = self.client.get(self.url)
+        response = self.client.get(self.url, data={
+            'content_type': self.bookcontentpk, 'query':""})
         self.assertContains(response, self.booklist.title)
 
     def test_get_user_anonymous(self):
-        response = self.client.get(self.url)
+        response = self.client.get(self.url, data={
+            'content_type': self.bookcontentpk, 'query':""})
         self.assertNotContains(response, self.booklist.title)
