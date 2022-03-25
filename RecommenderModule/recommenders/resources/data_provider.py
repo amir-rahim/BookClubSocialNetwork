@@ -1,5 +1,4 @@
-from surprise import Dataset
-from surprise import Reader
+from surprise import Dataset, Reader
 import pandas as pd
 from BookClub.models.review import BookReview
 
@@ -8,10 +7,7 @@ from BookClub.models.review import BookReview
 class DataProvider:
 
     ratings_path = "static/dataset/BX-Book-Ratings.csv"
-    ratings_trainset = None
     ratings_df = None
-    train_df = None
-    test_df = None
     filtering_min_ratings_threshold = 1
     filtered_ratings_df = None
     filtered_ratings_dataset = None
