@@ -6,9 +6,6 @@ from RecommenderModule.evaluation.evaluator import Evaluator
     for the app's item-based recommender."""
 class EvaluationItemBased:
 
-    trainset = None
-    testset = None
-
     """Evaluate the possible item-based recommenders and print the insights."""
     def run_evaluations(self):
 

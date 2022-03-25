@@ -47,14 +47,14 @@ class Evaluator:
     """Get a dictionary of the recommended books for all users in the trainset"""
     def get_recommendations(self, recommender, parameters):
         print("Getting recommendations...")
-        recommender.train(trainset=self.trainset, parameters=parameters)
+        recommender.fit(trainset=self.trainset, parameters=parameters)
         recommendations = {}
         nb_users = self.trainset.n_users
         for user_inner_id in self.trainset.all_users():
             if (user_inner_id % 1000 == 0):
                 print(f"{user_inner_id} / {nb_users}")
             user_id = self.trainset.to_raw_uid(user_inner_id)
-            user_recommendations = recommender.get_recommendations(user_id)
+            user_recommendations = recommender.get_user_recommendations(user_id)
             recommendations[user_id] = user_recommendations
         print("Getting recommendations done")
         return recommendations
