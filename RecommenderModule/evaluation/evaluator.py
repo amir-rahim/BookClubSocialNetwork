@@ -66,12 +66,12 @@ class Evaluator:
         evaluations = {
             "Hit Rate (Recall)": self.evaluation_metrics.get_hit_rate(recommendations),
             "Average Reciprocal Hit Rate": self.evaluation_metrics.get_average_reciprocal_hit_rate(recommendations),
+            "Precision": self.evaluation_metrics.get_precision(recommendations),
+            "F1 Score": self.evaluation_metrics.get_f1_score(recommendations),
             "Novelty": self.evaluation_metrics.get_novelty(recommendations),
             "Recommendation-Eligible Users Rate": self.evaluation_metrics.get_recommendation_eligible_users_rate(recommendations),
             "User Coverage": self.evaluation_metrics.get_user_coverage(recommendations),
-            "Precision": self.evaluation_metrics.get_precision(recommendations),
-            "F1 Score": self.evaluation_metrics.get_f1_score(recommendations),
-            "Book Coverage": self.evaluation_metrics.get_book_coverage(recommender)
+            "Book Coverage": self.evaluation_metrics.get_book_coverage(recommender),
         }
         self.print_evaluations(evaluations)
 
