@@ -44,7 +44,7 @@
                                        type="password"
                                        id="password-field"
                                        placeholder="Your Password">
-                                    <i toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password" ></i >
+                                    <span class="has-text-grey">Show/Hide Password <i toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></i></span>
                                 </div>
                                 <div class="control">
                                     <button class="button is-block is-info is-large is-fullwidth">
@@ -57,7 +57,7 @@
                     <p class="has-text-grey">
                         <a href="{% url 'sign_up' %}">Sign Up</a> &nbsp;·&nbsp;
                         <a href="{% url 'reset_password' %}">Forgot Password</a> &nbsp;·&nbsp;
-                        <a href="#">Need Help?</a>
+                        <a href="{% url 'home' %}">Back to Home</a>
                     </p>
                 </div>
             </div>
