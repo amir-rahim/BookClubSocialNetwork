@@ -20,7 +20,7 @@ class BaseUserRecommenderViewTestCase(TestCase):
         self.assertEqual(self.user_url, '/library/recommendations/')
 
     def test_club_url(self):
-        self.assertEqual(self.club_url, '/club/' + self.club.club_url_name + '/recommendations')
+        self.assertEqual(self.club_url, '/club/' + self.club.club_url_name + '/recommendations/')
 
     def test_correct_template_user_view(self):
         self.client.login(username=self.user1.username, password="Password123")

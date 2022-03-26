@@ -14,3 +14,4 @@ from .option import *
 from .poll import *
 from .user2user import *
 from .recommendations import *
+from .featured_books import *

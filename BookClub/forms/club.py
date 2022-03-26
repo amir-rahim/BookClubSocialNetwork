@@ -1,6 +1,7 @@
-from django.forms import ModelForm, Textarea
+from django.forms import HiddenInput, ModelForm, Textarea
 
-from BookClub.models import Club
+from BookClub.models import Club, FeaturedBooks
+from BookClub.forms.widgets import BookSelectorInput
 
 
 class ClubForm(ModelForm):
@@ -15,3 +16,17 @@ class ClubForm(ModelForm):
         labels = {
             'is_private': 'Set book club as private'
         }
+
+class FeatureBookForm(ModelForm):
+    class Meta:
+        model = FeaturedBooks
+        fields = ['book','reason']
+        widgets = {
+            'book' : BookSelectorInput(),
+        }
+        
+    def clean(self):
+        super().clean()
+        book = self.cleaned_data.get('book')
+        if book is None:
+            self.add_error('book', "Book is required")

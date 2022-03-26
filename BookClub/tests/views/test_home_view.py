@@ -19,4 +19,4 @@ class HomeViewTestCase(TestCase):
 
     def test_available_clubs_link_redirect(self):
         response = self.client.get(self.url)
-        self.assertContains(response, '<a class="card-footer-item" href="/club/">Join</a>')
+        self.assertContains(response, '<a class="card-footer-item" href="/club/">Join Clubs</a>')

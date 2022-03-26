@@ -33,6 +33,7 @@ class AgendaViewTestCase(TestCase):
             organiser=self.user,
             club=self.club,
             meeting_time=pytz.utc.localize(datetime.datetime.today()),
+            meeting_end_time="9999-02-22T20:00+00:00",
             created_on="2022-02-10",
             location="Volts House",
             title="Sebs complete guide to CS",
@@ -44,6 +45,7 @@ class AgendaViewTestCase(TestCase):
             organiser=self.user,
             club=self.club,
             meeting_time="9999-02-22T19:00+00:00",
+            meeting_end_time="9999-02-22T20:00+00:00",
             created_on="0001-02-10",
             location="Amirs House",
             title="Guide to global",
@@ -55,6 +57,7 @@ class AgendaViewTestCase(TestCase):
             organiser=self.another_user,
             club=self.club,
             meeting_time=pytz.utc.localize(datetime.datetime.today()),
+            meeting_end_time="9999-02-22T20:00+00:00",
             created_on="2022-02-10",
             location="Org",
             title="Fambit",
@@ -67,6 +70,7 @@ class AgendaViewTestCase(TestCase):
             organiser=self.another_user,
             club=self.club,
             meeting_time="9999-02-22T19:00+00:00",
+            meeting_end_time="9999-02-22T20:00+00:00",
             created_on="2022-02-10",
             location="Aoba Johsai",
             title="Oikawas Dream",
@@ -74,9 +78,6 @@ class AgendaViewTestCase(TestCase):
             type="B",
             book=self.book
         )
-
-        # self.meeting_future = Meeting.objects.get(pk=8)
-        # self.meeting_past = Meeting.objects.get(pk=9)
 
         self.url = reverse('agenda')
 

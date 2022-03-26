@@ -73,26 +73,24 @@ urlpatterns = [
     path('memberships/', views.MyClubMembershipsView.as_view(), name='my_club_memberships'),
     path('applications/', views.ApplicationListView.as_view(), name='applications'),
     path('create/', views.CreateClubView.as_view(), name='create_club'),
-    path('club/<str:club_url_name>/recommendations', views.RecommendationBaseView.as_view(), name='club_recommendations'),
+    path('club/<str:club_url_name>/recommendations/', views.RecommendationBaseView.as_view(), name='club_recommendations'),
 
     path('club/<str:club_url_name>/', views.ClubDashboardView.as_view(), name='club_dashboard'),
     path('club/<str:club_url_name>/members/', views.MembersListView.as_view(), name='member_list'),
     path('club/<str:club_url_name>/edit/', views.EditClubView.as_view(), name='edit_club'),
     path('club/<str:club_url_name>/applicants/', views.ApplicantListView.as_view(), name='applicant_list'),
     path('club/<str:club_url_name>/polls/create/', views.CreateClubPollView.as_view(), name='create_club_poll'),
+    path('club/<str:club_url_name>/featured/', views.FeatureBookView.as_view(), name='edit_featured_books'),
+    path('club/<str:club_url_name>/featured/<int:book_id>/remove', views.RemoveFeaturedBookView.as_view(), name='remove_featured_book'),
 
     # '''Club Forum URLs'''
     path('club/<str:club_url_name>/forum/', views.ForumView.as_view(), name='club_forum'),
     path('club/<str:club_url_name>/forum/post/', views.CreatePostView.as_view(), name='create_forum_post'),
     path('club/<str:club_url_name>/forum/<int:post_id>/', views.ForumPostView.as_view(), name='forum_post'),
-    path('club/<str:club_url_name>/forum/<int:post_id>/comment/',
-         views.CreateCommentView.as_view(), name='create_forum_comment'),
-    path('club/<str:club_url_name>/forum/<int:post_id>/comment/<int:comment_id>/delete/',
-         views.DeleteForumCommentView.as_view(), name='delete_forum_comment'),
-    path('club/<str:club_url_name>/forum/<int:post_id>/edit/',
-         views.EditForumPostView.as_view(), name='edit_forum_post'),
-    path('club/<str:club_url_name>/forum/<int:post_id>/delete/',
-         views.DeleteForumPostView.as_view(), name='delete_forum_post'),
+    path('club/<str:club_url_name>/forum/<int:post_id>/comment/', views.CreateCommentView.as_view(), name='create_forum_comment'),
+    path('club/<str:club_url_name>/forum/<int:post_id>/comment/<int:comment_id>/delete/', views.DeleteForumCommentView.as_view(), name='delete_forum_comment'),
+    path('club/<str:club_url_name>/forum/<int:post_id>/edit/', views.EditForumPostView.as_view(), name='edit_forum_post'),
+    path('club/<str:club_url_name>/forum/<int:post_id>/delete/', views.DeleteForumPostView.as_view(), name='delete_forum_post'),
 
     # '''Meeting URLs'''
     path('club/<str:club_url_name>/meetings/<int:meeting_id>/edit/', views.EditMeetingView.as_view(), name='edit_meeting'),
@@ -103,8 +101,7 @@ urlpatterns = [
     path('club/<str:club_url_name>/meetings/<int:meeting_id>/', views.MeetingDetailsView.as_view(), name='meeting_details'),
     path('club/<str:club_url_name>/meetings/<int:meeting_id>/participants/', views.MeetingParticipantsView.as_view(), name='meeting_participants'),
     path('club/<str:club_url_name>/meetings/create/', views.CreateMeetingView.as_view(), name='create_meeting'),
-    path('club/<str:club_url_name>/meetings/<int:meeting_id>/delete/', views.DeleteMeetingView.as_view(),
-         name='delete_meeting'),
+    path('club/<str:club_url_name>/meetings/<int:meeting_id>/delete/', views.DeleteMeetingView.as_view(), name='delete_meeting'),
     
 
     # '''Library URLs'''
@@ -113,8 +110,7 @@ urlpatterns = [
     path('library/books/add_to_book_list/', views.AddToBookListView.as_view(), name='add_to_book_list'),
     path('library/books/<int:book_id>/', views.BookDetailView.as_view(), name='book_view'),  # book view
     path('library/books/<int:book_id>/reviews/', views.BookReviewListView.as_view(), name='book_reviews'),
-    path('library/recommendations/', views.RecommendationBaseView.as_view(),
-         name='user_recommendations'),
+    path('library/recommendations/', views.RecommendationBaseView.as_view(), name='user_recommendations'),
 
     # '''Review URLs'''
     path('library/books/<int:book_id>/create/', views.CreateReviewView.as_view(), name='create_review'),
@@ -122,8 +118,11 @@ urlpatterns = [
     path('library/books/<int:book_id>/delete/', views.DeleteReviewView.as_view(), name='delete_review'),
     path('library/books/<int:book_id>/review/<int:review_id>/', views.ReviewDetailView.as_view(), name='book_review'),
     path('library/books/<int:book_id>/review/<int:review_id>/comment/', views.CreateCommentForReviewView.as_view(), name='comment_review'),
-    path('library/books/<int:book_id>/review/<int:review_id>/comment/<int:comment_id>/delete/',
-        views.DeleteCommentForReviewView.as_view(), name='delete_review_comment'),
+    path('library/books/<int:book_id>/review/<int:review_id>/comment/<int:comment_id>/delete/', views.DeleteCommentForReviewView.as_view(), name='delete_review_comment'),
+
+    # '''Review List URLs'''
+    path('library/reviews/', views.PersonalReviewFeedView.as_view(), name='personal_reviews'),
+    path('library/reviews/community/', views.CommunityReviewFeedView.as_view(), name='community_reviews'),
 
     # '''Forum URLs'''
     path('forum/', views.ForumView.as_view(), name='global_forum'),
@@ -152,6 +151,7 @@ urlpatterns = [
 
     # '''Agenda URLs'''
     path('agenda/', views.AgendaView.as_view(), name='agenda'),
+    path('agenda/export', views.ExportCalendarView.as_view(), name='agenda_export'),
     
     # '''Bookshelf URLs'''
     path('bookshelf/', views.BookShelfView.as_view(), name='bookshelf'),
@@ -163,4 +163,5 @@ urlpatterns = [
     path('search_books/', views.SearchView.as_view(), name='async_book_search'),
     path('user_recommendations/', views.RecommendationUserListView.as_view(), name='async_user_recommendations'),
     path('club_recommendations/<str:club_url_name>/', views.RecommendationClubListView.as_view(), name='async_club_recommendations'),
+
 ]

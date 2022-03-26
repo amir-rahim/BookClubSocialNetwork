@@ -24,7 +24,7 @@
                             <td>{{ book.title }}</td>
                             <td>{{ book.author }}</td>
                             <td>
-                                <input type="radio" name="book" value="{{ book.id }}"/>
+                                <input type="checkbox" name="book" value="{{ book.id }} class='checkbox'"/>
                             </td>
                         </tr>
                     {% endfor %}

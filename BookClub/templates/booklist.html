@@ -27,8 +27,7 @@
                 </p>
                 <ul class="menu-list">
                     <li>
-                        <a href="{% url 'booklists_list' %}"
-                           class="is-active"><b>{{ user.get_username }} Book Lists</b></a>
+                        <a href="{% url 'booklists_list' %}" class="is-active"><b>{{ user.get_username }} Book Lists</b></a>
                     </li>
                     <li>
                         <a href="{% url 'saved_booklists' %}">Saved Book Lists</a>
@@ -42,7 +41,7 @@
                 </p>
                 <ul class="menu-list">
                     <li>
-                        <a href="#">AI Recommended Books</a>
+                        <a href="{% url 'user_recommendations' %}">AI Recommended Books</a>
                     </li>
                 </ul>
                 <p class="menu-label">
@@ -50,7 +49,8 @@
                 </p>
                 <ul class="menu-list">
                     <li>
-                        <a href="{% url 'library_books' %}">View Personal Reviews</a>
+                        <a href="{% url 'personal_reviews' %}">View Personal Reviews</a>
+                        <a href="{% url 'community_reviews' %}">View Community Reviews</a>
                     </li>
                 </ul>
             </aside>
@@ -148,11 +148,11 @@
                     </table>
                 </div>
             {% else %}
-                <br />
-                <p class="subtitle" style="text-align: center;">
-                    <i>There are no books in this list.</i>
-                </p>
-                <br />
+                <div class="card">
+                    <p class="subtitle" style="text-align: center;">
+                        <i>There are no books in this list.</i>
+                    </p>
+                </div>
             {% endif %}
         </div>
         <script>
