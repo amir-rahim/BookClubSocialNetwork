@@ -16,7 +16,7 @@ from BookClub.views.meetings.meetings import *
 from BookClub.views.library.reviews import *
 from BookClub.views.forum.forum import *
 from BookClub.views.async_views.vote import *
-from BookClub.views.async_views.book_search import *
+from BookClub.views.async_views.async_search import *
 from BookClub.views.clubs.polls import *
 from BookClub.views.meetings.agenda import *
 from BookClub.views.relationship_views.u2u_views import *
