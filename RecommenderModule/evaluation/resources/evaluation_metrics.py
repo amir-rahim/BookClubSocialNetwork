@@ -88,11 +88,11 @@ class EvaluationMetrics:
             return 0
         return sum / total
 
-    """Get the rate of correct recommendatinos of an algorithm, given the recommendations produced from
-            the dataset's LOOCV train set and the left-out LOOCV test set.
-            The rate is calculated as the number of recommended books that are correctly part of the testset
-            out of the total number of books recommended."""
-    def get_correct_recommendations_rate(self, recommendations):
+    """Get the rate of correct recommendations ('true positives') of an algorithm, given the recommendations produced 
+        from the dataset's LOOCV train set and the left-out LOOCV test set.
+        The rate is calculated as the number of recommended books that are correctly part of the testset
+        out of the total number of books recommended."""
+    def get_precision(self, recommendations):
 
         hits = 0
         total = 0
