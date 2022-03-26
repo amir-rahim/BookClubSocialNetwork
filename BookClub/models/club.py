@@ -10,6 +10,9 @@ from BookClub.models import ClubMembership, User
 
 
 class Club(models.Model):
+    
+    class Meta:
+        ordering = ['name']
     name = models.CharField(unique=True, max_length=100, blank=False)
     club_url_name = models.CharField(
             unique=True,
