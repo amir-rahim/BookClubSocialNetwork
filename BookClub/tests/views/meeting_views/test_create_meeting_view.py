@@ -41,6 +41,7 @@ class CreateMeetingViewTestCase(TestCase):
             "title": "Weekly book review",
             "description": "This is our first weekly meeting for this weeks book!",
             "meeting_time": "2022-02-26 15:30:00",
+            "meeting_end_time": "2022-02-26 16:30:00",
             "location": "Maughan Library",
             "type": "B",
             "book": self.book.id,
@@ -147,7 +148,7 @@ class CreateMeetingViewTestCase(TestCase):
 
     def test_owner_create_wrong_meeting(self):
         self.client.login(username=self.owner.username, password='Password123')
-        self.data['meeting_time'] = 'aaaa'
+        self.data['meeting_time'] = "2022-02-26 17:30:00"
         before_count = Meeting.objects.count()
         response = self.client.post(self.url, self.data)
         after_count = Meeting.objects.count()
@@ -163,7 +164,23 @@ class CreateMeetingViewTestCase(TestCase):
 
     def test_moderator_create_wrong_meeting(self):
         self.client.login(username=self.moderator.username, password='Password123')
-        self.data['meeting_time'] = 'aaaa'
+        self.data['meeting_time'] = "2022-02-26 17:30:00"
+        before_count = Meeting.objects.count()
+        response = self.client.post(self.url, self.data)
+        after_count = Meeting.objects.count()
+        self.assertEqual(after_count, before_count)
+        messages_list = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.ERROR)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'create_meeting.html')
+        form = response.context['form']
+        self.assertTrue(isinstance(form, MeetingForm))
+        self.assertTrue(form.is_bound)
+
+    def test_moderator_create_meeting_with_incorrect_end_time(self):
+        self.client.login(username=self.moderator.username, password='Password123')
+        self.data['meeting_end_time'] = "2022-02-26 14:30:00"
         before_count = Meeting.objects.count()
         response = self.client.post(self.url, self.data)
         after_count = Meeting.objects.count()

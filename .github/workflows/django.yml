@@ -28,6 +28,7 @@ jobs:
       env:
         EMAIL_USER: ${{ secrets.EMAIL_USER }}
         EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+        DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
       run: |
         coverage run --source='.' manage.py test
         coverage xml

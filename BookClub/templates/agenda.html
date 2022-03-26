@@ -6,6 +6,13 @@
     Welcome to the Agenda!
 {% endblock page_subtitle %}
 {% block content %}
+
+   <form method="get"
+          action="{% url 'agenda_export' %}">
+        {% csrf_token %}
+        <button type="submit" class="button is-info">Export Agenda</button>
+    </form>
+
     <!--Tabs-->
     <div id="tabs-with-content">
         <div class="tabs is-toggle is-right">
