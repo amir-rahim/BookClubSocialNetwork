@@ -78,7 +78,7 @@ class ApplicantListTestCase(TestCase):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'applicant_list.html')
-        self.assertNotContains(response, "Club Administration")
+        self.assertContains(response, "Club Administration")
         self.assertNotContains(response, "Manage Club")
 
     def test_member_redirects(self):

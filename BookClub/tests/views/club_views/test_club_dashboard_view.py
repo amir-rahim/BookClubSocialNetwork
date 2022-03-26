@@ -1,9 +1,11 @@
 """Unit tests of the club dashboard view."""
 from django.test import TestCase, tag
 from django.urls import reverse
+from BookClub.helpers import get_club_reputation
 
 from BookClub.models import Club, User, FeaturedBooks, Book
 from BookClub.tests.helpers import reverse_with_next
+
 
 
 @tag('club', 'club_dashboard')
@@ -58,10 +60,9 @@ class ClubDashboardViewTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "club_dashboard.html")
-        # self.assertContains(response, self.club.get_number_of_members())
-        # self.assertContains(response, self.club.get_number_of_meetings())
-        # self.assertContains(response, self.club.get_number_of_posts())
-        # self.assertContains(response, self.club.get_review_score())
+        self.assertContains(response, self.club.get_number_of_members())
+        self.assertContains(response, self.club.get_number_of_meetings())
+        self.assertContains(response, get_club_reputation(self.club))
 
     def test_club_dashboard_has_owner_info(self):
         self.client.login(username=self.user.username, password="Password123")
@@ -99,7 +100,7 @@ class ClubDashboardViewTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "club_dashboard.html")
-        self.assertNotContains(response, "Club Administration")
+        self.assertContains(response, "Club Administration")
         self.assertNotContains(response, "Manage Club")
 
     def test_member_has_no_admin_options(self):

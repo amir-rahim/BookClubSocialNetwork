@@ -90,6 +90,7 @@ class MemberListTestCase(TestCase):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'club_members.html')
+        self.assertContains(response, "Club Administration")
         self.assertNotContains(response, "Manage Club")
 
     def test_member_has_no_admin_options(self):
