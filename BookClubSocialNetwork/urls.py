@@ -160,7 +160,7 @@ urlpatterns = [
     path('bookshelf/<int:book_id>/remove/', views.RemoveFromBookShelfView.as_view(), name='remove_from_bookshelf'),
     
     # '''Asyn Views'''
-    path('search_books/', views.SearchView.as_view(), name='async_book_search'),
+    path('search/', views.SearchView.as_view(), name='async_search'),
     path('user_recommendations/', views.RecommendationUserListView.as_view(), name='async_user_recommendations'),
     path('club_recommendations/<str:club_url_name>/', views.RecommendationClubListView.as_view(), name='async_club_recommendations'),
 

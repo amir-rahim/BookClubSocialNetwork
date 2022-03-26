@@ -35,7 +35,7 @@ class BookSearchTestCase(TestCase):
         self.booklistcontenttype = ContentType.objects.get_for_model(BookList)
         self.clubcontenttype = ContentType.objects.get_for_model(Club)
         self.usercontenttype = ContentType.objects.get_for_model(User)
-        self.url = reverse('async_book_search')
+        self.url = reverse('async_search')
         self.bookdata = {
             'content_type' : self.bookcontenttype.pk
         }
@@ -50,7 +50,7 @@ class BookSearchTestCase(TestCase):
         }
 
     def test_url(self):
-        self.assertEqual(reverse('async_book_search'), '/search_books/')
+        self.assertEqual(reverse('async_search'), '/search/')
 
     def test_select_is_set_get_templates(self):
         self.bookdata['select'] = True
