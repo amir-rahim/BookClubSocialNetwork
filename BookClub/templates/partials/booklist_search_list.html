@@ -1,0 +1,42 @@
+{% if page_obj %}
+<div class="table-container">
+    <table class="table is-hoverable is-fullwidth"
+           id="table-booklists"
+           data-toggle="table"
+           data-pagination="true">
+        <thead>
+            <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Description</th>
+                <th scope="col">Contents</th>
+                <th scope="col">Created by</th>
+                <th scope="col">View</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for list in page_obj %}
+                <tr>
+                    <td>
+                      {{list.title}}
+                    </td>
+                    <td>{{ list.description }}</td>
+                    <td>{{ list.get_short_contents }}</td>
+                    <td><a href="{% url 'user_profile' list.creator.username %}">{{ list.creator.username }}</a> on {{list.created_on.date}}</td>
+
+                    <td>
+                        <a class="button is-fullwidth is-link"
+                                href="{list.get_absolute_url}">View</button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% include 'partials/pagination_ajax.html' %}
+{% else %}
+    <hr>
+    <p style="text-align: center">
+        There are no available books at the moment.
+    </p>
+    <hr>
+{% endif %}

@@ -6,7 +6,7 @@ from BookClub.models import User, Club, Book
 
 
 class Meeting(models.Model):
-    
+
     class Meta:
         ordering=['-meeting_time']
     class MeetingType(models.TextChoices):
@@ -59,6 +59,15 @@ class Meeting(models.Model):
 
     def get_type(self):
         return self.type
+
+    def get_type_name(self):
+        type_names = {
+            'B': 'Book',
+            'C': 'Club',
+            'S': 'Social',
+            'O': 'Other'
+        }
+        return type_names[self.type]
 
     def get_book(self):
         return self.book

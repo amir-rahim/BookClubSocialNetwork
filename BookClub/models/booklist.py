@@ -26,3 +26,12 @@ class BookList(UserCreatedObject):
 
     def remove_book(self, book):
         self.books.remove(book)
+
+    def get_short_contents(self):
+        return_str = ''
+        for book in self.books.all().order_by('pk'):
+            return_str += f'{book.get_short_description()}; '
+
+        if len(return_str) > 75:
+            return_str = return_str[:72] + '...'
+        return return_str

@@ -169,3 +169,8 @@ class BookListTestCase(TestCase):
         url = self.bookList.get_absolute_url()
         correct_url = '/library/lists/1/'
         self.assertEqual(url, correct_url)
+
+    def test_get_short_contents(self):
+        short_contents = self.bookList.get_short_contents()
+        correct_short_contents = '"Classical Mythology" by Mark P. O. Morford; "The Greek Myths: The Compl...'
+        self.assertEqual(short_contents, correct_short_contents)

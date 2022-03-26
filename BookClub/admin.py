@@ -45,7 +45,7 @@ class BookAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for Books ."""
 
     list_display = [
-        'title', 'ISBN', 'author', 'publicationYear', 'publisher'
+        'id', 'title', 'ISBN', 'author', 'publicationYear', 'publisher'
     ]
 
 
@@ -141,4 +141,12 @@ class BookShelfAdmin(admin.ModelAdmin):
 
     list_display = [
         'user', 'book', 'status'
+    ]
+
+@admin.register(FeaturedBooks)
+class FeaturedBooksAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for Featured Books."""
+
+    list_display = [
+        'club', 'book', 'reason'
     ]

@@ -6,18 +6,19 @@
            placeholder="Search"/>
 </div>
 <div id="replaceable_content" class="column is-12">
-    {% include 'partials/book_search_list.html' %}
+        {% include 'partials/book_search_list.html'%}
 </div>
-
+{% load getcontenttype %}
+{% get_content_type_from_queryset content as content_type %}
 <script>
     const user_input = $("#user_input")
     const books_div = $("#replaceable_content")
     const view = "/search_books/"
     const delay_by_in_ms = 700
-    var request_parameters = {}
+    var request_parameters = {'content_type': {{ content_type }}}
     let scheduled_function = false
 
-    let call_book_search = function (view, request_parameters) {
+    let call_search = function (view, request_parameters) {
         $.getJSON(view, request_parameters).done(response => {
             books_div.fadeTo('fast', 0).promise().then(() => {
                 books_div.html(response['html_from_view'])
@@ -31,6 +32,7 @@
         if (scheduled_function){
             clearTimeout(scheduled_function)
         }
-        scheduled_function = setTimeout(call_book_search, delay_by_in_ms, view, request_parameters)
+        scheduled_function = setTimeout(call_search, delay_by_in_ms, view, request_parameters)
     })
+
 </script>

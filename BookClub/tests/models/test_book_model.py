@@ -86,3 +86,6 @@ class BookTestCase(TestCase):
 
     def test_get_l_size(self):
         self.assertEqual(31578, self.book.get_l_size())
+
+    def test_get_short_description(self):
+        self.assertEqual(self.book.get_short_description(), '"Classical Mythology" by Mark P. O. Morford')

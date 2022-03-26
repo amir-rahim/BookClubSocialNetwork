@@ -17,13 +17,20 @@
             <a id="{% url 'club_recommendations' current_club.club_url_name %}" href="{% url 'club_recommendations' current_club.club_url_name %}">Recommendations</a>
         </li>
     </ul>
-    {% if user == current_club.get_club_owner %}
+    {% if user == current_club.get_club_owner or user in current_club.get_moderators %}
         <p class="menu-label">
             Club Administration
         </p>
+        {% if user == current_club.get_club_owner %}
+            <ul class="menu-list">
+                <li>
+                    <a id="{% url 'edit_club' current_club.club_url_name %}" href="{% url 'edit_club' current_club.club_url_name %}">Manage Club</a>
+                </li>
+            </ul>
+        {% endif %}
         <ul class="menu-list">
             <li>
-                <a id="{% url 'edit_club' current_club.club_url_name %}" href="{% url 'edit_club' current_club.club_url_name %}">Manage Club</a>
+                <a id="{% url 'edit_club' current_club.club_url_name %}" href="{% url 'edit_featured_books' current_club.club_url_name %}">Featured Books</a>
             </li>
         </ul>
     {% endif %}

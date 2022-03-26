@@ -79,6 +79,8 @@ urlpatterns = [
     path('club/<str:club_url_name>/edit/', views.EditClubView.as_view(), name='edit_club'),
     path('club/<str:club_url_name>/applicants/', views.ApplicantListView.as_view(), name='applicant_list'),
     path('club/<str:club_url_name>/polls/create/', views.CreateClubPollView.as_view(), name='create_club_poll'),
+    path('club/<str:club_url_name>/featured/', views.FeatureBookView.as_view(), name='edit_featured_books'),
+    path('club/<str:club_url_name>/featured/<int:book_id>/remove', views.RemoveFeaturedBookView.as_view(), name='remove_featured_book'),
 
     # '''Club Forum URLs'''
     path('club/<str:club_url_name>/forum/', views.ForumView.as_view(), name='club_forum'),
@@ -157,7 +159,7 @@ urlpatterns = [
     path('bookshelf/<int:book_id>/remove/', views.RemoveFromBookShelfView.as_view(), name='remove_from_bookshelf'),
     
     # '''Asyn Views'''
-    path('search_books/', views.BookSearchView.as_view(), name='async_book_search'),
+    path('search_books/', views.SearchView.as_view(), name='async_book_search'),
     path('user_recommendations/', views.RecommendationUserListView.as_view(), name='async_user_recommendations'),
     path('club_recommendations/<str:club_url_name>/', views.RecommendationClubListView.as_view(), name='async_club_recommendations'),
 

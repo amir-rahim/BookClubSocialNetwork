@@ -1,9 +1,11 @@
 """Unit tests of the club dashboard view."""
 from django.test import TestCase, tag
 from django.urls import reverse
+from BookClub.helpers import get_club_reputation
 
-from BookClub.models import Club, User
+from BookClub.models import Club, User, FeaturedBooks, Book
 from BookClub.tests.helpers import reverse_with_next
+
 
 
 @tag('club', 'club_dashboard')
@@ -12,7 +14,8 @@ class ClubDashboardViewTest(TestCase):
     fixtures = [
         "BookClub/tests/fixtures/default_users.json",
         "BookClub/tests/fixtures/default_clubs.json",
-        "BookClub/tests/fixtures/default_memberships.json"
+        "BookClub/tests/fixtures/default_memberships.json",
+        'BookClub/tests/fixtures/default_books.json',
     ]
 
     def setUp(self):
@@ -23,6 +26,8 @@ class ClubDashboardViewTest(TestCase):
         self.url = reverse("club_dashboard", kwargs={"club_url_name": self.club.club_url_name})
         self.private_club = Club.objects.get(name="Jack Club")
         self.private_url = reverse("available_clubs")
+        self.book = Book.objects.get(pk=1)
+        self.featured_books = FeaturedBooks.objects.create(club = self.club, book = self.book, reason = "Great book")
 
     def test_club_dashboard_url(self):
         self.assertEqual(self.url, f"/club/Johnathan_Club/")
@@ -55,10 +60,9 @@ class ClubDashboardViewTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "club_dashboard.html")
-        # self.assertContains(response, self.club.get_number_of_members())
-        # self.assertContains(response, self.club.get_number_of_meetings())
-        # self.assertContains(response, self.club.get_number_of_posts())
-        # self.assertContains(response, self.club.get_review_score())
+        self.assertContains(response, self.club.get_number_of_members())
+        self.assertContains(response, self.club.get_number_of_meetings())
+        self.assertContains(response, get_club_reputation(self.club))
 
     def test_club_dashboard_has_owner_info(self):
         self.client.login(username=self.user.username, password="Password123")
@@ -96,7 +100,7 @@ class ClubDashboardViewTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "club_dashboard.html")
-        self.assertNotContains(response, "Club Administration")
+        self.assertContains(response, "Club Administration")
         self.assertNotContains(response, "Manage Club")
 
     def test_member_has_no_admin_options(self):
@@ -112,6 +116,15 @@ class ClubDashboardViewTest(TestCase):
         self.client.login(username=self.jack.username, password="Password123")
         response = self.client.get(reverse("club_dashboard", kwargs={"club_url_name": self.private_club.club_url_name}))
         self.assertRedirects(response, expected_url=reverse("available_clubs"), status_code=302, target_status_code=200)
+
+    def test_club_dashboard_has_featured_books(self):
+        self.client.login(username=self.user.username, password="Password123")
+        url = reverse("club_dashboard", kwargs={"club_url_name": self.club.club_url_name})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "club_dashboard.html")
+        self.assertContains(response, "Classical Mythology")
+        self.assertContains(response, "Mark P. O. Morford")
 
     def test_invalid_club(self):
         self.client.login(username=self.jack.username, password="Password123")

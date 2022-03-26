@@ -15,6 +15,12 @@ def get_club_from_url_name(url_name):
         return club[0]
     else:
         raise ObjectDoesNotExist()
+    
+    
+def get_memberships(user):
+    if user.is_authenticated:
+        return user.memberships_set().values_list('club__pk')
+    return []
 
 
 
@@ -25,6 +31,9 @@ def get_rank(user, club):
         return rank
     except ObjectDoesNotExist:
         return None
+    
+def get_clubs_user_is_member_of(user):
+    return ClubMembership.objects.filter(user=user).values_list('club__pk')
 
 
 def set_rank(user, club, rank):
