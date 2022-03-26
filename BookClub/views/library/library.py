@@ -19,7 +19,7 @@ class BookListView(ListView):
     model = Book
     template_name = "library_books.html"
     context_object_name = 'books'
-    paginate_by = 20
+    paginate_by = 10
 
     def get_queryset(self):
         object_list = Book.objects.all()

@@ -10,7 +10,7 @@ class AvailableClubsView(LoginRequiredMixin, ListView):
     model = Club
     template_name = 'available_clubs.html'
     context_object_name = 'clubs'
-    paginate_by=20
+    paginate_by=10
 
     def get_queryset(self):
         subquery = ClubMembership.objects.filter(user=self.request.user.pk, club=OuterRef('pk'))
