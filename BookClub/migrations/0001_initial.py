@@ -184,6 +184,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('meeting_time', models.DateTimeField()),
+                ('meeting_end_time', models.DateTimeField()),
                 ('created_on', models.DateField(auto_now_add=True)),
                 ('location', models.CharField(blank=True, max_length=120)),
                 ('title', models.CharField(max_length=120)),

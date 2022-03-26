@@ -148,6 +148,7 @@ urlpatterns = [
 
     # '''Agenda URLs'''
     path('agenda/', views.AgendaView.as_view(), name='agenda'),
+    path('agenda/export', views.ExportCalendarView.as_view(), name='agenda_export'),
     
     # '''Bookshelf URLs'''
     path('bookshelf/', views.BookShelfView.as_view(), name='bookshelf'),
@@ -159,4 +160,5 @@ urlpatterns = [
     path('search_books/', views.BookSearchView.as_view(), name='async_book_search'),
     path('user_recommendations/', views.RecommendationUserListView.as_view(), name='async_user_recommendations'),
     path('club_recommendations/<str:club_url_name>/', views.RecommendationClubListView.as_view(), name='async_club_recommendations'),
+
 ]
