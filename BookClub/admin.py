@@ -45,7 +45,7 @@ class BookAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for Books ."""
 
     list_display = [
-        'title', 'ISBN', 'author', 'publicationYear', 'publisher'
+        'id', 'title', 'ISBN', 'author', 'publicationYear', 'publisher'
     ]
 
 
