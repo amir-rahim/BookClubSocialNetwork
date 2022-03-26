@@ -49,14 +49,18 @@
                                     <input name="new_password"
                                            class="input is-large"
                                            type="password"
+                                           id="password-field"
                                            placeholder="New Password">
+                                    <i toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password" ></i >
                                     <div style="font-size: 10pt; color: red; padding-top: 5px;"> {{ form.new_password.errors }} </div>
                                 </div>
                                 <div class="control" style="padding-bottom: 10px;">
                                     <input name="password_confirmation"
                                            class="input is-large"
                                            type="password"
+                                           id="password-field2"
                                            placeholder="Confirm Password">
+                                    <i toggle="#password-field2" class="fa fa-fw fa-eye field-icon toggle-password" ></i >
                                     <div style="font-size: 10pt; color: red; padding-top: 5px;"> {{ form.password_confirmation.errors }} </div>
                                 </div>
                                 <div class="control" style="padding-bottom: 10px;">
