@@ -59,19 +59,44 @@ class EvaluationMetricsTestCase(TestCase):
         novelty = self.evaluation_metrics.get_novelty(test_recommendations)
         self.assertEqual(novelty, 21/6)
 
-    def test_get_correct_recommendations_rate_100_percent_rate(self):
+    def test_get_precision(self):
         test_recommendations = self.build_test_recommendations()
         for key in test_recommendations.keys():
             test_recommendations[key].insert(0, "XXXXXXXXXX")
             break
-        correct_recommendations_rate = self.evaluation_metrics.get_correct_recommendations_rate(test_recommendations)
+        precision = self.evaluation_metrics.get_precision(test_recommendations)
         recommendations_length = 0
         for user_recommendations in test_recommendations.values():
             recommendations_length += len(user_recommendations)
-        self.assertEqual(correct_recommendations_rate, (recommendations_length-1)/recommendations_length)
+        self.assertEqual(precision, (recommendations_length-1)/recommendations_length)
+
+    def test_get_precision_100_percents(self):
+        test_recommendations = self.build_test_recommendations()
+        precision = self.evaluation_metrics.get_precision(test_recommendations)
+        self.assertEqual(precision, 1)
 
     def test_get_recommendations_eligible_users_rate(self):
         test_recommendations = self.build_test_recommendations()
         all_users = self.trainset.n_users
         recommendation_eligible_users_rate = self.evaluation_metrics.get_recommendation_eligible_users_rate(test_recommendations)
         self.assertEqual(recommendation_eligible_users_rate, len(test_recommendations) / all_users)
+
+    def test_get_user_coverage(self):
+        test_recommendations = self.build_test_recommendations()
+        good_recommendation_users = set()
+        for user_id, book_id, rating in self.testset:
+            try:
+                if book_id in test_recommendations[user_id]:
+                    good_recommendation_users.add(user_id)
+            except:
+                pass
+        user_coverage = self.evaluation_metrics.get_user_coverage(test_recommendations)
+        self.assertEqual(user_coverage, len(good_recommendation_users)/len(test_recommendations))
+
+    def test_get_f1_score(self):
+        test_recommendations = self.build_test_recommendations()
+        f1_score_1 = self.evaluation_metrics.get_f1_score(test_recommendations)
+        precision = self.evaluation_metrics.get_precision(test_recommendations)
+        recall = self.evaluation_metrics.get_hit_rate(test_recommendations)
+        f1_score_2 = 2 * (precision * recall) / (precision + recall)
+        self.assertEqual(f1_score_1, f1_score_2)

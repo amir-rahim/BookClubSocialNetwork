@@ -124,7 +124,8 @@ class EvaluationMetrics:
         return eligible_users_number / all_users_number
 
 
-    """Percentage of users having at least 1 'good' recommendation."""
+    """Percentage of users having at least 1 'good' recommendation.
+        given the recommendations produced from the dataset's LOOCV train set and the left-out LOOCV test set."""
     def get_user_coverage(self, recommendations):
 
         users_number = len(recommendations)
@@ -140,3 +141,12 @@ class EvaluationMetrics:
                 pass
 
         return len(good_recommendation_users) / users_number
+
+
+    """Get F1 score (harmonic mean of precision and recall),
+        given the recommendations produced from the dataset's LOOCV train set and the left-out LOOCV test set."""
+    def get_f1_score(self, recommendations):
+        precision = self.get_precision(recommendations)
+        recall = self.get_hit_rate(recommendations)
+        f1_score = 2 * (precision * recall) / (precision + recall)
+        return f1_score

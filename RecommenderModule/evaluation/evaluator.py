@@ -64,12 +64,13 @@ class Evaluator:
         and then print them through the print_evaluations() method."""
     def evaluate(self, recommendations):
         evaluations = {
-            "hit_rate": self.evaluation_metrics.get_hit_rate(recommendations),
-            "average_reciprocal_hit_rate": self.evaluation_metrics.get_average_reciprocal_hit_rate(recommendations),
-            "novelty": self.evaluation_metrics.get_novelty(recommendations),
-            "recommendation_eligible_users_rate": self.evaluation_metrics.get_recommendation_eligible_users_rate(recommendations),
-            "user_coverage": self.evaluation_metrics.get_user_coverage(recommendations),
-            "precision": self.evaluation_metrics.get_precision(recommendations),
+            "Hit Rate (Recall)": self.evaluation_metrics.get_hit_rate(recommendations),
+            "Average Reciprocal Hit Rate": self.evaluation_metrics.get_average_reciprocal_hit_rate(recommendations),
+            "Novelty": self.evaluation_metrics.get_novelty(recommendations),
+            "Recommendation-Eligible Users Rate": self.evaluation_metrics.get_recommendation_eligible_users_rate(recommendations),
+            "User Coverage": self.evaluation_metrics.get_user_coverage(recommendations),
+            "Precision": self.evaluation_metrics.get_precision(recommendations),
+            "F1 Score": self.evaluation_metrics.get_f1_score(recommendations)
         }
         self.print_evaluations(evaluations)
 
