@@ -65,7 +65,7 @@
             </section>
             {% if clubs %}
                 <!-- If there are clubs available to the logged-in user -->
-                <div class="table-container">{% include 'partials/club_search.html' with content=clubs %}</div>
+                {% include 'partials/club_search.html' with content=clubs %}
             {% else %}
                 <!-- If there is no club available to the logged-in user -->
                 <hr>
