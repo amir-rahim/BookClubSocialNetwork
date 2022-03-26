@@ -22,7 +22,7 @@
                         <a href="{% url 'available_clubs' %}">Club</a>
                     </li>
                     <li>
-                        <a href="{% url 'club_dashboard' current_club.club_url_name %}">{{ current_club.name }}</a>
+                        <a href="#">{{ current_club.name }}</a>
                     </li>
                     <li>
                         <a href="{% url 'club_dashboard' current_club.club_url_name %}">Dashboard</a>
@@ -42,13 +42,13 @@
                     <div class="box card-equal-height">
                         <div class="card-content">
                             <p class="title">
-                                Club Details
+                                Owner Details
                             </p>
                             <div class="media">
                                 <div class="media-left">
                                     <figure class="image is-128x128">
                                         <img class="is-rounded"
-                                             src="https://image.shutterstock.com/image-vector/default-avatar-profile-icon-grey-600w-518740741.jpg"
+                                             src="{{ owner.gravatar }}"
                                              alt="Placeholder image">
                                     </figure>
                                 </div>
