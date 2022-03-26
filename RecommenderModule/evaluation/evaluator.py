@@ -75,9 +75,9 @@ class Evaluator:
 
     """Print the results of the evaluation of the recommender system"""
     def print_evaluations(self, evaluations={}):
-        print()
+        print("\nEVALUATIONS:")
         for name, value in evaluations.items():
-            print(f" -> {name}: {value}")
+            print(f" - {name}: {value}")
         print()
 
     """Create a list of all possible combinations of parameters, from the parameters_dict argument
