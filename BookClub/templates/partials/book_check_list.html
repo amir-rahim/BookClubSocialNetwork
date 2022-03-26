@@ -14,10 +14,10 @@
                     {% for book in page_obj %}
                         <tr>
                             <td>
-                                {% if book.imageS %}
-                                    <img src="{{ book.imageS }}" alt=""/>
+                                {% if book.get_s_size > 50 %}
+                                    <img src="//images.weserv.nl/?url={{ book.imageS }}" alt=""/>
                                 {% else %}
-                                    <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+                                    <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=36&w=22"
                                          alt=""/>
                                 {% endif %}
                             </td>
