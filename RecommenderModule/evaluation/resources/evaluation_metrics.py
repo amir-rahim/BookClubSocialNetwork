@@ -117,8 +117,26 @@ class EvaluationMetrics:
 
     """Get the rate of users that can get recommendations using the evaluated recommender algorithm,
         given the recommendations produced from the dataset's LOOCV train set and the left-out LOOCV test set.
-        The rate is calculated as the number of users given recommendations divided by the total number of users in the testset"""
+        The rate is calculated as the number of users given recommendations divided by the total number of users in the testset."""
     def get_recommendation_eligible_users_rate(self, recommendations):
         eligible_users_number = len([(user, user_recommendations) for (user, user_recommendations) in recommendations.items() if user_recommendations != []])
         all_users_number = self.trainset.n_users
         return eligible_users_number / all_users_number
+
+
+    """Percentage of users having at least 1 'good' recommendation."""
+    def get_user_coverage(self, recommendations):
+
+        users_number = len(recommendations)
+
+        good_recommendation_users = set()
+        for user_id, book_id, rating in self.testset:
+
+            # We add the user to good_recommendation_users if the book has been recommended to the user
+            try:
+                if book_id in recommendations[user_id]:
+                    good_recommendation_users.add(user_id)
+            except:
+                pass
+
+        return len(good_recommendation_users) / users_number

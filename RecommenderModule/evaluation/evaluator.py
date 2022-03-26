@@ -69,6 +69,7 @@ class Evaluator:
             "novelty": self.evaluation_metrics.get_novelty(recommendations),
             "correct_recommendations_rate": self.evaluation_metrics.get_correct_recommendations_rate(recommendations),
             "recommendation_eligible_users_rate": self.evaluation_metrics.get_recommendation_eligible_users_rate(recommendations),
+            "user_coverage": self.evaluation_metrics.get_user_coverage(recommendations),
         }
         self.print_evaluations(evaluations)
 
