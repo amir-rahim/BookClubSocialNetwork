@@ -40,7 +40,7 @@ class EvaluationPopularity:
 
         for (scoring_method, recommendations) in all_recommendations.items():
             print(f"\nScoring method: {scoring_method}")
-            self.evaluator.evaluate(recommendations)
+            self.evaluator.evaluate(recommendations, self.recommender)
 
     """Get the recommendations for all users from the train set, using the
         average metric."""

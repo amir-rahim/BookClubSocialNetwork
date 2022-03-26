@@ -41,7 +41,7 @@ class Evaluator:
     def evaluate_single_recommender(self, recommender, parameters={}):
         print(f"\nEvaluating recommender with parameters: {parameters}")
         recommendations = self.get_recommendations(recommender, parameters)
-        self.evaluate(recommendations)  # also calls print_evaluations
+        self.evaluate(recommendations, recommender)  # also calls print_evaluations
 
 
     """Get a dictionary of the recommended books for all users in the trainset"""
@@ -60,9 +60,9 @@ class Evaluator:
         return recommendations
 
 
-    """Compute all evaluations for the given recommendations, 
+    """Compute all evaluations for the given recommendations/recommender, 
         and then print them through the print_evaluations() method."""
-    def evaluate(self, recommendations):
+    def evaluate(self, recommendations, recommender):
         evaluations = {
             "Hit Rate (Recall)": self.evaluation_metrics.get_hit_rate(recommendations),
             "Average Reciprocal Hit Rate": self.evaluation_metrics.get_average_reciprocal_hit_rate(recommendations),
@@ -70,7 +70,8 @@ class Evaluator:
             "Recommendation-Eligible Users Rate": self.evaluation_metrics.get_recommendation_eligible_users_rate(recommendations),
             "User Coverage": self.evaluation_metrics.get_user_coverage(recommendations),
             "Precision": self.evaluation_metrics.get_precision(recommendations),
-            "F1 Score": self.evaluation_metrics.get_f1_score(recommendations)
+            "F1 Score": self.evaluation_metrics.get_f1_score(recommendations),
+            "Book Coverage": self.evaluation_metrics.get_book_coverage(recommender)
         }
         self.print_evaluations(evaluations)
 

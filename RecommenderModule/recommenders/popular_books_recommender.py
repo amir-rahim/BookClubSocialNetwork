@@ -39,3 +39,7 @@ class PopularBooksRecommender(AbstractRecommender):
         if self.popular_books_methods is None:
             self.popular_books_methods = PopularBooksMethods()
         return self.popular_books_methods.get_recommendations_from_median(read_books=club_read_books)
+
+    """Get the number of books that can be recommender to the user, using this recommender algorithm"""
+    def get_number_of_recommendable_books(self):
+        return self.popular_books_methods.get_number_of_recommendable_books()

@@ -155,3 +155,7 @@ class PopularBooksMethods:
     """Get most popular books (up to 10) according to their average and median rating, that the user has not read yet"""
     def get_recommendations_from_average_and_median(self, read_books=[]):
         return self.get_recommendations_from_popularity_list(self.sorted_combination_scores, read_books=read_books)
+
+    """Get the number of books that can be recommender to the user, using this recommender algorithm"""
+    def get_number_of_recommendable_books(self):
+        return len(self.filtered_books_list)

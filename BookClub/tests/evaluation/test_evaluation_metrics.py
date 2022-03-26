@@ -3,6 +3,7 @@ from RecommenderModule.recommenders.resources.data_provider import DataProvider
 from RecommenderModule.evaluation.resources.evaluation_data_provider import EvaluationDataProvider
 from RecommenderModule.evaluation.resources.evaluation_metrics import EvaluationMetrics
 from collections import Counter
+from RecommenderModule.recommenders.popular_books_recommender import PopularBooksRecommender
 
 @tag('evaluation')
 class EvaluationMetricsTestCase(TestCase):
@@ -100,3 +101,10 @@ class EvaluationMetricsTestCase(TestCase):
         recall = self.evaluation_metrics.get_hit_rate(test_recommendations)
         f1_score_2 = 2 * (precision * recall) / (precision + recall)
         self.assertEqual(f1_score_1, f1_score_2)
+
+    def test_get_book_coverage(self):
+        test_recommender = PopularBooksRecommender()
+        test_recommender.fit(self.trainset)
+        book_coverage_1 = self.evaluation_metrics.get_book_coverage(test_recommender)
+        book_coverage_2 = len(test_recommender.popular_books_methods.filtered_books_list) / self.trainset.n_items
+        self.assertEqual(book_coverage_1, book_coverage_2)

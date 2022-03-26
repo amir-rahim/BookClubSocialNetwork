@@ -150,3 +150,10 @@ class EvaluationMetrics:
         recall = self.get_hit_rate(recommendations)
         f1_score = 2 * (precision * recall) / (precision + recall)
         return f1_score
+
+    """Get coverage of the recommender (percentage of books that can be recommended to users),
+        given an instance of a recommender."""
+    def get_book_coverage(self, recommender):
+        recommendable_books_number = recommender.get_number_of_recommendable_books()
+        all_books_number = self.trainset.n_items
+        return recommendable_books_number / all_books_number
