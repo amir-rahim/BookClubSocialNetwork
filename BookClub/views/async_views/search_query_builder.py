@@ -1,5 +1,5 @@
 from enum import Enum
-from BookClub.helpers import get_clubs_user_is_member_of
+from BookClub.helpers import get_clubs_user_is_member_of, get_memberships_with_access
 from BookClub.models import Book, User, Club, Meeting, BookList, ClubMembership, TextPost, TextComment, UserCreatedObject, ForumPost, ForumComment
 from django.db.models import Q
 
@@ -45,9 +45,8 @@ class BookQuery(SearchQuery):
     match_models = Book
 
     def query(self, **kwargs):
-        self.q_objects.add(Q(title__icontains=self.query_string), Q.OR)
-        self.q_objects.add(Q(author__icontains=self.query_string), Q.OR)
-        self.q_objects.add(Q(publisher__icontains=self.query_string), Q.OR)
+        self.q_objects.add((Q(title__icontains=self.query_string) | Q(
+            author__icontains=self.query_string) | Q(publisher__icontains=self.query_string)), Q.OR)
         return self.q_objects
 
 
@@ -67,8 +66,8 @@ class BookListQuery(SearchQuery):
     match_models = BookList
 
     def query(self, **kwargs):
-        self.q_objects.add(Q(title__icontains=self.query_string), Q.OR)
-        self.q_objects.add(Q(description__icontains=self.query_string), Q.OR)
+        self.q_objects.add(Q(title__icontains=self.query_string) | Q(
+            description__icontains=self.query_string), Q.OR)
         return self.q_objects
 
 
@@ -78,10 +77,12 @@ class ClubQuery(SearchQuery):
 
     def query(self, **kwargs):
         user = kwargs.get('user', None)
-        user_clubs = get_clubs_user_is_member_of(user)
-        self.q_objects.add(Q((Q(name__icontains=self.query_string), Q.AND, ~Q(pk__in=user_clubs))), Q.OR)
-        self.q_objects.add(Q(description__icontains=self.query_string, pk__not__in=user_clubs), Q.OR)
-        self.q_objects.add(Q(tagline__icontains=self.query_string, pk__not__in=user_clubs), Q.OR)
+        user_clubs = get_memberships_with_access(user)
+        print(user_clubs)
+        self.q_objects.add(Q(name__icontains=self.query_string) & ~Q(pk__in=user_clubs), Q.OR)
+        self.q_objects.add(Q(description__icontains=self.query_string) & ~Q(pk__in=user_clubs), Q.OR)
+        self.q_objects.add(Q(tagline__icontains=self.query_string)
+                           & ~Q(pk__in=user_clubs), Q.OR)
         return self.q_objects
     
     
@@ -92,12 +93,3 @@ class UserQuery(SearchQuery):
     def query(self, **kwargs):
         self.q_objects.add(Q(username__icontains=self.query_string), Q.OR)
         return self.q_objects
-
-
-class SearchQueries(Enum):
-
-    BOOK = BookQuery
-    USERCREATEDOBJECT = UserCreatedObjectQuery
-    BOOKLIST = BookListQuery
-    CLUB = ClubQuery
-    USER = UserQuery
