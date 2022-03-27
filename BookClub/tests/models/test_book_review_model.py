@@ -8,7 +8,7 @@ from django.test import TestCase, tag
 from BookClub.models.user import User
 
 
-@tag('models', 'reviews')
+@tag('models', 'reviewsmodel')
 class BookReviewModelTestCase(TestCase):
 
     fixtures=[
@@ -122,11 +122,12 @@ class BookReviewModelTestCase(TestCase):
     def test_get_delete_url(self):
         delete_url = reverse('delete_review',kwargs={'book_id': self.review1.book.pk})
         self.assertEqual(self.review1.get_delete_url(),delete_url)
-    
+
     def test_str(self):
         self.assertEqual(self.review1.str(),"1/10 rating & review by johndoe on \"Classical Mythology\"")
         self.assertEqual(str(self.review1),"1/10 rating & review by johndoe on \"Classical Mythology\"")
-        
+        self.assertEqual(self.review1.get_delete_str(),"1/10 rating & review by johndoe on \"Classical Mythology\"")
+
 @tag('models', 'reviewcomment')
 class BookReviewCommentTestCase(TestCase):
     fixtures = [
@@ -176,11 +177,13 @@ class BookReviewCommentTestCase(TestCase):
 
     def test_str(self):
         self.assertEqual(self.bookReviewComment.str(),"Comment by johndoe on 1/10 rating & review by johndoe on \"Classical Mythology\"")
+        self.assertEqual(str(self.bookReviewComment),"Comment by johndoe on 1/10 rating & review by johndoe on \"Classical Mythology\"")
+        self.assertEqual(self.bookReviewComment.get_delete_str(),"Comment by johndoe on 1/10 rating & review by johndoe on \"Classical Mythology\"")
 
     def test_get_delete_url(self):
         delete_url = reverse('delete_review_comment',kwargs={
             'book_id': self.bookReview.book.id,
             'review_id': self.bookReview.id,
-            'comment_id': self.bookReviewComment.id 
+            'comment_id': self.bookReviewComment.id
             })
         self.assertEqual(self.bookReviewComment.get_delete_url(),delete_url)

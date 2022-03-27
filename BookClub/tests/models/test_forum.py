@@ -146,9 +146,19 @@ class ForumPostTestCase(TestCase):
         correct_str = '"blank" post on Global Forum by johndoe'
         self.assertEqual(return_str, correct_str)
 
+    def test_get_delete_str(self):
+        return_str = self.forumPost.get_delete_str()
+        correct_str = '"blank" post on Global Forum by johndoe'
+        self.assertEqual(return_str, correct_str)
+
     def test_get_absolute_url_(self):
         return_url = self.forumPost.get_absolute_url()
         correct_url = '/forum/1/'
+        self.assertEqual(return_url, correct_url)
+
+    def test_get_delete_url(self):
+        return_url = self.forumPost.get_delete_url()
+        correct_url = '/forum/1/delete/'
         self.assertEqual(return_url, correct_url)
 
 
@@ -181,3 +191,13 @@ class ForumCommentTestCase(TestCase):
     def test_str_function(self):
         return_str = str(self.forumComment)
         correct_str = 'Comment by johndoe on "blank" post on Global Forum by johndoe'
+        self.assertEqual(return_str, correct_str)
+
+    def test_get_delete_str(self):
+        return_str = self.forumComment.get_delete_str()
+        correct_str = 'Comment by johndoe on "blank" post on Global Forum by johndoe'
+        self.assertEqual(return_str, correct_str)
+
+    def test_get_delete_url(self):
+        return_url = self.forumComment.get_delete_url()
+        correct_url = 'forum/1/comment/1/delete/'

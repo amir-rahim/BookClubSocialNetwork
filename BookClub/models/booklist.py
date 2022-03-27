@@ -18,6 +18,9 @@ class BookList(UserCreatedObject):
     def __str__(self):
         return f"Book List '{self.title}' with {self.books.count()} titles"
 
+    def get_delete_str(self):
+        return self.__str__()
+
     def get_books(self):
         return self.books.all()
 

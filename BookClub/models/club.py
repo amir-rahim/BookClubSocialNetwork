@@ -44,6 +44,12 @@ class Club(models.Model):
     def __str__(self):
         return self.name
 
+    def get_delete_str(self):
+        return f'Club "{self.name}" with {self.get_number_of_members()} members'
+
+    def get_delete_url(self):
+        return reverse('delete_club', kwargs={'club_url_name': self.club_url_name})
+
     def get_club_owner(self):
         return ClubMembership.objects.get(club=self, membership=ClubMembership.UserRoles.OWNER).user
 
