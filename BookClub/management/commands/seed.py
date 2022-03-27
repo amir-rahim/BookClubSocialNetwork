@@ -14,7 +14,7 @@ class Command(BaseCommand):
         self.faker = Faker('en_GB')
 
     def add_arguments(self, parser):
-        parser.add_argument('count', type=int, nargs='?', default=10)
+        parser.add_argument('percent', type=int, nargs='?', default=10)
 
     def generateUser(self):
         faker = Faker('en_GB')
@@ -32,16 +32,16 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print("Seeding...")
-
-        try:
-            self.admin = User.objects.create_superuser(
-                username='Admin',
-                email='admin@example.org',
-                public_bio=self.faker.text(max_nb_chars=200),
-                password="Test123"
-            )
-        except IntegrityError:
-            pass
+        percent = options.get('percent', 1)
+        call_command("importusers", percent)
+        call_command("importbooksrandom", percent)
+        call_command("importbookreviews")
+        self.admin = User.objects.create_superuser(
+            username='Admin',
+            email='admin@example.org',
+            public_bio=self.faker.text(max_nb_chars=200),
+            password="Test123"
+        )
         count = options.get('count', None)
         for i in range(count):
             print("Club: " + str(i + 1))
@@ -49,16 +49,13 @@ class Command(BaseCommand):
                 self.create_club()
 
             except IntegrityError as e:
-                print("Integrity error was found, attempting again")
+                print("Integrity error was found, skipping")
                 print(str(e))
                 continue
-
-        #call_command('importbooks', 5)
+            
         id1 = Book.objects.all()[0].id
-        print(id1)
         self.add_reviews_to(id1)
         id2 = Book.objects.all()[1].id
-        print(id2)
         self.add_reviews_to(id2)
 
         self.create_global_forum()
