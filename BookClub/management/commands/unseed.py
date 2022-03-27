@@ -5,15 +5,17 @@ class Command(BaseCommand):
         """The database unseeder."""
         def __init__(self):
             super().__init__()
+        def add_arguments(self, parser):
 
+            parser.add_argument('--complete', '--c', action="store_true")
         def handle(self, *args, **options):
             print('Unseeding...')
-
-            User.objects.filter(is_superuser=False).delete()
+            if options['complete']:
+                User.objects.filter(is_superuser=False).delete()
+                Book.objects.all().delete()
+                BookReview.objects.all().delete()
             Club.objects.all().delete()
             ClubMembership.objects.all().delete()
-            Book.objects.all().delete()
-            BookReview.objects.all().delete()
             ForumPost.objects.all().delete()
             ForumComment.objects.all().delete()
             Forum.objects.all().delete()
