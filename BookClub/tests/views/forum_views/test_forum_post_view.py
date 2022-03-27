@@ -76,15 +76,9 @@ class ForumPostViewTestCase(TestCase):
         response = self.client.get(self.my_url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'forum_post.html')
+        self.assertTemplateUsed(response, 'partials/delete_button_and_modal.html')
         self.assertContains(response, "<a href=\"" + self.my_url + "edit/\">")
-        self.assertContains(response, """<button class="button is-danger is-rounded"
-                                        aria-label="Delete Post"
-                                        type="submit">
-                                    <span class="icon">
-                                        <i class="fa-solid fa-x"></i>
-                                    </span>
-                                    <span>Delete</span>
-                                </button>""")
+        self.assertContains(response, """<form class="" action="/forum/1/delete/" method="post">""")
 
     def test_comments_shown(self):
         response = self.client.get(self.my_url)

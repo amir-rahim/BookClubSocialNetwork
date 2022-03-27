@@ -48,6 +48,12 @@ class ClubModelTestCase(TestCase):
     def test_str_returns_name(self):
         self.assertEqual(str(self.club1), self.club1.name)
 
+    def test_get_delete_str(self):
+        self.assertEqual(self.club1.get_delete_str(), f'Club "Johnathan Club" with 3 members')
+
+    def test_get_delete_url(self):
+        self.assertEqual(self.club1.get_delete_url(), f'/delete_club/Johnathan_Club/')
+
     def test_name_cannot_be_blank(self):
         self.club1.name = ''
         self._assert_club_is_invalid()
