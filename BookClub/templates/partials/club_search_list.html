@@ -28,8 +28,7 @@
                         </td>
                         <td>
                             <div>
-                                <button class="button is-fullwidth is-link"
-                                        href="{{ club.get_absolute_url }}">View</button>
+                                <a href="{{ club.get_absolute_url }}"><button class="button is-fullwidth is-link">View</button></a>
                                 {% if club.is_private == True %}
                                     <form method="post"
                                           action="{% url 'join_club' club_url_name=club.club_url_name %}">
