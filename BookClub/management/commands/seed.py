@@ -70,7 +70,7 @@ class Command(BaseCommand):
                 public_bio=self.faker.text(max_nb_chars=200),
                 password="Test123"
             )
-        count = options.get('count', None)
+        count = options.get('count', 5)
         for i in range(count):
             print("Club: " + str(i + 1))
             try:
