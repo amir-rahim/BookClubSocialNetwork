@@ -88,7 +88,7 @@ class EvaluationMetrics:
             return 0
         return sum / total
 
-    """Get the rate of correct recommendations ('true positives') of an algorithm, given the recommendations produced 
+    """Get the percentage of correct recommendations ('true positives') of an algorithm, given the recommendations produced 
         from the dataset's LOOCV train set and the left-out LOOCV test set.
         The rate is calculated as the number of recommended books that are correctly part of the testset
         out of the total number of books recommended."""
@@ -115,7 +115,7 @@ class EvaluationMetrics:
         return hits / total
 
 
-    """Get the rate of users that can get recommendations using the evaluated recommender algorithm,
+    """Get the percentage of users that can get recommendations using the evaluated recommender algorithm,
         given the recommendations produced from the dataset's LOOCV train set and the left-out LOOCV test set.
         The rate is calculated as the number of users given recommendations divided by the total number of users in the testset."""
     def get_recommendation_eligible_users_rate(self, recommendations):
@@ -124,7 +124,7 @@ class EvaluationMetrics:
         return eligible_users_number / all_users_number
 
 
-    """Percentage of users having at least 1 'good' recommendation.
+    """Get the percentage of users having at least 1 'good' recommendation.
         given the recommendations produced from the dataset's LOOCV train set and the left-out LOOCV test set."""
     def get_user_coverage(self, recommendations):
 
