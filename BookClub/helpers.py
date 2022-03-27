@@ -19,10 +19,13 @@ def get_club_from_url_name(url_name):
     
 def get_memberships(user):
     if user.is_authenticated:
-        return user.memberships_set().values_list('club__pk')
+        return user.memberships_set.values_list('club__pk')
     return []
 
-
+def get_memberships_with_access(user):
+    if user.is_authenticated:
+        return user.clubmembership_set.exclude(membership=ClubMembership.UserRoles.APPLICANT).values_list('club__pk')
+    return []
 
 # Used to get the actual rank of the user (if they have a membership in that club)
 def get_rank(user, club):

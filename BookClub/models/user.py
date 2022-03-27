@@ -8,6 +8,9 @@ from libgravatar import Gravatar
 class User(AbstractUser):
     """User model used for authentication."""
 
+    class Meta:
+        ordering = ['username']
+        
     username = models.CharField(
         max_length=30,
         unique=True,
