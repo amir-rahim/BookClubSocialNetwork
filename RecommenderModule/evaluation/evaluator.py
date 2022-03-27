@@ -51,7 +51,7 @@ class Evaluator:
         recommendations = {}
         nb_users = self.trainset.n_users
         for user_inner_id in self.trainset.all_users():
-            if (user_inner_id % 1000 == 0):
+            if user_inner_id % 5000 == 0:
                 print(f"{user_inner_id} / {nb_users}")
             user_id = self.trainset.to_raw_uid(user_inner_id)
             user_recommendations = recommender.get_user_recommendations(user_id)
