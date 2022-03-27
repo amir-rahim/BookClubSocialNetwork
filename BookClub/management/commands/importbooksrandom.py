@@ -11,7 +11,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('books', type=int, nargs='?', default=5)
-
+        parser.add_argument('--deploy', action="store_true")
     def handle(self, *args, **options):
         tic = time.time()
         file_path = "static/dataset/BX_Books.csv"
@@ -33,6 +33,8 @@ class Command(BaseCommand):
             imageL=record['Image-URL-L'],
         ) for record in df_records]
         count = int(len(model_instances) * (percent / 100))
+        if options['deploy']:
+            count = 300
         random_sample = random.sample(model_instances, count)
         try:
             Book.objects.bulk_create(random_sample)

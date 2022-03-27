@@ -13,12 +13,14 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('users', type=int, nargs='?', default=5)
-
+        parser.add_argument('--deploy', action="store_true")
     def handle(self, *args, **options):
         tic = time.time()
         percent = options.get('users', None)
         model_instances = self.import_users()
         count = int(len(model_instances) * (percent / 100))
+        if options['deploy']:
+            count = 150
         random_sample = random.sample(model_instances, count)
         try:
             User.objects.bulk_create(random_sample)

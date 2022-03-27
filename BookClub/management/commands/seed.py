@@ -1,3 +1,4 @@
+from subprocess import call
 from django.core.management.base import BaseCommand
 from faker import Faker
 import random
@@ -21,6 +22,8 @@ class Command(BaseCommand):
         parser.add_argument('percent', type=int, nargs='?', default=10)
 
         parser.add_argument('--count', '--c', type=int)
+        
+        parser.add_argument('--deploy', action="store_true")
 
         parser.add_argument(
             '--load',
@@ -55,6 +58,11 @@ class Command(BaseCommand):
             call_command("importusers", percent)
             call_command("importbooksrandom", percent)
             call_command("importbookreviews")
+            
+        if options['deploy']:
+            call_command("importusers", "--deploy")
+            call_command("importbooksrandom","--deploy")
+            call_command("importbookreviews")
         if options['admin']:
             self.admin = User.objects.create_superuser(
                 username='Admin',
@@ -77,6 +85,34 @@ class Command(BaseCommand):
         self.add_books_to_shelf()
         self.add_following()
         self.create_booklists()
+        self.add_reviews()
+        
+    def add_reviews(self):
+        count = BookReview.objects.all().count()
+        
+        if count < 300:
+            i = count
+            while i < 300:
+                book = Book.objects.order_by('?')[0]
+                if self.add_review_to_book(book):
+                    i +=1
+                
+    def add_review_to_book(self, book):
+        u = self.get_random_user()
+        try:
+            review = BookReview.objects.create(creator=u, book=book,book_rating=random.randrange(0,10), title=self.faker.text(max_nb_chars=30), content=self.faker.text(max_nb_chars=120))
+            for x in range(1, random.randrange(0, 5)):
+                commentUser = User.objects.order_by('?')[0]
+                curComment = BookReviewComment.objects.create(
+                    content=self.faker.text(max_nb_chars=240),
+                    creator=commentUser,
+                    book_review = review
+                )
+                self.add_votes_public(curComment)
+            
+            return True
+        except:
+            return False
 
     def create_club(self):
         owner = User.objects.order_by('?')[0]
