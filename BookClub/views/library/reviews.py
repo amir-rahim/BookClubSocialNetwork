@@ -100,7 +100,9 @@ class EditReviewView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 
 class DeleteReviewView(LoginRequiredMixin, View):
-    redirect_location = 'library_books'  # Need to change to review list view or somewhere else
+
+    def get_redirect_location(self):
+        return reverse('book_reviews', kwargs=self.kwargs)
 
     """Handles no permssion and Reviews that don't exist"""
 
@@ -117,15 +119,15 @@ class DeleteReviewView(LoginRequiredMixin, View):
             current_user = self.request.user
             review = BookReview.objects.get(book=book, creator=current_user)
             self.action(review)
-            return redirect(self.redirect_location)
+            return redirect(self.get_redirect_location())
 
         except:
             self.is_not_actionable()
-            return redirect(self.redirect_location)
+            return redirect(self.get_redirect_location())
 
     def get(self, request, *args, **kwargs):
         messages.error(self.request, "You are not allowed to delete this review or Review doesn\'t exist")
-        return redirect(self.redirect_location)
+        return redirect(self.get_redirect_location())
 
 
 class ReviewDetailView(ListView):
@@ -205,5 +207,5 @@ class DeleteCommentForReviewView(LoginRequiredMixin, UserPassesTestMixin, Delete
             return False
 
     def get_success_url(self):
-        self.kwargs.pop('comment_id') 
+        self.kwargs.pop('comment_id')
         return reverse('book_review', kwargs=self.kwargs)

@@ -24,7 +24,7 @@ class DeleteBookReview(TestCase, LogInTester):
         self.otherUser = User.objects.get(pk=6)
 
         self.url = reverse('delete_review', kwargs={'book_id': self.review_book.id})
-        self.redirect_url = reverse('library_books')  # Need to redirect to book review list
+        self.redirect_url = reverse('book_reviews', kwargs={'book_id': self.review_book.pk})
 
     def test_delete_book_review_url(self):
         self.assertEqual(self.url, f'/library/books/{self.bookreview.book.id}/delete/')
