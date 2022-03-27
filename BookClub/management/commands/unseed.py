@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from BookClub.models import User, Club, ClubMembership, Book, BookReview, Vote, Forum, ForumComment, ForumPost
+from BookClub.models import *
 
 class Command(BaseCommand):
         """The database unseeder."""
@@ -18,5 +18,13 @@ class Command(BaseCommand):
             ForumComment.objects.all().delete()
             Forum.objects.all().delete()
             Vote.objects.all().delete()
-
+            Meeting.objects.all().delete()
+            UserRecommendations.objects.all().delete()
+            ClubRecommendations.objects.all().delete()
+            BookList.objects.all().delete()
+            FeaturedBooks.objects.all().delete()
+            BookReviewComment.objects.all().delete()
+            UserToUserRelationship.objects.all().delete()
+            Vote.objects.all().delete()         
+            
             print('Done!')
