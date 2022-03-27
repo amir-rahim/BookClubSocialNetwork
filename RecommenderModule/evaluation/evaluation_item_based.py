@@ -11,7 +11,7 @@ class EvaluationItemBased:
 
         evaluator = Evaluator()
         parameters_to_evaluate = {
-            'min_support': [2, 5, 10],
+            'min_support': [1, 2, 5, 7],
             'model_function_name': ['cosine', 'msd', 'pearson', 'pearson_baseline']
         }
         recommender = ItemBasedRecommender()
