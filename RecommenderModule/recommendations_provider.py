@@ -20,7 +20,7 @@ def get_club_popularity_recommendations(club_url_name):
 """Retrain the popularity recommender with the current data."""
 def retrain_popularity_recommender(min_ratings_threshold=300):
     popularity_recommender = PopularBooksRecommender()
-    popularity_recommender.fit_and_save(parameters={"min_ratings_threshold": min_ratings_threshold})
+    popularity_recommender.fit_and_save(parameters={"min_ratings_threshold": min_ratings_threshold, 'ranking_method': 'combination'})
 
 """Get (up to) 10 book recommendations, from books the user has rated.
     Returns a list of ISBN numbers."""

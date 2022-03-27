@@ -3,6 +3,7 @@ from RecommenderModule.recommenders.resources.library import Library
 import math
 import numpy as np
 import joblib
+from collections import Counter
 
 """This class provides the developer with methods to recommend the most popular books to a user"""
 class PopularBooksMethods:
@@ -17,12 +18,15 @@ class PopularBooksMethods:
     median_ratings = {}
     sorted_median_ratings = []
     sorted_combination_scores = []
+    min_ratings_threshold = 300
+    ranking_method = "average"
 
-    def __init__(self, min_ratings_threshold=300, retraining=False, retraining_and_saving=False, trainset=None, print_status=True):
+    def __init__(self, parameters={}, retraining=False, retraining_and_saving=False, trainset=None, print_status=True):
         self.print_status = print_status
+        self.initialise_parameters(parameters)
         if trainset is None:
-            if (retraining or retraining_and_saving):
-                self.load_filtered_books_list(min_ratings_threshold)
+            if retraining or retraining_and_saving:
+                self.load_filtered_books_list()
                 self.compute_all_popularity_lists()
                 if retraining_and_saving:
                     self.save_all_popularity_lists()
@@ -31,14 +35,21 @@ class PopularBooksMethods:
                 try:
                     self.import_trained_lists()
                 except:
-                    self.__init__(min_ratings_threshold=min_ratings_threshold, retraining_and_saving=True)
+                    self.__init__(parameters=parameters, retraining_and_saving=True)
         else:
             self.trainset = trainset
-            self.load_filtered_books_list(None)
+            self.load_filtered_books_list()
             self.compute_all_popularity_lists()
             if retraining_and_saving:
                 self.save_all_popularity_lists()
 
+
+    """Store the values of the parameters into class attributes"""
+    def initialise_parameters(self, parameters):
+        if "min_ratings_threshold" in parameters.keys():
+            self.min_ratings_threshold = parameters["min_ratings_threshold"]
+        if "ranking_method" in parameters.keys():
+            self.ranking_method = parameters["ranking_method"]
 
     """Import all sorted ratings list objects, using the joblib library"""
     def import_trained_lists(self):
@@ -47,23 +58,26 @@ class PopularBooksMethods:
         self.sorted_combination_scores = joblib.load(f"{self.path_to_popularity_lists}/sorted_combination_scores.sav")
 
     """Get all books with at least {self.min_ratings_threshold} user ratings"""
-    def load_filtered_books_list(self, min_ratings_threshold):
+    def load_filtered_books_list(self):
         if self.trainset is None:
-            self.data_provider = DataProvider(filtering_min_ratings_threshold=min_ratings_threshold)
+            self.data_provider = DataProvider(filtering_min_ratings_threshold=self.min_ratings_threshold)
             self.filtered_books_list = self.data_provider.get_filtered_books_list()
             self.trainset = self.data_provider.get_filtered_ratings_trainset()
         else:
-            books_list = []
-            for item_inner_id in self.trainset.all_items():
-                books_list.append(self.trainset.to_raw_iid(item_inner_id))
+            inner_books_list = [inner_item_id for (inner_user_id, inner_item_id, rating) in self.trainset.all_ratings()]
+            counter = Counter(inner_books_list)
+            books_list = [self.trainset.to_raw_iid(inner_item_id) for (inner_item_id, count) in counter.items() if count >= self.min_ratings_threshold]
             self.filtered_books_list = books_list
         self.library = Library(trainset=self.trainset)
 
     """Calculate popularity lists for all books according to the different metrics"""
     def compute_all_popularity_lists(self):
-        self.compute_sorted_average_ratings()
-        self.compute_sorted_median_ratings()
-        self.compute_sorted_combination_scores()
+        if self.ranking_method == "average" or self.ranking_method == "combination":
+            self.compute_sorted_average_ratings()
+        if self.ranking_method == "median" or self.ranking_method == "combination":
+            self.compute_sorted_median_ratings()
+        if self.ranking_method == "combination":
+            self.compute_sorted_combination_scores()
 
     """Save all computed popularity lists into .sav files, using the joblib library"""
     def save_all_popularity_lists(self):
@@ -159,3 +173,14 @@ class PopularBooksMethods:
     """Get the number of books that can be recommender to the user, using this recommender algorithm"""
     def get_number_of_recommendable_books(self):
         return len(self.filtered_books_list)
+
+    """Get most popular books (up to 10) according to the chosen ranking_method, that the user has not read yet"""
+    def get_recommendations(self, read_books=[]):
+        if self.ranking_method == "average":
+            return self.get_recommendations_from_average(read_books)
+        elif self.ranking_method == "median":
+            return self.get_recommendations_from_median(read_books)
+        elif self.ranking_method == "combination":
+            return self.get_recommendations_from_average_and_median(read_books)
+        else:
+            raise ValueError(f"ranking_method {self.ranking_method} not supported.")
