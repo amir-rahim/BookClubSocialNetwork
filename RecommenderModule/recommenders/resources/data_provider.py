@@ -1,17 +1,13 @@
-from surprise import Dataset
-from surprise import Reader
+from surprise import Dataset, Reader
 import pandas as pd
 from BookClub.models.review import BookReview
-import time
+
 
 """This class loads the ratings dataset from the 'BX-Book-Ratings.csv' file and builds the train sets"""
 class DataProvider:
 
     ratings_path = "static/dataset/BX-Book-Ratings.csv"
-    ratings_trainset = None
     ratings_df = None
-    train_df = None
-    test_df = None
     filtering_min_ratings_threshold = 1
     filtered_ratings_df = None
     filtered_ratings_dataset = None
@@ -42,11 +38,8 @@ class DataProvider:
 
     """Get data from Django database as pandas DataFrame"""
     def get_ratings_from_django_database(self):
-        ratings_query = BookReview.objects.all().values(
-            'creator__username', 'book__ISBN', 'book_rating')
-        ratings_list = []
-        for rating in ratings_query:
-            ratings_list.append([rating['creator__username'], rating['book__ISBN'], rating['book_rating']])
+        ratings_query = BookReview.objects.all().values('creator__username', 'book__ISBN', 'book_rating')
+        ratings_list = [[rating['creator__username'], rating['book__ISBN'], rating['book_rating']] for rating in ratings_query]
         ratings_df = pd.DataFrame.from_records(ratings_list, columns=["User-ID", "ISBN", "Book-Rating"])
         self.ratings_df = ratings_df
 
