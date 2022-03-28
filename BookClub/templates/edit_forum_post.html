@@ -3,7 +3,7 @@
     Global Forum
 {% endblock page_title %}
 {% block page_subtitle %}
-    This is the Global Forum, you can look at what our members are posting about!
+    Upvote and leave comments on this post!
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
@@ -34,7 +34,11 @@
                         <a href="{% url 'library_dashboard' %}">Library</a>
                     </li>
                     <li>
-                        <a href="{% url 'global_forum' %}">Forum</a>
+                        {% if club %}
+                            <a href="{% url 'club_forum' club.club_url_name %}">Forums</a>
+                        {% else %}
+                            <a href="{% url 'global_forum' %}">Forums</a>
+                        {% endif %}
                     </li>
                 </ul>
             </aside>
@@ -48,16 +52,20 @@
                         <a href="{% url 'home' %}">Home</a>
                     </li>
                     <li>
-                        <a href="{% url 'global_forum' %}">Forum</a>
+                        {% if club %}
+                            <a href="{% url 'club_forum' club.club_url_name %}">Forums</a>
+                        {% else %}
+                            <a href="{% url 'global_forum' %}">Forums</a>
+                        {% endif %}
                     </li>
                     <li>
-                        <a href="#">{{ post.title }}</a>
+                        <a href="{% url 'edit_forum_post' post.id %}">{{ post.title }}</a>
                     </li>
                 </ul>
             </nav>
             <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
                 <div class="hero-body">
-                    <h1 class="title">Forum Post</h1>
+                    <h1 class="title">Edit Forum Post</h1>
                 </div>
             </section>
             <div class="card">
@@ -68,31 +76,17 @@
                         </p>
                     </div>
                     <div class="card-header-icon">
-                        <button class="button is-info is-fullwidth is-rounded"
-                                data-target="modal-create-comment">
-                            <span class="icon">
-                                <i class="fa-solid fa-pen"></i>
-                            </span>
-                            <span>Reply</span>
-                        </button>
-                        <button class="button is-danger is-fullwidth is-rounded"
-                                aria-label="Delete Post">
-                            <span class="icon">
-                                <i class="fa-solid fa-x"></i>
-                            </span>
-                            <span>Delete</span>
-                        </button>
-                        <button class="button is-primary is-rounded" aria-label="Upvote">
-                            <span class="icon">
-                                <i class="fa-solid fa-arrow-up"></i>
-                            </span>
-                        </button>
-                        <button class="button is-danger is-rounded" aria-label="Downvote">
-                            <span class="icon">
-                                <i class="fa-solid fa-arrow-down"></i>
-                            </span>
-                        </button>
-                        <button class="button is-rounded" title="Disabled button" disabled>{{ post.rating }}</button>
+                        <form method="post" action="{% url 'delete_forum_post' post_id=post.id %}">
+                            {% csrf_token %}
+                            <button class="button is-danger is-rounded"
+                                    aria-label="Delete Post"
+                                    type="submit">
+                                <span>Delete</span>
+                                <span class="icon is-small">
+                                    <i class="fas fa-times"></i>
+                                </span>
+                            </button>
+                        </form>
                     </div>
                 </header>
                 <form method="post" action="{% url 'edit_forum_post' post.id %}">

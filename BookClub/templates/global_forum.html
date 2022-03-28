@@ -1,9 +1,9 @@
 {% extends 'base_content.html' %}
 {% block page_title %}
-    {{ forum.title }}
+    {{ forum.associated_with.name }} Forums
 {% endblock page_title %}
 {% block page_subtitle %}
-    You can view these Forums posts, create posts, vote on them and view them in more detail.
+    Post, upvote and converse with other users
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
@@ -55,10 +55,16 @@
                 </div>
             </section>
             <hr class="solid">
+            {% if forum.associated_with %}
+                {% include 'partials/aside_menu/club_aside.html' with current_club=club %}
+            {% else %}
             <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+                <p class="menu-label">
+                    Global Forums
+                </p>
                 <ul class="menu-list">
                     <li>
-                        <a href="{% url 'global_forum' %}" class="is-active"><b>Global Forum</b></a>
+                        <a href="{% url 'global_forum' %}" class="is-active"><b>Forums</b></a>
                     </li>
                 </ul>
                 <p class="menu-label">
@@ -70,9 +76,6 @@
                     </li>
                     <li>
                         <a href="{% url 'my_club_memberships' %}">Memberships</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'create_club' %}">Create Club</a>
                     </li>
                 </ul>
                 <p class="menu-label">
@@ -87,6 +90,7 @@
                     </li>
                 </ul>
             </aside>
+            {% endif %}
         </div>
         <div class="column is-9">
             <div class="columns">
@@ -98,9 +102,18 @@
                             <li>
                                 <a href="{% url 'home' %}">Home</a>
                             </li>
-                            <li>
-                                <a href="{% url 'global_forum' %}">Forum</a>
-                            </li>
+                            {% if forum.associated_with %}
+                                <li>
+                                    <a href="{% url 'club_dashboard' club.club_url_name %}">{{ club.name }}</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'club_forum' club.club_url_name %}">Forums</a>
+                                </li>
+                            {% else %}
+                                <li>
+                                    <a href="{% url 'global_forum' %}">Forums</a>
+                                </li>
+                            {% endif %}
                         </ul>
                     </nav>
                 </div>
@@ -116,11 +129,14 @@
                     <br />
                     <div class="card">
                         <header class="card-header">
-                            <div class="card-header-title">
-                                <p class="subtitle">
-                                    <b>{{ post.title }}</b>
-                                </p>
-                            </div>
+                            <a {% if club %} href="{% url 'forum_post' post_id=post.id club_url_name=club.club_url_name %}" {% else %} href="{% url 'forum_post' post.id %}" {% endif %}
+                               class="card-footer-item">
+                                <div class="card-header-title">
+                                    <p class="subtitle">
+                                        <b>{{ post.title }}</b>
+                                    </p>
+                                </div>
+                            </a>
                             <div class="card-header-icon">{% include 'partials/voting.html' with content=post %}</div>
                         </header>
                         <div class="card-content">
@@ -149,7 +165,7 @@
                 <br />
                 {% include 'partials/pagination.html' %}
             {% else %}
-                <p style="text-align: center">
+                <p style="text-align: center" class="has-text-grey">
                     There are no posts at the moment. Be first to post!
                 </p>
             {% endif %}

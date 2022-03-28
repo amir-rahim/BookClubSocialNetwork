@@ -1,14 +1,25 @@
 {% extends 'base_content.html' %}
 {% block page_title %}
-    Forum Post
+    Forums
 {% endblock page_title %}
 {% block page_subtitle %}
-    This is the Forum Post, you can view and make comments on the post!
+    Upvote and leave comments on this post!
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
         <div class="column is-3">
+            {% if club %}
+                {% include 'partials/aside_menu/club_aside.html' with current_club=club %}
+            {% else %}
             <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+                <p class="menu-label">
+                    Global Forums
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'global_forum' %}" class="is-active"><b>Forums</b></a>
+                    </li>
+                </ul>
                 <p class="menu-label">
                     Clubs
                 </p>
@@ -19,9 +30,6 @@
                     <li>
                         <a href="{% url 'my_club_memberships' %}">Memberships</a>
                     </li>
-                    <li>
-                        <a href="{% url 'create_club' %}">Create Club</a>
-                    </li>
                 </ul>
                 <p class="menu-label">
                     Useful Links
@@ -31,13 +39,11 @@
                         <a href="{% url 'user_dashboard' %}">User Profile</a>
                     </li>
                     <li>
-                        <a>Library</a>
-                    </li>
-                    <li>
-                        <a>Forum</a>
+                        <a href="{% url 'library_dashboard' %}">Library</a>
                     </li>
                 </ul>
             </aside>
+            {% endif %}
         </div>
         <div class="column is-9">
             <nav class="breadcrumb"
@@ -47,12 +53,25 @@
                     <li>
                         <a href="{% url 'home' %}">Home</a>
                     </li>
-                    <li>
-                        <a href="{% url 'global_forum' %}">Forum</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'forum_post' post.id %}">{{ post.title }}</a>
-                    </li>
+                    {% if club %}
+                        <li>
+                            <a href="{% url 'club_dashboard' club.club_url_name %}">{{ club.name }}</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'club_forum' club_url_name=club.club_url_name %}">Forums</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'forum_post' club.club_url_name post.id %}">{{ post.title }}</a>
+                        </li>
+                    {% else %}
+                        <li>        
+                            <a href="{% url 'global_forum' %}">Forums</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'forum_post' post.id %}">{{ post.title }}</a>
+                        </li>
+                    {% endif %}
+                    
                 </ul>
             </nav>
             <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
@@ -71,23 +90,12 @@
                         {% if user == post.creator %}
                             <a href="{% url 'edit_forum_post' post_id=post.id %}">
                                 <button class="button is-success is-rounded" aria-label="Edit Post">
-                                    <span class="icon">
+                                    <span>Edit</span>
+                                    <span class="icon is-small">
                                         <i class="fa-solid fa-wand-magic-sparkles"></i>
                                     </span>
-                                    <span>Edit</span>
                                 </button>
                             </a>
-                            <form method="post" action="{% url 'delete_forum_post' post_id=post.id %}">
-                                {% csrf_token %}
-                                <button class="button is-danger is-rounded"
-                                        aria-label="Delete Post"
-                                        type="submit">
-                                    <span class="icon">
-                                        <i class="fa-solid fa-x"></i>
-                                    </span>
-                                    <span>Delete</span>
-                                </button>
-                            </form>
                         {% endif %}
                     </div>
                 </header>
@@ -137,10 +145,10 @@
                                                         <button class="button is-danger is-rounded"
                                                                 aria-label="Delete Post"
                                                                 type="submit">
-                                                            <span class="icon">
-                                                                <i class="fa-solid fa-x"></i>
-                                                            </span>
                                                             <span>Delete</span>
+                                                            <span class="icon">
+                                                                <i class="fas fa-times"></i>
+                                                            </span>
                                                         </button>
                                                     </form>
                                                 {% endif %}
