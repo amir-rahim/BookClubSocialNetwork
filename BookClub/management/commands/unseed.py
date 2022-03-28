@@ -11,7 +11,7 @@ class Command(BaseCommand):
         def handle(self, *args, **options):
             print('Unseeding...')
             if options['complete']:
-                User.objects.filter(is_superuser=False).delete()
+                User.objects.all().delete()
                 Book.objects.all().delete()
                 BookReview.objects.all().delete()
             Club.objects.all().delete()
