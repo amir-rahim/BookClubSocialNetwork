@@ -125,9 +125,11 @@ class Command(BaseCommand):
     def create_club(self):
         owner = User.objects.order_by('?')[0]
         name = self.faker.sentence(nb_words=1)
+        privacy = random.getrandbits(1)
         club = Club.objects.create(
             name=name,
             club_url_name=Club.convertNameToUrl(None, name),
+            is_private=privacy,
             description=self.faker.text(max_nb_chars=200),
             tagline=self.faker.text(max_nb_chars=30),
             rules=self.faker.text(max_nb_chars=30),
@@ -139,9 +141,9 @@ class Command(BaseCommand):
         ran_member = random.randrange(10, 15)
         ran_applicant = random.randrange(5, 7)
         ran_moderator = random.randrange(1, 3)
-
-        for x in range(ran_applicant):
-            club.add_applicant(self.get_random_user())
+        if(privacy):
+            for x in range(ran_applicant):
+                club.add_applicant(self.get_random_user())
         for y in range(ran_member):
             club.add_member(self.get_random_user())
         # 1 officer
