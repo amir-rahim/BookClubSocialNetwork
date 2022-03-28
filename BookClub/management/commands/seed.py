@@ -124,7 +124,7 @@ class Command(BaseCommand):
 
     def create_club(self):
         owner = User.objects.order_by('?')[0]
-        name = self.faker.sentence(nb_words=1)
+        name = self.faker.unique.sentence(nb_words=1)
         privacy = random.getrandbits(1)
         club = Club.objects.create(
             name=name,
