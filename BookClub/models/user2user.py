@@ -2,8 +2,6 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import UniqueConstraint
 
-from BookClub.models.user import User
-
 class UserToUserRelationship(models.Model):
     class UToURelationshipTypes(models.IntegerChoices):
         FOLLOWING = 1

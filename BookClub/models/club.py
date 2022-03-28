@@ -73,10 +73,6 @@ class Club(models.Model):
     def get_number_of_posts(self):
         return self.forum.get_posts().count()
 
-    # Has unimplemented dependencies
-    def get_review_score(self):
-        pass
-
     def get_users(self, search_role):
         """Get all the users from the given club with the given authorization."""
 
@@ -126,7 +122,6 @@ class Club(models.Model):
         if not ClubMembership.objects.filter(club=self, membership=ClubMembership.UserRoles.OWNER).exists():
             self.add_user(user, ClubMembership.UserRoles.OWNER)
         else:
-            # print("Owner already set")
             pass
 
     def add_applicant(self, user):
