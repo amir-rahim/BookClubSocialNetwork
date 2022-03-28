@@ -12,12 +12,12 @@ from BookClub.models import Book, BookList
 
 def library_dashboard(request):
     """This is the library dashboard view."""
-    return render(request, 'library_dashboard.html')
+    return render(request, 'library/library_dashboard.html')
 
 
 class BookListView(ListView):
     model = Book
-    template_name = "library_books.html"
+    template_name = "library/library_books.html"
     context_object_name = 'books'
     paginate_by = 10
 

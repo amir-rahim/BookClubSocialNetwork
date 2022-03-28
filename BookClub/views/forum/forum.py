@@ -19,7 +19,7 @@ from BookClub.authentication_mixins import ClubMemberTestMixin
 class ForumPostView(ClubMemberTestMixin, ListView):
     model = ForumComment
     paginate_by = 10
-    template_name = 'forum_post.html'
+    template_name = 'forum/forum_post.html'
     context_object_name = 'comments'
     pk_url_kwarg = 'post_id'
 
@@ -52,7 +52,7 @@ class ForumView(ClubMemberTestMixin, ListView):
     model = ForumPost
     context_object_name = 'posts'
     paginate_by = 5
-    template_name = 'global_forum.html'
+    template_name = 'forum/global_forum.html'
 
     def get_queryset(self):
         if self.kwargs.get('club_url_name') is not None:
@@ -149,7 +149,7 @@ class CreateCommentView(LoginRequiredMixin, ClubMemberTestMixin, CreateView):
 class EditForumPostView(LoginRequiredMixin, ClubMemberTestMixin, UpdateView):
     model = ForumPost
     form_class = CreateForumCommentForm
-    template_name = 'edit_forum_post.html'
+    template_name = 'forum/edit_forum_post.html'
     pk_url_kwarg = 'post_id'
     context_object_name = 'post'
 

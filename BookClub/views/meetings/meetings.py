@@ -98,7 +98,7 @@ class CreateMeetingView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     model = Meeting
     form_class = MeetingForm
-    template_name = 'create_meeting.html'
+    template_name = 'meeting/create_meeting.html'
 
     # Redirect if user is not a moderator or owner of the club
     def test_func(self):
@@ -182,7 +182,7 @@ class DeleteMeetingView(LoginRequiredMixin, View):
 
 class MeetingDetailsView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     """View to display meeting details"""
-    template_name = 'meeting_details.html'
+    template_name = 'meeting/meeting_details.html'
     model = Meeting
     pk_url_kwarg = 'meeting_id'
     context_object_name = 'meeting'

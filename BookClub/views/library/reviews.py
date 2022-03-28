@@ -13,7 +13,7 @@ from BookClub.forms import ReviewForm, BookReviewCommentForm
 from BookClub.models import Book, BookReview, BookReviewComment
 
 class CreateReviewView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
-    template_name = 'create_review.html'
+    template_name = 'reviews/create_review.html'
     model = BookReview
     form_class = ReviewForm
     redirect_location = 'book_reviews'
@@ -62,7 +62,7 @@ class CreateReviewView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 class EditReviewView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = BookReview
     form_class = ReviewForm
-    template_name = 'edit_review.html'
+    template_name = 'reviews/edit_review.html'
     context_object_name = 'book_review'
     redirect_location = 'book_reviews'
 
@@ -135,7 +135,7 @@ class ReviewDetailView(ListView):
     """Review to display review details"""
     model = BookReviewComment
     paginate_by = 10
-    template_name = 'review_details.html'
+    template_name = 'reviews/review_details.html'
     context_object_name = 'comments'
     pk_url_kwarg = 'review_id'
 

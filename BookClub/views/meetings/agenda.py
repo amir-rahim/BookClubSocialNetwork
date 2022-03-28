@@ -14,7 +14,7 @@ from BookClub.models import Meeting
 
 class AgendaView(LoginRequiredMixin, ListView):
     """View to display agenda"""
-    template_name = 'agenda.html'
+    template_name = 'meeting/agenda.html'
 
     def get_queryset(self):
         user = User.objects.get(id=self.request.user.id)

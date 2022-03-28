@@ -11,7 +11,7 @@ from BookClub.models import User, Club, ClubMembership, Meeting
 class MembersListView(LoginRequiredMixin, PrivateClubMixin, TemplateView):
     """View to display member list"""
 
-    template_name = 'club_members.html'
+    template_name = 'clubs/club_members.html'
 
     def handle_no_permission(self):
         url = reverse('club_dashboard', kwargs=self.kwargs)
@@ -39,7 +39,7 @@ class MembersListView(LoginRequiredMixin, PrivateClubMixin, TemplateView):
 class ApplicantListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
     """View to display applicant list"""
 
-    template_name = 'applicant_list.html'
+    template_name = 'clubs/applicant_list.html'
 
     def test_func(self):
         try:
@@ -81,7 +81,7 @@ class ApplicantListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
 class MeetingListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     """View to display meeting list"""
 
-    template_name = 'club_meetings.html'
+    template_name = 'meeting/club_meetings.html'
     context_object_name = 'meetings'
     paginate_by = 10
 
@@ -123,7 +123,7 @@ class MeetingListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 class MeetingParticipantsView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     """View to display list of meeting participants"""
 
-    template_name = 'meeting_participants.html'
+    template_name = 'meeting/meeting_participants.html'
     context_object_name = 'participants'
 
     # Redirect if club is private and user is not a member

@@ -15,7 +15,7 @@ class BooklistListView(LoginRequiredMixin, ListView):
     http_method_names = ['get']
     model = BookList
     context_object_name = 'booklists'
-    template_name = 'user_booklists.html'
+    template_name = 'booklists/user_booklists.html'
 
     def get_queryset(self):
         if self.kwargs.get('username') is not None:
@@ -41,7 +41,7 @@ class BooklistListView(LoginRequiredMixin, ListView):
 
 
 class CreateBookListView(LoginRequiredMixin, CreateView):
-    template_name = 'create_booklist.html'
+    template_name = 'booklists/create_booklist.html'
     model = BookList
     form_class = CreateBookListForm
 
@@ -59,7 +59,7 @@ class CreateBookListView(LoginRequiredMixin, CreateView):
 class EditBookListView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = BookList
     form_class = CreateBookListForm
-    template_name = 'edit_booklist.html'
+    template_name = 'booklists/edit_booklist.html'
     context_object_name = 'booklist'
     redirect_location = 'booklists_list'
 
@@ -125,7 +125,7 @@ class UserBookListView(LoginRequiredMixin, ListView):
     http_method_names = ['get']
     model = BookList
     context_object_name = 'books'
-    template_name = 'booklist.html'
+    template_name = 'booklists/booklist.html'
 
     def get_queryset(self):
         booklist = BookList.objects.get(pk=self.kwargs['booklist_id'])

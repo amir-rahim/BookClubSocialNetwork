@@ -18,7 +18,7 @@ from BookClub.authentication_mixins import PrivateClubMixin
 
 
 class CreateClubView(LoginRequiredMixin, CreateView):
-    template_name = 'create_club.html'
+    template_name = 'clubs/create_club.html'
     model = Club
     form_class = ClubForm
 
@@ -35,7 +35,7 @@ class CreateClubView(LoginRequiredMixin, CreateView):
 
 
 class ClubDashboardView(LoginRequiredMixin, PrivateClubMixin, DetailView):
-    template_name = "club_dashboard.html"
+    template_name = "clubs/club_dashboard.html"
     model = Club
     slug_url_kwarg = 'club_url_name'
     slug_field = 'club_url_name'
@@ -59,7 +59,7 @@ class ClubDashboardView(LoginRequiredMixin, PrivateClubMixin, DetailView):
 class EditClubView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Club
     form_class = ClubForm
-    template_name = 'edit_club.html'
+    template_name = 'clubs/edit_club.html'
     slug_url_kwarg = 'club_url_name'
     slug_field = 'club_url_name'
     context_object_name = 'club'
@@ -86,7 +86,7 @@ class EditClubView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 
 class FeatureBookView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
-    template_name = 'edit_featured_books.html'
+    template_name = 'clubs/edit_featured_books.html'
     model = FeaturedBooks
     form_class = FeatureBookForm
 

@@ -6,7 +6,7 @@ from BookClub.models import User, UserToUserRelationship
 class FollowerListView(LoginRequiredMixin, TemplateView):
     model = User
     paginate_by = 20
-    template_name = 'following_followers.html'
+    template_name = 'user/following_followers.html'
 
     def get_followers(self):
         user = self.kwargs.get('username')
