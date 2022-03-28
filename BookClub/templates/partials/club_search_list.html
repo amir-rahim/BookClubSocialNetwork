@@ -28,7 +28,6 @@
                         </td>
                         <td>
                             <div>
-                                <a href="{{ club.get_absolute_url }}"><button class="button is-fullwidth is-link">View</button></a>
                                 {% if club.is_private == True %}
                                     <form method="post"
                                           action="{% url 'join_club' club_url_name=club.club_url_name %}">
@@ -36,6 +35,7 @@
                                         <button type="submit" class="button is-fullwidth is-success">Apply</button>
                                     </form>
                                 {% else %}
+                                    <button class="button is-fullwidth is-success" onclick="window.location='{% url 'club_dashboard' club.club_url_name %}';">View</button>
                                     <form method="post"
                                           action="{% url 'join_club' club_url_name=club.club_url_name %}">
                                         {% csrf_token %}

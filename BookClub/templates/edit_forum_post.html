@@ -75,19 +75,7 @@
                             <b>{{ post.title }}</b>
                         </p>
                     </div>
-                    <div class="card-header-icon">
-                        <form method="post" action="{% url 'delete_forum_post' post_id=post.id %}">
-                            {% csrf_token %}
-                            <button class="button is-danger is-rounded"
-                                    aria-label="Delete Post"
-                                    type="submit">
-                                <span>Delete</span>
-                                <span class="icon is-small">
-                                    <i class="fas fa-times"></i>
-                                </span>
-                            </button>
-                        </form>
-                    </div>
+                    {% include 'partials/delete_button_and_modal.html' with delete_item=post delete_modal_id=post.pk %}
                 </header>
                 <form method="post" action="{% url 'edit_forum_post' post.id %}">
                     <div class="card-content">
