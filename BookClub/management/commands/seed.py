@@ -21,7 +21,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('percent', type=int, nargs='?', default=10)
 
-        parser.add_argument('--count', '--c', type=int)
+        parser.add_argument('--count', '--c', type=int, default=5)
         
         parser.add_argument('--deploy', action="store_true")
 
@@ -59,17 +59,25 @@ class Command(BaseCommand):
             call_command("importbooksrandom", percent)
             call_command("importbookreviews")
             
-        if options['deploy']:
+        elif options['deploy']:
             call_command("importusers", "--deploy")
             call_command("importbooksrandom","--deploy")
             call_command("importbookreviews")
-        if options['admin']:
+        else:
+            for i in range(0, 150):
+                self.generateUser()
+                
+            call_command("importbooksrandom", "--deploy")
+        try:
             self.admin = User.objects.create_superuser(
                 username='Admin',
                 email='admin@example.org',
                 public_bio=self.faker.text(max_nb_chars=200),
                 password="Test123"
             )
+        except Exception:
+            pass
+        
         count = options.get('count', 5)
         for i in range(count):
             print("Club: " + str(i + 1))
