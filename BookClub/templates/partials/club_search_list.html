@@ -1,0 +1,59 @@
+{% if page_obj %}
+    <div class="table-container">
+        <table class="table is-hoverable is-fullwidth"
+               id="table-booklists"
+               data-toggle="table"
+               data-pagination="true">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Tagline</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Public/Private</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for club in page_obj %}
+                    <tr>
+                        <td>{{ club.name }}</td>
+                        <td>{{ club.tagline }}</td>
+                        <td>{{ club.description }}</td>
+                        <td>
+                            {% if club.is_private %}
+                                Private
+                            {% else %}
+                                Public
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div>
+                                <a href="{{ club.get_absolute_url }}"><button class="button is-fullwidth is-link">View</button></a>
+                                {% if club.is_private == True %}
+                                    <form method="post"
+                                          action="{% url 'join_club' club_url_name=club.club_url_name %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="button is-fullwidth is-success">Apply</button>
+                                    </form>
+                                {% else %}
+                                    <form method="post"
+                                          action="{% url 'join_club' club_url_name=club.club_url_name %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="button is-fullwidth is-info">Join</button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% include 'partials/pagination_ajax.html' with page_obj=page_obj %}
+{% else %}
+    <hr>
+    <p style="text-align: center">
+        There are no available clubs matching that query.
+    </p>
+    <hr>
+{% endif %}

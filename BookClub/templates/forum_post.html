@@ -139,18 +139,7 @@
                                             </p>
                                             <div class="buttons">
                                                 {% if comment.creator == user %}
-                                                    <form method="post"
-                                                          action="{% url 'delete_forum_comment' post.id comment.id %}">
-                                                        {% csrf_token %}
-                                                        <button class="button is-danger is-rounded"
-                                                                aria-label="Delete Post"
-                                                                type="submit">
-                                                            <span>Delete</span>
-                                                            <span class="icon">
-                                                                <i class="fas fa-times"></i>
-                                                            </span>
-                                                        </button>
-                                                    </form>
+                                                    {% include 'partials/delete_button_and_modal.html' with delete_item=comment delete_modal_id=comment.pk %}
                                                 {% endif %}
                                             </div>
                                         </div>

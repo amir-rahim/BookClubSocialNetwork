@@ -145,7 +145,7 @@ class BookListTestCase(TestCase):
         self.assertEqual(url_from_model, correct_url)
 
     def test_string_function_returns_correct_value(self):
-        strings_from_model = [self.bookList.__str__(), self.bookList.__str__(), self.bookList.__str__()]
+        strings_from_model = [self.bookList.__str__(), self.bookList.get_delete_str()]
         correct_string = f"Book List '{self.bookList.title}' with {self.bookList.books.count()} titles"
         for model_string in strings_from_model:
             self.assertEqual(model_string, correct_string)

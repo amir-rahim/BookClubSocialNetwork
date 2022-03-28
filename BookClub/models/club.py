@@ -10,6 +10,9 @@ from BookClub.models import ClubMembership, User
 
 
 class Club(models.Model):
+    
+    class Meta:
+        ordering = ['name']
     name = models.CharField(unique=True, max_length=100, blank=False)
     club_url_name = models.CharField(
             unique=True,
@@ -43,6 +46,12 @@ class Club(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_delete_str(self):
+        return f'Club "{self.name}" with {self.get_number_of_members()} members'
+
+    def get_delete_url(self):
+        return reverse('delete_club', kwargs={'club_url_name': self.club_url_name})
 
     def get_club_owner(self):
         return ClubMembership.objects.get(club=self, membership=ClubMembership.UserRoles.OWNER).user

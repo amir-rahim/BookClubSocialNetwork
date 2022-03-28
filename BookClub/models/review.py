@@ -26,6 +26,9 @@ class BookReview(TextPost):
     def str(self):
         return self.__str__()
 
+    def get_delete_str(self):
+        return self.__str__()
+
     def save(self, **kwargs):
         super().save(**kwargs)
         if UserRecommendations.objects.filter(user=self.creator).exists():
@@ -50,4 +53,7 @@ class BookReviewComment(TextComment):
         return f'Comment by {str(self.creator)} on {str(self.book_review)}'
 
     def str(self):
+        return self.__str__()
+
+    def get_delete_str(self):
         return self.__str__()

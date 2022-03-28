@@ -47,6 +47,12 @@ class ForumPost(TextPost):
     def __str__(self):
         return f'"{self.title}" post on {str(self.forum)} by {str(self.creator)}'
 
+    def get_delete_str(self):
+        return self.__str__()
+
+    def get_delete_url(self):
+        return reverse('delete_forum_post', kwargs={'post_id': self.pk})
+
 
 class ForumComment(TextComment):
     class Meta:
@@ -56,3 +62,12 @@ class ForumComment(TextComment):
 
     def __str__(self):
         return f'Comment by {str(self.creator)} on {str(self.post)}'
+
+    def get_delete_str(self):
+        return self.__str__()
+
+    def get_delete_url(self):
+        return reverse('delete_forum_comment', kwargs={
+            'post_id': self.post.pk,
+            'comment_id': self.pk
+        })

@@ -1,0 +1,60 @@
+[
+  {
+    "model": "BookClub.Book",
+    "pk": 1,
+    "fields": {
+        "title": "Classical Mythology",
+        "ISBN": "0195153448",
+        "author": "Mark P. O. Morford",
+        "publicationYear": "2002-02-02",
+        "publisher": "Oxford University Press",
+        "imageS": "http://images.amazon.com/images/P/0195153448.01.THUMBZZZ.jpg",
+        "imageM": "http://images.amazon.com/images/P/0195153448.01.MZZZZZZZ.jpg",
+        "imageL": "http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg"
+    }
+  },
+  {
+    "model": "BookClub.Book",
+    "pk": 2,
+    "fields": {
+        "title": "The Bone Lady",
+        "ISBN": "014029192X",
+        "author": "Mary H. Manhein",
+        "publicationYear": "2000-07-03",
+        "publisher": "Penguin Books",
+        "imageS": "http://images.amazon.com/images/P/014029192X.01.THUMBZZZ.jpg",
+        "imageM": "http://images.amazon.com/images/P/014029192X.01.MZZZZZZZ.jpg",
+        "imageL": "http://images.amazon.com/images/P/014029192X.01.LZZZZZZZ.jpg"
+    }
+  },
+
+  {
+    "model": "BookClub.Book",
+    "pk": 3,
+    "fields": {
+        "title": "Arabia",
+        "ISBN": "033030058X",
+        "author": "Jonathan Raban",
+        "publicationYear": "1987-10-23",
+        "publisher": "Pan Books Ltd",
+        "imageS": "http://images.amazon.com/images/P/033030058X.01.THUMBZZZ.jpg",
+        "imageM": "http://images.amazon.com/images/P/033030058X.01.MZZZZZZZ.jpg",
+        "imageL": "http://images.amazon.com/images/P/033030058X.01.LZZZZZZZ.jpg"
+    }
+  },
+
+  {
+    "model": "BookClub.Book",
+    "pk": 4,
+    "fields": {
+        "title": "The Meatless Gourmet: Favorite Recipes from Around the World",
+        "ISBN": "1559585595",
+        "author": "Bobbie Hinman",
+        "publicationYear": "1994-09-19",
+        "publisher": "Prima Lifestyles",
+        "imageS": "http://images.amazon.com/images/P/1559585595.01.THUMBZZZ.jpg",
+        "imageM": "http://images.amazon.com/images/P/1559585595.01.MZZZZZZZ.jpg",
+        "imageL": "http://images.amazon.com/images/P/1559585595.01.LZZZZZZZ.jpg"
+    }
+  }
+]

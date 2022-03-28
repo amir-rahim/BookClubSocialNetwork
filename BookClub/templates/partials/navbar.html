@@ -13,6 +13,11 @@
     </div>
     <div id="nav-right" class="navbar-menu">
         <div class="navbar-end">
+            <a class="navbar-item" href="{% url 'global_user_search' %}">
+                <span class="icon">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+            </a>
             <div class="navbar-item has-dropdown is-hoverable">
                 <a class="navbar-link" href="{% url 'available_clubs' %}">Clubs</a>
                 <div class="navbar-dropdown is-boxed is-right">

@@ -23,11 +23,11 @@ class ItemBasedCollaborativeFilteringMethods:
         self.print_status = print_status
         self.initialise_parameters(parameters)
         self.library = Library(trainset=trainset)
-        if (trainset == None):
-            if (retraining or retraining_and_saving):
+        if trainset is None:
+            if retraining or retraining_and_saving:
                 self.build_trainset()
                 self.train_model()
-                if (retraining_and_saving):
+                if retraining_and_saving:
                     self.save_model()
             else:
                 try:
@@ -107,7 +107,7 @@ class ItemBasedCollaborativeFilteringMethods:
     def get_recommendations_from_inner_ratings(self, ratings, all_books_rated=None):
 
         # Define all books rated (read) by the user
-        if all_books_rated == None:
+        if all_books_rated is None:
             all_books_rated = ratings
 
         # Weigh items by rating
@@ -122,12 +122,11 @@ class ItemBasedCollaborativeFilteringMethods:
         all_books_rated_isbn = [rating[0] for rating in all_books_rated]
         for item_id, rating_sum in sorted(candidates.items(), key=itemgetter(1), reverse=True):
             # Check if user has already read the book, and only recommend the book if it has some similarity
-            if (not item_id in all_books_rated_isbn) and (not math.isnan(rating_sum)) and rating_sum != 0:
+            if (item_id not in all_books_rated_isbn) and (not math.isnan(rating_sum)) and rating_sum != 0:
                 try:
                     book_isbn = self.trainset.to_raw_iid(item_id)
-                    #print(book_isbn, rating_sum)
                     final_recommendations.append(book_isbn)
-                    if (len(final_recommendations) >= 10): # Get the top 10 recommendations
+                    if len(final_recommendations) >= 10: # Get the top 10 recommendations
                         break
                 except:
                     pass

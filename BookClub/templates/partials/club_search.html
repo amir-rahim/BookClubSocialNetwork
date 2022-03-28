@@ -6,7 +6,7 @@
            placeholder="Search"/>
 </div>
 <div id="replaceable_content" class="column is-12">
-        {% include 'partials/book_search_list.html'%}
+        {% include 'partials/club_search_list.html' with page_obj=content %}
 </div>
 {% load getcontenttype %}
 {% get_content_type_from_queryset content as content_type %}

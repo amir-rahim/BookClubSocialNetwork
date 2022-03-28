@@ -215,10 +215,11 @@ class DeleteForumPostView(LoginRequiredMixin, ClubMemberTestMixin, DeleteView):
             return False
 
     def get_success_url(self):
-        self.kwargs.pop('post_id')
-        if self.kwargs.get('club_url_name') is not None:
-            return reverse('club_forum', kwargs=self.kwargs)
+        forum_club = ForumPost.objects.get(pk=self.kwargs['post_id']).forum.associated_with
+        if forum_club is not None:
+            return reverse('club_forum', kwargs={'club_url_name': forum_club.club_url_name})
         else:
+            self.kwargs.pop('post_id')
             return reverse('global_forum', kwargs=self.kwargs)
 
 

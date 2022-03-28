@@ -4,7 +4,7 @@ from django.urls import reverse
 from BookClub.models import User, ForumPost
 
 
-@tag('forum', 'forum_post')
+@tag('forum', 'forum_post',)
 class ForumPostViewTestCase(TestCase):
     """Tests of the Forum view."""
 
