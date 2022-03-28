@@ -11,16 +11,23 @@
 				<!-- BEGIN EMAIL -->
 				<tr>
 					<td align="center" bgcolor="#f5f5f5" style="padding:30px">
-						<p style="text-align:left">Hey!<br><br> You received this mail because you attempted to create account on our website. Please click on the link below to confirm the email and activate your account.
-						</p>
-						<p>
-							<div class="format-font" >
-								<a target="_blank" style="text-decoration:none; background-color: #757763; border: black 1px solid; color: #fff; padding:10px 10px; display:block;" href="{{link}}" class="my-button" >Verify</a>
-							</div>
+						<p style="text-align:left">
+							Hey {{ inactive_user.username }}!<br><br> Thank you for registering an account with Novella. Finish your registration by clicking the link below.
 						</p>
 						<br>
+						<p>
+							<div class="format-font" >
+								<a target="_blank" style="text-decoration:none; background-color: #757763; border: black 1px solid; color: #fff; padding:10px 10px; display:block;" href="{{ link }}" class="my-button" >Verify</a>
+							</div>
+						</p>
+						<p class="is-grey">
+							<i>This link will expire in an hour.</i>
+						</p>
+						<p>
+							If this wasn't you, ignore this email.
+						</p>
 						<p style="text-align:left">
-							Sincerely,<br>Novella BookClub
+							Sincerely,<br>Novella
 						</p>
 					</td>
 				</tr>
