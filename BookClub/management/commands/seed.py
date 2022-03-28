@@ -190,7 +190,7 @@ class Command(BaseCommand):
             m = Meeting.objects.create(meeting_time=meeting_time, meeting_end_time=meeting_end_time,
                                    organiser=owner, club=club, location=self.faker.text(max_nb_chars=30), title=self.faker.text(max_nb_chars=60), description=self.faker.text(max_nb_chars=200), type=type[0][0], book=book)
             for i in range(0, 10):
-                user = self.get_random_user()
+                user = self.get_random_user_from_club(club)
                 m.join_member(user)
                 
     def feature_book(self,club):
