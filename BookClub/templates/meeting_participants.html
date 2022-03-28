@@ -1,40 +1,14 @@
 {% extends 'base_content.html' %}
 {% block page_title %}
-    Meeting Participants
+    Meeting
 {% endblock page_title %}
 {% block page_subtitle %}
-    Participants of {{ current_meeting.get_title }}
+    Description and details for an event
 {% endblock page_subtitle %}
 {% block content %}
     <div class = "columns">
         <div class="column is-3">
-            <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
-                <p class="menu-label">
-                    Meeting
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'meeting_list' current_club.club_url_name %}">Meeting List</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'meeting_details' current_club.club_url_name current_meeting.id %}">Meeting Details</a>
-                    </li>
-                    <li>
-                        <a class="is-active"
-                           href="{% url 'meeting_participants' current_club.club_url_name current_meeting.id %}"><b>Meeting Participants</b></a>
-                    </li>
-                </ul>
-                {% if current_user == current_meeting.get_organiser %}
-                    <p class="menu-label">
-                        Meeting Administration
-                    </p>
-                    <ul class="menu-list">
-                        <li>
-                            <a>Manage Meeting</a>
-                        </li>
-                    </ul>
-                {% endif %}
-            </aside>
+            {% include 'partials/aside_menu/meeting_aside.html' with current_club=current_club meeting=current_meeting %}
         </div>
         <div class="column is-9">
             <nav class="breadcrumb"
@@ -45,16 +19,16 @@
                         <a href="{% url 'home' %}">Home</a>
                     </li>
                     <li>
-                        <a href="{% url 'available_clubs' %}">Club</a>
+                        <a href="{% url 'available_clubs' %}">Clubs</a>
                     </li>
                     <li>
                         <a href="{% url 'club_dashboard' current_club.club_url_name %}">{{ current_club.name }}</a>
                     </li>
                     <li>
-                        <a href="{% url 'meeting_list' current_club.club_url_name %}">Meeting List</a>
+                        <a href="{% url 'meeting_list' current_club.club_url_name %}">Meetings</a>
                     </li>
                     <li>
-                        <a href="{% url 'meeting_details' current_club.club_url_name current_meeting.id %}">{{ current_meeting.get_title }}</a>
+                        <a href="{% url 'meeting_details' current_club.club_url_name current_meeting.id %}">{{ current_meeting.title }}</a>
                     </li>
                     <li>
                         <a href="{% url 'meeting_participants' current_club.club_url_name current_meeting.id %}">Participants</a>
@@ -65,7 +39,7 @@
                 <div class="hero-body">
                     <div class="container">
                         <h1 class="title">Participants</h1>
-                        <h2 class="subtitle">{{ current_meeting.get_name }}</h2>
+                        <h2 class="subtitle">All members attending {{ current_meeting.title }}</h2>
                     </div>
                 </div>
             </section>
@@ -115,10 +89,11 @@
                 </div>
             </div>
         {% else %}
-            <hr class="solid">
-            <p>
-                There are no participants for this meeting.
-            </p>
+            <hr>
+                <p style="text-align: center" class="has-text-grey">
+                    There are no participants for this meeting.
+                </p>
+            <hr>
         {% endif %}
     </div>
     <script>
