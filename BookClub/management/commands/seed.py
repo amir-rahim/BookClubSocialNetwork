@@ -41,8 +41,8 @@ class Command(BaseCommand):
         faker = Faker('en_GB')
 
         user = User.objects.create_user(
-            username=faker.user_name(),
-            email=faker.email(),
+            username=faker.unique.user_name(),
+            email=faker.unique.email(),
             public_bio="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut "
                        "labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco "
                        "laboris nisi ut aliquip ex ea commodo consequat.",
@@ -222,7 +222,7 @@ class Command(BaseCommand):
                 title=self.faker.text(max_nb_chars=30),
                 content=self.faker.text(max_nb_chars=1024),
                 creator=user,
-                forum=globalForum
+                forum=globalForum,
             )
             self.add_votes_public(curPost)
             for x in range(1, random.randrange(0, 5)):
@@ -230,7 +230,7 @@ class Command(BaseCommand):
                 curComment = ForumComment.objects.create(
                     content=self.faker.text(max_nb_chars=240),
                     creator=commentUser,
-                    post=curPost
+                    post=curPost,
                 )
                 self.add_votes_public(curComment)
                 
