@@ -22,19 +22,19 @@ class LibraryBooksViewTestCase(TestCase):
     def test_get_dashboard_not_logged_in(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'library_books.html')
+        self.assertTemplateUsed(response, 'library/library_books.html')
 
     def test_get_dashboard_logged_in(self):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'library_books.html')
+        self.assertTemplateUsed(response, 'library/library_books.html')
 
     def test_no_books(self):
         Book.objects.all().delete()
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'library_books.html')
+        self.assertTemplateUsed(response, 'library/library_books.html')
         books = list(response.context['books'])
         self.assertEqual(len(books), 0)
         self.assertContains(response, "There are no available books at the moment.")
@@ -42,14 +42,14 @@ class LibraryBooksViewTestCase(TestCase):
     def test_books_show(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'library_books.html')
+        self.assertTemplateUsed(response, 'library/library_books.html')
         books = list(response.context['books'])
         self.assertEqual(len(books), 4)
 
     def test_book_details_show(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'library_books.html')
+        self.assertTemplateUsed(response, 'library/library_books.html')
         self.assertContains(response, "Classical Mythology")
         self.assertContains(response, "Mark P. O. Morford")
         self.assertContains(response, "Oxford University Press")

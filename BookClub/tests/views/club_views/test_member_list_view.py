@@ -39,7 +39,7 @@ class MemberListTestCase(TestCase):
         url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'club_members.html')
+        self.assertTemplateUsed(response, 'clubs/club_members.html')
 
     def test_redirect_when_not_logged_in(self):
         url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
@@ -51,7 +51,7 @@ class MemberListTestCase(TestCase):
         self.client.login(username=non_member.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'club_members.html')
+        self.assertTemplateUsed(response, 'clubs/club_members.html')
 
     def test_redirect_if_not_member_of_club_private(self):
         self.client.login(username=self.user.username, password="Password123")
@@ -73,7 +73,7 @@ class MemberListTestCase(TestCase):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'club_members.html')
+        self.assertTemplateUsed(response, 'clubs/club_members.html')
         self.assertContains(response, self.club.name)
 
     def test_owner_has_admin_options(self):
@@ -81,7 +81,7 @@ class MemberListTestCase(TestCase):
         url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'club_members.html')
+        self.assertTemplateUsed(response, 'clubs/club_members.html')
         self.assertContains(response, "Club Administration")
         self.assertContains(response, "Manage Club")
 
@@ -89,7 +89,7 @@ class MemberListTestCase(TestCase):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'club_members.html')
+        self.assertTemplateUsed(response, 'clubs/club_members.html')
         self.assertContains(response, "Club Administration")
         self.assertNotContains(response, "Manage Club")
 
@@ -97,7 +97,7 @@ class MemberListTestCase(TestCase):
         self.client.login(username=self.jack.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'club_members.html')
+        self.assertTemplateUsed(response, 'clubs/club_members.html')
         self.assertNotContains(response, "Club Administration")
         self.assertNotContains(response, "Manage Club")
 
@@ -105,7 +105,7 @@ class MemberListTestCase(TestCase):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'club_members.html')
+        self.assertTemplateUsed(response, 'clubs/club_members.html')
         self.assertContains(response, self.owner.username)
         self.assertContains(response, self.owner.public_bio)
 
@@ -113,7 +113,7 @@ class MemberListTestCase(TestCase):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'club_members.html')
+        self.assertTemplateUsed(response, 'clubs/club_members.html')
         for mod in self.moderators:
             self.assertContains(response, mod.username)
 
@@ -121,7 +121,7 @@ class MemberListTestCase(TestCase):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'club_members.html')
+        self.assertTemplateUsed(response, 'clubs/club_members.html')
         for member in self.members:
             self.assertContains(response, member.username)
 
@@ -129,7 +129,7 @@ class MemberListTestCase(TestCase):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'club_members.html')
+        self.assertTemplateUsed(response, 'clubs/club_members.html')
         for applicant in self.applicants:
             self.assertNotContains(response, applicant.username)
 
@@ -141,7 +141,7 @@ class MemberListTestCase(TestCase):
         url = reverse("member_list", kwargs={"club_url_name": example_club.club_url_name})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'club_members.html')
+        self.assertTemplateUsed(response, 'clubs/club_members.html')
         self.assertContains(response, "<b>Name: </b> " + self.jack.username)
         self.assertContains(response, "<b>Public Bio: </b> " + self.jack.public_bio)
 
@@ -153,7 +153,7 @@ class MemberListTestCase(TestCase):
         url = reverse("member_list", kwargs={"club_url_name": example_club.club_url_name})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'club_members.html')
+        self.assertTemplateUsed(response, 'clubs/club_members.html')
         self.assertContains(response, "There are no moderators in this club.")
 
     def test_no_members(self):
@@ -164,5 +164,5 @@ class MemberListTestCase(TestCase):
         url = reverse("member_list", kwargs={"club_url_name": example_club.club_url_name})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'club_members.html')
+        self.assertTemplateUsed(response, 'clubs/club_members.html')
         self.assertContains(response, "There are no members in this club.")

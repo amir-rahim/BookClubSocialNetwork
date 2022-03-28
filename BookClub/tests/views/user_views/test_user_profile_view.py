@@ -25,7 +25,7 @@ class UserProfileViewTest(TestCase):
         self.client.login(username=self.login_user.username, password='Password123')
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'user_dashboard.html')
+        self.assertTemplateUsed(response, 'user/user_dashboard.html')
 
     def test_get_info(self):
         self.client.login(username=self.login_user.username, password='Password123')

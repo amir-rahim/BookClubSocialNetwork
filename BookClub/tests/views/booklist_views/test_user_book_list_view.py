@@ -29,13 +29,13 @@ class UserBookListViewTestCase(TestCase, LogInTester):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'booklist.html')
+        self.assertTemplateUsed(response, 'booklists/booklist.html')
 
     def test_other_user_can_see_public_list(self):
         self.client.login(username=self.other_user.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'booklist.html')
+        self.assertTemplateUsed(response, 'booklists/booklist.html')
         self.assertContains(response, "Classical Mythology")
         self.assertContains(response, "Mark P. O. Morford")
         self.assertContains(response, "The Greek Myths: The Complete and Definitive Edition")
@@ -45,7 +45,7 @@ class UserBookListViewTestCase(TestCase, LogInTester):
         self.client.login(username=self.user.username, password='Password123')
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'booklist.html')
+        self.assertTemplateUsed(response, 'booklists/booklist.html')
         self.assertContains(response, "Classical Mythology")
         self.assertContains(response, "Mark P. O. Morford")
         self.assertContains(response, "The Greek Myths: The Complete and Definitive Edition")
@@ -61,5 +61,5 @@ class UserBookListViewTestCase(TestCase, LogInTester):
         response = self.client.get(
             reverse('user_booklist', kwargs={'booklist_id': booklist.id}))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'booklist.html')
+        self.assertTemplateUsed(response, 'booklists/booklist.html')
         self.assertContains(response, "There are no books in this list.")

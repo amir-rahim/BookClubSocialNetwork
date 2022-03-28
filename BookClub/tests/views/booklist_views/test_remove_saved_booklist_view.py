@@ -32,7 +32,7 @@ class RemoveSavedBookListViewTestcase(TestCase):
         self.assertRedirects(response, redirect_url,
                              status_code=302, target_status_code=200, fetch_redirect_response=True
                              )
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
         after_count = BookList.objects.count()
         self.assertEqual(before_count, after_count)
 

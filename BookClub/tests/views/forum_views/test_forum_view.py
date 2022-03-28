@@ -32,7 +32,7 @@ class ForumViewTestCase(TestCase):
     def test_get_forum_not_logged_in(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'global_forum.html')
+        self.assertTemplateUsed(response, 'forum/forums.html')
 
     def test_get_club_forum_not_logged_in(self):
         redirect_url = reverse_with_next('login', self.club_url)
@@ -45,18 +45,18 @@ class ForumViewTestCase(TestCase):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'global_forum.html')
+        self.assertTemplateUsed(response, 'forum/forums.html')
 
     def test_get_club_forum_logged_in(self):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.club_url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'global_forum.html')
+        self.assertTemplateUsed(response, 'forum/forums.html')
 
     def test_posts_show(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'global_forum.html')
+        self.assertTemplateUsed(response, 'forum/forums.html')
         posts = list(response.context['posts'])
         self.assertEqual(len(posts), 3)
 
@@ -64,7 +64,7 @@ class ForumViewTestCase(TestCase):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.club_url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'global_forum.html')
+        self.assertTemplateUsed(response, 'forum/forums.html')
         posts = list(response.context['posts'])
         self.assertEqual(len(posts), 1)
 
@@ -72,7 +72,7 @@ class ForumViewTestCase(TestCase):
         ForumPost.objects.all().delete()
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'global_forum.html')
+        self.assertTemplateUsed(response, 'forum/forums.html')
         posts = list(response.context['posts'])
         self.assertEqual(len(posts), 0)
         self.assertContains(response, "There are no posts at the moment. Be first to post!")
@@ -82,7 +82,7 @@ class ForumViewTestCase(TestCase):
         ForumPost.objects.all().delete()
         response = self.client.get(self.club_url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'global_forum.html')
+        self.assertTemplateUsed(response, 'forum/forums.html')
         posts = list(response.context['posts'])
         self.assertEqual(len(posts), 0)
         self.assertContains(response, "There are no posts at the moment. Be first to post!")
@@ -90,7 +90,7 @@ class ForumViewTestCase(TestCase):
     def test_post_details_show(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'global_forum.html')
+        self.assertTemplateUsed(response, 'forum/forums.html')
         self.assertContains(response, "Lorem Ipsum")
         self.assertContains(response, "Lorem Ipsum is simply dummy text of the printing and typesetting industry. ")
         self.assertContains(response, "Posted by: johndoe")

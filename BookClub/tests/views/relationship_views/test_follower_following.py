@@ -25,14 +25,14 @@ class FollowingFolloweeTestCase(TestCase):
         self.follower_relation.delete()
         self.client.login(username=self.user1.username, password="Password123")
         response = self.client.get(self.url)
-        self.assertTemplateUsed(response, 'following_followers.html')
+        self.assertTemplateUsed(response, 'user/following_followers.html')
         self.assertContains(response,"There are no followers for this user.")
 
     def test_1_follower(self):
         self.following_relation.delete()
         self.client.login(username=self.user1.username, password="Password123")
         response = self.client.get(self.url)
-        self.assertTemplateUsed(response, 'following_followers.html')
+        self.assertTemplateUsed(response, 'user/following_followers.html')
         self.assertContains(response,"1 Follower")
         self.assertContains(response, self.user2.username)
 
@@ -41,7 +41,7 @@ class FollowingFolloweeTestCase(TestCase):
         self.follower_relation.delete()
         self.client.login(username=self.user1.username, password="Password123")
         response = self.client.get(self.url)
-        self.assertTemplateUsed(response, 'following_followers.html')
+        self.assertTemplateUsed(response, 'user/following_followers.html')
         self.assertContains(response, "This user isn't following anyone")
 
 
@@ -49,6 +49,6 @@ class FollowingFolloweeTestCase(TestCase):
         self.follower_relation.delete()
         self.client.login(username=self.user1.username, password="Password123")
         response = self.client.get(self.url)
-        self.assertTemplateUsed(response, 'following_followers.html')
+        self.assertTemplateUsed(response, 'user/following_followers.html')
         self.assertContains(response, "1 Following")
         self.assertContains(response, self.user2.username)

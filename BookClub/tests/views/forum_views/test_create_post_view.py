@@ -59,7 +59,7 @@ class CreatePostViewTestCase(TestCase):
         self.assertRedirects(response, redirect_url,
                              status_code=302, target_status_code=200, fetch_redirect_response=True
                              )
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
         post_count_after = ForumPost.objects.count()
         self.assertEqual(post_count_after, post_count_before)
 
@@ -70,7 +70,7 @@ class CreatePostViewTestCase(TestCase):
         self.assertRedirects(response, redirect_url,
                              status_code=302, target_status_code=200, fetch_redirect_response=True
                              )
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
         post_count_after = ForumPost.objects.count()
         self.assertEqual(post_count_after, post_count_before)
 

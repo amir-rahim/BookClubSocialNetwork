@@ -30,7 +30,7 @@ class PasswordViewTest(TestCase, LogInTester):
         self.client.login(username=self.user.username, password='Password123')
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'password_change.html')
+        self.assertTemplateUsed(response, 'user/password_change.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, ChangePasswordForm))
 
@@ -51,7 +51,7 @@ class PasswordViewTest(TestCase, LogInTester):
                              response_url,
                              status_code=302,
                              target_status_code=200)
-        self.assertTemplateUsed(response, 'user_dashboard.html')
+        self.assertTemplateUsed(response, 'user/user_dashboard.html')
         self.user.refresh_from_db()
         is_password_correct = check_password('NewPassword123',
                                              self.user.password)
@@ -62,7 +62,7 @@ class PasswordViewTest(TestCase, LogInTester):
         self.form_input['password'] = 'WrongPassword123'
         response = self.client.post(self.url, self.form_input, follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'password_change.html')
+        self.assertTemplateUsed(response, 'user/password_change.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, ChangePasswordForm))
         self.user.refresh_from_db()
@@ -74,7 +74,7 @@ class PasswordViewTest(TestCase, LogInTester):
         self.form_input['password_confirmation'] = 'WrongPassword123'
         response = self.client.post(self.url, self.form_input, follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'password_change.html')
+        self.assertTemplateUsed(response, 'user/password_change.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, ChangePasswordForm))
         self.user.refresh_from_db()
@@ -88,7 +88,7 @@ class PasswordViewTest(TestCase, LogInTester):
         self.form_input['password_confirmation'] = 'WrongPassword123'
         response = self.client.post(self.url, self.form_input, follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'password_change.html')
+        self.assertTemplateUsed(response, 'user/password_change.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, ChangePasswordForm))
         self.user.refresh_from_db()
@@ -112,7 +112,7 @@ class PasswordViewTest(TestCase, LogInTester):
         self.form_input['password_confirmation'] = 'NewPassword123'
         response = self.client.post(self.url, self.form_input, follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'password_change.html')
+        self.assertTemplateUsed(response, 'user/password_change.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, ChangePasswordForm))
         self.user.refresh_from_db()

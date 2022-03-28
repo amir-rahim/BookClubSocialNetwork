@@ -25,7 +25,7 @@ class LogInViewTestCase(TestCase, LogInTester):
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
 
         messages_list = list(response.context['messages'])
 
@@ -37,7 +37,7 @@ class LogInViewTestCase(TestCase, LogInTester):
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
 
         messages_list = list(response.context['messages'])
 
@@ -48,7 +48,7 @@ class LogInViewTestCase(TestCase, LogInTester):
         response = self.client.post(self.url, form_input)
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
         self.assertFalse(self._is_logged_in())
 
         messages_list = list(response.context['messages'])
@@ -61,7 +61,7 @@ class LogInViewTestCase(TestCase, LogInTester):
         response = self.client.post(self.url, form_input)
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
 
         self.assertFalse(self._is_logged_in())
 
@@ -75,7 +75,7 @@ class LogInViewTestCase(TestCase, LogInTester):
         response = self.client.post(self.url, form_input)
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
 
         form = response.context['form']
 
@@ -122,7 +122,7 @@ class LogInViewTestCase(TestCase, LogInTester):
         response = self.client.post(self.url, form_input, follow=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
 
         self.assertFalse(self._is_logged_in())
 

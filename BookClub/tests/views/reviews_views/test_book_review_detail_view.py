@@ -43,14 +43,14 @@ class BookReviewViewTestCase(TestCase,LogInTester):
         self.assertFalse(self._is_logged_in())
         response = self.client.get(self.main_review_url)
         self.assertEqual(response.status_code,200)
-        self.assertTemplateUsed(response,"review_details.html")
+        self.assertTemplateUsed(response, "reviews/review_details.html")
 
     def test_can_view_forum_when_logged_in(self):
         self.client.login(username=self.creator_of_main_review.username,password="Password123")
         self.assertTrue(self._is_logged_in())
         response = self.client.get(self.main_review_url)
         self.assertEqual(response.status_code,200)
-        self.assertTemplateUsed(response,"review_details.html")
+        self.assertTemplateUsed(response, "reviews/review_details.html")
     
     def test_guest_can_see_review_content(self):
         response = self.client.get(self.main_review_url)

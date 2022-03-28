@@ -49,7 +49,7 @@ class RemoveFeaturedBookViewTestCase(TestCase):
         redirect_url = reverse_with_next('login', self.url)
         response = self.client.post(self.url, follow=True)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200, fetch_redirect_response=True)
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
         featured_book_count_after = FeaturedBooks.get_books(self.club).count()
         self.assertEqual(featured_book_count_before, featured_book_count_after)
 
@@ -58,7 +58,7 @@ class RemoveFeaturedBookViewTestCase(TestCase):
         redirect_url = reverse_with_next('login', self.url)
         response = self.client.get(self.url, follow=True)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200, fetch_redirect_response=True)
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
         featured_book_count_after = FeaturedBooks.get_books(self.club).count()
         self.assertEqual(featured_book_count_before, featured_book_count_after)
 
@@ -83,7 +83,7 @@ class RemoveFeaturedBookViewTestCase(TestCase):
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]), 'You have removed the book from featured.')
         self.assertEqual(after_count, before_count - 1)
-        self.assertTemplateUsed(response, 'club_dashboard.html')
+        self.assertTemplateUsed(response, 'clubs/club_dashboard.html')
         self.assertFalse(FeaturedBooks.objects.filter(club=self.club, book=self.book).exists())
 
     def test_moderator_can_remove_featured_book(self):
@@ -96,7 +96,7 @@ class RemoveFeaturedBookViewTestCase(TestCase):
         self.assertEqual(str(messages[0]), 'You have removed the book from featured.')
         after_count = FeaturedBooks.get_books(self.club).count()
         self.assertEqual(after_count, before_count - 1)
-        self.assertTemplateUsed(response, 'club_dashboard.html')
+        self.assertTemplateUsed(response, 'clubs/club_dashboard.html')
         self.assertFalse(FeaturedBooks.objects.filter(club=self.club, book=self.book).exists())
 
     def test_member_cannot_remove_featured_book(self):
@@ -109,7 +109,7 @@ class RemoveFeaturedBookViewTestCase(TestCase):
         self.assertEqual(str(messages[0]), 'You are not allowed to edit this!')
         after_count = FeaturedBooks.get_books(self.club).count()
         self.assertEqual(after_count, before_count)
-        self.assertTemplateUsed(response, 'club_dashboard.html')
+        self.assertTemplateUsed(response, 'clubs/club_dashboard.html')
         self.assertTrue(FeaturedBooks.objects.filter(club=self.club, book=self.book).exists())
 
     def test_applicant_cannot_remove_featured_book(self):
@@ -123,7 +123,7 @@ class RemoveFeaturedBookViewTestCase(TestCase):
         self.assertEqual(str(messages[0]), 'You are not allowed to edit this!')
         after_count = FeaturedBooks.get_books(self.private_club).count()
         self.assertEqual(after_count, before_count)
-        self.assertTemplateUsed(response, 'available_clubs.html')
+        self.assertTemplateUsed(response, 'clubs/available_clubs.html')
         self.assertTrue(FeaturedBooks.objects.filter(club=self.private_club, book=self.book).exists())
 
     def test_cannot_remove_not_featured_book(self):
@@ -138,7 +138,7 @@ class RemoveFeaturedBookViewTestCase(TestCase):
         self.assertEqual(str(messages[0]), "Error, invalid data.")
         after_count = FeaturedBooks.get_books(self.club).count()
         self.assertEqual(after_count, before_count)
-        self.assertTemplateUsed(response, 'club_dashboard.html')
+        self.assertTemplateUsed(response, 'clubs/club_dashboard.html')
 
     def test_cannot_remove_featured_invalid_book(self):
         self.client.login(username=self.owner.username, password='Password123')
@@ -153,7 +153,7 @@ class RemoveFeaturedBookViewTestCase(TestCase):
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]), 'Error, invalid data.')
         self.assertEqual(after_count, before_count)
-        self.assertTemplateUsed(response, 'club_dashboard.html')
+        self.assertTemplateUsed(response, 'clubs/club_dashboard.html')
 
     def test_cannot_remove_featured_book_from_invalid_club(self):
         self.client.login(username=self.owner.username, password='Password123')
