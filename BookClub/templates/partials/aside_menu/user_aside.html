@@ -1,0 +1,46 @@
+<aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+    <p class="menu-label">
+        Profile
+    </p>
+    <ul class="menu-list">
+        <li>
+            <a href="{% url 'user_dashboard' %}">Profile Dashboard</a>
+        </li>
+        <li>
+            <a href="{% url 'edit_profile' %}">Edit Profile</a>
+        </li>
+        <li>
+            <a href="{% url 'password_change' %}">Change Password</a>
+        </li>
+    </ul>
+    <p class="menu-label">
+        Clubs
+    </p>
+    <ul class="menu-list">
+        <li>
+            <a href="{% url 'available_clubs' %}">Available Clubs</a>
+        </li>
+        <li>
+            <a href="{% url 'applications' %}">Applications</a>
+        </li>
+        <li>
+            <a href="{% url 'my_club_memberships' %}">Memberships</a>
+        </li>
+    </ul>
+    <p class="menu-label">
+        Book Lists
+    </p>
+    <ul class="menu-list">
+        <li>
+            <a href="{% url 'booklists_list' %}">My Book Lists</a>
+        </li>
+    </ul>
+    <p class="menu-label">
+        Agenda
+    </p>
+    <ul class="menu-list">
+        <li>
+            <a href="{% url 'agenda' %}">View Agenda</a>
+        </li>
+    </ul>
+</aside>

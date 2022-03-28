@@ -1,0 +1,70 @@
+<aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+    <p class="menu-label">
+        Club Views
+    </p>
+    <ul class="menu-list">
+        <li>
+            <a href="{% url 'club_dashboard' current_club.club_url_name %}">{{ current_club.name }}</a>
+        </li>
+        <li>
+            <a href="{% url 'member_list' current_club.club_url_name %}">Members</a>
+        </li>
+        <li>
+            <a href="{% url 'applicant_list' current_club.club_url_name %}">Applicants</a>
+        </li>
+        <li>
+            <a href="{% url 'club_recommendations' current_club.club_url_name %}">Recommendations</a>
+        </li>
+    </ul>
+    {% if user == current_club.get_club_owner or user in current_club.get_moderators %}
+        <p class="menu-label">
+            Club Administration
+        </p>
+        {% if user == current_club.get_club_owner %}
+            <ul class="menu-list">
+                <li>
+                    <a href="{% url 'edit_club' current_club.club_url_name %}">Manage Club</a>
+                </li>
+            </ul>
+        {% endif %}
+        <ul class="menu-list">
+            <li>
+                <a href="{% url 'edit_featured_books' current_club.club_url_name %}">Featured Books</a>
+            </li>
+        </ul>
+    {% endif %}
+    <p class="menu-label">
+        Forums & Reviews
+    </p>
+    <ul class="menu-list">
+        <li>
+            <a href="{% url 'club_forum' current_club.club_url_name %}">Forums</a>
+        </li>
+    </ul>
+    <p class="menu-label">
+        Meetings
+    </p>
+    <ul class="menu-list">
+        <li>
+            <a href="{% url 'meeting_list' current_club.club_url_name %}">Meetings</a>
+        </li>
+        <li>
+            <a href="{% url 'meeting_details' current_club.club_url_name meeting.id %}">{{ meeting.title }}</a>
+            <ul>
+                <li>
+                    <a href="{% url 'meeting_participants' current_club.club_url_name meeting.id %}">Meeting Participants</a>
+                </li>
+                {% if user == meeting.get_organiser %}
+                <li>
+                    <a href="{% url 'edit_meeting' current_club.club_url_name meeting.id %}">Manage Meeting</a>
+                </li>
+                {% endif %}
+            </ul>
+        </li>
+        {% if user == current_club.get_club_owner or user in current_club.get_moderators %}
+            <li>
+                <a id="{% url 'create_meeting' current_club.club_url_name %}" href="{% url 'create_meeting' current_club.club_url_name %}">Create</a>
+            </li>
+        {% endif %}
+    </ul>
+</aside>
