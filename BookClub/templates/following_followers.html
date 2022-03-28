@@ -1,59 +1,28 @@
 {% extends 'base_content.html' %}
 {% block page_title %}
-    User Profile
+    Following and Followers
 {% endblock page_title %}
 {% block page_subtitle %}
-    This is the User Profile, this is where you can view other profiles!
+    Here you can see following and followers of a member!
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
         <div class="column is-3">
-            <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
-                <p class="menu-label">
-                    Profile
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'user_profile' user.username %}">Profile Dashboard</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'user_following' user.username %}" class="is-active"><b>Following</b></a>
-                    </li>
-                </ul>
-                <p class="menu-label">
-                    Clubs
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'user_memberships' user.username %}">Club Memberships</a>
-                    </li>
-                </ul>
-                <p class="menu-label">
-                    Books
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'user_memberships' user.username %}">Book Lists</a>
-                    </li>
-                </ul>
-            </aside>
+            {% include 'partials/aside_menu/profile_aside.html' %}
         </div>
         <div class="column is-9">
             <nav class="breadcrumb"
-                 aria-label="breadcrumbs"
-                 style="padding-left: 5px;">
+                aria-label="breadcrumbs"
+                style="padding-left: 5px;">
                 <ul>
                     <li>
                         <a href="{% url 'home' %}">Home</a>
                     </li>
                     <li>
-                        <a href="{% url 'user_dashboard' %}">Profile</a>
+                        <a href="{% url 'user_profile' username %}">{{ username }}</a>
                     </li>
                     <li>
-                        <a>{{ displayed_user.username }}</a>
-                    </li>
-                    <li>
-                        <a>Followers</a>
+                        <a href="{% url 'user_following' username %}">Following</a>
                     </li>
                 </ul>
             </nav>

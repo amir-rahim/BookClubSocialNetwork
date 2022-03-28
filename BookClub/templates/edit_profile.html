@@ -3,60 +3,12 @@
     User Dashboard
 {% endblock page_title %}
 {% block page_subtitle %}
-    This is the Edit Profile page, you can change your profile details!
+    This is the User Dashboard, view community contributions and statistics
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
         <div class="column is-3">
-            <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
-                <p class="menu-label">
-                    Profile
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'user_dashboard' %}">Profile Dashboard</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'edit_profile' %}" class="is-active"><b>Edit Profile</b></a>
-                    </li>
-                    <li>
-                        <a href="{% url 'password_change' %}">Change Password</a>
-                    </li>
-                </ul>
-                <p class="menu-label">
-                    Clubs
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'create_club' %}">Create Club</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'available_clubs' %}">Available Clubs</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'applications' %}">Applications</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'my_club_memberships' %}">Memberships</a>
-                    </li>
-                </ul>
-                <p class="menu-label">
-                    Book Lists
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'booklists_list' %}">My Book Lists</a>
-                    </li>
-                </ul>
-                <p class="menu-label">
-                    Agenda
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'agenda' %}">View Agenda</a>
-                    </li>
-                </ul>
-            </aside>
+            {% include 'partials/aside_menu/user_aside.html' %}
         </div>
         <div class="column is-9">
             <nav class="breadcrumb"
@@ -67,10 +19,10 @@
                         <a href="{% url 'home' %}">Home</a>
                     </li>
                     <li>
-                        <a>Profile</a>
+                        <a href="{% url 'user_dashboard' %}">User</a>
                     </li>
                     <li>
-                        <a>Edit Profile</a>
+                        <a href="{% url 'edit_profile' %}">Edit Profile</a>
                     </li>
                 </ul>
             </nav>
@@ -83,7 +35,7 @@
             </section>
             <div class="columns">
                 <div class="column is-12">
-                    <div class="card">
+                    <div class="container">
                         <div class="card-content">
                             <p class="title">
                                 User Details
@@ -123,7 +75,7 @@
                                         </article>
 
                                         <div class="control has-text-centered">
-                                            <button class="js-modal-trigger button is-danger is-outlined center" data-target="modal-delete-user-confirmation">
+                                            <button class="js-modal-trigger button is-danger is-outlined is-fullwidth" data-target="modal-delete-user-confirmation">
                                                 <span>Delete Account</span>
                                                 <span class="icon is-small">
                                                   <i class="fas fa-times"></i>
