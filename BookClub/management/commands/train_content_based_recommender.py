@@ -10,3 +10,4 @@ class Command(BaseCommand):
         def handle(self, *args, **options):
             print("Started training content-based recommender...")
             recommendations_provider.retrain_content_based_recommender()
+            print("Done training content-based recommender.")
