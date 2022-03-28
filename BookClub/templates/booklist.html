@@ -3,57 +3,12 @@
     Book List
 {% endblock page_title %}
 {% block page_subtitle %}
-    View all the books in {{ booklist.title }}
+    View and manage your book list
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
         <div class="column is-3">
-            <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'library_dashboard' %}">Dashboard</a>
-                    </li>
-                </ul>
-                <p class="menu-label">
-                    Our Book Library
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'library_books' %}">View Library</a>
-                    </li>
-                </ul>
-                <p class="menu-label">
-                    Book Lists
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'booklists_list' %}" class="is-active"><b>{{ user.get_username }} Book Lists</b></a>
-                    </li>
-                    <li>
-                        <a href="{% url 'saved_booklists' %}">Saved Book Lists</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'create_booklist' %}">Create Book Lists</a>
-                    </li>
-                </ul>
-                <p class="menu-label">
-                    Recommender
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'user_recommendations' %}">AI Recommended Books</a>
-                    </li>
-                </ul>
-                <p class="menu-label">
-                    Reviews
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'personal_reviews' %}">View Personal Reviews</a>
-                        <a href="{% url 'community_reviews' %}">View Community Reviews</a>
-                    </li>
-                </ul>
-            </aside>
+            {% include 'partials/aside_menu/library_aside.html' %}
         </div>
         <div class="column is-9">
         {% if own %}
@@ -84,10 +39,10 @@
                             <a href="{% url 'home' %}">Home</a>
                         </li>
                         <li>
-                            <a href="{% url 'user_profile' user.username %}">{{ user.username }}</a>
+                            <a href="{% url 'user_profile' creator.username %}">{{ creator.username }}</a>
                         </li>
                         <li>
-                            <a href="{% url 'booklists_list' user.username %}">Book Lists</a>
+                            <a href="{% url 'booklists_list' creator.username %}">Book Lists</a>
                         </li>
                         <li>
                             <a href="{% url 'user_booklist' booklist.id %}">{{ booklist.title }}</a>
@@ -111,6 +66,7 @@
                            data-pagination="true">
                         <thead>
                             <tr>
+                                
                                 <th scope="col">Title</th>
                                 <th scope="col">Author</th>
                                 <th scope="col">Remove</th>
@@ -122,11 +78,10 @@
                                     <td>
                                         <div class="media">
                                             <div class="media-left">
-                                                {% if book.imageS %}
-                                                    <img src="{{ book.imageS }}" alt=""/>
+                                                {% if book.get_s_size > 50 %}
+                                                    <img src="//images.weserv.nl/?url={{ book.imageS }}" alt=""/>
                                                 {% else %}
-                                                    <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-                                                         alt=""/>
+                                                    <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?h=75&w=50" alt=""/>
                                                 {% endif %}
                                             </div>
                                             <div class="media-content">
@@ -139,7 +94,12 @@
                                         <form method="post"
                                               action="{% url 'remove_book' booklist_id=booklist.id book_id=book.id %}">
                                             {% csrf_token %}
-                                            <button type="submit" class="is-danger is-inverted">X</button>
+                                            <button type="submit" class="button is-danger is-outlined">
+                                                <span>Remove</span>
+                                                <span class="icon is-small">
+                                                    <i class="fas fa-times"></i>
+                                                </span>
+                                            </button>
                                         </form>
                                     </td>
                                 </tr>
@@ -148,11 +108,11 @@
                     </table>
                 </div>
             {% else %}
-                <div class="card">
-                    <p class="subtitle" style="text-align: center;">
-                        <i>There are no books in this list.</i>
+                <hr>
+                    <p class="has-text-grey" style="text-align: center;">
+                        There are no books in this list.
                     </p>
-                </div>
+                <hr>
             {% endif %}
         </div>
         <script>

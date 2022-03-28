@@ -1,29 +1,14 @@
 {% extends 'base_content.html' %}
 {% block page_title %}
-    Edit a book list
+    Book Lists
 {% endblock page_title %}
 {% block page_subtitle %}
-    Edit your book list here!
+    Collections of your favourite reads
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
         <div class="column is-3">
-            <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
-                <p class="menu-label">
-                    Book List
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'booklists_list' %}">My Book Lists</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'create_booklist' %}">Create Book List</a>
-                    </li>
-                    <li>
-                        <a>Saved Lists</a>
-                    </li>
-                </ul>
-            </aside>
+            {% include 'partials/aside_menu/library_aside.html' %}
         </div>
         <div class="column is-9">
             <nav class="breadcrumb"
@@ -40,7 +25,7 @@
                         <a href="{% url 'booklists_list' %}">Book Lists</a>
                     </li>
                     <li>
-                        <a>Edit</a>
+                        <a href="{% url 'edit_booklist' id %}">Edit</a>
                     </li>
                 </ul>
             </nav>
@@ -52,11 +37,10 @@
                     </div>
                 </div>
             </section>
-            <div class="columns">
-                <div class="column is-12">
-                    <form class=""
-                          action="{% url 'edit_booklist' booklist_id=id %}"
-                          method="post">
+            <div class="container">
+                <div class="card-content">
+                    <form action="{% url 'edit_booklist' booklist_id=id %}"
+                            method="post">
                         {% csrf_token %}
                         {% include 'partials/bulma_form.html' with form=form %}
                         <input type="submit" value="Update" class="button is-link">
