@@ -3,7 +3,7 @@
     {{ book.title }}
 {% endblock page_title %}
 {% block page_subtitle %}
-View this book's details and reviews here.
+    View this book's details and reviews
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
@@ -38,7 +38,7 @@ View this book's details and reviews here.
                         <a href="{% url 'library_books' %}">Books</a>
                     </li>
                     <li>
-                        <a href="{% url 'book_view' book.id %}">{{ book.title }}</a>
+                        <a href="{% url 'book_view' book.id %}">{{ book.title |truncatechars:20 }}</a>
                     </li>
                 </ul>
             </nav>
@@ -54,7 +54,7 @@ View this book's details and reviews here.
                         <li>
                             <a>
                                 <span class="icon is-small"><i class="fa-solid fa-user-pen"></i></span>
-                                <span>User Reviews</span>
+                                <span>Community Reviews</span>
                             </a>
                         </li>
                         <li>
@@ -130,7 +130,7 @@ View this book's details and reviews here.
                                     </header>
                                     <div class="card-content">
                                         <div class="content">
-                                            <span class="has-text-black"><b>Rating:</b> {{ review.rating }}/10</span>
+                                            <span class="has-text-black"><b>Rating:</b> {{ review.book_rating }}/10</span>
                                             <br/>
                                             <span class="has-text-grey"><b>Review:</b> {{ review.content }}</span>
                                         </div>
@@ -142,25 +142,27 @@ View this book's details and reviews here.
                                     </footer>
                                 </div>
                             {% endfor %}
-                            <div class="box">
-                                <form method="get" action="{% url 'create_review' book.id %}">
-                                    <button class="button is-info is-fullwidth">Add Review</button>
-                                </form>
-                                <form method="get" action="{% url 'book_reviews' book.id %}">
-                                    <button class="button is-link is-fullwidth">See more</button>
-                                </form>
-                            </div>
+                            
+                            <div class="columns">
+                                <div class="column is-half">
+                                    <form method="get" action="{% url 'create_review' book.id %}">
+                                        <button class="button is-info is-fullwidth">Add Review</button>
+                                    </form>
+                                </div>
+                                <div class="column is-half">
+                                    <form method="get" action="{% url 'book_reviews' book.id %}">
+                                        <button class="button is-link is-fullwidth">See more</button>
+                                    </form>
+                                </div>
                         {% else %}
                             <div class="box">
-                                <p>
+                                <p class="has-text-centered">
                                     No reviews as of yet
                                 </p>
                             </div>
-                            <div class="box">
                                 <form method="get" action="{% url 'create_review' book.id %}">
                                     <button class="button is-info is-fullwidth">Add Review</button>
                                 </form>
-                            </div>
                         {% endif %}
                     </section>
                     <section class="tab-content">
@@ -248,15 +250,18 @@ View this book's details and reviews here.
                                             </div>
                                         </div>
                                     </form>
+
+                                    <br>
                                     <form action="{% url 'remove_from_bookshelf' book_id=book.id %}" method="post">
                                         {% csrf_token %}
                                         <div class="field">
-                                            <div class="control is-fullwidth">
-                                                <input type="submit" value="Delete" class="button is-danger"/>
+                                            <div class="control is-expanded">
+                                                <input type="submit" value="Remove from Bookshelf" class="button is-danger is-outlined is-fullwidth"/>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
+
                                 <footer class="card-footer">
                                     <a class="card-footer-item" href="{% url 'bookshelf' %}">
                                         View your bookshelf

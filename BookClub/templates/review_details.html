@@ -3,41 +3,25 @@
     Book Review
 {% endblock page_title %}
 {% block page_subtitle %}
-  This is a Review of a title. You can read the review, comment it, and read comments by others.
+    Leave a comment on this review
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
         <div class="column is-3">
-            <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
-                <p class="menu-label">
-                    Clubs
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'available_clubs' %}">Available Clubs</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'my_club_memberships' %}">Memberships</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'create_club' %}">Create Club</a>
-                    </li>
-                </ul>
-                <p class="menu-label">
-                    Useful Links
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'user_dashboard' %}">User Profile</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'library_dashboard' %}">Library</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'global_forum' %}">Forum</a>
-                    </li>
-                </ul>
-            </aside>
+            <a class="button is-fullwidth is-link" href="{% url 'book_view' book_id=review.book.id %}"><b>Back to Book</b></a>
+            <hr class="solid">
+            <div class="card">
+                <div class="card-image">
+                    <figure class="image">
+                        {% if book.get_l_size > 50 %}
+                            <img src="//images.weserv.nl/?url={{ review.book.imageL }}" alt="Book Cover">
+                        {% else %}
+                            <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+                                 alt="Book Cover">
+                        {% endif %}
+                    </figure>
+                </div>
+            </div>
         </div>
         <div class="column is-9">
             <nav class="breadcrumb"
@@ -48,8 +32,18 @@
                         <a href="{% url 'home' %}">Home</a>
                     </li>
                     <li>
-                        <a href="{% url 'book_view' book_id=review.book.id %}">{{review.book.title}}</a>
+                        <a href="{% url 'library_dashboard' %}">Library</a>
                     </li>
+                    <li>
+                        <a href="{% url 'library_books' %}">Books</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'book_view' book_id=review.book.id %}">{{ review.book.title |truncatechars:20 }}</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'community_reviews' %}">Reviews</a>
+                    </li>
+                    
                     <li>
                         <a href="{% url 'book_review' book_id=review.book.id review_id=review.id %}">Review by {{ review.creator }}</a>
                     </li>
@@ -62,33 +56,28 @@
                     </p>
                 </div>
             </section>
-            <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
-                <div class="hero-body">
-                    <p class="subtitle">
-                        {{review.book_rating}}/10
-                    </p>
-                    <p class="subtitle">
-                        <b>{{review.title}}</b>
-                    </p>
-                </div>
-            </section>
             <div class="card">
                 <header class="card-header">
                     <p class="card-header-title is-vcentered">
+                        <span class="has-text-black"><b>{{ review.title }}</b> - Rating: {{ review.book_rating }}/10 &nbsp;·&nbsp; </span>
                         <span class="has-text-grey-light">Posted by: {{ review.creator }} {{ review.created_on | timesince }} ago</span>
                     </p>
                     <div class="card-header-icon">
-                        {% if user == review.creator %}
-                            <a href="{% url 'edit_review' book_id=review.book.id %}">
-                                <button class="button is-success is-rounded" aria-label="Edit Review">
-                                    <span class="icon">
-                                        <i class="fa-solid fa-wand-magic-sparkles"></i>
-                                    </span>
-                                    <span>Edit</span>
-                                </button>
-                            </a>
-                            {% include 'partials/delete_button_and_modal.html' with delete_item=review delete_modal_id=review.pk %}
-                        {% endif %}
+                        <div class="field is-grouped">
+                            <div class="control">
+                                {% if user == review.creator %}
+                                    <a href="{% url 'edit_review' book_id=review.book.id %}">
+                                        <button class="button is-success" aria-label="Edit Review">
+                                            <span>Edit</span>
+                                            <span class="icon is-small">
+                                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                            </span>
+                                        </button>
+                                    </a>
+                                    {% include 'partials/delete_button_and_modal.html' with delete_item=review delete_modal_id=review.pk %}
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
                 </header>
                 <div class="card-content">
@@ -171,12 +160,12 @@
                                         </div>
                                     </div>
                                     <footer class="card-footer">
-                                        <input type="button"
-                                               value="Reset"
-                                               id="resetBtn"
-                                               onClick="this.form.reset()"
-                                               class="button is-danger is-fullwidth"/>
-                                        <input type="submit" value="Add Comment" class="button is-link is-fullwidth"/>
+                                    <input type="button"
+                                        value="Reset"
+                                        id="resetBtn"
+                                        onClick="this.form.reset()"
+                                        class="button is-danger is-fullwidth"/>
+                                    <input type="submit" value="Comment" class="button is-link is-fullwidth"/>
                                     </footer>
                                 </form>
                             </div>

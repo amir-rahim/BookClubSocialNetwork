@@ -19,10 +19,13 @@
                         <a href="{% url 'library_dashboard' %}">Library</a>
                     </li>
                     <li>
-                        <a href="{% url 'book_reviews' book.id %}">Rate & Review</a>
+                        <a href="{% url 'book_reviews' book.id %}">Reviews</a>
                     </li>
                     <li>
-                        <a>Edit</a>
+                        <a>{{ book.title |truncatechars:20 }}</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'edit_review' book.id %}">Edit</a>
                     </li>
                 </ul>
             </nav>
@@ -34,9 +37,9 @@
                     </div>
                 </div>
             </section>
-            <div class="columns">
-                <div class="column is-12">
-                    <form class="" method="post">
+            <div class="container">
+                <div class="card-content">
+                    <form method="post">
                         {% csrf_token %}
                         {% include 'partials/bulma_form.html' with form=form %}
                         <input type="submit" value="Update rating and review" class="button is-link">
