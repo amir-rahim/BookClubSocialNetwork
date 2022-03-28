@@ -33,9 +33,9 @@
         </div>
         {% include 'partials/pagination_ajax.html' with page_obj=page_obj %}
     {% else %}
-        <hr />
-        <p style="text-align: center">
+        <hr>
+        <p style="text-align: center" class="has-text-grey">
             There are no available books at the moment.
         </p>
-        <hr />
+        <hr>
     {% endif %}
