@@ -3,12 +3,12 @@
     Recommendations
 {% endblock page_title %}
 {% block page_subtitle %}
-    View your personalised recommendations here!
+    View your club based recommendations here
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
         <div class="column is-3">
-            {% include 'partials/club_aside.html' %}
+            {% include 'partials/aside_menu/club_aside.html' %}
         </div>
         <div class="column is-9">
             <nav class="breadcrumb"
@@ -19,7 +19,7 @@
                         <a href="{% url 'home' %}">Home</a>
                     </li>
                     <li>
-                        <a href="{% url 'available_clubs' %}">Club</a>
+                        <a href="{% url 'available_clubs' %}">Clubs</a>
                     </li>
                     <li>
                         <a href="{% url 'club_dashboard' current_club.club_url_name %}">{{ current_club.name }}</a>
