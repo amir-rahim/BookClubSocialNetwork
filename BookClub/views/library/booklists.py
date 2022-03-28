@@ -138,6 +138,7 @@ class UserBookListView(LoginRequiredMixin, ListView):
         context['booklist'] = booklist
         context['user'] = self.request.user
         context['number_of_books'] = len(booklist.get_books())
+        context['creator'] = booklist.creator
         return context
 
 

@@ -83,6 +83,7 @@ class MeetingListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 
     template_name = 'club_meetings.html'
     context_object_name = 'meetings'
+    paginate_by = 10
 
     def test_func(self):
         try:

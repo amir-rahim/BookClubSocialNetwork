@@ -53,7 +53,7 @@ class AddToBookListView(LoginRequiredMixin, FormView):
             messages.error(self.request, "There was an error finding the book or booklist")
 
         elif booklist.get_books().filter(pk=book.id):
-            messages.info(self.request, "This book is already in the list")
+            messages.error(self.request, "This book is already in the list")
         else:
             booklist.add_book(book)
             booklist.save()

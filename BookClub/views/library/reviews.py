@@ -22,16 +22,18 @@ class CreateReviewView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         if not self.request.user.is_authenticated:
             return super(LoginRequiredMixin, self).handle_no_permission()
 
-        messages.error(self.request, f"Error attempting to review book.")
         url = reverse('library_books')
         return redirect(url)
 
     def test_func(self):
         try:
             book = Book.objects.get(pk=self.kwargs['book_id'])
-            reviewed = BookReview.objects.filter(book=book, creator=self.request.user).exists()
-            return not reviewed
+            if BookReview.objects.filter(book=book, creator=self.request.user).exists():
+                messages.info(self.request, f"You have already reviewed this book.")
+                return False
+            return True
         except Exception as e:
+            messages.error(self.request, f"Error attempting to review book.")
             return False
 
     def form_valid(self, form):
@@ -40,7 +42,7 @@ class CreateReviewView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         form.instance.creator = user
         form.instance.book = book
         response = super().form_valid(form)
-        messages.success(self.request, f"Successfully reviewed '{book.title}'!")
+        messages.success(self.request, f"You have created a review for '{book.title}'!")
         return response
 
     def form_invalid(self, form):
@@ -49,7 +51,6 @@ class CreateReviewView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def get_success_url(self):
         """Return redirect URL after successful creation."""
-        messages.add_message(self.request, messages.SUCCESS, "You have created a book review!")
         return reverse(self.redirect_location, kwargs={'book_id': self.kwargs['book_id']})
 
     def get_context_data(self, **kwargs):

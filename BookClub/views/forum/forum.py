@@ -25,10 +25,18 @@ class ForumPostView(ClubMemberTestMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        try:
-            context['post'] = ForumPost.objects.get(pk=self.kwargs.get('post_id'))
-        except ObjectDoesNotExist:
-            raise Http404("Given post id not found....")
+        if self.kwargs.get('club_url_name'):
+            try:
+                context['post'] = ForumPost.objects.get(pk=self.kwargs.get('post_id'))
+                context['club'] = Club.objects.get(club_url_name=self.kwargs.get('club_url_name'))
+            except ObjectDoesNotExist:
+                raise Http404("Given club or post id not found....")
+        else:
+            try:
+                context['post'] = ForumPost.objects.get(pk=self.kwargs.get('post_id'))
+                context['club'] = None
+            except ObjectDoesNotExist:
+                raise Http404("Given club or post id not found....")
         return context
 
     def get_queryset(self):
@@ -65,6 +73,7 @@ class ForumView(ClubMemberTestMixin, ListView):
             context['forum'] = Forum.objects.get(associated_with=club)
             context['usercount'] = ClubMembership.objects.filter(club=club).count()
         else:
+            context['club'] = None
             context['forum'] = Forum.objects.get(associated_with=None)
             context['usercount'] = User.objects.all().count()
 

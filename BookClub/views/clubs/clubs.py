@@ -114,7 +114,7 @@ class FeatureBookView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def form_valid(self, form):
         club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
-        if FeaturedBooks.objects.filter(book = self.request.POST.get("book")).exists():
+        if FeaturedBooks.objects.filter(club=club, book = self.request.POST.get("book")).exists():
             messages.error(self.request, 'Book is already featured!')
             return super().form_invalid(form)
         featuredBook = form.save(commit=False)
