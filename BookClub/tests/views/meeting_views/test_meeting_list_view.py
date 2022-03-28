@@ -120,7 +120,7 @@ class MeetingListTest(TestCase):
         response = self.client.get(reverse("meeting_list", kwargs={'club_url_name': club.club_url_name}))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'club_meetings.html')
-        self.assertContains(response, 'Join Meeting')
+        self.assertContains(response, 'Join')
 
     def test_allowed_user_can_see_leave_button(self):
         self.client.login(username=self.owner.username, password="Password123")
@@ -131,7 +131,7 @@ class MeetingListTest(TestCase):
         response = self.client.get(reverse("meeting_list", kwargs={'club_url_name': club.club_url_name}))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'club_meetings.html')
-        self.assertContains(response, 'Leave Meeting')
+        self.assertContains(response, 'Leave')
 
     def test_invalid_club(self):
         self.client.login(username=self.member.username, password="Password123")

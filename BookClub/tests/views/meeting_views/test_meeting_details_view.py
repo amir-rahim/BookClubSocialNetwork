@@ -206,7 +206,6 @@ class MeetingDetailsViewTestCase(TestCase, LogInTester):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "meeting_details.html")
-        self.assertContains(response, "Meeting Administration")
         self.assertContains(response, "Manage Meeting")
 
     def test_user_has_no_admin_options(self):
@@ -214,7 +213,6 @@ class MeetingDetailsViewTestCase(TestCase, LogInTester):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "meeting_details.html")
-        self.assertNotContains(response, "Meeting Administration")
         self.assertNotContains(response, "Manage Meeting")
 
     def test_invalid_club(self):

@@ -124,32 +124,17 @@ class BookReviewViewTestCase(TestCase,LogInTester):
         self.client.login(username = self.creator_of_main_review.username,password = "Password123")
         response = self.client.get(self.main_review_url)
         self.assertContains(response,f"<button class=\"button is-danger\">Delete</button>")
-        self.assertContains(response,"""<button class="button is-success is-rounded" aria-label="Edit Review">
-                                    <span class="icon">
-                                        <i class="fa-solid fa-wand-magic-sparkles"></i>
-                                    </span>
-                                    <span>Edit</span>
-                                </button>""")
+        self.assertContains(response,"<button class=\"button is-success\" aria-label=\"Edit Review\">")
 
     def test_not_creator_cannot_see_book_review_buttons(self):
         response = self.client.get(self.main_review_url)
-        self.assertNotContains(response,"""<button class="button is-success is-rounded" aria-label="Edit Review">
-                                    <span class="icon">
-                                        <i class="fa-solid fa-wand-magic-sparkles"></i>
-                                    </span>
-                                    <span>Edit</span>
-                                </button>""")
+        self.assertNotContains(response,"<button class=\"button is-success\" aria-label=\"Edit Review\">")
 
         self.assertNotContains(response,f"<button class=\"button is-danger\">Delete</button>")
         self.client.login(username = self.other_user.username,password = "Password123")
 
         response2 = self.client.get(self.main_review_url)
-        self.assertNotContains(response2,"""<button class="button is-success is-rounded" aria-label="Edit Review">
-                                    <span class="icon">
-                                        <i class="fa-solid fa-wand-magic-sparkles"></i>
-                                    </span>
-                                    <span>Edit</span>
-                                </button>""")
+        self.assertNotContains(response2,"<button class=\"button is-success is-rounded\" aria-label=\"Edit Review\">")
         self.assertNotContains(response2,f"<button class=\"button is-danger\">Delete</button>")
 
     def test_not_creator_cannot_see_book_review_comment_buttons(self):

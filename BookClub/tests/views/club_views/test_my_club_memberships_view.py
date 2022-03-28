@@ -44,7 +44,7 @@ class MyClubsMembershipsViewTestCase(TestCase):
         clubs = list(response.context['clubs'])
         self.assertEqual(len(clubs), 0)
         self.assertContains(response,
-                            "You are not a member of any club, you can find clubs <a href=\"/club/\">here</a>")
+                            "You are not a member of any club, you can find clubs <a href=\"/club/\" class=\"is-link\"><i>here</i></a>.")
 
     def test_not_contains_club_not_member_of(self):
         self.client.login(username=self.user.username, password='Password123')

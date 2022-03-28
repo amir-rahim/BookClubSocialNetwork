@@ -32,7 +32,7 @@ class CommunityFeedReviewListView(TestCase):
         self.assertEqual(response.status_code, 200)
         reviews = list(response.context['reviews'])
         self.assertEqual(len(reviews), 0)
-        self.assertContains(response, 'There are no reviews, you can find books in the library <a href="/library/books/">here</a>.')
+        self.assertContains(response, 'There are no book reviews yet, you can find books in the library <a href="/library/books/" class="is-link"><i>here</i></a>.')
 
     def test_reviews_show(self):
         self.client.login(username=self.user.username, password='Password123')

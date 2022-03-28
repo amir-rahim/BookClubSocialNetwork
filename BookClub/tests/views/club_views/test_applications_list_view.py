@@ -51,7 +51,7 @@ class MyClubsMembershipsViewTestCase(TestCase):
         clubs = list(response.context['clubs'])
         self.assertEqual(len(clubs), 0)
         self.assertContains(response,
-                            "You have not applied to any clubs yet, find more <a href=\"/club/\">here</a>")
+                            "You have not applied to any clubs yet, find more <a href=\"/club/\" class=\"is-link\"><i>here</i></a>.")
 
     def test_owner_has_no_applications(self):
         self.client.login(username=self.owner.username, password='Password123')
@@ -62,7 +62,7 @@ class MyClubsMembershipsViewTestCase(TestCase):
         clubs = list(response.context['clubs'])
         self.assertEqual(len(clubs), 0)
         self.assertContains(response,
-                            "You have not applied to any clubs yet, find more <a href=\"/club/\">here</a>")
+                            "You have not applied to any clubs yet, find more <a href=\"/club/\" class=\"is-link\"><i>here</i></a>.")
 
     def test_moderator_has_no_applications(self):
         self.client.login(username=self.mod.username, password='Password123')
@@ -73,7 +73,7 @@ class MyClubsMembershipsViewTestCase(TestCase):
         clubs = list(response.context['clubs'])
         self.assertEqual(len(clubs), 0)
         self.assertContains(response,
-                            "You have not applied to any clubs yet, find more <a href=\"/club/\">here</a>")
+                            "You have not applied to any clubs yet, find more <a href=\"/club/\" class=\"is-link\"><i>here</i></a>.")
     
     """Testing table contents"""
 

@@ -10,11 +10,6 @@ class FollowingFolloweeTestCase(TestCase):
         'BookClub/tests/fixtures/default_relationships.json',
     ]
 
-    # test no followers
-    # test one follower
-    # test no followees
-    # test no followees
-
     def setUp(self):
         self.user1 = User.objects.get(pk=1)
         self.user2 = User.objects.get(pk=2)
@@ -38,7 +33,7 @@ class FollowingFolloweeTestCase(TestCase):
         self.client.login(username=self.user1.username, password="Password123")
         response = self.client.get(self.url)
         self.assertTemplateUsed(response, 'following_followers.html')
-        self.assertContains(response,"1 follower")
+        self.assertContains(response,"1 Follower")
         self.assertContains(response, self.user2.username)
 
     def test_no_followee(self):
@@ -55,5 +50,5 @@ class FollowingFolloweeTestCase(TestCase):
         self.client.login(username=self.user1.username, password="Password123")
         response = self.client.get(self.url)
         self.assertTemplateUsed(response, 'following_followers.html')
-        self.assertContains(response, "1 following")
+        self.assertContains(response, "1 Following")
         self.assertContains(response, self.user2.username)

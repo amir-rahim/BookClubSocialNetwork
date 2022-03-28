@@ -154,7 +154,7 @@ class MemberListTestCase(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'club_members.html')
-        self.assertContains(response, "There is no moderators to this club.")
+        self.assertContains(response, "There are no moderators in this club.")
 
     def test_no_members(self):
         self.client.login(username=self.jack.username, password="Password123")
@@ -165,4 +165,4 @@ class MemberListTestCase(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'club_members.html')
-        self.assertContains(response, "There is no members to this club.")
+        self.assertContains(response, "There are no members in this club.")
