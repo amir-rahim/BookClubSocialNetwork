@@ -1,7 +1,7 @@
 <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
     <div class="hero-body">
         <div class="container">
-            <h1 class="title">{{ followees.count }} following</h1>
+            <h1 class="title">{{ followees.count }} Following</h1>
         </div>
     </div>
 </section>
@@ -42,9 +42,9 @@
 </div>
 {% endfor %}
 {% else %}
-<hr class="solid">
-<p style="text-align: center;">
-    <i>This user isn't following anyone.</i>
+<hr>
+<p style="text-align: center;" class="has-text-grey">
+    This user isn't following anyone.
 </p>
-<hr class="solid">
+<hr>
 {% endif %}
