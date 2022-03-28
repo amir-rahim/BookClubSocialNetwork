@@ -11,6 +11,9 @@
         {% elif field|widget_type == "bookselectorinput" %}
             <label for="{{ field.auto_id }}" class="label">{{ field.label }}</label>
             {% render_field field class="input" %}
+        {% elif field|widget_type == "bookcheckinput" %}
+            <label for="{{ field.auto_id }}" class="label">{{ field.label }}</label>
+            {% render_field field class="input" %}
         {% elif field|widget_type == 'datetimeinput' %}
             <div class="control">
                 <label for="{{ field.auto_id }}" class="label">{{ field.label }}</label>

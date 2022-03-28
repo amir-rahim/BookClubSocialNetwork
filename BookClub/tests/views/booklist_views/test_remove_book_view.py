@@ -21,11 +21,10 @@ class RemoveBookViewTestCase(TestCase, LogInTester):
         self.booklist = BookList.objects.get(pk=1)
         self.user = User.objects.get(pk=1)
 
-        self.url = reverse('remove_book', kwargs={'username': self.user.username, 'booklist_id': self.booklist.id,
-                                                  'book_id': self.book.id})
+        self.url = reverse('remove_book', kwargs={'booklist_id': self.booklist.id, 'book_id': self.book.id})
 
     def test_url(self):
-        self.assertEqual(self.url, f'/user/{self.user.username}/lists/{self.booklist.id}/{self.book.id}/delete')
+        self.assertEqual(self.url, f'/library/lists/{self.booklist.id}/{self.book.id}/delete/')
 
     def test_redirect_when_not_logged_in(self):
         self.assertFalse(self._is_logged_in())
@@ -37,11 +36,8 @@ class RemoveBookViewTestCase(TestCase, LogInTester):
 
         self.client.login(username=self.user.username, password='Password123')
         self.assertTrue(self._is_logged_in())
-        response = self.client.get(reverse('remove_book',
-                                           kwargs={'username': self.user.username, 'booklist_id': self.booklist.id,
-                                                   'book_id': self.book.id}))
-        redirect_url = reverse('user_booklist',
-                               kwargs={'username': self.user.username, 'booklist_id': self.booklist.id})
+        response = self.client.get(reverse('remove_book', kwargs={'booklist_id': self.booklist.id, 'book_id': self.book.id}))
+        redirect_url = reverse('user_booklist', kwargs={'booklist_id': self.booklist.id})
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_successful_remove_book(self):
@@ -49,7 +45,6 @@ class RemoveBookViewTestCase(TestCase, LogInTester):
         self.assertTrue(self._is_logged_in())
         before_count = len(self.booklist.get_books())
         response = self.client.post(reverse('remove_book', kwargs={
-            'username': self.user.username,
             'booklist_id': self.booklist.id,
             'book_id': self.book.id
         }))
@@ -66,7 +61,6 @@ class RemoveBookViewTestCase(TestCase, LogInTester):
         self.assertTrue(self._is_logged_in())
         before_count = len(self.booklist.get_books())
         response = self.client.post(reverse('remove_book', kwargs={
-            'username': self.user.username,
             'booklist_id': self.booklist.id,
             'book_id': self.book.id
         }))
@@ -82,7 +76,6 @@ class RemoveBookViewTestCase(TestCase, LogInTester):
         self.assertTrue(self._is_logged_in())
         before_count = len(self.booklist.get_books())
         response = self.client.post(reverse('remove_book', kwargs={
-            'username': self.user.username,
             'booklist_id': self.booklist.id,
             'book_id': 100
         }))
@@ -98,7 +91,6 @@ class RemoveBookViewTestCase(TestCase, LogInTester):
         self.assertTrue(self._is_logged_in())
         before_count = len(self.booklist.get_books())
         response = self.client.post(reverse('remove_book', kwargs={
-            'username': self.user.username,
             'booklist_id': 10000,
             'book_id': self.book.id
         }))

@@ -1,9 +1,9 @@
 {% extends 'base_content.html' %}
 {% block page_title %}
-    My Club Memberships
+    Club Memberships
 {% endblock page_title %}
 {% block page_subtitle %}
-    Find the Book Clubs you have memberships for here!
+    Find the Book Club memberships here
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
@@ -80,13 +80,16 @@
                     <tbody>
                         {% for club in clubs %}
                             <!-- For each available club, add a row linked to the corresponding club dashboard page -->
-                            <tr onclick="window.location='{% url 'club_dashboard' club.club_url_name %}';">
+                            <tr>
                                 <td>{{ club.name }}</td>
                                 <td>{{ club.tagline }}</td>
                                 <td>{{ club.description }}</td>
                                 <td>
-                                    <button class="button is-fullwidth is-success">View</button>
-                                    <button class="button is-fullwidth is-danger">Leave</button>
+                                    <a href="{{ club.get_absolute_url }}" class="button is-link is-fullwidth">View</a>
+                                    <form class="" action="{% url 'leave_club' club_url_name=club.club_url_name %}" method="post">
+                                      {% csrf_token %}
+                                      <button type="submit" class="button is-fullwidth is-danger">Leave</button>
+                                    </form>
                                 </td>
                             </tr>
                         {% endfor %}

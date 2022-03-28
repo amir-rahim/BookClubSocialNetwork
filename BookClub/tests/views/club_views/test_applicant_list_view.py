@@ -72,16 +72,14 @@ class ApplicantListTestCase(TestCase):
         self.assertTemplateUsed(response, 'applicant_list.html')
         self.assertContains(response, "Club Administration")
         self.assertContains(response, "Manage Club")
-        self.assertContains(response, "Club Settings")
 
     def test_mod_has_no_admin_options(self):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'applicant_list.html')
-        self.assertNotContains(response, "Club Administration")
+        self.assertContains(response, "Club Administration")
         self.assertNotContains(response, "Manage Club")
-        self.assertNotContains(response, "Club Settings")
 
     def test_member_redirects(self):
         self.client.login(username=self.jack.username, password="Password123")

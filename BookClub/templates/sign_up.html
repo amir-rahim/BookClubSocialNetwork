@@ -4,17 +4,15 @@
         <div class="hero-body is-link">
             <div class="container has-text-centered">
                 <div class="column is-4 is-offset-4">
+                  <div class="has-text-centered">
                     <h3 class="title has-text-black">Sign Up</h3>
                     <hr class="login-hr">
                     <p class="subtitle has-text-black">
                         Please sign up to access member-only features.
                     </p>
+                    <br>
+                  </div>
                     <div class="box">
-                        <figure class="avatar" style="padding-bottom: 20px;">
-                            <img class="is-rounded"
-                                 src="https://www.gravatar.com/avatar/45209b754e699e7d18337a3ddbb08ff7?size=120&default=mp"
-                                 alt="profile picture">
-                        </figure>
                         {% if messages %}
                             {% for message in messages %}
                                 {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
@@ -31,34 +29,43 @@
                         <form action="{% url 'sign_up' %}" method="post">
                             {% csrf_token %}
                             <div class="field">
-                                <div class="control" style="padding-bottom: 20px;">
+                                <div class="control" style="padding-bottom: 10px;">
                                     <input name="username"
                                            class="input is-large"
                                            type="username"
                                            placeholder="Username"
                                            autofocus="">
+                                    <div style="font-size: 10pt; color: red; padding-top: 5px;">  {{ form.username.errors }} </div>
                                 </div>
-                                <div class="control" style="padding-bottom: 20px;">
+                                <div class="control" style="padding-bottom: 10px;">
                                     <input name="email"
                                            class="input is-large"
                                            type="email"
                                            placeholder="Email"
                                            autofocus="">
+                                    <div style="font-size: 10pt; color: red; padding-top: 5px;"> {{ form.email.errors }} </div>
                                 </div>
-                                <div class="control" style="padding-bottom: 20px;">
+                                <div class="control">
                                     <input name="new_password"
                                            class="input is-large"
                                            type="password"
+                                           id="password-field"
                                            placeholder="New Password">
+                                    <span class="has-text-grey">Show/Hide Password <i toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></i></span>
+                                    <div style="font-size: 10pt; color: red; padding-top: 5px;"> {{ form.new_password.errors }} </div>
                                 </div>
-                                <div class="control" style="padding-bottom: 20px;">
+                                <div class="control" style="padding-bottom: 10px;">
                                     <input name="password_confirmation"
                                            class="input is-large"
                                            type="password"
+                                           id="password-field2"
                                            placeholder="Confirm Password">
+                                    <span class="has-text-grey">Show/Hide Password <i toggle="#password-field2" class="fa fa-fw fa-eye field-icon toggle-password"></i></span>
+                                    <div style="font-size: 10pt; color: red; padding-top: 5px;"> {{ form.password_confirmation.errors }} </div>
                                 </div>
-                                <div class="control" style="padding-bottom: 20px;">
+                                <div class="control" style="padding-bottom: 10px;">
                                     <textarea name="public_bio" class="textarea" placeholder="Public Bio"></textarea>
+                                    <div style="font-size: 10pt; color: red; padding-top: 5px;"> {{ form.public_bio.errors }} </div>
                                 </div>
                                 <div class="control">
                                     <button class="button is-block is-info is-large is-fullwidth">
@@ -70,7 +77,7 @@
                     </div>
                     <p class="has-text-grey">
                         <a href="{% url 'login' %}">Login</a> &nbsp;·&nbsp;
-                        <a href="#">Need Help?</a>
+                        <a href="{% url 'home' %}">Back to Home</a>
                     </p>
                 </div>
             </div>

@@ -162,6 +162,9 @@ class MeetingTestCase(TestCase):
     def test_get_type(self):
         self.assertEqual(self.meeting.get_type(), "B")
 
+    def test_get_type_name(self):
+        self.assertEqual(self.meeting.get_type_name(), "Book")
+
     def test_get_book(self):
         self.assertEqual(self.meeting.get_book(), self.book)
 

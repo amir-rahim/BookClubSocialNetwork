@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.shortcuts import redirect, render, reverse
 from django.views.generic import ListView, FormView
+from django.contrib.contenttypes.models import ContentType
 
 from BookClub.forms import AddBookForm
 from BookClub.models import Book, BookList
@@ -18,7 +19,7 @@ class BookListView(ListView):
     model = Book
     template_name = "library_books.html"
     context_object_name = 'books'
-    paginate_by = 20
+    paginate_by = 10
 
     def get_queryset(self):
         object_list = Book.objects.all()
@@ -30,6 +31,7 @@ class BookListView(ListView):
         context['lists'] = None
         if not user.is_anonymous:
             context['lists'] = BookList.objects.filter(creator=user)
+        context['content_type'] = ContentType.objects.get_for_model(self.model).pk
             
         return context
 

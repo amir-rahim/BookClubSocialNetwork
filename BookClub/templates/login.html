@@ -40,9 +40,11 @@
                                 </div>
                                 <div class="control" style="padding-bottom: 20px;">
                                     <input name="password"
-                                           class="input is-large"
-                                           type="password"
-                                           placeholder="Your Password">
+                                       class="input is-large"
+                                       type="password"
+                                       id="password-field"
+                                       placeholder="Your Password">
+                                    <span class="has-text-grey">Show/Hide Password <i toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></i></span>
                                 </div>
                                 <div class="control">
                                     <button class="button is-block is-info is-large is-fullwidth">
@@ -54,11 +56,13 @@
                     </div>
                     <p class="has-text-grey">
                         <a href="{% url 'sign_up' %}">Sign Up</a> &nbsp;·&nbsp;
-                        <a href="#">Forgot Password</a> &nbsp;·&nbsp;
-                        <a href="#">Need Help?</a>
+                        <a href="{% url 'reset_password' %}">Forgot Password</a> &nbsp;·&nbsp;
+                        <a href="{% url 'home' %}">Back to Home</a>
                     </p>
                 </div>
             </div>
         </div>
     </section>
+
+
 {% endblock %}

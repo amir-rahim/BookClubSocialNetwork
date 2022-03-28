@@ -1,0 +1,47 @@
+<div class="control is-expanded">
+    <input class="input is-rounded"
+           type="text"
+           name="q"
+           id="user_input"
+           placeholder="Search"/>
+</div>
+<div id="replaceable_content" class="column is-12">
+        <p id="loading" class="is-centered" style="margin-bottom:100px;">
+            <strong>Loading</strong>
+        </p>
+        <progress class="progress is-primary" max="100">30%</progress>
+</div>
+{% load getcontenttype %}
+{% get_content_type_from_queryset content as content_type %}
+<script>
+    const user_input = $("#user_input")
+    const books_div = $("#replaceable_content")
+    const view = "/search_books/"
+    const delay_by_in_ms = 700
+    var request_parameters = {'content_type': {{ content_type }}}
+    let scheduled_function = false
+
+    let call_search = function (view, request_parameters) {
+        $.getJSON(view, request_parameters).done(response => {
+            books_div.fadeTo('fast', 0).promise().then(() => {
+                books_div.html(response['html_from_view'])
+                books_div.fadeTo('fast', 1)
+            })
+        })
+    }
+
+    user_input.on('keyup', function () {
+        request_parameters['q'] = $(this).val()
+        if (scheduled_function){
+            clearTimeout(scheduled_function)
+        }
+        scheduled_function = setTimeout(call_search, delay_by_in_ms, view, request_parameters)
+    })
+    
+    $('#loading').ready(
+        function() {
+            call_search(view, request_parameters)
+        }
+    )
+    
+</script>

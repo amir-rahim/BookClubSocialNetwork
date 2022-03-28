@@ -28,10 +28,13 @@
                     </p>
                     <ul class="menu-list">
                         <li>
-                            <a href="{% url 'booklists_list' username=user.username %}">{{ user.get_username }} Book Lists</a>
+                            <a href="{% url 'booklists_list' %}">{{ user.get_username }} Book Lists</a>
                         </li>
                         <li>
-                            <a href="{% url 'create_booklist' username=user.username %}">Create Book Lists</a>
+                            <a href="{% url 'saved_booklists' %}">Saved Book Lists</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'create_booklist' %}">Create Book Lists</a>
                         </li>
                     </ul>
                 {% endif %}
@@ -40,7 +43,7 @@
                 </p>
                 <ul class="menu-list">
                     <li>
-                        <a href="#">AI Recommended Books</a>
+                        <a href="{% url 'user_recommendations' %}">AI Recommended Books</a>
                     </li>
                 </ul>
                 {% if user.is_authenticated %}
@@ -49,7 +52,8 @@
                     </p>
                     <ul class="menu-list">
                         <li>
-                            <a href="{% url 'library_books' %}">View Personal Reviews</a>
+                            <a href="{% url 'personal_reviews' %}">View Personal Reviews</a>
+                            <a href="{% url 'community_reviews' %}">View Community Reviews</a>
                         </li>
                     </ul>
                 {% endif %}
@@ -79,7 +83,7 @@
                     </div>
                 </div>
             </section>
-            {% include 'partials/book_search.html' %}
+            {% include 'partials/book_search.html' with content=books %}
         </div>
     </div>
 {% endblock content %}

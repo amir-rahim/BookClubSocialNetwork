@@ -1,13 +1,14 @@
 """User Related Views"""
 from django.contrib import messages
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Exists, Q, OuterRef
-from django.shortcuts import reverse
-from django.views.generic import FormView, TemplateView, UpdateView
+from django.shortcuts import redirect, reverse
+from django.views.generic import FormView, TemplateView, UpdateView, View
 
 from BookClub.forms.user_forms import EditProfileForm, ChangePasswordForm
-from BookClub.models import User, ClubMembership, Club
+from BookClub.models import User, ClubMembership, Club, BookList
+from BookClub.helpers import *
 
 
 class UserDashboardView(LoginRequiredMixin, TemplateView):
@@ -16,26 +17,22 @@ class UserDashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'user_dashboard.html'
 
     def get_context_data(self, **kwargs):
-        user = self.request.user
         context = super(UserDashboardView, self).get_context_data(**kwargs)
-        context['gravatar'] = user.gravatar
-        context['username'] = user.username
-        context['email'] = user.email
-        context['public_bio'] = user.public_bio
-        return context
+        if self.kwargs.get('username') is not None:
+            user = User.objects.get(username=self.kwargs['username'])
+            context['own_profile'] = False
+            context['email'] = ''
+        else:
+            user = self.request.user
+            context['own_profile'] = True
+            context['email'] = user.email
 
-
-class UserProfileView(LoginRequiredMixin, TemplateView):
-    """Class based view for user profile"""
-    model = User
-    template_name = 'user_profile.html'
-
-    def get_context_data(self, **kwargs):
-        user = User.objects.get(username=self.kwargs['username'])
-        context = super(UserProfileView, self).get_context_data(**kwargs)
         context['gravatar'] = user.gravatar
         context['username'] = user.username
         context['public_bio'] = user.public_bio
+        context['booklist_count'] = BookList.objects.filter(creator=user).count()
+        context['club_count'] = ClubMembership.objects.filter(user=user).count()
+        context['reputation'] = get_user_reputation(user)
         return context
 
 
@@ -61,22 +58,6 @@ class UserProfileMembershipsView(LoginRequiredMixin, TemplateView):
         context['public_bio'] = user.public_bio
         context['clubs'] = self.get_queryset()
         return context
-
-
-class UserProfileFollowingView(LoginRequiredMixin, TemplateView):
-    """Class based view for user profile following page"""
-    model = User
-    template_name = 'user_profile_following.html'
-
-    def get_context_data(self, **kwargs):
-        user = User.objects.get(username=self.kwargs['username'])
-        context = super(UserProfileFollowingView, self).get_context_data(**kwargs)
-        context['gravatar'] = user.gravatar
-        context['username'] = user.username
-        context['public_bio'] = user.public_bio
-        context['following'] = list()  # to be updated with following when implemented
-        return context
-
 
 class EditProfileView(LoginRequiredMixin, UpdateView):
     """Class based view for editing user profile"""
@@ -126,3 +107,20 @@ class ChangePasswordView(LoginRequiredMixin, FormView):
 
         messages.add_message(self.request, messages.SUCCESS, "Password updated!")
         return reverse('user_dashboard')
+
+class DeleteUserAccountView(LoginRequiredMixin, View):
+    redirect_location = 'home'
+
+    def action(self, user):
+        user.delete()
+        messages.success(self.request, "You have successfully deleted your account.")
+    
+    def post(self, request, *args, **kwargs):
+        user = self.request.user
+        self.action(user)
+
+        return redirect(self.redirect_location)
+    
+    def get(self, request, *args, **kwargs):
+        self.post(self, request, *args, **kwargs)
+        return redirect(self.redirect_location)

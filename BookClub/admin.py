@@ -13,6 +13,15 @@ class UserAdmin(admin.ModelAdmin):
     ]
 
 
+@admin.register(UserToUserRelationship)
+class UserAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for User to User relationships."""
+
+    list_display = [
+        'source_user', 'target_user', 'relationship_type'
+    ]
+
+
 @admin.register(Club)
 class ClubAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for clubs."""
@@ -36,7 +45,7 @@ class BookAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for Books ."""
 
     list_display = [
-        'title', 'ISBN', 'author', 'publicationYear', 'publisher'
+        'id', 'title', 'ISBN', 'author', 'publicationYear', 'publisher'
     ]
 
 
@@ -124,4 +133,20 @@ class OptionAdmin(admin.ModelAdmin):
 
     list_display = [
         'poll', 'text', 'book'
+    ]
+
+@admin.register(BookShelf)
+class BookShelfAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for Book Shelf."""
+
+    list_display = [
+        'user', 'book', 'status'
+    ]
+
+@admin.register(FeaturedBooks)
+class FeaturedBooksAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for Featured Books."""
+
+    list_display = [
+        'club', 'book', 'reason'
     ]

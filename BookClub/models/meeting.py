@@ -6,6 +6,9 @@ from BookClub.models import User, Club, Book
 
 
 class Meeting(models.Model):
+
+    class Meta:
+        ordering=['-meeting_time']
     class MeetingType(models.TextChoices):
         BOOK = 'B'
         CLUB = 'C'
@@ -15,6 +18,7 @@ class Meeting(models.Model):
     organiser = models.ForeignKey(User, related_name='meeting_organiser', blank=False, on_delete=models.CASCADE)
     club = models.ForeignKey(Club, blank=False, on_delete=models.CASCADE)
     meeting_time = models.DateTimeField(blank=False)
+    meeting_end_time = models.DateTimeField(blank=False)
     created_on = models.DateField(auto_now_add=True, editable=False)
     location = models.CharField(max_length=120, blank=True)
     title = models.CharField(max_length=120, blank=False)
@@ -55,6 +59,15 @@ class Meeting(models.Model):
 
     def get_type(self):
         return self.type
+
+    def get_type_name(self):
+        type_names = {
+            'B': 'Book',
+            'C': 'Club',
+            'S': 'Social',
+            'O': 'Other'
+        }
+        return type_names[self.type]
 
     def get_book(self):
         return self.book

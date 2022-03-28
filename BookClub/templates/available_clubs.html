@@ -65,55 +65,7 @@
             </section>
             {% if clubs %}
                 <!-- If there are clubs available to the logged-in user -->
-                <div class="table-container">
-                    <table class="table is-hoverable is-fullwidth"
-                           id="table-clubs"
-                           data-toggle="table"
-                           data-pagination="true">
-                        <thead>
-                            <tr>
-                                <th scope="col">Club Name</th>
-                                <th scope="col">Tagline</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Public/Private</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for club in clubs %}
-                                <!-- For each available club, add a row linked to the corresponding club dashboard page -->
-                                <tr onclick="window.location='{% url 'club_dashboard' club.club_url_name %}';">
-                                    <td>{{ club.name }}</td>
-                                    <td>{{ club.tagline }}</td>
-                                    <td>{{ club.description }}</td>
-                                    <td>
-                                        {% if club.is_private %}
-                                            Private
-                                        {% else %}
-                                            Public
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        <button class="button is-fullwidth is-success">View</button>
-                                        {% if club.is_private == True %}
-                                            <form method="post"
-                                                  action="{% url 'join_club' club_url_name=club.club_url_name %}">
-                                                {% csrf_token %}
-                                                <button type="submit" class="button is-fullwidth is-success">Apply</button>
-                                            </form>
-                                        {% else %}
-                                            <form method="post"
-                                                  action="{% url 'join_club' club_url_name=club.club_url_name %}">
-                                                {% csrf_token %}
-                                                <button type="submit" class="button is-fullwidth is-info">Join</button>
-                                            </form>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+                {% include 'partials/club_search.html' with content=clubs %}
             {% else %}
                 <!-- If there is no club available to the logged-in user -->
                 <hr>
@@ -124,12 +76,4 @@
             {% endif %}
         </div>
     </div>
-    <script>
-const dataTable = new simpleDatatables.DataTable("#table-clubs", {
-    fixedHeight: true,
-    columns: [
-      {select: [1], sortable:false}
-    ]
-})
-    </script>
 {% endblock %}

@@ -1,0 +1,41 @@
+{% if page_obj %}
+    <div class="table-container">
+        <table class="table is-hoverable is-fullwidth is-scrollable"
+               id="table-books"
+               data-toggle="table">
+            <thead>
+                <tr>
+                    <th scope="col">Cover</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Author</th>
+                    <th scope="col">Select</th>
+                </thead>
+                <tbody>
+                    {% for book in page_obj %}
+                        <tr>
+                            <td>
+                                {% if book.get_s_size > 50 %}
+                                    <img src="//images.weserv.nl/?url={{ book.imageS }}" alt=""/>
+                                {% else %}
+                                    <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=36&w=22"
+                                         alt=""/>
+                                {% endif %}
+                            </td>
+                            <td>{{ book.title }}</td>
+                            <td>{{ book.author }}</td>
+                            <td>
+                                <input type="checkbox" name="book" value="{{ book.id }} class='checkbox'"/>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% include 'partials/pagination_ajax.html' with page_obj=page_obj %}
+    {% else %}
+        <hr />
+        <p style="text-align: center">
+            There are no available books at the moment.
+        </p>
+        <hr />
+    {% endif %}

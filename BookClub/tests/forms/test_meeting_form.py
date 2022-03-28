@@ -27,6 +27,7 @@ class MeetingFormTestCase(TestCase):
             "title": "Weekly book review",
             "description": "This is our first weekly meeting for this weeks book!",
             "meeting_time": "2022-02-26 15:30:00",
+            "meeting_end_time": "2022-02-26 16:30:00",
             "location": "Maughan Library",
             "type": "B",
             "book": self.book.id,
@@ -41,6 +42,7 @@ class MeetingFormTestCase(TestCase):
         self.assertIn('title', form.fields)
         self.assertIn('description', form.fields)
         self.assertIn('meeting_time', form.fields)
+        self.assertIn('meeting_end_time', form.fields)
         self.assertIn('location', form.fields)
         self.assertIn('type', form.fields)
         self.assertIn('book', form.fields)
@@ -63,6 +65,7 @@ class MeetingFormTestCase(TestCase):
         self.assertEqual(meeting.title, self.form_input['title'])
         self.assertEqual(meeting.description, self.form_input['description'])
         self.assertEqual(meeting.meeting_time.replace(tzinfo=None), datetime.strptime(self.form_input['meeting_time'], '%Y-%m-%d %H:%M:%S'))
+        self.assertEqual(meeting.meeting_end_time.replace(tzinfo=None), datetime.strptime(self.form_input['meeting_end_time'], '%Y-%m-%d %H:%M:%S'))
         self.assertEqual(meeting.location, self.form_input['location'])
         self.assertEqual(meeting.type, self.form_input['type'])
         self.assertEqual(meeting.book.id, self.form_input['book'])
@@ -90,3 +93,8 @@ class MeetingFormTestCase(TestCase):
         self.form_input['type'] = Meeting.MeetingType.SOCIAL
         form = MeetingForm(data=self.form_input)
         self.assertTrue(form.is_valid())
+
+    def test_meeting_end_time_must_be_after_meeting_time(self):
+        self.form_input['meeting_end_time'] = "2022-02-26 14:30:00"
+        form = MeetingForm(data=self.form_input)
+        self.assertFalse(form.is_valid())

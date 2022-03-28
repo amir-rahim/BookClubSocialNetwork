@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 
-from BookClub.models import User, Book, UserCreatedObject
+from BookClub.models import Book, UserCreatedObject
 
 
 class BookList(UserCreatedObject):
@@ -10,13 +10,16 @@ class BookList(UserCreatedObject):
     books = models.ManyToManyField(Book, blank=True)
 
     def get_absolute_url(self):
-        return reverse('user_booklist', kwargs={'username': self.creator.username, 'booklist_id': self.pk})
+        return reverse('user_booklist', kwargs={'booklist_id': self.pk})
 
     def get_delete_url(self):
-        return reverse('delete_booklist', kwargs={'username': self.creator.username, 'list_id': self.pk})
+        return reverse('delete_booklist', kwargs={'booklist_id': self.pk})
 
     def __str__(self):
         return f"Book List '{self.title}' with {self.books.count()} titles"
+
+    def get_delete_str(self):
+        return self.__str__()
 
     def get_books(self):
         return self.books.all()
@@ -26,3 +29,12 @@ class BookList(UserCreatedObject):
 
     def remove_book(self, book):
         self.books.remove(book)
+
+    def get_short_contents(self):
+        return_str = ''
+        for book in self.books.all().order_by('pk'):
+            return_str += f'{book.get_short_description()}; '
+
+        if len(return_str) > 75:
+            return_str = return_str[:72] + '...'
+        return return_str

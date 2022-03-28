@@ -1,5 +1,3 @@
-import random
-
 from django.test import TestCase, tag
 from django.urls import reverse
 

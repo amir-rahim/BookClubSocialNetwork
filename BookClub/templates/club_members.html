@@ -8,63 +8,7 @@
 {% block content %}
     <div class="columns">
         <div class="column is-3">
-            <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
-                <p class="menu-label">
-                    Club Views
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'club_dashboard' club.club_url_name %}">Dashboard</a>
-                    </li>
-                    <li>
-                        <a class="is-active" href="{% url 'member_list' club.club_url_name %}"><b>Member List</b></a>
-                    </li>
-                    <li>
-                        <a href="{% url 'applicant_list' club.club_url_name %}">Applicant List</a>
-                    </li>
-                </ul>
-                {% if user == club.get_club_owner %}
-                    <p class="menu-label">
-                        Club Administration
-                    </p>
-                    <ul class="menu-list">
-                        <li>
-                            <a href="{% url 'edit_club' club.club_url_name %}">Manage Club</a>
-                        </li>
-                        <li>
-                            <a>Club Settings</a>
-                        </li>
-                    </ul>
-                {% endif %}
-                <p class="menu-label">
-                    Forum & Reviews
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a>Forum</a>
-                    </li>
-                    <li>
-                        <a>Members Reviews</a>
-                    </li>
-                </ul>
-                <p class="menu-label">
-                    Meetings
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'meeting_list' club.club_url_name %}">All Meetings</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'create_meeting' club.club_url_name %}">Create a Meeting</a>
-                    </li>
-                    <li>
-                        <a>Joined Upcoming Meetings</a>
-                    </li>
-                    <li>
-                        <a>Prior Meetings</a>
-                    </li>
-                </ul>
-            </aside>
+            {% include 'partials/club_aside.html' with current_club=club %}
         </div>
         <div class="column is-9">
             <nav class="breadcrumb"
@@ -98,17 +42,7 @@
                 Owner
             </p>
             {% if user == club.get_club_owner %}
-                <div class="delete">
-                    <form method="post"
-                          action="{% url 'delete_club' club_url_name=club.club_url_name %}">
-                        {% csrf_token %}
-                        <button type="submit"
-                                class="button is-danger is-small"
-                                onclick="return confirm('Confirm you want to delete club {{ club.name }}?');">
-                            Delete Club
-                        </button>
-                    </form>
-                </div>
+                {% include 'partials/delete_button_and_modal.html' with delete_item=club delete_modal_id=club.pk %}
             {% endif %}
             <hr class="solid">
             <div class="columns">
@@ -132,7 +66,7 @@
                                     </div>
                                     <hr class="solid">
                                     <div class="buttons">
-                                        <button class="button is-warning is-small" style="margin-right: 5px">View</button>
+                                        <button onclick="window.location='{% url 'user_profile' owner.username %}';" class="button is-warning is-small" style="margin-right: 5px">View</button>
                                     </div>
                                 </div>
                             </div>
@@ -171,7 +105,7 @@
                                             </div>
                                             <hr class="solid">
                                             <div class="buttons">
-                                                <button class="button is-warning is-small" style="margin-right: 5px">View</button>
+                                                <button onclick="window.location='{% url 'user_profile' moderator.username %}';" class="button is-warning is-small" style="margin-right: 5px">View</button>
                                                 {% if request_user.membership == 2 %}
                                                     <form method="post"
                                                           action="{% url 'transfer_ownership' club_url_name=club.club_url_name %}">
@@ -251,7 +185,7 @@
                                             </div>
                                             <hr class="solid">
                                             <div class="buttons">
-                                                <button class="button is-warning is-small">View</button>
+                                                <button onclick="window.location='{% url 'user_profile' member.username %}';" class="button is-warning is-small">View</button>
                                                 {% if request_user.membership == 2 %}
                                                     <form method="post"
                                                           action="{% url 'promote_member' club_url_name=club.club_url_name %}">

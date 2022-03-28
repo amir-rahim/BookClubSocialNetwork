@@ -12,21 +12,30 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 
+import environ
+
+# Initialise environment variables
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+environ.Env.read_env()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%af@p+7sw$$0+onbzcj6xugj7v2f*k=oco%h@&wsadm@3wglvk'
+SECRET_KEY = env('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True # set to False on deployment to display user friendly 404
 
 ALLOWED_HOSTS = []
-
+# ALLOWED_HOSTS = ['.localhost'] # Uncomment this to see the user-friendly 404, and add current domain name to the list
+                # e.g. 'novella-books.herokuapp.com'
 
 # Application definition
 
@@ -40,6 +49,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'widget_tweaks',
+    'verify_email.apps.VerifyEmailConfig',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -65,14 +76,14 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'BookClub.form_processor.ForumPostForm'
+                'BookClub.form_processor.ForumPostForm',
+                'BookClub.form_processor.BooklistContext'
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'BookClubSocialNetwork.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -83,7 +94,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -103,7 +113,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -117,13 +126,12 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"),]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"), ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
@@ -143,8 +151,30 @@ AUTH_USER_MODEL = 'BookClub.User'
 try:
     if '/app' in os.environ['HOME']:
         import django_heroku
+
         django_heroku.settings(locals())
 except:
     if '/app' in os.path.expanduser('~'):
         import django_heroku
+
         django_heroku.settings(locals())
+
+# SMTP Configuration
+# For Django Email Backend
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = env('EMAIL_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_PASSWORD')
+
+EMAIL_USE_TLS = True
+
+DEFAULT_FROM_EMAIL = 'noreply<no_reply@domain.com>'
+
+EXPIRE_AFTER = "1h" # Will expire after one hour from link generation
+
+HTML_MESSAGE_TEMPLATE = 'account_verification/verification_email.html'
+VERIFICATION_SUCCESS_TEMPLATE = None
+VERIFICATION_FAILED_TEMPLATE = 'account_verification/verification_email_failed.html'
+REQUEST_NEW_EMAIL_TEMPLATE = 'account_verification/verification_email_request.html'
+LINK_EXPIRED_TEMPLATE = 'account_verification/verification_email_expired.html'
