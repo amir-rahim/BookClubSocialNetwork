@@ -27,13 +27,16 @@ class AgendaView(LoginRequiredMixin, ListView):
         """Generate context data to be shown in the template."""
         club_ids = ClubMembership.objects.filter(user=self.request.user).values_list('club', flat=True)
         clubs = Club.objects.filter(id__in=club_ids)
-        not_joined = Meeting.objects.filter(club__in=clubs).exclude(members=self.request.user.id)
-        all_meetings = Meeting.objects.filter(club__in=clubs)
+
         context = super().get_context_data(**kwargs)
         context['meetings'] = self.get_queryset()
-        context['today'] = datetime.date.today()
-        context['not_joined'] = not_joined
-        context['all_meetings'] = all_meetings
+        today = datetime.date.today()
+        context['joined_today'] = Meeting.objects.filter(club__in=clubs, members=self.request.user.id, meeting_time__date=today).order_by('meeting_time')
+        context['joined_upcoming'] = Meeting.objects.filter(club__in=clubs, members=self.request.user.id, meeting_time__date__gt=today).order_by('meeting_time')
+        context['not_joined_today'] = Meeting.objects.filter(club__in=clubs, meeting_time__date=today).exclude(members=self.request.user.id).order_by('meeting_time')
+        context['not_joined_upcoming'] = Meeting.objects.filter(club__in=clubs, meeting_time__date__gt=today).exclude(members=self.request.user.id).order_by('meeting_time')
+        context['all_meetings_today'] = Meeting.objects.filter(club__in=clubs, meeting_time__date=today).order_by('meeting_time')
+        context['all_meetings_upcoming'] = Meeting.objects.filter(club__in=clubs, meeting_time__date__gt=today).order_by('meeting_time')
         context['current_user'] = self.request.user
 
         return context
