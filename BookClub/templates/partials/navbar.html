@@ -23,7 +23,7 @@
             </div>
             <a class="navbar-item" href="{% url 'agenda' %}">Agenda</a>
             <a class="navbar-item" href="{% url 'library_dashboard' %}">Library</a>
-            <a class="navbar-item" href="{% url 'global_forum' %}">Global Forum</a>
+            <a class="navbar-item" href="{% url 'global_forum' %}">Forums</a>
             {% if user.is_authenticated %}
                 {% include 'partials/dropdown_authenticated.html' %}
             {% else %}
