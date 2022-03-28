@@ -1,14 +1,14 @@
 {% extends 'base_content.html' %}
 {% block page_title %}
-    Club Member List
+    {{ club.name }}
 {% endblock page_title %}
 {% block page_subtitle %}
-    This is the list of members for this club.
+    {{ club.tagline }}
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
         <div class="column is-3">
-            {% include 'partials/club_aside.html' with current_club=club %}
+            {% include 'partials/aside_menu/club_aside.html' with current_club=club %}
         </div>
         <div class="column is-9">
             <nav class="breadcrumb"
@@ -19,42 +19,31 @@
                         <a href="{% url 'home' %}">Home</a>
                     </li>
                     <li>
-                        <a href="{% url 'my_club_memberships' %}">Club</a>
+                        <a href="{% url 'available_clubs' %}">Clubs</a>
                     </li>
                     <li>
                         <a href="{% url 'club_dashboard' club.club_url_name %}">{{ club.name }}</a>
                     </li>
                     <li>
-                        <a href="{% url 'member_list' club.club_url_name %}">Member List</a>
+                        <a href="{% url 'member_list' club.club_url_name %}">Members</a>
                     </li>
                 </ul>
             </nav>
             <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
                 <div class="hero-body">
                     <div class="container">
-                        <h1 class="title">{{ club.name }}</h1>
-                        <h2 class="subtitle">{{ club.tagline }}</h2>
+                        <h1 class="title">Members</h1>
+                        <h2 class="subtitle">Members of {{ club.name }}</h2>
                     </div>
                 </div>
             </section>
-            <hr class="solid">
+
+            <br>
+            
             <p class="subtitle">
                 Owner
             </p>
-            {% if user == club.get_club_owner %}
-                <div class="delete">
-                    <form method="post"
-                          action="{% url 'delete_club' club_url_name=club.club_url_name %}">
-                        {% csrf_token %}
-                        <button type="submit"
-                                class="button is-danger is-small"
-                                onclick="return confirm('Confirm you want to delete club {{ club.name }}?');">
-                            Delete Club
-                        </button>
-                    </form>
-                </div>
-            {% endif %}
-            <hr class="solid">
+            
             <div class="columns">
                 <div class="column is-12">
                     <div class="card">
@@ -74,9 +63,11 @@
                                             <b>Public Bio: </b> {{ owner.public_bio }}
                                         </p>
                                     </div>
-                                    <hr class="solid">
-                                    <div class="buttons">
-                                        <button onclick="window.location='{% url 'user_profile' owner.username %}';" class="button is-warning is-small" style="margin-right: 5px">View</button>
+                                    <br> 
+                                </div>
+                                <div class="column is-3">
+                                    <div class="buttons media-right is-vcentered" style="display: block;">
+                                        <button onclick="window.location='{% url 'user_profile' owner.username %}';" class="button is-warning is-fullwidth" style="margin-right: 5px">View</button>
                                     </div>
                                 </div>
                             </div>
@@ -84,11 +75,12 @@
                     </div>
                 </div>
             </div>
-            <hr class="solid">
+            
+            <br>
+
             <p class="subtitle">
                 Moderators
             </p>
-            <hr class="solid">
             {% if moderators %}
                 {% for moderator in moderators %}
                     <div class="columns">
@@ -103,7 +95,7 @@
                                                      alt="Placeholder image">
                                             </figure>
                                         </div>
-                                        <hr class="solid">
+                                        <br>
                                         <div class="media-content">
                                             <div class="content">
                                                 <p class="text">
@@ -113,46 +105,105 @@
                                                     <b>Public Bio: </b> {{ moderator.public_bio }}
                                                 </p>
                                             </div>
-                                            <hr class="solid">
-                                            <div class="buttons">
-                                                <button onclick="window.location='{% url 'user_profile' moderator.username %}';" class="button is-warning is-small" style="margin-right: 5px">View</button>
+                                            <br>
+                                        </div>
+                                        <div class="column is-3">
+                                            <div class="buttons media-right is-vcentered" style="display: block;">
+                                                <button onclick="window.location='{% url 'user_profile' moderator.username %}';" class="button is-warning is-fullwidth" style="margin-right: 5px">View</button>
                                                 {% if request_user.membership == 2 %}
-                                                    <form method="post"
-                                                          action="{% url 'transfer_ownership' club_url_name=club.club_url_name %}">
-                                                        <input type="hidden" name="user" value="{{ moderator.username }}" />
-                                                        {% csrf_token %}
-                                                        <button type="submit"
-                                                                class="button is-success is-small"
-                                                                style="margin-right: 5px"
-                                                                onclick="return confirm('Confirm you want to transfer ownership to {{ moderator.username }}?');">
-                                                            Transfer Ownership
+                                                    <div class="control has-text-centered">
+                                                        <button class="js-modal-trigger button is-success is-fullwidth" data-target="modal-transfer-ownership-confirmation">
+                                                            <span>Transfer Ownership</span>
                                                         </button>
-                                                    </form>
+                                                    </div>
+                                        
+                                                    <div id="modal-transfer-ownership-confirmation" class="modal">
+                                                        <div class="modal-background"></div>
+                                                        <div class="modal-card">
+                                                            <header class="modal-card-head">
+                                                                <p class="modal-card-title">Transfer Ownership</p>
+                                                                <button class="delete" aria-label="close"></button>
+                                                            </header>
+                                                            <section class="modal-card-body">
+                                                                Are you sure you want to transfer ownership of the club to this member?
+                                                            </section>
+                                                            <footer class="modal-card-foot">
+
+
+                                                                <div class="field is-grouped">
+                                                                    <div class="control">
+                                                                        <form method="post"
+                                                                            action="{% url 'transfer_ownership' club_url_name=club.club_url_name %}">
+                                                                            <input type="hidden" name="user" value="{{ moderator.username }}" />
+                                                                            {% csrf_token %}
+                                                                            <button type="submit"
+                                                                                    class="button is-success is-fullwidth"
+                                                                                    style="margin-right: 5px">
+                                                                                Transfer Ownership
+                                                                            </button>
+                                                                        </form>
+                                                                    </div>
+                                                                    <div class="control">
+                                                                        <button class="button">Cancel</button>
+                                                                    </div>
+                                                                </div>
+                                                            </footer>
+                                                        </div>
+                                                    </div>
+
                                                     <form method="post"
                                                           action="{% url 'demote_member' club_url_name=club.club_url_name %}">
                                                         <input type="hidden" name="user" value="{{ moderator.username }}" />
                                                         {% csrf_token %}
                                                         <button type="submit"
-                                                                class="button is-danger is-small"
-                                                                style="margin-right: 5px"
-                                                                onclick="return confirm('Confirm you want to demote {{ moderator.username }}?');">
+                                                                class="button is-danger is-fullwidth"
+                                                                style="margin-right: 5px">
                                                             Demote
                                                         </button>
                                                     </form>
-                                                    <form method="post"
-                                                          action="{% url 'kick_member' club_url_name=club.club_url_name %}">
-                                                        <input type="hidden" name="user" value="{{ moderator.username }}" />
-                                                        {% csrf_token %}
-                                                        <button type="submit"
-                                                                class="button is-danger is-small"
-                                                                style="margin-right: 5px"
-                                                                onclick="return confirm('Confirm you want to kick {{ moderator.username }}?');">
-                                                            Kick
+                                                    <div class="control has-text-centered">
+                                                        <button class="js-modal-trigger button is-danger is-outlined is-fullwidth" data-target="modal-kick-confirmation">
+                                                            <span>Kick</span>
+                                                            <span class="icon is-small">
+                                                              <i class="fas fa-times"></i>
+                                                            </span>
                                                         </button>
-                                                    </form>
+                                                    </div>
+                                        
+                                                    <div id="modal-kick-confirmation" class="modal">
+                                                        <div class="modal-background"></div>
+                                                        <div class="modal-card">
+                                                            <header class="modal-card-head">
+                                                                <p class="modal-card-title">Kick</p>
+                                                                <button class="delete" aria-label="close"></button>
+                                                            </header>
+                                                            <section class="modal-card-body">
+                                                                Are you sure you want to kick this member from the club?
+                                                            </section>
+                                                            <footer class="modal-card-foot">
+                                                                <div class="field is-grouped">
+                                                                    <div class="control">
+                                                                        <form method="post"
+                                                                            action="{% url 'kick_member' club_url_name=club.club_url_name %}">
+                                                                            <input type="hidden" name="user" value="{{ moderator.username }}" />
+                                                                            {% csrf_token %}
+                                                                            <button type="submit"
+                                                                                    class="button is-danger is-fullwidth"
+                                                                                    style="margin-right: 5px">
+                                                                                Kick
+                                                                            </button>
+                                                                        </form>
+                                                                    </div>
+                                                                    <div class="control">
+                                                                        <button class="button">Cancel</button>
+                                                                    </div>
+                                                                </div>
+                                                            </footer>
+                                                        </div>
+                                                    </div>
                                                 {% endif %}
                                             </div>
-                                        </div>
+                                        </div> 
                                     </div>
                                 </div>
                             </div>
@@ -160,15 +211,14 @@
                     </div>
                 {% endfor %}
             {% else %}
-                <p>
-                    There is no moderators to this club.
+                <p style="text-align: center" class="has-text-grey">
+                    There are no moderators in this club.
                 </p>
             {% endif %}
-            <hr class="solid">
+            <br>
             <p class="subtitle">
                 Members
             </p>
-            <hr class="solid">
             {% if members %}
                 {% for member in members %}
                     <div class="columns">
@@ -183,7 +233,7 @@
                                                      alt="Placeholder image">
                                             </figure>
                                         </div>
-                                        <hr class="solid">
+                                        <br>
                                         <div class="media-content">
                                             <div class="content">
                                                 <p class="text">
@@ -193,34 +243,64 @@
                                                     <b>Public Bio: </b> {{ member.public_bio }}
                                                 </p>
                                             </div>
-                                            <hr class="solid">
-                                            <div class="buttons">
-                                                <button onclick="window.location='{% url 'user_profile' member.username %}';" class="button is-warning is-small">View</button>
+                                            <br> 
+                                        </div>
+                                        <div class="column is-3">
+                                            <div class="buttons media-right is-vcentered" style="display: block;">
+                                                <button onclick="window.location='{% url 'user_profile' member.username %}';" class="button is-warning is-fullwidth">View</button>
                                                 {% if request_user.membership == 2 %}
                                                     <form method="post"
                                                           action="{% url 'promote_member' club_url_name=club.club_url_name %}">
                                                         <input type="hidden" name="user" value="{{ member.username }}" />
                                                         {% csrf_token %}
                                                         <button type="submit"
-                                                                class="button is-success is-small"
-                                                                style="margin-right: 5px"
-                                                                onclick="return confirm('Confirm you want to promote {{ member.username }}?');">
+                                                                class="button is-success is-fullwidth"
+                                                                style="margin-right: 5px">
                                                             Promote
                                                         </button>
                                                     </form>
                                                 {% endif %}
                                                 {% if request_user.membership == 2 or request_user.membership == 1 %}
-                                                    <form method="post"
-                                                          action="{% url 'kick_member' club_url_name=club.club_url_name %}">
-                                                        <input type="hidden" name="user" value="{{ member.username }}" />
-                                                        {% csrf_token %}
-                                                        <button type="submit"
-                                                                class="button is-danger is-small"
-                                                                style="margin-right: 5px"
-                                                                onclick="return confirm('Confirm you want to kick {{ member.username }}?');">
-                                                            Kick
+                                                    <div class="control has-text-centered">
+                                                        <button class="js-modal-trigger button is-danger is-outlined is-fullwidth" data-target="modal-kick-confirmation">
+                                                            <span>Kick</span>
+                                                            <span class="icon is-small">
+                                                            <i class="fas fa-times"></i>
+                                                            </span>
                                                         </button>
-                                                    </form>
+                                                    </div>
+                                        
+                                                    <div id="modal-kick-confirmation" class="modal">
+                                                        <div class="modal-background"></div>
+                                                        <div class="modal-card">
+                                                            <header class="modal-card-head">
+                                                                <p class="modal-card-title">Kick</p>
+                                                                <button class="delete" aria-label="close"></button>
+                                                            </header>
+                                                            <section class="modal-card-body">
+                                                                Are you sure you want to kick this member from the club?
+                                                            </section>
+                                                            <footer class="modal-card-foot">
+                                                                <div class="field is-grouped">
+                                                                    <div class="control">
+                                                                        <form method="post"
+                                                                            action="{% url 'kick_member' club_url_name=club.club_url_name %}">
+                                                                            <input type="hidden" name="user" value="{{ moderator.username }}" />
+                                                                            {% csrf_token %}
+                                                                            <button type="submit"
+                                                                                    class="button is-danger is-fullwidth"
+                                                                                    style="margin-right: 5px">
+                                                                                Kick
+                                                                            </button>
+                                                                        </form>
+                                                                    </div>
+                                                                    <div class="control">
+                                                                        <button class="button">Cancel</button>
+                                                                    </div>
+                                                                </div>
+                                                            </footer>
+                                                        </div>
+                                                    </div>
                                                 {% endif %}
                                             </div>
                                         </div>
@@ -231,9 +311,10 @@
                     </div>
                 {% endfor %}
             {% else %}
-                <p>
-                    There is no members to this club.
+                <p style="text-align: center" class="has-text-grey">
+                    There are no members in this club.
                 </p>
+                <br>
             {% endif %}
         </div>
     </div>

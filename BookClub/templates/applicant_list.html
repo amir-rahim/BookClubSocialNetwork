@@ -1,14 +1,14 @@
 {% extends 'base_content.html' %}
 {% block page_title %}
-    Club Applicant List
+    Applicants List
 {% endblock page_title %}
 {% block page_subtitle %}
-    This is the list of applicants for this club.
+    Approve or reject applicants for {{ club.name }}
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
         <div class="column is-3">
-            {% include 'partials/club_aside.html' with current_club=club %}
+            {% include 'partials/aside_menu/club_aside.html' with current_club=club %}
         </div>
         <div class="column is-9">
             <nav class="breadcrumb"
@@ -19,13 +19,13 @@
                         <a href="{% url 'home' %}">Home</a>
                     </li>
                     <li>
-                        <a>Club</a>
+                        <a href="{% url 'available_clubs' %}">Clubs</a>
                     </li>
                     <li>
-                        <a>{{ club.name }}</a>
+                        <a href="{% url 'club_dashboard' club.club_url_name %}">{{ club.name }}</a>
                     </li>
                     <li>
-                        <a href="#">Member List</a>
+                        <a href="{% url 'applicant_list' club.club_url_name %}">Applicants</a>
                     </li>
                 </ul>
             </nav>
@@ -37,66 +37,72 @@
                     </div>
                 </div>
             </section>
-            <p class="subtitle">
-                Applicants
-            </p>
-            {% for applicant in applicants %}
-                <div class="columns">
-                    <div class="column is-12">
-                        <div class="card">
-                            <div class="card-content">
-                                <div class="media">
-                                    <div class="media-left">
-                                        <figure class="image is-64x64">
-                                            <img class="is-rounded"
-                                                 src="{{ member.gravatar }}"
-                                                 alt="Placeholder image">
-                                        </figure>
-                                    </div>
-                                    <div class="media-content">
-                                        <div class="content">
-                                            <p class="text">
-                                                <b>Name: </b> {{ applicant.username }}
-                                            </p>
-                                            <p class="text">
-                                                <b>Public Bio: </b> {{ applicant.public_bio }}
-                                            </p>
+            {% if applicants %}
+                {% for applicant in applicants %}
+                    <div class="columns">
+                        <div class="column is-12">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <figure class="image is-64x64">
+                                                <img class="is-rounded"
+                                                    src="{{ applicant.gravatar }}"
+                                                    alt="Placeholder image">
+                                            </figure>
                                         </div>
-                                        <hr class="solid">
-                                        <div class="buttons">
-                                            <button class="button is-warning is-small">View</button>
-                                            {% if request_user.membership == 2 or request_user.membership == 1 %}
-                                                <form method="post"
-                                                      action="{% url 'approve_applicant' club_url_name=club.club_url_name %}">
-                                                    <input type="hidden" name="user" value="{{ applicant.username }}" />
-                                                    {% csrf_token %}
-                                                    <button type="submit"
-                                                            class="button is-success is-small"
-                                                            style="margin-right: 5px"
-                                                            onclick="return confirm('Confirm you want to approve {{ applicant.username }}?');">
-                                                        Approve
-                                                    </button>
-                                                </form>
-                                                <form method="post"
-                                                      action="{% url 'reject_applicant' club_url_name=club.club_url_name %}">
-                                                    <input type="hidden" name="user" value="{{ applicant.username }}" />
-                                                    {% csrf_token %}
-                                                    <button type="submit"
-                                                            class="button is-danger is-small"
-                                                            style="margin-right: 5px"
-                                                            onclick="return confirm('Confirm you want to reject {{ applicant.username }}?');">
-                                                        Reject
-                                                    </button>
-                                                </form>
-                                            {% endif %}
+                                        <div class="media-content">
+                                            <div class="content">
+                                                <p class="text">
+                                                    <b>Name: </b> {{ applicant.username }}
+                                                </p>
+                                                <p class="text">
+                                                    <b>Public Bio: </b> {{ applicant.public_bio }}
+                                                </p>
+                                            </div>
+                                            <hr class="solid">
+                                        </div>
+                                        <div class="media-right">
+                                            <div class="buttons is-vcentered are-one-third" style="display: block;">
+                                                <button class="button is-warning is-fullwidth" onclick="window.location='{% url 'user_profile' applicant.username %}';">View</button>
+                                                {% if request_user.membership == 2 or request_user.membership == 1 %}
+                                                    <form method="post"
+                                                        action="{% url 'approve_applicant' club.club_url_name %}">
+                                                        <input type="hidden" name="user" value="{{ applicant.username }}" />
+                                                        {% csrf_token %}
+                                                        <button type="submit"
+                                                                class="button is-success is-fullwidth"
+                                                                style="margin-right: 5px">
+                                                            Approve
+                                                        </button>
+                                                    </form>
+                                                    <form method="post"
+                                                        action="{% url 'reject_applicant' club.club_url_name %}">
+                                                        <input type="hidden" name="user" value="{{ applicant.username }}" />
+                                                        {% csrf_token %}
+                                                        <button type="submit"
+                                                                class="button is-danger is-fullwidth"
+                                                                style="margin-right: 5px">
+                                                            Reject
+                                                        </button>
+                                                    </form>
+                                                {% endif %}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            {% else %}
+                <br>
+                <hr>
+                    <p style="text-align: center" class="has-text-grey">
+                        There are no applicants for this club.
+                    </p>
+                <hr>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

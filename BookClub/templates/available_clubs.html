@@ -1,46 +1,14 @@
 {% extends 'base_content.html' %}
 {% block page_title %}
-    Memberships
+    Clubs
 {% endblock page_title %}
 {% block page_subtitle %}
-    Find the Book Club you are looking for here!
+    Join our community
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
         <div class="column is-3">
-            <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
-                <p class="menu-label">
-                    Clubs
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a class="is-active"><b>Available Clubs</b></a>
-                    </li>
-                    <li>
-                        <a href="{% url 'my_club_memberships' %}">Memberships</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'applications' %}">My Applications</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'create_club' %}">Create Club</a>
-                    </li>
-                </ul>
-                <p class="menu-label">
-                    Useful Links
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'user_dashboard' %}">User Profile</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'library_dashboard' %}">Library</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'global_forum' %}">Global Forum</a>
-                    </li>
-                </ul>
-            </aside>
+            {% include 'partials/aside_menu/membership_aside.html' %}
         </div>
         <div class="column is-9">
             <nav class="breadcrumb"
@@ -51,7 +19,7 @@
                         <a href="{% url 'home' %}">Home</a>
                     </li>
                     <li>
-                        <a href="{% url 'available_clubs' %}">Club</a>
+                        <a href="{% url 'available_clubs' %}">Clubs</a>
                     </li>
                 </ul>
             </nav>
@@ -59,7 +27,7 @@
                 <div class="hero-body">
                     <div class="container">
                         <h1 class="title">Available Clubs</h1>
-                        <h2 class="subtitle">List of Clubs you have not joined yet.</h2>
+                        <h2 class="subtitle">Join a new club today</h2>
                     </div>
                 </div>
             </section>
@@ -82,7 +50,7 @@
                         <tbody>
                             {% for club in clubs %}
                                 <!-- For each available club, add a row linked to the corresponding club dashboard page -->
-                                <tr onclick="window.location='{% url 'club_dashboard' club.club_url_name %}';">
+                                <tr>
                                     <td>{{ club.name }}</td>
                                     <td>{{ club.tagline }}</td>
                                     <td>{{ club.description }}</td>
@@ -94,7 +62,6 @@
                                         {% endif %}
                                     </td>
                                     <td>
-                                        <button class="button is-fullwidth is-success">View</button>
                                         {% if club.is_private == True %}
                                             <form method="post"
                                                   action="{% url 'join_club' club_url_name=club.club_url_name %}">
@@ -102,6 +69,7 @@
                                                 <button type="submit" class="button is-fullwidth is-success">Apply</button>
                                             </form>
                                         {% else %}
+                                            <button class="button is-fullwidth is-success" onclick="window.location='{% url 'club_dashboard' club.club_url_name %}';">View</button>
                                             <form method="post"
                                                   action="{% url 'join_club' club_url_name=club.club_url_name %}">
                                                 {% csrf_token %}
@@ -117,9 +85,9 @@
             {% else %}
                 <!-- If there is no club available to the logged-in user -->
                 <hr>
-                <p style="text-align: center">
-                    There are no available clubs at the moment.
-                </p>
+                    <p style="text-align: center" class="has-text-grey">
+                        There are no available clubs at the moment.
+                    </p>
                 <hr>
             {% endif %}
         </div>
