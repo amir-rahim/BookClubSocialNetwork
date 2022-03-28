@@ -12,11 +12,10 @@ from BookClub.models import Meeting, Club
 class JoinMeetingView(LoginRequiredMixin, View):
     """Users can join meetings"""
 
-    redirect_location = 'meeting_details'
+    redirect_location = 'meeting_list'
 
     def get(self, *args, **kwargs):
-        return redirect(self.redirect_location, club_url_name=self.kwargs['club_url_name'],
-                        meeting_id=self.kwargs['meeting_id'])
+        return redirect(self.redirect_location, club_url_name=self.kwargs['club_url_name'])
 
     def is_actionable(self, current_user, meeting):
         """Check if user can join a meeting"""
@@ -42,26 +41,23 @@ class JoinMeetingView(LoginRequiredMixin, View):
             current_user = self.request.user
         except:
             messages.error(self.request, "Error, meeting not found.")
-            return redirect(self.redirect_location, club_url_name=kwargs['club_url_name'],
-                            meeting_id=kwargs['meeting_id'])
+            return redirect(self.redirect_location, club_url_name=kwargs['club_url_name'])
 
         if self.is_actionable(current_user, meeting):
             self.action(current_user, meeting)
         else:
             self.is_not_actionable()
 
-        return redirect(self.redirect_location, club_url_name=kwargs['club_url_name'],
-                        meeting_id=kwargs['meeting_id'])
+        return redirect(self.redirect_location, club_url_name=kwargs['club_url_name'])
 
 
 class LeaveMeetingView(LoginRequiredMixin, View):
     """Users can leave meetings"""
 
-    redirect_location = 'meeting_details'
+    redirect_location = 'meeting_list'
 
     def get(self, *args, **kwargs):
-        return redirect(self.redirect_location, club_url_name=self.kwargs['club_url_name'],
-                        meeting_id=self.kwargs['meeting_id'])
+        return redirect(self.redirect_location, club_url_name=self.kwargs['club_url_name'])
 
     def is_actionable(self, current_user, meeting):
         """Check if user can leave a meeting"""
@@ -87,16 +83,14 @@ class LeaveMeetingView(LoginRequiredMixin, View):
             current_user = self.request.user
         except:
             messages.error(self.request, "Error, meeting not found.")
-            return redirect(self.redirect_location, club_url_name=kwargs['club_url_name'],
-                            meeting_id=kwargs['meeting_id'])
+            return redirect(self.redirect_location, club_url_name=kwargs['club_url_name'])
 
         if self.is_actionable(current_user, meeting):
             self.action(current_user, meeting)
         else:
             self.is_not_actionable()
 
-        return redirect(self.redirect_location, club_url_name=self.kwargs['club_url_name'],
-                        meeting_id=self.kwargs['meeting_id'])
+        return redirect(self.redirect_location, club_url_name=self.kwargs['club_url_name'])
 
 
 class CreateMeetingView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
