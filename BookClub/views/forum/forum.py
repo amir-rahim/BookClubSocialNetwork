@@ -52,7 +52,7 @@ class ForumView(ClubMemberTestMixin, ListView):
     model = ForumPost
     context_object_name = 'posts'
     paginate_by = 5
-    template_name = 'forum/global_forum.html'
+    template_name = 'forum/forums.html'
 
     def get_queryset(self):
         if self.kwargs.get('club_url_name') is not None:
