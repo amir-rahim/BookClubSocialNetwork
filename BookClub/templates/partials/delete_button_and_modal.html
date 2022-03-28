@@ -1,11 +1,11 @@
 <button type="button"
-        class="button is-danger js-modal-trigger"
+        class="button is-danger is-outlined js-modal-trigger"
         data-target="{{ delete_modal_id }}-delete-modal"
         aria-haspopup="true">
-    <span class="icon is-small">
-        <i class="fas fa-trash"></i>
-    </span>
     <span>Delete</span>
+    <span class="icon is-small">
+        <i class="fas fa-times"></i>
+    </span>
 </button>
 <div class="modal" id="{{ delete_modal_id }}-delete-modal">
     <div class="modal-background"></div>
@@ -22,11 +22,17 @@
             </p>
         </section>
         <footer class="modal-card-foot">
-            <form class="" action="{{ delete_item.get_delete_url }}" method="post">
-                {% csrf_token %}
-                <button class="button is-danger">Delete</button>
-            </form>
-            <button class="button">Cancel</button>
+            <div class="field is-grouped">
+                <div class="control">
+                    <form action="{{ delete_item.get_delete_url }}" method="post">
+                        {% csrf_token %}
+                        <button class="button is-danger">Delete</button>
+                    </form>
+                </div>
+                <div class="control">
+                    <button class="button">Cancel</button>
+                </div>
+            </div>
         </footer>
     </div>
 </div>
