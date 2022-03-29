@@ -217,43 +217,44 @@
             </div>
             <br>
 
-            <div class="control has-text-centered">
-                <button class="js-modal-trigger button is-danger is-outlined is-fullwidth" data-target="modal-leave-club-confirmation">
-                    <span>Leave Club</span>
-                    <span class="icon is-small">
-                      <i class="fas fa-times"></i>
-                    </span>
-                </button>
-            </div>
-
-            <div id="modal-leave-club-confirmation" class="modal">
-                <div class="modal-background"></div>
-              
-                <div class="modal-card">
-                    <header class="modal-card-head">
-                        <p class="modal-card-title">Leave Club</p>
-                        <button class="delete" aria-label="close"></button>
-                    </header>
-                    <section class="modal-card-body">
-                        Are you sure you want to leave this club?
-                    </section>
-                    <footer class="modal-card-foot">
-                        <div class="field is-grouped">
-                            <div class="control">
-                                <form method="post" action="{% url 'leave_club' current_club.club_url_name %}">
-                                    {% csrf_token %}
-                                    <button type="submit" class="button is-fullwidth is-outline is-danger">Leave club</button>
-                                </form>
-                            </div>
-                            <div class="control">
-                                <button class="button">Cancel</button>
-                            </div>
-                        </div>
-                    </footer>
+            {% if user in current_club.get_members %}
+                <div class="control has-text-centered">
+                    <button class="js-modal-trigger button is-danger is-outlined is-fullwidth" data-target="modal-leave-club-confirmation">
+                        <span>Leave Club</span>
+                        <span class="icon is-small">
+                        <i class="fas fa-times"></i>
+                        </span>
+                    </button>
                 </div>
-                <button class="modal-close is-large" aria-label="close"></button>
-            </div>
-            
+
+                <div id="modal-leave-club-confirmation" class="modal">
+                    <div class="modal-background"></div>
+                
+                    <div class="modal-card">
+                        <header class="modal-card-head">
+                            <p class="modal-card-title">Leave Club</p>
+                            <button class="delete" aria-label="close"></button>
+                        </header>
+                        <section class="modal-card-body">
+                            Are you sure you want to leave this club?
+                        </section>
+                        <footer class="modal-card-foot">
+                            <div class="field is-grouped">
+                                <div class="control">
+                                    <form method="post" action="{% url 'leave_club' current_club.club_url_name %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="button is-fullwidth is-outline is-danger">Leave club</button>
+                                    </form>
+                                </div>
+                                <div class="control">
+                                    <button class="button">Cancel</button>
+                                </div>
+                            </div>
+                        </footer>
+                    </div>
+                    <button class="modal-close is-large" aria-label="close"></button>
+                </div>
+            {% endif %}
         </div>
     </div>
 
@@ -270,7 +271,7 @@
             });
         } else {
             bulmaCarousel.attach('#slider', {
-                slidesToScroll: 4,
+                slidesToScroll: 1,
                 slidesToShow: 4,
                 infinite: true,
                 navigationSwipe: true,

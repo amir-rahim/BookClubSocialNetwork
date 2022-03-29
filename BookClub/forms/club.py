@@ -1,3 +1,4 @@
+from django import forms
 from django.forms import HiddenInput, ModelForm, Textarea
 
 from BookClub.models import Club, FeaturedBooks
@@ -23,6 +24,7 @@ class FeatureBookForm(ModelForm):
         fields = ['book','reason']
         widgets = {
             'book' : BookSelectorInput(),
+            'reason' : forms.TextInput(attrs={'placeholder': 'Optional'})
         }
         
     def clean(self):
