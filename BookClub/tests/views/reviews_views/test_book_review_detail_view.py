@@ -54,8 +54,8 @@ class BookReviewViewTestCase(TestCase,LogInTester):
     
     def test_guest_can_see_review_content(self):
         response = self.client.get(self.main_review_url)
-        self.assertContains(response,f'Review by {self.book_review.creator}')
-        self.assertContains(response,f'Posted by: {self.book_review.creator}')
+        self.assertContains(response,f'{self.book_review.creator}')
+        self.assertContains(response,f'{self.book_review.creator}')
         self.assertContains(response,self.book_review.title)
         self.assertContains(response,self.book_review.content)
         self.assertContains(response,f'{self.book_review.book_rating}/10')
@@ -65,8 +65,8 @@ class BookReviewViewTestCase(TestCase,LogInTester):
     def test_other_user_can_see_review_content(self):
         self.client.login(username=self.other_user.username,password="Password123")
         response = self.client.get(self.main_review_url)
-        self.assertContains(response,f'Review by {self.book_review.creator}')
-        self.assertContains(response,f'Posted by: {self.book_review.creator}')
+        self.assertContains(response,f'{self.book_review.creator}')
+        self.assertContains(response,f'{self.book_review.creator}')
         self.assertContains(response,self.book_review.title)
         self.assertContains(response,self.book_review.content)
         self.assertContains(response,f'{self.book_review.book_rating}/10')
@@ -74,8 +74,8 @@ class BookReviewViewTestCase(TestCase,LogInTester):
     def test_creator_can_see_review_content(self):
         self.client.login(username=self.creator_of_main_review.username,password="Password123")
         response = self.client.get(self.main_review_url)
-        self.assertContains(response,f'Review by {self.book_review.creator}')
-        self.assertContains(response,f'Posted by: {self.book_review.creator}')
+        self.assertContains(response,f'{self.book_review.creator}')
+        self.assertContains(response,f'{self.book_review.creator}')
         self.assertContains(response,self.book_review.title)
         self.assertContains(response,self.book_review.content)
         self.assertContains(response,f'{self.book_review.book_rating}/10')
@@ -148,4 +148,3 @@ class BookReviewViewTestCase(TestCase,LogInTester):
         self.assertContains(response,f"<button class=\"button is-danger\">Delete</button>")
         
         
-

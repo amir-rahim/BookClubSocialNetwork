@@ -93,4 +93,4 @@ class ForumViewTestCase(TestCase):
         self.assertTemplateUsed(response, 'forum/forums.html')
         self.assertContains(response, "Lorem Ipsum")
         self.assertContains(response, "Lorem Ipsum is simply dummy text of the printing and typesetting industry. ")
-        self.assertContains(response, "Posted by: johndoe")
+        self.assertContains(response, "johndoe")
