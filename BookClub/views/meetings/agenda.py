@@ -39,7 +39,7 @@ class AgendaView(LoginRequiredMixin, ListView):
         return context
 
 
-class ExportCalendarView(View):
+class ExportCalendarView(LoginRequiredMixin, View):
 
     def get(self, *args, **kwargs):
         user = User.objects.get(id=self.request.user.id)
