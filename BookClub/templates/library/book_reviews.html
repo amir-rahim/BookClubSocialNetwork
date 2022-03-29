@@ -72,7 +72,7 @@
                                         <tr>
                                             <td>{{ review.creator }}</td>
                                             <td>{{ review.book_rating }}</td>
-                                            <td>{{ review.content }}</td>
+                                            <td>{{ review.content |truncatechars:130 }}</td>
                                             <td>{{ review.created_on }}</td>
                                             {% if review.creator == request.creator %}
                                                 <td>
