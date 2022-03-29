@@ -1,6 +1,6 @@
 {% extends 'base_content.html' %}
 {% block page_title %}
-    Global Forum
+    Forums
 {% endblock page_title %}
 {% block page_subtitle %}
     Upvote and leave comments on this post!
@@ -8,40 +8,42 @@
 {% block content %}
     <div class="columns">
         <div class="column is-3">
-            <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
-                <p class="menu-label">
-                    Clubs
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'available_clubs' %}">Available Clubs</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'my_club_memberships' %}">Memberships</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'create_club' %}">Create Club</a>
-                    </li>
-                </ul>
-                <p class="menu-label">
-                    Useful Links
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'user_dashboard' %}">User Profile</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'library_dashboard' %}">Library</a>
-                    </li>
-                    <li>
-                        {% if club %}
-                            <a href="{% url 'club_forum' club.club_url_name %}">Forums</a>
-                        {% else %}
-                            <a href="{% url 'global_forum' %}">Forums</a>
-                        {% endif %}
-                    </li>
-                </ul>
-            </aside>
+            {% if club %}
+                {% include 'partials/aside_menu/club_aside.html' with current_club=club %}
+            {% else %}
+                <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+                    <p class="menu-label">
+                        Global Forums
+                    </p>
+                    <ul class="menu-list">
+                        <li>
+                            <a href="{% url 'global_forum' %}" class="is-active"><b>Forums</b></a>
+                        </li>
+                    </ul>
+                    <p class="menu-label">
+                        Clubs
+                    </p>
+                    <ul class="menu-list">
+                        <li>
+                            <a href="{% url 'available_clubs' %}">Available Clubs</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'my_club_memberships' %}">Memberships</a>
+                        </li>
+                    </ul>
+                    <p class="menu-label">
+                        Useful Links
+                    </p>
+                    <ul class="menu-list">
+                        <li>
+                            <a href="{% url 'user_dashboard' %}">User Profile</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'library_dashboard' %}">Library</a>
+                        </li>
+                    </ul>
+                </aside>
+            {% endif %}
         </div>
         <div class="column is-9">
             <nav class="breadcrumb"
@@ -70,12 +72,14 @@
             </section>
             <div class="card">
                 <header class="card-header">
-                    <div class="card-header-title">
+                    <div class="card-header-title is-vcentered">
                         <p class="subtitle">
                             <b>{{ post.title }}</b>
                         </p>
                     </div>
-                    {% include 'partials/delete_button_and_modal.html' with delete_item=post delete_modal_id=post.pk %}
+                    <div class="card-header-icon">
+                        {% include 'partials/delete_button_and_modal.html' with delete_item=post delete_modal_id=post.pk %}
+                    </div>
                 </header>
                 <form method="post" action="{% url 'edit_forum_post' post.id %}">
                     <div class="card-content">
@@ -99,13 +103,6 @@
                     </p>
                     <p class="card-footer-item has-text-grey-light">
                         {{ post.created_on | timesince }} ago
-                    </p>
-                    <p class="card-footer-item">
-                        {% if post.comments.count > 0 %}
-                            See {{ post.comments.count }} comments
-                        {% else %}
-                            Be the first to comment!
-                        {% endif %}
                     </p>
                 </footer>
             </div>
