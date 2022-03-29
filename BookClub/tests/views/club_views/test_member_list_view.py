@@ -47,7 +47,7 @@ class MemberListTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_non_member_can_view_member_list(self):
-        non_member = User.objects.get(pk=6)
+        non_member = User.objects.get(pk=7)
         self.client.login(username=non_member.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
@@ -61,7 +61,7 @@ class MemberListTestCase(TestCase):
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.ERROR)
         self.assertEqual(str(messages_list[0]),"This club is private")
-    
+
     def test_invalid_club(self):
         self.client.login(username=self.jack.username, password="Password123")
         response = self.client.get(reverse("member_list", kwargs={"club_url_name": 'fakeclub'}))
