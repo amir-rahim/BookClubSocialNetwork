@@ -93,10 +93,8 @@
             {% if user.username != username %}
                 <div class="columns">
                     <div class="column is-12">
-                        <div class="card">
-                            <div class="card-content">
-                                <button type="button" name="follow-button" id="follow-button" onclick="followButtonClick()"></button>
-                            </div>
+                        <div class="container">
+                            <button type="button" name="follow-button" id="follow-button" onclick="followButtonClick()"></button>
                         </div>
                     </div>
                 </div>
@@ -104,14 +102,18 @@
 
             <div class="columns">
                 <div class="column is-6">
-                    <div class="card">
+                    <div class="card card-equal-height">
                         <div class="card-image">
+                            {% if own_profile %}
+                                <a href="{% url 'user_following' %}">
+                            {% else %}
+                                <a href="{% url 'user_following' username %}">
+                            {% endif %}
                             <figure class="image is-16by9">
-                                <a href="">
                                 <img src="https://images.unsplash.com/photo-1474403078171-7f199e9d1335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1471&q=80"
                                      alt="Image">
-                                </a>
                             </figure>
+                            </a>
                         </div>
                         <div class="card-content">
                             <p class="title">
@@ -120,7 +122,7 @@
                         </div>
                         <div class="card-footer">
                             {% if own_profile %}
-                                <a class="card-footer-item" href="{% url 'user_following' username %}">View All</a>
+                                <a class="card-footer-item" href="{% url 'user_following' %}">View All</a>
                             {% else %}
                                 <a class="card-footer-item" href="{% url 'user_following' username %}">View All</a>
                             {% endif %}
@@ -128,10 +130,14 @@
                     </div>
                 </div>
                 <div class="column is-6">
-                    <div class="card">
+                    <div class="card card-equal-height">
                         <div class="card-image">
                             <figure class="image is-16by9">
-                                <a href="{% url 'available_clubs' %}">
+                                {% if own_profile %}
+                                    <a href="{% url 'my_club_memberships' %}">
+                                {% else %}
+                                    <a href="{% url 'user_memberships' username %}">
+                                {% endif %}
                                 <img src="https://images.unsplash.com/photo-1615791287388-6f1bd87ace4e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=876&q=80"
                                      alt="Image">
                                 </a>
@@ -181,7 +187,7 @@
                     </article>
                 </div>
                 {% if own_profile %}
-                <div class="tile is-parent" onclick="window.location='{% url 'user_following' username %}';" style="cursor:pointer;">
+                <div class="tile is-parent" onclick="window.location='{% url 'user_following' %}';" style="cursor:pointer;">
                 {% else %}
                 <div class="tile is-parent" onclick="window.location='{% url 'user_following' username %}';" style="cursor:pointer;">
                 {% endif %}
@@ -234,10 +240,14 @@
 
             <div class="columns">
                 <div class="column is-6">
-                    <div class="card">
+                    <div class="card card-equal-height">
                         <div class="card-image">
                             <figure class="image is-16by9">
-                                <a href="{% url 'bookshelf' %}">
+                                {% if own_profile %}
+                                    <a href="{% url 'booklists_list' %}">
+                                {% else %}
+                                    <a href="{% url 'booklists_list' user.username %}">
+                                {% endif %}
                                 <img src="https://images.unsplash.com/photo-1628046903351-992bd4b583e6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
                                      alt="Image">
                                 </a>
@@ -263,7 +273,11 @@
                     <div class="card">
                         <div class="card-image">
                             <figure class="image is-16by9">
-                                <a href="{% url 'global_forum' %}">
+                                {% if own_profile %}
+                                    <a href="{% url 'personal_reviews' %}">
+                                {% else %}
+                                    <a href="{% url 'community_reviews' %}">
+                                {% endif %}
                                 <img src="https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=773&q=80"
                                      alt="Image">
                                 </a>
