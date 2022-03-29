@@ -32,7 +32,9 @@ class BookReview(TextPost):
     def save(self, **kwargs):
         super().save(**kwargs)
         if UserRecommendations.objects.filter(user=self.creator).exists():
-            UserRecommendations.objects.get(user=self.creator).modified = True
+            recommendation = UserRecommendations.objects.get(user=self.creator)
+            recommendation.modified = True
+            recommendation.save()
 
 
 class BookReviewComment(TextComment):
