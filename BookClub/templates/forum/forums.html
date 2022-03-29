@@ -146,7 +146,7 @@
                         </div>
                         <footer class="card-footer">
                             <p class="card-footer-item">
-                                <span class="is-small has-text-grey-light">Posted by: {{ post.creator }}</span>
+                                <span class="is-small has-text-grey-light">Posted by: <a href="{{ post.creator.get_absolute_url }}"> {{ post.creator }}</a></span>
                             </p>
                             <p class="card-footer-item has-text-grey-light">
                                 {{ post.created_on | timesince }} ago

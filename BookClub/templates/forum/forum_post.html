@@ -84,7 +84,7 @@
             <div class="card">
                 <header class="card-header">
                     <p class="card-header-title is-vcentered">
-                        <span class="has-text-grey-light">Posted by: {{ post.creator }} {{ post.created_on | timesince }} ago</span>
+                        <span class="has-text-grey-light">Posted by: <a href="{{ post.user.get_absolute_url }}"> {{ post.creator }} </a> {{ post.created_on | timesince }} ago</span>
                     </p>
                     <div class="card-header-icon">
                         {% if user == post.creator %}
@@ -135,7 +135,7 @@
                                             </p>
                                             <br />
                                             <p class="has-text-right">
-                                                <i>- by {{ comment.creator }}, {{ comment.created_on | timesince }} ago</i>
+                                                <i>- by <a href="{{ comment.creator.get_absolute_url }}">{{ comment.creator }}</a>, {{ comment.created_on | timesince }} ago</i>
                                             </p>
                                             <div class="buttons">
                                                 {% if comment.creator == user %}

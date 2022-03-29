@@ -60,7 +60,7 @@
                 <header class="card-header">
                     <p class="card-header-title is-vcentered">
                         <span class="has-text-black"><b>{{ review.title }}</b> - Rating: {{ review.book_rating }}/10 &nbsp;·&nbsp; </span>
-                        <span class="has-text-grey-light">Posted by: {{ review.creator }} {{ review.created_on | timesince }} ago</span>
+                        <span class="has-text-grey-light">Posted by: <a href="{{ review.creator.get_absolute_url }}"> {{ review.creator }}</a> {{ review.created_on | timesince }} ago</span>
                     </p>
                     <div class="card-header-icon">
                         <div class="field is-grouped">
@@ -116,7 +116,7 @@
                                             </p>
                                             <br />
                                             <p class="has-text-right">
-                                                <i>- by {{ comment.creator }}, {{ comment.created_on | timesince }} ago</i>
+                                                <i>- by <a href="{{ comment.creator.get_absolute_url }}">{{ comment.creator }}</a>, {{ comment.created_on | timesince }} ago</i>
                                             </p>
                                             <div class="buttons">
                                                 {% if comment.creator == user %}
