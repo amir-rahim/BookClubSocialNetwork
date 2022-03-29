@@ -1,6 +1,6 @@
 """Book Related Views"""
 from django.views.generic import DetailView, ListView
-
+from django.shortcuts import get_object_or_404
 from BookClub.models import Book, BookReview, BookList, BookShelf
 
 
@@ -14,7 +14,7 @@ class BookDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         book = context.get('book')
         user = self.request.user
-        
+
         if not user.is_anonymous:
             context['lists'] = BookList.objects.filter(creator=user)
             context['user'] = user
@@ -24,20 +24,19 @@ class BookDetailView(DetailView):
             context['user'] = None
             context['in_bookshelf'] = False
 
-        if book is not None:
-            reviews = BookReview.objects.filter(book=book)
-            if reviews:
-                context['reviews'] = reviews[:3]
-                sum = 0
-                for review in reviews:
-                    sum += review.book_rating
-                avg = sum / len(reviews)
-                avg = round(avg, 2)
-                context['average'] = avg
-                if len(reviews) > 3:
-                    context['more'] = True
-            else:
-                reviews = None
+        reviews = BookReview.objects.filter(book=book)
+        if reviews:
+            context['reviews'] = reviews[:3]
+            sum = 0
+            for review in reviews:
+                sum += review.book_rating
+            avg = sum / len(reviews)
+            avg = round(avg, 2)
+            context['average'] = avg
+            if len(reviews) > 3:
+                context['more'] = True
+        else:
+            reviews = None
 
         return context
 
@@ -50,15 +49,14 @@ class BookReviewListView(ListView):
 
     def get_queryset(self):
         book_pk = self.kwargs.get('book_id')
-        book = Book.objects.get(pk=book_pk)
+        book = get_object_or_404(Book, pk=book_pk)
         queryset = BookReview.objects.filter(book = book).order_by('-id')
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         book_pk = self.kwargs.get('book_id')
-        if book_pk is not None:
-            book = Book.objects.get(pk=book_pk)
-            context['book'] = book
+        book = Book.objects.get(pk=book_pk)
+        context['book'] = book
 
         return context
