@@ -10,7 +10,7 @@ from BookClub.models import ClubMembership, User
 
 
 class Club(models.Model):
-    
+
     class Meta:
         ordering = ['name']
     name = models.CharField(unique=True, max_length=100, blank=False)
@@ -81,10 +81,6 @@ class Club(models.Model):
 
     def get_number_of_posts(self):
         return self.forum.get_posts().count()
-
-    # Has unimplemented dependencies
-    def get_review_score(self):
-        pass
 
     def get_users(self, search_role):
         """Get all the users from the given club with the given authorization."""
