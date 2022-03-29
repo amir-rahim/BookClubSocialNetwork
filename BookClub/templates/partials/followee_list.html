@@ -24,23 +24,23 @@
                                 <div class="content">
                                     <p class="text">
                                         <b>Name: </b> {{ followee.username }}
-                                </p>
-                                <p class="text">
-                                    <b>Public Bio: </b> {{ followee.public_bio }}
-                            </p>
-                        </div>
-                        <div class="buttons">
-                            <a href="{% url 'user_profile' followee.username %}">
-                                <button class="button is-warning is-small">View</button>
-                            </a>
+                                    </p>
+                                    <p class="text">
+                                        <b>Public Bio: </b> {{ followee.public_bio }}
+                                    </p>
+                                </div>
+                                <div class="buttons">
+                                    <a href="{% url 'user_profile' followee.username %}">
+                                        <button class="button is-warning is-normal">View</button>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-{% endfor %}
+    {% endfor %}
 {% else %}
 <hr>
 <p style="text-align: center;" class="has-text-grey">

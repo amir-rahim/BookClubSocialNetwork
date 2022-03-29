@@ -24,27 +24,27 @@
                                 <div class="content">
                                     <p class="text">
                                         <b>Name: </b> {{ follower.username }}
-                                </p>
-                                <p class="text">
-                                    <b>Public Bio: </b> {{ follower.public_bio }}
-                            </p>
-                        </div>
-                        <div class="buttons">
-                            <a href="{% url 'user_profile' follower.username %}">
-                                <button class="button is-warning is-small">View</button>
-                            </a>
+                                    </p>
+                                    <p class="text">
+                                        <b>Public Bio: </b> {{ follower.public_bio }}
+                                    </p>
+                                </div>
+                                <div class="buttons">
+                                    <a href="{% url 'user_profile' follower.username %}">
+                                        <button class="button is-warning">View</button>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-{% endfor %}
+    {% endfor %}
 {% else %}
-<hr class="solid"/>
-<p style="text-align: center;">
-    <i>There are no followers for this user.</i>
+<hr>
+<p style="text-align: center;" class="has-text-grey">
+    There are no followers for this user.
 </p>
-<hr class="solid"/>
+<hr>
 {% endif %}

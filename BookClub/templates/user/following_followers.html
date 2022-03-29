@@ -8,7 +8,11 @@
 {% block content %}
     <div class="columns">
         <div class="column is-3">
-            {% include 'partials/aside_menu/profile_aside.html' %}
+            {% if own %}
+                {% include 'partials/aside_menu/user_aside.html' %}
+            {% else %}
+                {% include 'partials/aside_menu/profile_aside.html' %}
+            {% endif %}
         </div>
         <div class="column is-9">
             <nav class="breadcrumb"
@@ -21,28 +25,40 @@
                     <li>
                         <a href="{% url 'user_profile' username %}">{{ username }}</a>
                     </li>
-                    <li>
-                        <a href="{% url 'user_following' username %}">Following</a>
-                    </li>
+                    {% if own %}
+                        <li>
+                            <a href="{% url 'user_following' %}">Following</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{% url 'user_following' username %}">Following</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </nav>
             <div id="tabs-with-content">
-                <div class="tabs">
+                <div class="tabs is-centered">
                     <ul>
                         <li class="is-active">
-                            <a>Followers</a>
+                            <a>
+                                <span class="icon is-small"><i class="fa-solid fa-users" aria-hidden="true"></i></span>
+                                <span>Following</span>
+                            </a>
                         </li>
                         <li>
-                            <a>Following</a>
+                            <a>
+                                <span class="icon is-small"><i class="fa-solid fa-user-plus" aria-hidden="true"></i></span>
+                                <span>Followers</span>
+                            </a>
                         </li>
                     </ul>
                 </div>
                 <div>
                     <section class="tab-content">
-                        {% include 'partials/follower_list.html' with followers=followers %}
+                        {% include 'partials/followee_list.html' with followees=followees %}
                     </section>
                     <section class="tab-content">
-                        {% include 'partials/followee_list.html' with followees=followees %}
+                        {% include 'partials/follower_list.html' with followers=followers %}
                     </section>
                 </div>
             </div>
