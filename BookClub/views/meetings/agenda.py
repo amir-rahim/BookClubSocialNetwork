@@ -25,7 +25,7 @@ class AgendaView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         """Generate context data to be shown in the template."""
-        club_ids = ClubMembership.objects.filter(user=self.request.user).values_list('club', flat=True)
+        club_ids = get_memberships_with_access(self.request.user)
         clubs = Club.objects.filter(id__in=club_ids)
 
         context = super().get_context_data(**kwargs)

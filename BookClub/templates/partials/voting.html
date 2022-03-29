@@ -21,7 +21,7 @@
     <input type="hidden" name="object_id" value="{{ content.id }}"/>
     <p class="control" type="submit">
         <button id="upvote{{ contenttype }}{{ content.id }}"
-                class="button is-rounded is-white {% if vote_type == True %} is-primary{% endif %}"
+                class="button is-rounded is-white {% if vote_type == True %} is-success{% endif %}"
                 aria-label="Upvote">
             <span class="icon">
                 <i class="fa-solid fa-arrow-up"></i>
