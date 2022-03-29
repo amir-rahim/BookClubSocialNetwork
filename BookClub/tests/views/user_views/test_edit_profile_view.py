@@ -25,7 +25,7 @@ class EditProfileTestCase(TestCase):
         }
 
     def test_profile_url(self):
-        self.assertEqual(self.url, '/edit_profile/')
+        self.assertEqual(self.url, '/user/edit/')
 
     def test_get_profile(self):
         self.client.login(username=self.user.username, password='Password123')

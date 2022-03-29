@@ -24,7 +24,7 @@ class PasswordViewTest(TestCase, LogInTester):
         }
 
     def test_password_url(self):
-        self.assertEqual(self.url, '/password_change/')
+        self.assertEqual(self.url, '/user/password/')
 
     def test_get_password(self):
         self.client.login(username=self.user.username, password='Password123')
