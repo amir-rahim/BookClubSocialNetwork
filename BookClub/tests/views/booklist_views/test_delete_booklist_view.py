@@ -31,7 +31,7 @@ class DeleteBookListView(TestCase, LogInTester):
         self.assertRedirects(response, redirect_url,
                              status_code=302, target_status_code=200, fetch_redirect_response=True
                              )
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
 
     def test_redirects_on_get_request_when_logged_in(self):
         self.client.login(username='johndoe', password='Password123')
@@ -42,7 +42,7 @@ class DeleteBookListView(TestCase, LogInTester):
         self.assertRedirects(response, redirect_url,
                              status_code=302, target_status_code=200, fetch_redirect_response=True
                              )
-        self.assertTemplateUsed(response, 'user_booklists.html')
+        self.assertTemplateUsed(response, 'booklists/user_booklists.html')
 
         messages_list = list(response.context['messages'])
         self.assertEqual(len(messages_list), 1)
@@ -75,11 +75,11 @@ class DeleteBookListView(TestCase, LogInTester):
         self.assertRedirects(response, redirect_url,
                              status_code=302, target_status_code=200, fetch_redirect_response=True
                              )
-        self.assertTemplateUsed(response, 'user_booklists.html')
-        response_messages = messages.get_messages(response.wsgi_request)
-        self.assertEqual(len(response_messages), 1)
-        # below test not working, cannot check message contents...
-        # self.assertEqual(str(response_messages[0]), 'Non-existing list was targeted')
+        self.assertTemplateUsed(response, 'booklists/user_booklists.html')
+        messages_list = list(response.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(str(messages_list[0]), 'Non-existing list was targeted')
+        self.assertEqual(messages_list[0].level, messages.ERROR)
 
         after_count = BookList.objects.count()
         self.assertEqual(after_count, before_count)
@@ -97,7 +97,7 @@ class DeleteBookListView(TestCase, LogInTester):
         self.assertRedirects(response, redirect_url,
                              status_code=302, target_status_code=200, fetch_redirect_response=True
                              )
-        self.assertTemplateUsed(response, 'user_booklists.html')
+        self.assertTemplateUsed(response, 'booklists/user_booklists.html')
         response_messages = messages.get_messages(response.wsgi_request)
         self.assertEqual(len(response_messages), 1)
 

@@ -7,14 +7,15 @@ from django.shortcuts import redirect, reverse
 from django.views.generic import FormView, TemplateView, UpdateView, View
 
 from BookClub.forms.user_forms import EditProfileForm, ChangePasswordForm
-from BookClub.models import User, ClubMembership, Club, BookList
+from BookClub.models import User, ClubMembership, Club, BookList, BookShelf
 from BookClub.helpers import *
+from BookClub.models.user2user import UserToUserRelationship
 
 
 class UserDashboardView(LoginRequiredMixin, TemplateView):
     """Class based view for user dashboard"""
     model = User
-    template_name = 'user_dashboard.html'
+    template_name = 'user/user_dashboard.html'
 
     def get_context_data(self, **kwargs):
         context = super(UserDashboardView, self).get_context_data(**kwargs)
@@ -33,13 +34,18 @@ class UserDashboardView(LoginRequiredMixin, TemplateView):
         context['booklist_count'] = BookList.objects.filter(creator=user).count()
         context['club_count'] = ClubMembership.objects.filter(user=user).count()
         context['reputation'] = get_user_reputation(user)
+        context['number_of_to_read'] = BookShelf.get_to_read(user).count()
+        context['number_of_reading'] = BookShelf.get_reading(user).count()
+        context['number_of_on_hold'] = BookShelf.get_on_hold(user).count()
+        context['number_of_completed'] = BookShelf.get_completed(user).count()
+        context['number_of_following'] = UserToUserRelationship.objects.filter(source_user=user.id).count()
         return context
 
 
 class UserProfileMembershipsView(LoginRequiredMixin, TemplateView):
     """Class based view for user profile memberships"""
     model = Club
-    template_name = 'user_profile_memberships.html'
+    template_name = 'user/user_profile_memberships.html'
     context_object_name = 'posts'
 
     def get_queryset(self):
@@ -63,7 +69,7 @@ class EditProfileView(LoginRequiredMixin, UpdateView):
     """Class based view for editing user profile"""
     model = User
     form_class = EditProfileForm
-    template_name = 'edit_profile.html'
+    template_name = 'user/edit_profile.html'
 
     def get_object(self):
         """Return the object (user) to be updated."""
@@ -83,7 +89,7 @@ class EditProfileView(LoginRequiredMixin, UpdateView):
 class ChangePasswordView(LoginRequiredMixin, FormView):
     """Class based view for changing user password"""
     form_class = ChangePasswordForm
-    template_name = 'password_change.html'
+    template_name = 'user/password_change.html'
 
     def get_form_kwargs(self, **kwargs):
         """Pass the current user to the password change form."""

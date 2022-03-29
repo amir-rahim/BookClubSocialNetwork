@@ -55,7 +55,7 @@ class CreateMeetingViewTestCase(TestCase):
         redirect_url = reverse_with_next('login', self.url)
         response = self.client.post(self.url, self.data, follow=True)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200, fetch_redirect_response=True)
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
         meeting_count_after = Meeting.objects.count()
         self.assertEqual(meeting_count_after, meeting_count_before)
 
@@ -64,7 +64,7 @@ class CreateMeetingViewTestCase(TestCase):
         redirect_url = reverse_with_next('login', self.url)
         response = self.client.get(self.url, follow=True)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200, fetch_redirect_response=True)
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
         meeting_count_after = Meeting.objects.count()
         self.assertEqual(meeting_count_after, meeting_count_before)
 
@@ -74,7 +74,7 @@ class CreateMeetingViewTestCase(TestCase):
         self.client.login(username=self.owner.username, password='Password123')
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'create_meeting.html')
+        self.assertTemplateUsed(response, 'meeting/create_meeting.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, MeetingForm))
         self.assertFalse(form.is_bound)
@@ -83,7 +83,7 @@ class CreateMeetingViewTestCase(TestCase):
         self.client.login(username=self.moderator.username, password='Password123')
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'create_meeting.html')
+        self.assertTemplateUsed(response, 'meeting/create_meeting.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, MeetingForm))
         self.assertFalse(form.is_bound)
@@ -120,7 +120,7 @@ class CreateMeetingViewTestCase(TestCase):
         self.assertEqual(messages_list[0].level, messages.SUCCESS)
         after_count = Meeting.objects.count()
         self.assertEqual(after_count, before_count + 1)
-        self.assertTemplateUsed(response, 'club_meetings.html')
+        self.assertTemplateUsed(response, 'meeting/club_meetings.html')
         self.assertEqual(meeting.title, self.data['title'])
         self.assertEqual(meeting.description, self.data['description'])
         self.assertEqual(meeting.location, self.data['location'])
@@ -137,7 +137,7 @@ class CreateMeetingViewTestCase(TestCase):
         self.assertEqual(messages_list[0].level, messages.SUCCESS)
         after_count = Meeting.objects.count()
         self.assertEqual(after_count, before_count + 1)
-        self.assertTemplateUsed(response, 'club_meetings.html')
+        self.assertTemplateUsed(response, 'meeting/club_meetings.html')
         self.assertEqual(meeting.title, self.data['title'])
         self.assertEqual(meeting.description, self.data['description'])
         self.assertEqual(meeting.location, self.data['location'])
@@ -157,7 +157,7 @@ class CreateMeetingViewTestCase(TestCase):
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.ERROR)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'create_meeting.html')
+        self.assertTemplateUsed(response, 'meeting/create_meeting.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, MeetingForm))
         self.assertTrue(form.is_bound)
@@ -173,7 +173,7 @@ class CreateMeetingViewTestCase(TestCase):
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.ERROR)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'create_meeting.html')
+        self.assertTemplateUsed(response, 'meeting/create_meeting.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, MeetingForm))
         self.assertTrue(form.is_bound)
@@ -189,7 +189,7 @@ class CreateMeetingViewTestCase(TestCase):
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.ERROR)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'create_meeting.html')
+        self.assertTemplateUsed(response, 'meeting/create_meeting.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, MeetingForm))
         self.assertTrue(form.is_bound)
@@ -226,7 +226,7 @@ class CreateMeetingViewTestCase(TestCase):
         messages_list = list(response.context['messages'])
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.ERROR)
-        self.assertTemplateUsed(response, 'available_clubs.html')
+        self.assertTemplateUsed(response, 'clubs/available_clubs.html')
 
     def test_moderator_of_club_cannot_create_meetings_for_another_private_club(self):
         self.client.login(username=self.moderator.username, password='Password123')
@@ -236,7 +236,7 @@ class CreateMeetingViewTestCase(TestCase):
         messages_list = list(response.context['messages'])
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.ERROR)
-        self.assertTemplateUsed(response, 'available_clubs.html')
+        self.assertTemplateUsed(response, 'clubs/available_clubs.html')
 
     def test_member_of_club_cannot_create_meetings_for_another_private_club(self):
         self.client.login(username=self.member.username, password='Password123')
@@ -246,7 +246,7 @@ class CreateMeetingViewTestCase(TestCase):
         messages_list = list(response.context['messages'])
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.ERROR)
-        self.assertTemplateUsed(response, 'available_clubs.html')
+        self.assertTemplateUsed(response, 'clubs/available_clubs.html')
 
     '''Tests for users creating meetings for invalid club'''
 

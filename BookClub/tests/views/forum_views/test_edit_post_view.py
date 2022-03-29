@@ -46,7 +46,7 @@ class EditPostViewTestCase(TestCase):
         self.assertRedirects(response, redirect_url,
                              status_code=302, target_status_code=200, fetch_redirect_response=True
                              )
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
 
     def test_redirect_club_when_not_logged_in(self):
         redirect_url = reverse_with_next('login', self.club_url)
@@ -54,7 +54,7 @@ class EditPostViewTestCase(TestCase):
         self.assertRedirects(response, redirect_url,
                              status_code=302, target_status_code=200, fetch_redirect_response=True
                              )
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
 
     def test_redirect_when_not_creator(self):
         self.client.login(username=self.user.username, password="Password123")
@@ -115,7 +115,7 @@ class EditPostViewTestCase(TestCase):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.my_url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'edit_forum_post.html')
+        self.assertTemplateUsed(response, 'forum/edit_forum_post.html')
         self.assertContains(response, "Lorem Ipsum")
         self.assertContains(response, "Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
                                       "Lorem Ipsum has been the industrial standard dummy text ever since the "

@@ -44,7 +44,7 @@ class EditClubViewTestCase(TestCase):
         self.assertRedirects(response, redirect_url,
                              status_code=302, target_status_code=200, fetch_redirect_response=True
                              )
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
 
     def test_post_edit_club_when_non_existing_club(self):
         self.client.login(username=self.user.username, password='Password123')
@@ -54,7 +54,7 @@ class EditClubViewTestCase(TestCase):
         self.assertRedirects(response, redirect_url,
                              status_code=302, target_status_code=200, fetch_redirect_response=True
                              )
-        self.assertTemplateUsed(response, 'available_clubs.html')
+        self.assertTemplateUsed(response, 'clubs/available_clubs.html')
 
     def test_get_edit_club_redirects_when_not_logged_in_invalid_club(self):
         url = reverse('edit_club', kwargs={'club_url_name': 'fakeclub'})
@@ -63,7 +63,7 @@ class EditClubViewTestCase(TestCase):
         self.assertRedirects(response, redirect_url,
                              status_code=302, target_status_code=200, fetch_redirect_response=True
                              )
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
 
     def test_edit_create_club_logged_in_correct_rank(self):
         self.client.login(username=self.user.username, password='Password123')
@@ -73,7 +73,7 @@ class EditClubViewTestCase(TestCase):
         response = self.client.get(self.url)
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'edit_club.html')
+        self.assertTemplateUsed(response, 'clubs/edit_club.html')
         self.assertEqual(len(messages), 0)
 
     def test_edit_club_logged_in_not_in_club(self):

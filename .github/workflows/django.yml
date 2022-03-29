@@ -30,7 +30,7 @@ jobs:
         EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
         DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
       run: |
-        coverage run --source='.' manage.py test
+        coverage run --source='.' manage.py test --exclude-tag=recommenders
         coverage xml
     - name: "Upload coverage to Codecov"
       uses: codecov/codecov-action@v2

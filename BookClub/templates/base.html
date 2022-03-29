@@ -21,38 +21,38 @@
 				const navMenu = document.querySelector(".navbar-menu");
 
 				hamburgerButton.addEventListener("click", () => {
-				  hamburgerButton.classList.toggle("is-active");
-				  navMenu.classList.toggle("is-active");
+					hamburgerButton.classList.toggle("is-active");
+					navMenu.classList.toggle("is-active");
 				});
 
 				const allDropdowns = document.querySelectorAll(
-				  ".navbar-item.has-dropdown"
+				  	".navbar-item.has-dropdown"
 				);
 
 				allDropdowns.forEach((dropdown) => {
-				  dropdown.addEventListener("click", () => {
-					const elem = dropdown.querySelector(".navbar-dropdown");
-					elem.classList.toggle("is-active");
-				  });
+					dropdown.addEventListener("click", () => {
+						const elem = dropdown.querySelector(".navbar-dropdown");
+						elem.classList.toggle("is-active");
+					});
 				});
-			  });
+			});
 
-			  document.addEventListener('DOMContentLoaded', () => {
+			document.addEventListener('DOMContentLoaded', () => {
 				(document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
-				  const $notification = $delete.parentNode;
+					const $notification = $delete.parentNode;
 
-				  $delete.addEventListener('click', () => {
-					$notification.parentNode.removeChild($notification);
-				  });
+					$delete.addEventListener('click', () => {
+						$notification.parentNode.removeChild($notification);
+					});
 				});
-			  });
+			});
 
 
         </script>
         <style>
 
             .carousel{
-              overflow: hidden;
+              	overflow: hidden;
             }
             .card-equal-height {
                 display: flex;
@@ -67,7 +67,7 @@
         <title>
             {% block page_title %}
             {% endblock page_title %}
-        | Novella</title>
+        	| Novella</title>
         {% block head %}
         {% endblock head %}
     </head>
@@ -79,263 +79,278 @@
     <script>
       // Initialize all input of type date
         var calendars = bulmaCalendar.attach('[type="datetime"]', {
-          dateFormat: 'yyyy-MM-dd',
-          timeFormat: 'HH:mm:SS',
-          closeOnSelect : true,
-          displayMode : 'dialog',
-          validateLabel : "Select",
-          minuteSteps : 15,
-          color : 'primary'
+			dateFormat: 'yyyy-MM-dd',
+			timeFormat: 'HH:mm:SS',
+			closeOnSelect : true,
+			displayMode : 'dialog',
+			validateLabel : "Select",
+			minuteSteps : 15,
+			color : 'primary'
         });
 
         // Loop on each calendar initialized
         for(var i = 0; i < calendars.length; i++) {
-          // Add listener to select event
-          calendars[i].on('select', date => {
-            console.log(date);
-          });
+			// Add listener to select event
+			calendars[i].on('select', date => {
+				console.log(date);
+			});
         }
 
         // To access to bulmaCalendar instance of an element
         var element = document.querySelector('#my-element');
         if (element) {
           // bulmaCalendar instance is available as element.bulmaCalendar
-          element.bulmaCalendar.on('select', function(datepicker) {
-            console.log(datepicker.data.value());
-          });
+			element.bulmaCalendar.on('select', function(datepicker) {
+				console.log(datepicker.data.value());
+			});
         }
+        </script>
 
-        var carousels = bulmaCarousel.attach('.carousel', {
-          pagination: false,
-          slidesToShow: 3, 
-          slidesToScroll: 1,
-          infinite: true,
-      });
+        <script>
+			var carousels = bulmaCarousel.attach('.carousel', {
+				pagination: false,
+				slidesToShow: 3, 
+				slidesToScroll: 1,
+				infinite: true,
+			});
 
-      // Loop on each carousel initialized
-      for(var i = 0; i < carousels.length; i++) {
-        // Add listener to  event
-        carousels[i].on('before:show', state => {
-          console.log(state);
+		// Loop on each carousel initialized
+			for(var i = 0; i < carousels.length; i++) {
+			// Add listener to  event
+				carousels[i].on('before:show', state => {
+					console.log(state);
+				});
+			}
+
+		// Access to bulmaCarousel instance of an element
+			var element = document.querySelector('#my-element');
+			if (element && element.bulmaCarousel) {
+				// bulmaCarousel instance is available as element.bulmaCarousel
+				element.bulmaCarousel.on('before-show', function(state) {
+					console.log(state);
+				});
+			}
+      	</script>
+      	<script>
+			document.addEventListener('DOMContentLoaded', () => {
+			// Functions to open and close a modal
+			function openModal($el) {
+				$el.classList.add('is-active');
+			}
+
+			function closeModal($el) {
+				$el.classList.remove('is-active');
+			}
+
+			function closeAllModals() {
+				(document.querySelectorAll('.modal') || []).forEach(($modal) => {
+					closeModal($modal);
+				});
+			}
+
+			// Add a click event on buttons to open a specific modal
+			(document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
+				const modal = $trigger.dataset.target;
+				const $target = document.getElementById(modal);
+				console.log($target);
+
+				$trigger.addEventListener('click', () => {
+					openModal($target);
+				});
+			});
+
+          	// Add a click event on various child elements to close the parent modal
+          	(document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
+            	const $target = $close.closest('.modal');
+
+				$close.addEventListener('click', () => {
+					closeModal($target);
+				});
+          	});
+
+			// Add a keyboard event to close all modals
+			document.addEventListener('keydown', (event) => {
+				const e = event || window.event;
+
+				if (e.keyCode === 27) { // Escape key
+					closeAllModals();
+				}
+          	});
         });
-      }
+      	</script>
 
-      // Access to bulmaCarousel instance of an element
-      var element = document.querySelector('#my-element');
-      if (element && element.bulmaCarousel) {
-        // bulmaCarousel instance is available as element.bulmaCarousel
-        element.bulmaCarousel.on('before-show', function(state) {
-          console.log(state);
-        });
-      }
+      	<script>
+			$('.voteform').on('submit', catchVote);
 
-        document.addEventListener('DOMContentLoaded', () => {
-          // Functions to open and close a modal
-          function openModal($el) {
-            $el.classList.add('is-active');
-          }
+			function catchVote(event){
+				event.preventDefault();
+				form = event.target
+				content_type = form['content_type'].value
+				object_id = form['object_id'].value
+				url = form.action
+				identifier = content_type+object_id
+				create_vote(url, identifier, form);
+			}
 
-          function closeModal($el) {
-            $el.classList.remove('is-active');
-          }
+			function updateRating(identifier, rating){
+				$('#votecount'+identifier).text(rating)
+			}
 
-          function closeAllModals() {
-            (document.querySelectorAll('.modal') || []).forEach(($modal) => {
-              closeModal($modal);
+			function create_vote(actionUrl, identifier, form) {
+				$.ajax({
+					type: "POST",
+					url: actionUrl,
+					data: $(form).serializeArray()
+				}).done(function (response){
+					rating = response['rating']
+					upvoted = response['upvote']
+					downvoted = response['downvote']
+					noVote = response['no_vote']
+					console.log(upvoted)
+					console.log(downvoted)
+					console.log(noVote)
+					if(noVote){
+					minimise_downvote(identifier)
+					minimise_upvote(identifier)
+					}
+					else if(downvoted){
+					minimise_upvote(identifier)
+					highlight_downvote(identifier)
+					}
+					else if(upvoted){
+					minimise_downvote(identifier)
+					highlight_upvote(identifier)
+					}
+					updateRating(identifier, rating)
+				});
+			}
+
+			function highlight_upvote(identifier){
+				$('#upvote'+identifier).addClass('is-success')
+			}
+
+			function minimise_upvote(identifier){
+				$('#upvote'+identifier).removeClass('is-success')
+			}
+
+			function highlight_downvote(identifier){
+				$('#downvote'+identifier).addClass('is-danger')
+			}
+
+			function minimise_downvote(identifier){
+				$('#downvote'+identifier).removeClass('is-danger')
+			}
+      	</script>
+
+      	<script>
+		  	document.addEventListener('DOMContentLoaded', () => {
+			// Functions to open and close a modal
+				function openModal($el) {
+					$el.classList.add('is-active');
+				}
+
+				function closeModal($el) {
+					$el.classList.remove('is-active');
+				}
+
+				function closeAllModals() {
+					(document.querySelectorAll('.modal') || []).forEach(($modal) => {
+						closeModal($modal);
+					});
+				}
+
+				// Add a click event on buttons to open a specific modal
+				(document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
+					const modal = $trigger.dataset.target;
+					const $target = document.getElementById(modal);
+					console.log($target);
+
+					$trigger.addEventListener('click', () => {
+						openModal($target);
+					});
+				});
+
+				// Add a click event on various child elements to close the parent modal
+				(document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
+					const $target = $close.closest('.modal');
+
+					$close.addEventListener('click', () => {
+						closeModal($target);
+					});
+				});
+
+				// Add a keyboard event to close all modals
+				document.addEventListener('keydown', (event) => {
+					const e = event || window.event;
+
+					if (e.keyCode === 27) { // Escape key
+						closeAllModals();
+					}
+				});
+			});
+		</script>
+		<script>
+			let tabsWithContent = (function () {
+				let tabs = document.querySelectorAll('.tabs li');
+				let tabsContent = document.querySelectorAll('.tab-content');
+
+				let deactvateAllTabs = function () {
+					tabs.forEach(function (tab) {
+						tab.classList.remove('is-active');
+					});
+				};
+
+				let hideTabsContent = function () {
+					tabsContent.forEach(function (tabContent) {
+						tabContent.classList.remove('is-active');
+					});
+				};
+
+				let activateTabsContent = function (tab) {
+					tabsContent[getIndex(tab)].classList.add('is-active');
+				};
+
+				let getIndex = function (el) {
+					return [...el.parentElement.children].indexOf(el);
+				};
+
+				tabs.forEach(function (tab) {
+					tab.addEventListener('click', function () {
+						deactvateAllTabs();
+						hideTabsContent();
+						tab.classList.add('is-active');
+						activateTabsContent(tab);
+					});
+				})
+
+              	tabs[0].click();
+            })();
+		</script>
+		<script>
+              //Show Hide password
+            $(".toggle-password").click(function() {
+
+				$(this).toggleClass("fa-eye fa-eye-slash");
+				var input = $($(this).attr("toggle"));
+				if (input.attr("type") === "password") {
+					input.attr("type", "text");
+				} else {
+					input.attr("type", "password");
+				}
+
             });
-          }
+        </script>
+        <script>
+			$(window).on("load", function() {
+				active = $('a[href="{{ request.path }}"')
+				active.addClass("is-active")
+				activehtml = active.html()
+				activehtml = "<b>"+activehtml+"</b>"
+				active.html(activehtml)
+			})
+        </script>
 
-          // Add a click event on buttons to open a specific modal
-          (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
-            const modal = $trigger.dataset.target;
-            const $target = document.getElementById(modal);
-            console.log($target);
-
-            $trigger.addEventListener('click', () => {
-              openModal($target);
-            });
-          });
-
-          // Add a click event on various child elements to close the parent modal
-          (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
-            const $target = $close.closest('.modal');
-
-            $close.addEventListener('click', () => {
-              closeModal($target);
-            });
-          });
-
-          // Add a keyboard event to close all modals
-          document.addEventListener('keydown', (event) => {
-            const e = event || window.event;
-
-            if (e.keyCode === 27) { // Escape key
-              closeAllModals();
-            }
-          });
-        });
-
-        $('.voteform').on('submit', catchVote);
-
-        function catchVote(event){
-          event.preventDefault();
-          form = event.target
-          content_type = form['content_type'].value
-          object_id = form['object_id'].value
-          url = form.action
-          identifier = content_type+object_id
-          create_vote(url, identifier, form);
-        }
-
-        function updateRating(identifier, rating){
-          $('#votecount'+identifier).text(rating)
-        }
-
-        function create_vote(actionUrl, identifier, form) {
-          $.ajax({
-            type: "POST",
-            url: actionUrl,
-            data: $(form).serializeArray()
-          }).done(function (response){
-            rating = response['rating']
-            upvoted = response['upvote']
-            downvoted = response['downvote']
-            noVote = response['no_vote']
-            console.log(upvoted)
-            console.log(downvoted)
-            console.log(noVote)
-            if(noVote){
-              minimise_downvote(identifier)
-              minimise_upvote(identifier)
-            }
-            else if(downvoted){
-              minimise_upvote(identifier)
-              highlight_downvote(identifier)
-            }
-            else if(upvoted){
-              minimise_downvote(identifier)
-              highlight_upvote(identifier)
-            }
-            updateRating(identifier, rating)
-          });
-        }
-
-        function highlight_upvote(identifier){
-            $('#upvote'+identifier).addClass('is-primary')
-        }
-
-        function minimise_upvote(identifier){
-            $('#upvote'+identifier).removeClass('is-primary')
-        }
-
-        function highlight_downvote(identifier){
-            $('#downvote'+identifier).addClass('is-danger')
-        }
-
-        function minimise_downvote(identifier){
-            $('#downvote'+identifier).removeClass('is-danger')
-        }
-
-		document.addEventListener('DOMContentLoaded', () => {
-	// Functions to open and close a modal
-	function openModal($el) {
-		$el.classList.add('is-active');
-	}
-
-	function closeModal($el) {
-		$el.classList.remove('is-active');
-	}
-
-	function closeAllModals() {
-		(document.querySelectorAll('.modal') || []).forEach(($modal) => {
-			closeModal($modal);
-		});
-	}
-
-	// Add a click event on buttons to open a specific modal
-	(document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
-		const modal = $trigger.dataset.target;
-		const $target = document.getElementById(modal);
-		console.log($target);
-
-		$trigger.addEventListener('click', () => {
-			openModal($target);
-		});
-	});
-
-	// Add a click event on various child elements to close the parent modal
-	(document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
-		const $target = $close.closest('.modal');
-
-		$close.addEventListener('click', () => {
-			closeModal($target);
-		});
-	});
-
-	// Add a keyboard event to close all modals
-	document.addEventListener('keydown', (event) => {
-		const e = event || window.event;
-
-		if (e.keyCode === 27) { // Escape key
-			closeAllModals();
-		}
-	});
-	});
-
-  let tabsWithContent = (function () {
-          let tabs = document.querySelectorAll('.tabs li');
-          let tabsContent = document.querySelectorAll('.tab-content');
-
-          let deactvateAllTabs = function () {
-            tabs.forEach(function (tab) {
-              tab.classList.remove('is-active');
-            });
-          };
-
-          let hideTabsContent = function () {
-            tabsContent.forEach(function (tabContent) {
-              tabContent.classList.remove('is-active');
-            });
-          };
-
-          let activateTabsContent = function (tab) {
-            tabsContent[getIndex(tab)].classList.add('is-active');
-          };
-
-          let getIndex = function (el) {
-            return [...el.parentElement.children].indexOf(el);
-          };
-
-          tabs.forEach(function (tab) {
-            tab.addEventListener('click', function () {
-              deactvateAllTabs();
-              hideTabsContent();
-              tab.classList.add('is-active');
-              activateTabsContent(tab);
-            });
-          })
-
-          tabs[0].click();
-        })();
-
-
-    </script>
-
-    <script>
-          //Show Hide password
-        $(".toggle-password").click(function() {
-
-          $(this).toggleClass("fa-eye fa-eye-slash");
-          var input = $($(this).attr("toggle"));
-          if (input.attr("type") === "password") {
-            input.attr("type", "text");
-          } else {
-            input.attr("type", "password");
-          }
-
-        });
-    </script>
-        <style>
+	  <style>
         #tabs-with-content .tabs:not(:last-child) {
           margin-bottom: 0;
         }

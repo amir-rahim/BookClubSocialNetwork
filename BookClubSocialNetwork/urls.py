@@ -42,9 +42,11 @@ urlpatterns = [
 
     # '''User URLs'''
     path('user/', views.UserDashboardView.as_view(), name='user_dashboard'),
-    path('edit_profile/', views.EditProfileView.as_view(), name='edit_profile'),
-    path('password_change/', views.ChangePasswordView.as_view(), name='password_change'),
-    path('delete_account/', views.DeleteUserAccountView.as_view(), name='delete_user_account'),
+    path('user/following/', views.FollowerListView.as_view(), name='user_following'),
+    path('user/search/', views.GlobalUserListView.as_view(), name='global_user_search'),
+    path('user/edit/', views.EditProfileView.as_view(), name='edit_profile'),
+    path('user/password/', views.ChangePasswordView.as_view(), name='password_change'),
+    path('user/delete/', views.DeleteUserAccountView.as_view(), name='delete_user_account'),
 
     # '''User Profile URLs'''
     path('profile/<str:username>/', views.UserDashboardView.as_view(), name='user_profile'),
@@ -159,7 +161,7 @@ urlpatterns = [
     path('bookshelf/<int:book_id>/remove/', views.RemoveFromBookShelfView.as_view(), name='remove_from_bookshelf'),
     
     # '''Asyn Views'''
-    path('search_books/', views.SearchView.as_view(), name='async_book_search'),
+    path('search/', views.SearchView.as_view(), name='async_search'),
     path('user_recommendations/', views.RecommendationUserListView.as_view(), name='async_user_recommendations'),
     path('club_recommendations/<str:club_url_name>/', views.RecommendationClubListView.as_view(), name='async_club_recommendations'),
 

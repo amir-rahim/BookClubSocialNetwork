@@ -1,0 +1,245 @@
+{% extends 'base_content.html' %}
+{% block page_title %}
+    Forums
+{% endblock page_title %}
+{% block page_subtitle %}
+    Upvote and leave comments on this post!
+{% endblock page_subtitle %}
+{% block content %}
+    <div class="columns">
+        <div class="column is-3">
+            {% if club %}
+                {% include 'partials/aside_menu/club_aside.html' with current_club=club %}
+            {% else %}
+            <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+                <p class="menu-label">
+                    Global Forums
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'global_forum' %}" class="is-active"><b>Forums</b></a>
+                    </li>
+                </ul>
+                <p class="menu-label">
+                    Clubs
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'available_clubs' %}">Available Clubs</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'my_club_memberships' %}">Memberships</a>
+                    </li>
+                </ul>
+                <p class="menu-label">
+                    Useful Links
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="{% url 'user_dashboard' %}">User Profile</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'library_dashboard' %}">Library</a>
+                    </li>
+                </ul>
+            </aside>
+            {% endif %}
+        </div>
+        <div class="column is-9">
+            <nav class="breadcrumb"
+                 aria-label="breadcrumbs"
+                 style="padding-left: 10px;">
+                <ul>
+                    <li>
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    {% if club %}
+                        <li>
+                            <a href="{% url 'club_dashboard' club.club_url_name %}">{{ club.name }}</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'club_forum' club_url_name=club.club_url_name %}">Forums</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'forum_post' club.club_url_name post.id %}">{{ post.title }}</a>
+                        </li>
+                    {% else %}
+                        <li>        
+                            <a href="{% url 'global_forum' %}">Forums</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'forum_post' post.id %}">{{ post.title }}</a>
+                        </li>
+                    {% endif %}
+                    
+                </ul>
+            </nav>
+            <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
+                <div class="hero-body">
+                    <h1 class="title">
+                        <b>{{ post.title }}</b>
+                    </h1>
+                </div>
+            </section>
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title is-vcentered">
+                        <span class="has-text-grey-light">Posted by: <a href="{{ post.user.get_absolute_url }}"> {{ post.creator }} </a> {{ post.created_on | timesince }} ago</span>
+                    </p>
+                    <div class="card-header-icon">
+                        {% if user == post.creator %}
+                            <a href="{% url 'edit_forum_post' post_id=post.id %}">
+                                <button class="button is-success is-rounded" aria-label="Edit Post">
+                                    <span>Edit</span>
+                                    <span class="icon is-small">
+                                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                    </span>
+                                </button>
+                            </a>
+                        {% endif %}
+                    </div>
+                </header>
+                <div class="card-content">
+                    <div class="content">
+                        <span class="has-text-grey">{{ post.content }}</span>
+                    </div>
+                </div>
+                <footer class="card-footer">
+                    <p class="card-footer-item">
+                        <button class="button is-info js-modal-trigger is-rounded"
+                                data-target="modal-create-comment">
+                            <span class="icon">
+                                <i class="fa-solid fa-pen"></i>
+                            </span>
+                            <span>Reply</span>
+                        </button>
+                    </p>
+                    <div class="card-footer-item">{% include 'partials/voting.html' with content=post %}</div>
+                </footer>
+            </div>
+            <br />
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-header-title">Comments to Post:</div>
+                </div>
+                <div class="card-content">
+                    {% if comments.count > 0 %}
+                        {% for comment in comments %}
+                            <article class="message">
+                                <div class="columns is-vcentered">
+                                    <div class="column is-1" style="margin-left: 20px;">{% include 'partials/voting.html' with content=comment %}</div>
+                                    <div class="column is-11">
+                                        <div class="message-body" style="margin-right: 20px;">
+                                            <p class="has-text-justified">
+                                                "{{ comment.content }}"
+                                            </p>
+                                            <br />
+                                            <p class="has-text-right">
+                                                <i>- by <a href="{{ comment.creator.get_absolute_url }}">{{ comment.creator }}</a>, {{ comment.created_on | timesince }} ago</i>
+                                            </p>
+                                            <div class="buttons">
+                                                {% if comment.creator == user %}
+                                                    {% include 'partials/delete_button_and_modal.html' with delete_item=comment delete_modal_id=comment.pk %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                                <br />
+                            {% endfor %}
+                            {% include 'partials/pagination.html' %}
+                        {% else %}
+                            <p class="has-text-grey-light has-text-centered">
+                                <i>There are no comments for this post. Comment using the reply button on the post.</i>
+                            </p>
+                            <br />
+                        {% endif %}
+                    </div>
+                </div>
+                <div id="modal-create-comment" class="modal">
+                    <div class="modal-background"></div>
+                    <div class="modal-content">
+                        <div class="card">
+                            <div class="card-header">
+                                <button class="card-header-icon" aria-label="more options">
+                                    <span class="icon">
+                                        <i class="card-header-icon fa-solid fa-pen-clip"></i>
+                                    </span>
+                                </button>
+                                <p class="card-header-title">
+                                    Create Comment/Reply
+                                </p>
+                            </div>
+                            <div class="card-content">
+                                <form method="post" action="{% url 'create_forum_comment' post.id %}">
+                                    <div class="card-content">
+                                        <div class="container">
+                                            {% csrf_token %}
+                                            {% include 'partials/bulma_form.html' with form=forum_comment_form %}
+                                        </div>
+                                    </div>
+                                    <footer class="card-footer">
+                                        <input type="button"
+                                               value="Reset"
+                                               id="resetBtn"
+                                               onClick="this.form.reset()"
+                                               class="button is-danger is-fullwidth"/>
+                                        <input type="submit" value="Add Comment" class="button is-link is-fullwidth"/>
+                                    </footer>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="modal-close is-large" aria-label="close"></button>
+                </div>
+            </div>
+        </div>
+        <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          // Functions to open and close a modal
+          function openModal($el) {
+            $el.classList.add('is-active');
+          }
+
+          function closeModal($el) {
+            $el.classList.remove('is-active');
+          }
+
+          function closeAllModals() {
+            (document.querySelectorAll('.modal') || []).forEach(($modal) => {
+              closeModal($modal);
+            });
+          }
+
+          // Add a click event on buttons to open a specific modal
+          (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
+            const modal = $trigger.dataset.target;
+            const $target = document.getElementById(modal);
+            console.log($target);
+
+            $trigger.addEventListener('click', () => {
+              openModal($target);
+            });
+          });
+
+          // Add a click event on various child elements to close the parent modal
+          (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
+            const $target = $close.closest('.modal');
+
+            $close.addEventListener('click', () => {
+              closeModal($target);
+            });
+          });
+
+          // Add a keyboard event to close all modals
+          document.addEventListener('keydown', (event) => {
+            const e = event || window.event;
+
+            if (e.keyCode === 27) { // Escape key
+              closeAllModals();
+            }
+          });
+        });
+
+        </script>
+    {% endblock content %}

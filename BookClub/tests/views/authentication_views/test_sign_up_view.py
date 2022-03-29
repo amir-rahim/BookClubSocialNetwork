@@ -33,7 +33,7 @@ class SignUpViewTestCase(TestCase, LogInTester):
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'sign_up.html')
+        self.assertTemplateUsed(response, 'authentication/sign_up.html')
 
         form = response.context['form']
 
@@ -56,7 +56,7 @@ class SignUpViewTestCase(TestCase, LogInTester):
 
         self.assertEqual(after_count, before_count)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'sign_up.html')
+        self.assertTemplateUsed(response, 'authentication/sign_up.html')
 
         form = response.context['form']
 

@@ -35,7 +35,7 @@ class MeetingListTest(TestCase):
         self.client.login(username=self.owner.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'club_meetings.html')
+        self.assertTemplateUsed(response, 'meeting/club_meetings.html')
 
     def test_redirect_when_not_logged_in(self):
         response = self.client.get(self.url)
@@ -54,7 +54,7 @@ class MeetingListTest(TestCase):
         self.meeting.leave_member(self.owner)
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'club_meetings.html')
+        self.assertTemplateUsed(response, 'meeting/club_meetings.html')
         self.assertContains(response, 'Book meeting 1')
         self.assertContains(response, 'Feb. 22, 2022, 7 p.m.')
         self.assertContains(response, 'johndoe')
@@ -66,7 +66,7 @@ class MeetingListTest(TestCase):
         self.meeting.leave_member(self.moderator)
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'club_meetings.html')
+        self.assertTemplateUsed(response, 'meeting/club_meetings.html')
         self.assertContains(response, 'Book meeting 1')
         self.assertContains(response, 'Feb. 22, 2022, 7 p.m.')
         self.assertContains(response, 'johndoe')
@@ -77,7 +77,7 @@ class MeetingListTest(TestCase):
         self.client.login(username=self.member.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'club_meetings.html')
+        self.assertTemplateUsed(response, 'meeting/club_meetings.html')
         self.assertContains(response, 'Book meeting 1')
         self.assertContains(response, 'Feb. 22, 2022, 7 p.m.')
         self.assertContains(response, 'johndoe')
@@ -100,7 +100,7 @@ class MeetingListTest(TestCase):
         self.client.login(username=self.owner.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'club_meetings.html')
+        self.assertTemplateUsed(response, 'meeting/club_meetings.html')
 
         self.assertContains(response, 'Book meeting 1')
         self.assertContains(response, 'johndoe')
@@ -119,8 +119,8 @@ class MeetingListTest(TestCase):
         ClubMembership.objects.create(user=self.owner, club=club, membership=ClubMembership.UserRoles.MEMBER)
         response = self.client.get(reverse("meeting_list", kwargs={'club_url_name': club.club_url_name}))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'club_meetings.html')
-        self.assertContains(response, 'Join Meeting')
+        self.assertTemplateUsed(response, 'meeting/club_meetings.html')
+        self.assertContains(response, 'Join')
 
     def test_allowed_user_can_see_leave_button(self):
         self.client.login(username=self.owner.username, password="Password123")
@@ -130,8 +130,8 @@ class MeetingListTest(TestCase):
         meeting.join_member(self.owner)
         response = self.client.get(reverse("meeting_list", kwargs={'club_url_name': club.club_url_name}))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'club_meetings.html')
-        self.assertContains(response, 'Leave Meeting')
+        self.assertTemplateUsed(response, 'meeting/club_meetings.html')
+        self.assertContains(response, 'Leave')
 
     def test_invalid_club(self):
         self.client.login(username=self.member.username, password="Password123")

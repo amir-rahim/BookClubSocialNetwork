@@ -41,10 +41,7 @@ class JoinMeetingViewTestCase(TestCase, LogInTester):
         self.client.login(username=self.user.username, password='Password123')
         self.assertTrue(self._is_logged_in())
         response = self.client.get(reverse('join_meeting', kwargs={'club_url_name' : self.club.club_url_name, 'meeting_id': self.future_meeting.id}))
-        redirect_url = reverse('meeting_details', kwargs={
-                                                    'club_url_name' : self.club.club_url_name,
-                                                    'meeting_id' : self.future_meeting.id
-                                                }) 
+        redirect_url = reverse('meeting_list', kwargs={'club_url_name' : self.club.club_url_name}) 
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_member_successful_join_meeting(self):

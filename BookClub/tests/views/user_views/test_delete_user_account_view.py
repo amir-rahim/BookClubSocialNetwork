@@ -21,7 +21,7 @@ class DeleteUserAccountView(TestCase, LogInTester):
         self.url = reverse('delete_user_account')
 
     def test_delete_user_account_url(self):
-        self.assertEqual(self.url, f'/delete_account/')
+        self.assertEqual(self.url, f'/user/delete/')
 
     def test_get_delete_user_account_redirects_to_home(self):
         """Test for redirecting user to logged out home page when account deleted."""

@@ -1,0 +1,27 @@
+{% for user in page_obj %}
+    <div class="container">
+        <div class="card-content">
+            <div class="media">
+                <div class="media-left">
+                    <figure class="image is-64x64">
+                        <img class="is-rounded" src="{{ user.gravatar }}" alt="Placeholder image">
+                    </figure>
+                </div>
+                <div class="media-content">
+                    <div class="content">
+                        <p class="text">
+                            <a href="{% url 'user_profile' user.username %}"><b>Username: </b> {{ user.username }}</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% empty %}
+    <br>
+    <p style="text-align: center" class="has-text-grey">
+        No users found.
+    </p>
+    <br>
+{% endfor %}
+{% include 'partials/pagination_ajax.html' %}

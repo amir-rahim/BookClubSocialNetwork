@@ -1,7 +1,7 @@
 <div class="card-content">
     <div class="content">
         <p class="subtitle is-4 charlimit">
-            {{ meeting.description }}
+            {{ meeting.description |truncatechars:25 }}
             <br />
         </p>
         <span class="subtitle is-5">

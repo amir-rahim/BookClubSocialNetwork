@@ -69,7 +69,7 @@ class CreateClubPollViewTestCase(TestCase):
         response = self.client.post(self.url, self.data, follow=True)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200,
                              fetch_redirect_response=True)
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
         polls_count_after = Poll.objects.count()
         options_count_after = Option.objects.count()
         self.assertEqual(polls_count_after, polls_count_before)
@@ -82,7 +82,7 @@ class CreateClubPollViewTestCase(TestCase):
         response = self.client.get(self.url, follow=True)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200,
                              fetch_redirect_response=True)
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
         polls_count_after = Poll.objects.count()
         options_count_after = Option.objects.count()
         self.assertEqual(polls_count_after, polls_count_before)
@@ -94,7 +94,7 @@ class CreateClubPollViewTestCase(TestCase):
         self.client.login(username=self.owner.username, password='Password123')
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'create_club_poll.html')
+        self.assertTemplateUsed(response, 'clubs/create_club_poll.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, PollForm))
         self.assertFalse(form.is_bound)
@@ -133,7 +133,7 @@ class CreateClubPollViewTestCase(TestCase):
         self.assertEqual(polls_after_count, polls_before_count + 1)
 
         poll = Poll.objects.get(title=self.data['poll_title'])
-        self.assertTemplateUsed(response, 'club_dashboard.html')
+        self.assertTemplateUsed(response, 'clubs/club_dashboard.html')
         self.assertEqual(poll.title, self.data['poll_title'])
         self.assertEqual(poll.deadline, self.data['deadline'])
         self.assertEqual(poll.active, saving_datetime < poll.deadline)
@@ -176,7 +176,7 @@ class CreateClubPollViewTestCase(TestCase):
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.ERROR)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'create_club_poll.html')
+        self.assertTemplateUsed(response, 'clubs/create_club_poll.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, PollForm))
         self.assertTrue(form.is_bound)

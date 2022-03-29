@@ -1,0 +1,102 @@
+{% extends 'base_content.html' %}
+{% block page_title %}
+    {{ club.name }}
+{% endblock page_title %}
+{% block page_subtitle %}
+    {{ club.tagline }}
+{% endblock page_subtitle %}
+{% block content %}
+    <div class="columns">
+        <div class="column is-12">
+            <nav class="breadcrumb"
+                 aria-label="breadcrumbs"
+                 style="padding-left: 5px;">
+                <ul>
+                    <li>
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'available_clubs' %}">Clubs</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'club_dashboard' club.club_url_name %}">{{ club.club_url_name }}</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'meeting_list' club.club_url_name %}">Meetings</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'meeting_details' club.club_url_name meeting.id %}">{{ meeting.get_title }}</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'edit_meeting' club.club_url_name meeting.id %}">Manage</a>
+                    </li>
+                </ul>
+            </nav>
+            <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
+                <div class="hero-body">
+                    <div class="container">
+                        <h1 class="title">Edit meeting</h1>
+                        <h2 class="subtitle">Edit the details of meeting</h2>
+                    </div>
+                </div>
+            </section>
+            <div class="container">
+                <div class="card-content">
+                    <div class="columns">
+                        <div class="column is-9">
+                            <form method="post">
+                                {% csrf_token %}
+                                {% include 'partials/bulma_form.html' with form=form %}
+                                <input type="submit" value="Update Meeting" class="button is-link"/>
+                            </form>
+                        </div>
+                        <div class="column is-3">
+                            <div class="table-container">
+                                <table class="table is-hoverable"
+                                    id="table-clubs"
+                                    data-toggle="table"
+                                    data-pagination="true">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Gravatar</th>
+                                            <th scope="col">Username</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for member in members %}
+                                            {% if member == meeting.organiser %}
+                                            {% else %}
+                                                <td>
+                                                    <figure class="image is-48x48">
+                                                        <img class="is-rounded"
+                                                            src="{{ member.gravatar }}"
+                                                            alt="Placeholder image">
+                                                    </figure>
+                                                </td>
+                                                <td>{{ member.username }}</td>
+                                                <td>
+                                                    <form id="{{ member.id }}"
+                                                        action="{% url 'remove_meeting_member' club.club_url_name meeting.id member.id %}"
+                                                        method="post">
+                                                        {% csrf_token %}
+                                                        <button type='submit' class="button is-danger is-outlined">
+                                                            <span>Kick</span>
+                                                            <span class="icon is-small">
+                                                                <i class="fas fa-times"></i>
+                                                            </span>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            {% endif %}
+                                        </tbody>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

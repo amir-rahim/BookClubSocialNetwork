@@ -26,20 +26,20 @@ class BookDetailViewTestCase(TestCase):
 
     def test_contains_book_data(self):
         response = self.client.get(self.url)
-        self.assertTemplateUsed(response, 'book_detail_view.html')
+        self.assertTemplateUsed(response, 'library/book_detail_view.html')
         context = response.context
         self.assertEqual(context['book'], self.book)
 
     def test_redirect_invalid_book(self):
         url = reverse('book_view', kwargs={'book_id' : 99999})
         response = self.client.get(url)
-        self.assertTemplateNotUsed(response, 'book_detail_view.html')
+        self.assertTemplateNotUsed(response, 'library/book_detail_view.html')
         self.assertEqual(response.status_code, 404)
 
     def test_displays_book_data(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'book_detail_view.html')
+        self.assertTemplateUsed(response, 'library/book_detail_view.html')
         content = response.content
         self.assertContains(response, 'Author')
         self.assertContains(response, self.book.ISBN)
@@ -54,7 +54,7 @@ class BookDetailViewTestCase(TestCase):
     def test_displays_no_review_message(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'book_detail_view.html')
+        self.assertTemplateUsed(response, 'library/book_detail_view.html')
         content = response.content
         self.assertContains(response, 'Author')
         self.assertContains(response, self.book.ISBN)
@@ -78,7 +78,7 @@ class BookDetailViewTestCase(TestCase):
 
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'book_detail_view.html')
+        self.assertTemplateUsed(response, 'library/book_detail_view.html')
         content = response.content
         self.assertContains(response, 'Author')
         self.assertContains(response, self.book.ISBN)
@@ -108,7 +108,7 @@ class BookDetailViewTestCase(TestCase):
         )
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'book_detail_view.html')
+        self.assertTemplateUsed(response, 'library/book_detail_view.html')
         content = response.content
         self.assertContains(response, 'Author')
         self.assertContains(response, self.book.ISBN)
@@ -146,7 +146,7 @@ class BookDetailViewTestCase(TestCase):
 
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'book_detail_view.html')
+        self.assertTemplateUsed(response, 'library/book_detail_view.html')
         content = response.content
         self.assertContains(response, 'Author')
         self.assertContains(response, self.book.ISBN)
@@ -190,7 +190,7 @@ class BookDetailViewTestCase(TestCase):
         )
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'book_detail_view.html')
+        self.assertTemplateUsed(response, 'library/book_detail_view.html')
         content = response.content
         self.assertContains(response, 'Author')
         self.assertContains(response, self.book.ISBN)

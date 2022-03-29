@@ -53,6 +53,7 @@ class Migration(migrations.Migration):
                 ('books', models.ManyToManyField(blank=True, to='BookClub.Book')),
             ],
             options={
+                'ordering': ['-created_on'],
                 'abstract': False,
             },
         ),
@@ -84,6 +85,9 @@ class Migration(migrations.Migration):
                 ('is_private', models.BooleanField(default=False)),
                 ('created_on', models.DateField(auto_now_add=True)),
             ],
+            options={
+                'ordering': ['name'],
+            },
         ),
         migrations.CreateModel(
             name='Forum',
@@ -128,9 +132,7 @@ class Migration(migrations.Migration):
                 ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.Permission', verbose_name='user permissions')),
             ],
             options={
-                'verbose_name': 'user',
-                'verbose_name_plural': 'users',
-                'abstract': False,
+                'ordering': ['username'],
             },
             managers=[
                 ('objects', django.contrib.auth.models.UserManager()),

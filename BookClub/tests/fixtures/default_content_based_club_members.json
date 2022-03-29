@@ -1,0 +1,23 @@
+[
+    {
+        "model": "BookClub.ClubMembership",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "club": 1,
+            "membership": 2,
+            "joined_on": "2022-02-04"
+        }
+    },
+
+    {
+        "model": "BookClub.ClubMembership",
+        "pk": 2,
+        "fields": {
+            "user": 2,
+            "club": 1,
+            "membership": 0,
+            "joined_on": "2022-02-03"
+        }
+    }
+]

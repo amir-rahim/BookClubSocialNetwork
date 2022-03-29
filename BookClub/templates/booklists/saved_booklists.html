@@ -1,0 +1,127 @@
+{% extends 'base_content.html' %}
+{% block page_title %}
+    Book Lists
+{% endblock page_title %}
+{% block page_subtitle %}
+    Collections of your favourite reads
+{% endblock page_subtitle %}
+{% block content %}
+    <div class="columns">
+        <div class="column is-3">
+            {% if own %}
+                {% include 'partials/aside_menu/library_aside.html' %}
+            {% else %}
+                {% include 'partials/aside_menu/profile_aside.html' with username=creator.username %}
+            {% endif %}
+        </div>
+        <div class="column is-9">
+            {% if own %}
+            <nav class="breadcrumb"
+                 aria-label="breadcrumbs"
+                 style="padding-left: 5px;">
+                <ul>
+                    <li>
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'user_dashboard' %}">{{ creator.username }}</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'booklists_list' %}">Book Lists</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'saved_booklists' %}">Saved</a>
+                    </li>
+                </ul>
+            </nav>
+            {% else %}
+            <nav class="breadcrumb"
+                 aria-label="breadcrumbs"
+                 style="padding-left: 5px;">
+                <ul>
+                    <li>
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'user_profile' username=creator.username %}">{{ creator.username }}</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'booklists_list' username=creator.username %}">Book Lists</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'saved_booklists' username=creator.username %}">Saved</a>
+                    </li>
+                </ul>
+            </nav>
+            {% endif %}
+            <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
+                <div class="hero-body">
+                    <div class="container">
+                        <h1 class="title">Saved Book Lists</h1>
+                        <h2 class="subtitle">Favourite other user's lists</h2>
+                    </div>
+                </div>
+            </section>
+            <div class="columns">
+                <div class="column is-12">
+                    <div class="container">
+                        <table class="table is-fullwidth is-hoverable">
+                            {% if booklists %}
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Book List</th>
+                                        <th scope="col">Creator</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                            {% endif %}
+                            <tbody>
+                                {% for list in booklists %}
+                                    <tr>
+                                        <td class="container">
+                                            <p class="is-medium">
+                                                <strong><a href="{% url 'user_booklist' list.id %}">{{ list.title }}</a></strong>
+                                            </p>
+                                        </td>
+                                        <td class="container">
+                                            {{ creator.username }}
+                                        </td>
+                                        <td class="container">
+                                            {% if list.description %}
+                                                <p>
+                                                    {{ list.description }}
+                                                </p>
+                                            {% endif %}
+                                        </td>
+                                        {% if own %}
+                                            <td>
+                                                <form method="post"
+                                                    action="{% url 'remove_saved_booklist' booklist_id=list.id %}">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="button is-info">Remove from saved</button>
+                                                </form>
+                                            </td>
+                                        {% endif %}
+                                    </tr>
+                                {% empty %}
+                                    <hr>
+                                        <p style="text-align: center" class="has-text-grey">
+                                            No saved lists.
+                                            {% if own %}
+                                            You can save other user's lists by visiting their profiles.
+                                            {% endif %}
+                                        </p>
+                                    <hr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                {% include 'partials/booklist_search.html' with content=lists %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

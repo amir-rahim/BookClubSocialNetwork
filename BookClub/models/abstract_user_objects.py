@@ -6,6 +6,7 @@ class UserCreatedObject(models.Model):
 
     class Meta:
         abstract = True
+        ordering = ['-created_on']
 
     creator = models.ForeignKey(
         'BookClub.User', blank=False, null=False, on_delete=models.CASCADE)

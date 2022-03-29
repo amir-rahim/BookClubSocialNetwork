@@ -25,7 +25,7 @@
 
                     <td>
                         <a class="button is-fullwidth is-link"
-                                href="{list.get_absolute_url}">View</button>
+                                href="{{list.get_absolute_url}}">View</button>
                     </td>
                 </tr>
             {% endfor %}
@@ -35,8 +35,8 @@
 {% include 'partials/pagination_ajax.html' %}
 {% else %}
     <hr>
-    <p style="text-align: center">
-        There are no available books at the moment.
+    <p style="text-align: center" class="has-text-grey">
+        There are no book lists matching this search.
     </p>
     <hr>
 {% endif %}
