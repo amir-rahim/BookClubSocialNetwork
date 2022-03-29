@@ -8,7 +8,7 @@ from BookClub.models import Club, ClubMembership
 
 class AvailableClubsView(LoginRequiredMixin, ListView):
     model = Club
-    template_name = 'available_clubs.html'
+    template_name = 'clubs/available_clubs.html'
     context_object_name = 'clubs'
     paginate_by=10
 
@@ -23,7 +23,7 @@ class AvailableClubsView(LoginRequiredMixin, ListView):
 
 class MyClubMembershipsView(LoginRequiredMixin, ListView):
     model = Club
-    template_name = 'my_club_memberships.html'
+    template_name = 'clubs/my_club_memberships.html'
     context_object_name = 'posts'
 
     def get_queryset(self):
@@ -41,7 +41,7 @@ class MyClubMembershipsView(LoginRequiredMixin, ListView):
 
 class ApplicationListView(LoginRequiredMixin, ListView):
     model = Club
-    template_name = 'applications_list.html'
+    template_name = 'clubs/applications_list.html'
     context_object_name = 'clubs'
 
     def get_queryset(self):

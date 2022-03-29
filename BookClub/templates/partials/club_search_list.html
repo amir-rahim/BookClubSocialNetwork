@@ -28,20 +28,28 @@
                         </td>
                         <td>
                             <div>
-                                <a href="{{ club.get_absolute_url }}"><button class="button is-fullwidth is-link">View</button></a>
-                                {% if club.is_private == True %}
-                                    <form method="post"
-                                          action="{% url 'join_club' club_url_name=club.club_url_name %}">
-                                        {% csrf_token %}
-                                        <button type="submit" class="button is-fullwidth is-success">Apply</button>
-                                    </form>
-                                {% else %}
-                                    <form method="post"
-                                          action="{% url 'join_club' club_url_name=club.club_url_name %}">
-                                        {% csrf_token %}
-                                        <button type="submit" class="button is-fullwidth is-info">Join</button>
-                                    </form>
-                                {% endif %}
+                                <div class="field is-grouped">
+                                    {% if club.is_private == True %}
+                                        <div class="control is-expanded">
+                                            <form method="post"
+                                                action="{% url 'join_club' club_url_name=club.club_url_name %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="button is-fullwidth is-info">Apply</button>
+                                            </form>
+                                        </div>
+                                    {% else %}
+                                        <div class="control is-expanded">
+                                            <button class="button is-fullwidth is-success" onclick="window.location='{% url 'club_dashboard' club.club_url_name %}';">View</button>
+                                        </div>
+                                        <div class="control is-expanded">
+                                            <form method="post"
+                                                action="{% url 'join_club' club_url_name=club.club_url_name %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="button is-fullwidth is-info">Join</button>
+                                            </form>
+                                        </div>
+                                    {% endif %}
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -52,8 +60,8 @@
     {% include 'partials/pagination_ajax.html' with page_obj=page_obj %}
 {% else %}
     <hr>
-    <p style="text-align: center">
-        There are no available clubs matching that query.
+    <p style="text-align: center" class="has-text-grey">
+        There are no available clubs matching your sea.
     </p>
     <hr>
 {% endif %}

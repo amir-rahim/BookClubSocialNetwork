@@ -10,7 +10,7 @@ class SavedBooklistsListView(LoginRequiredMixin, ListView):
     http_method_names = ['get']
     model = BookList
     context_object_name = 'booklists'
-    template_name = 'saved_booklists.html'
+    template_name = 'booklists/saved_booklists.html'
 
     def get_queryset(self):
         if self.kwargs.get('username') is not None:

@@ -6,7 +6,7 @@ from BookClub.models import Book, BookReview, BookList, BookShelf
 
 class BookDetailView(DetailView):
     model = Book
-    template_name = 'book_detail_view.html'
+    template_name = 'library/book_detail_view.html'
     pk_url_kwarg = 'book_id'
     context_object_name = 'book'
 
@@ -44,7 +44,7 @@ class BookDetailView(DetailView):
 
 class BookReviewListView(ListView):
     model = BookReview
-    template_name = 'book_reviews.html'
+    template_name = 'library/book_reviews.html'
     context_object_name = 'reviews'
     paginate_by = 10
 

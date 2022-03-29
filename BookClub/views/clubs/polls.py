@@ -10,7 +10,7 @@ from BookClub.models import Club, ClubMembership
 
 
 class CreateClubPollView(LoginRequiredMixin, UserPassesTestMixin, FormView):
-    template_name = 'create_club_poll.html'
+    template_name = 'clubs/create_club_poll.html'
     form_class = PollForm
 
     def test_func(self):

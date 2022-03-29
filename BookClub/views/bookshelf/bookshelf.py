@@ -9,7 +9,7 @@ from BookClub.models import BookShelf, Book
 
 class BookShelfView(LoginRequiredMixin, ListView):
     model = BookShelf
-    template_name = 'bookshelf.html'
+    template_name = 'library/bookshelf.html'
     context_object_name = 'all_books'
     paginate_by = 10
     

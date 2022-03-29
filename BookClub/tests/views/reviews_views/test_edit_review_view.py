@@ -40,7 +40,7 @@ class EditReviewView(TestCase, LogInTester):
         response = self.client.post(self.url, self.data, follow=True)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200,
                              fetch_redirect_response=True)
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
 
     def test_edit_review_redirects_when_different_user(self):
         # print('not author of review')
@@ -53,7 +53,7 @@ class EditReviewView(TestCase, LogInTester):
         self.assertEqual(messages_list[0].level, messages.ERROR)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200,
                              fetch_redirect_response=True)
-        self.assertTemplateUsed(response, 'book_reviews.html')
+        self.assertTemplateUsed(response, 'library/book_reviews.html')
 
     '''Tests for user successfully editing the review and rating'''
 
@@ -70,7 +70,7 @@ class EditReviewView(TestCase, LogInTester):
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.SUCCESS)
         redirect_url = reverse('book_reviews', kwargs={'book_id': self.book.id})
-        self.assertTemplateUsed(response, 'book_reviews.html')
+        self.assertTemplateUsed(response, 'library/book_reviews.html')
         self.assertEqual(self.book_review.creator.id, self.user.id)
         self.assertEqual(self.book_review.book_rating, self.data['book_rating'])
         self.assertEqual(self.book_review.title, self.data['title'])
@@ -105,7 +105,7 @@ class EditReviewView(TestCase, LogInTester):
         self.assertEqual(len(messages_list), 1)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200,
                              fetch_redirect_response=True)
-        self.assertTemplateUsed(response, 'book_reviews.html')
+        self.assertTemplateUsed(response, 'library/book_reviews.html')
 
     def test_cannot_edit_other_users_rating_and_review(self):
         self.client.login(username=self.another_user.username, password="Password123")

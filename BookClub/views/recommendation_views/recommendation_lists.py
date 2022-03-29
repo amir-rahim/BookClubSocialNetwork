@@ -9,7 +9,7 @@ from RecommenderModule.recommendations_provider import get_club_personalised_rec
 
 class RecommendationBaseView(LoginRequiredMixin, TemplateView):
     model = Book
-    template_name = "recommendation_base.html"
+    template_name = "recommendations/recommendation_base.html"
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -21,8 +21,8 @@ class RecommendationBaseView(LoginRequiredMixin, TemplateView):
     def get_template_names(self):
         club = self.kwargs.get('club_url_name')
         if club is not None:
-            return "recommendation_base_club.html"
-        return "recommendation_base_user.html"
+            return "recommendations/recommendation_base_club.html"
+        return "recommendations/recommendation_base_user.html"
     
 
 class RecommendationUserListView(LoginRequiredMixin, TemplateView):

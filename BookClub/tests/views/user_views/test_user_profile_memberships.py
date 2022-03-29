@@ -28,7 +28,7 @@ class UserProfileMembershipsViewTest(TestCase):
     def test_template_used(self):
         self.client.login(username=self.login_user.username, password='Password123')
         response = self.client.get(self.url)
-        self.assertTemplateUsed(response, 'user_profile_memberships.html')
+        self.assertTemplateUsed(response, 'user/user_profile_memberships.html')
 
     def test_no_club(self):
         self.client.login(username=self.login_user.username, password='Password123')

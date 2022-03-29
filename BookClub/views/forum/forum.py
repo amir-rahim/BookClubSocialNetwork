@@ -19,16 +19,24 @@ from BookClub.authentication_mixins import ClubMemberTestMixin
 class ForumPostView(ClubMemberTestMixin, ListView):
     model = ForumComment
     paginate_by = 10
-    template_name = 'forum_post.html'
+    template_name = 'forum/forum_post.html'
     context_object_name = 'comments'
     pk_url_kwarg = 'post_id'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        try:
-            context['post'] = ForumPost.objects.get(pk=self.kwargs.get('post_id'))
-        except ObjectDoesNotExist:
-            raise Http404("Given post id not found....")
+        if self.kwargs.get('club_url_name'):
+            try:
+                context['post'] = ForumPost.objects.get(pk=self.kwargs.get('post_id'))
+                context['club'] = Club.objects.get(club_url_name=self.kwargs.get('club_url_name'))
+            except ObjectDoesNotExist:
+                raise Http404("Given club or post id not found....")
+        else:
+            try:
+                context['post'] = ForumPost.objects.get(pk=self.kwargs.get('post_id'))
+                context['club'] = None
+            except ObjectDoesNotExist:
+                raise Http404("Given club or post id not found....")
         return context
 
     def get_queryset(self):
@@ -44,7 +52,7 @@ class ForumView(ClubMemberTestMixin, ListView):
     model = ForumPost
     context_object_name = 'posts'
     paginate_by = 5
-    template_name = 'global_forum.html'
+    template_name = 'forum/forums.html'
 
     def get_queryset(self):
         if self.kwargs.get('club_url_name') is not None:
@@ -65,6 +73,7 @@ class ForumView(ClubMemberTestMixin, ListView):
             context['forum'] = Forum.objects.get(associated_with=club)
             context['usercount'] = ClubMembership.objects.filter(club=club).count()
         else:
+            context['club'] = None
             context['forum'] = Forum.objects.get(associated_with=None)
             context['usercount'] = User.objects.all().count()
 
@@ -140,7 +149,7 @@ class CreateCommentView(LoginRequiredMixin, ClubMemberTestMixin, CreateView):
 class EditForumPostView(LoginRequiredMixin, ClubMemberTestMixin, UpdateView):
     model = ForumPost
     form_class = CreateForumCommentForm
-    template_name = 'edit_forum_post.html'
+    template_name = 'forum/edit_forum_post.html'
     pk_url_kwarg = 'post_id'
     context_object_name = 'post'
 

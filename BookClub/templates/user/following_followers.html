@@ -1,0 +1,67 @@
+{% extends 'base_content.html' %}
+{% block page_title %}
+    Following and Followers
+{% endblock page_title %}
+{% block page_subtitle %}
+    Here you can see following and followers of a member!
+{% endblock page_subtitle %}
+{% block content %}
+    <div class="columns">
+        <div class="column is-3">
+            {% if own %}
+                {% include 'partials/aside_menu/user_aside.html' %}
+            {% else %}
+                {% include 'partials/aside_menu/profile_aside.html' %}
+            {% endif %}
+        </div>
+        <div class="column is-9">
+            <nav class="breadcrumb"
+                aria-label="breadcrumbs"
+                style="padding-left: 5px;">
+                <ul>
+                    <li>
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'user_profile' username %}">{{ username }}</a>
+                    </li>
+                    {% if own %}
+                        <li>
+                            <a href="{% url 'user_following' %}">Following</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{% url 'user_following' username %}">Following</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            <div id="tabs-with-content">
+                <div class="tabs is-centered">
+                    <ul>
+                        <li class="is-active">
+                            <a>
+                                <span class="icon is-small"><i class="fa-solid fa-users" aria-hidden="true"></i></span>
+                                <span>Following</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a>
+                                <span class="icon is-small"><i class="fa-solid fa-user-plus" aria-hidden="true"></i></span>
+                                <span>Followers</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <section class="tab-content">
+                        {% include 'partials/followee_list.html' with followees=followees %}
+                    </section>
+                    <section class="tab-content">
+                        {% include 'partials/follower_list.html' with followers=followers %}
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

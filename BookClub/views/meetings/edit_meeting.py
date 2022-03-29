@@ -13,7 +13,7 @@ from BookClub.models.club_membership import ClubMembership
 class EditMeetingView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Meeting
     form_class = MeetingForm
-    template_name = 'edit_meeting.html'
+    template_name = 'meeting/edit_meeting.html'
     pk_url_kwarg = 'meeting_id'
 
     def test_func(self):

@@ -60,7 +60,7 @@ class CreateCommentForReviewTestCase(TestCase,LogInTester):
             target_status_code=200,
             fetch_redirect_response=True
             )
-        self.assertTemplateUsed(response,"login.html")
+        self.assertTemplateUsed(response, "authentication/login.html")
         book_review_count_after = BookReviewComment.objects.count()
         self.assertEqual(book_review_count_before,book_review_count_after)
 

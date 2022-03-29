@@ -1,0 +1,55 @@
+{% extends 'base_content.html' %}
+{% block page_title %}
+    {{ current_club.name }}
+{% endblock page_title %}
+{% block page_subtitle %}
+    {{ current_club.tagline }}
+{% endblock page_subtitle %}
+{% block content %}
+    <div class="columns">
+        <div class="column is-3">
+            {% include 'partials/aside_menu/club_aside.html' with current_club=current_club %}
+        </div>
+        <div class="column is-9">
+            <nav class="breadcrumb"
+                 aria-label="breadcrumbs"
+                 style="padding-left: 5px;">
+                <ul>
+                    <li>
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'available_clubs' %}">Clubs</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'club_dashboard' current_club.club_url_name %}">{{ current_club.name }}</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'meeting_list' current_club.club_url_name %}">Meetings</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'create_meeting' current_club.club_url_name %}">Create</a>
+                    </li>
+                </ul>
+            </nav>
+            <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
+                <div class="hero-body">
+                    <div class="container">
+                        <h1 class="title">Create Meeting</h1>
+                        <h2 class="subtitle">Schedule a new club event</h2>
+                    </div>
+                </div>
+            </section>
+            <div class="container">
+                <div class="card-content">
+                    <form action="{% url 'create_meeting' current_club.club_url_name %}"
+                          method="post">
+                        {% csrf_token %}
+                        {% include 'partials/bulma_form.html' with form=form %}
+                        <input type="submit" value="Create meeting" class="button is-link"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

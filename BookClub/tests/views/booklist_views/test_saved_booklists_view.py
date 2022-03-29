@@ -29,7 +29,7 @@ class SavedBookListsViewTestCase(TestCase, LogInTester):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'saved_booklists.html')
+        self.assertTemplateUsed(response, 'booklists/saved_booklists.html')
 
     def _get_url_for_user(self, username):
         return reverse('saved_booklists', kwargs={'username': username})
@@ -40,14 +40,14 @@ class SavedBookListsViewTestCase(TestCase, LogInTester):
         self.assertRedirects(response, redirect_url,
             status_code=302, target_status_code=200, fetch_redirect_response=True
         )
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
 
     def test_get_template_logged_in(self):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'saved_booklists.html')
+        self.assertTemplateUsed(response, 'booklists/saved_booklists.html')
        
 
     def test_not_contains_booklists_created_by_user(self):
@@ -55,7 +55,7 @@ class SavedBookListsViewTestCase(TestCase, LogInTester):
         response = self.client.get(self.url)
         self.user.save_booklist(self.own_booklist)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'saved_booklists.html')
+        self.assertTemplateUsed(response, 'booklists/saved_booklists.html')
         
         response_lists = list(response.context['booklists'])
         user_lists = list(BookList.objects.filter(creator=self.user))
@@ -68,7 +68,7 @@ class SavedBookListsViewTestCase(TestCase, LogInTester):
         self.user.save_booklist(self.booklist_to_save)
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'saved_booklists.html')
+        self.assertTemplateUsed(response, 'booklists/saved_booklists.html')
         response_lists = list(response.context['booklists'])
         lists_by_other_users = self.user.get_saved_booklists()
 
@@ -80,7 +80,7 @@ class SavedBookListsViewTestCase(TestCase, LogInTester):
         self.user.save_booklist(self.booklist_to_save)
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'saved_booklists.html')
+        self.assertTemplateUsed(response, 'booklists/saved_booklists.html')
         self.assertEqual(response.context['own'], True)
         self.assertContains(response, 'Remove from saved')
 
@@ -90,7 +90,7 @@ class SavedBookListsViewTestCase(TestCase, LogInTester):
         url = reverse('saved_booklists', kwargs={'username': self.creator.username})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'saved_booklists.html')
+        self.assertTemplateUsed(response, 'booklists/saved_booklists.html')
         response_lists = list(response.context['booklists'])
         lists_by_other_users = self.creator.get_saved_booklists()
 
@@ -103,7 +103,7 @@ class SavedBookListsViewTestCase(TestCase, LogInTester):
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'saved_booklists.html')
+        self.assertTemplateUsed(response, 'booklists/saved_booklists.html')
         response_lists = list(response.context['booklists'])
         self.assertEqual(len(response_lists), 0)
         self.assertContains(response, "No saved lists.")
