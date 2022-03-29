@@ -110,7 +110,7 @@ class AgendaViewTestCase(TestCase):
         self.assertTemplateUsed(response, 'meeting/agenda.html')
         self.assertContains(response, "Upcoming Meetings")
         self.assertContains(response, "Guide to global")
-        self.assertContains(response, "Amirs complete guide to becoming a role model entry fragger/star player/mvp/igl/glave wannabe/seb wannabe")
+        self.assertContains(response, "Amirs complete guide to")
         self.assertContains(response, "Organised by <i>johndoe</i> for <i>Johnathan Club</i>")
 
     def test_user_can_see_agenda_for_not_joined_today(self):
