@@ -45,7 +45,7 @@ class AvailableClubsViewTestCase(TestCase):
         self.assertTemplateUsed(response, 'clubs/available_clubs.html')
         clubs = list(response.context['clubs'])
         self.assertEqual(len(clubs), 0)
-        self.assertContains(response, "There are no available clubs at the moment.")
+        self.assertContains(response, "There are no clubs matching this search.")
 
     def test_contains_club_not_member_of(self):
         self.client.login(username=self.user.username, password='Password123')
