@@ -25,7 +25,7 @@
                 books_div.fadeTo('fast', 1)
             })
         })
-    }
+    };
 
     user_input.on('keyup', function () {
         request_parameters['q'] = $(this).val()
@@ -33,6 +33,10 @@
             clearTimeout(scheduled_function)
         }
         scheduled_function = setTimeout(call_search, delay_by_in_ms, view, request_parameters)
-    })
+    });
+
+    $( document ).ready(function() {
+    call_search(view, request_parameters)
+});
 
 </script>
