@@ -5,9 +5,7 @@
            id="user_input"
            placeholder="Search"/>
 </div>
-<div id="replaceable_content" class="column is-12">
-    {% include 'partials/book_select_list.html' %}
-</div>
+<div id="replaceable_content" class="column is-12">{% include 'partials/book_select_list.html' %}</div>
 <script>
     const user_input = $("#user_input")
     const books_div = $("#replaceable_content")
@@ -34,4 +32,3 @@
         scheduled_function = setTimeout(call_search, delay_by_in_ms, view, request_parameters)
     })
 </script>
- 

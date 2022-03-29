@@ -7,9 +7,7 @@
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
-        <div class="column is-3">
-            {% include 'partials/aside_menu/library_aside.html' %}
-        </div>
+        <div class="column is-3">{% include 'partials/aside_menu/library_aside.html' %}</div>
         <div class="column is-9">
             <nav class="breadcrumb"
                  aria-label="breadcrumbs"
@@ -36,13 +34,11 @@
             </section>
             <div id="replaceable-content">
                 <p class="is-centered" style="margin-bottom:100px;">
-                <strong>Getting your personalised book recommendations</strong>
+                    <strong>Getting your personalised book recommendations</strong>
                 </p>
                 <progress class="progress is-primary" max="100">30%</progress>
-                
             </div>
         </div>
-        
     </div>
     <script>
         const view = "/user_recommendations/"

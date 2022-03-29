@@ -7,9 +7,7 @@
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
-        <div class="column is-3">
-            {% include 'partials/aside_menu/user_aside.html' %}
-        </div>
+        <div class="column is-3">{% include 'partials/aside_menu/user_aside.html' %}</div>
         <div class="column is-9">
             <nav class="breadcrumb"
                  aria-label="breadcrumbs"
@@ -43,9 +41,7 @@
                             <div class="media">
                                 <div class="media-left">
                                     <figure class="image is-128x128">
-                                        <img class="is-rounded"
-                                             src="{{ user.gravatar }}"
-                                             alt="Placeholder image">
+                                        <img class="is-rounded" src="{{ user.gravatar }}" alt="Placeholder image">
                                     </figure>
                                 </div>
                                 <div class="media-content">
@@ -64,42 +60,40 @@
                                                 </div>
                                                 <div class="control">
                                                     <button class="button is-block is-info is-large is-fullwidth">Save Change</button>
-                                                </div>                                             
+                                                </div>
                                             </div>
                                         </form>
                                         <br>
                                         <article class="message is-danger">
-                                            <div class="message-body">
-                                                Warning: This will delete your account permanently
-                                            </div>
+                                            <div class="message-body">Warning: This will delete your account permanently</div>
                                         </article>
-
                                         <div class="control has-text-centered">
-                                            <button class="js-modal-trigger button is-danger is-outlined is-fullwidth" data-target="modal-delete-user-confirmation">
+                                            <button class="js-modal-trigger button is-danger is-outlined is-fullwidth"
+                                                    data-target="modal-delete-user-confirmation">
                                                 <span>Delete Account</span>
                                                 <span class="icon is-small">
-                                                  <i class="fas fa-times"></i>
+                                                    <i class="fas fa-times"></i>
                                                 </span>
                                             </button>
                                         </div>
-
                                         <div id="modal-delete-user-confirmation" class="modal">
                                             <div class="modal-background"></div>
-                                          
                                             <div class="modal-card">
                                                 <header class="modal-card-head">
-                                                    <p class="modal-card-title">Delete Account</p>
+                                                    <p class="modal-card-title">
+                                                        Delete Account
+                                                    </p>
                                                     <button class="delete" aria-label="close"></button>
                                                 </header>
                                                 <section class="modal-card-body">
                                                     Are you sure you want to permanently delete your account?
                                                 </section>
                                                 <footer class="modal-card-foot">
-                                                    <button class="button is-danger" onclick="window.location='{% url 'delete_user_account' %}'">Delete Account</button>
+                                                    <button class="button is-danger"
+                                                            onclick="window.location='{% url 'delete_user_account' %}'">Delete Account</button>
                                                     <button class="button">Cancel</button>
                                                 </footer>
                                             </div>
-                                        
                                             <button class="modal-close is-large" aria-label="close"></button>
                                         </div>
                                     </div>

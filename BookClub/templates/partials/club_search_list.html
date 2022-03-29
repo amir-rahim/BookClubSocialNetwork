@@ -32,18 +32,21 @@
                                     {% if club.is_private == True %}
                                         <div class="control is-expanded">
                                             <form method="post"
-                                                action="{% url 'join_club' club_url_name=club.club_url_name %}">
+                                                  action="{% url 'join_club' club_url_name=club.club_url_name %}">
                                                 {% csrf_token %}
                                                 <button type="submit" class="button is-fullwidth is-info">Apply</button>
                                             </form>
                                         </div>
                                     {% else %}
                                         <div class="control is-expanded">
-                                            <button class="button is-fullwidth is-success" onclick="window.location='{% url 'club_dashboard' club.club_url_name %}';">View</button>
+                                            <button class="button is-fullwidth is-success"
+                                                    onclick="window.location='{% url 'club_dashboard' club.club_url_name %}';">
+                                                View
+                                            </button>
                                         </div>
                                         <div class="control is-expanded">
                                             <form method="post"
-                                                action="{% url 'join_club' club_url_name=club.club_url_name %}">
+                                                  action="{% url 'join_club' club_url_name=club.club_url_name %}">
                                                 {% csrf_token %}
                                                 <button type="submit" class="button is-fullwidth is-info">Join</button>
                                             </form>

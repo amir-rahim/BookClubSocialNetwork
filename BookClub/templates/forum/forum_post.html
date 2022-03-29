@@ -11,38 +11,38 @@
             {% if club %}
                 {% include 'partials/aside_menu/club_aside.html' with current_club=club %}
             {% else %}
-            <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
-                <p class="menu-label">
-                    Global Forums
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'global_forum' %}" class="is-active"><b>Forums</b></a>
-                    </li>
-                </ul>
-                <p class="menu-label">
-                    Clubs
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'available_clubs' %}">Available Clubs</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'my_club_memberships' %}">Memberships</a>
-                    </li>
-                </ul>
-                <p class="menu-label">
-                    Useful Links
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'user_dashboard' %}">User Profile</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'library_dashboard' %}">Library</a>
-                    </li>
-                </ul>
-            </aside>
+                <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+                    <p class="menu-label">
+                        Global Forums
+                    </p>
+                    <ul class="menu-list">
+                        <li>
+                            <a href="{% url 'global_forum' %}" class="is-active"><b>Forums</b></a>
+                        </li>
+                    </ul>
+                    <p class="menu-label">
+                        Clubs
+                    </p>
+                    <ul class="menu-list">
+                        <li>
+                            <a href="{% url 'available_clubs' %}">Available Clubs</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'my_club_memberships' %}">Memberships</a>
+                        </li>
+                    </ul>
+                    <p class="menu-label">
+                        Useful Links
+                    </p>
+                    <ul class="menu-list">
+                        <li>
+                            <a href="{% url 'user_dashboard' %}">User Profile</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'library_dashboard' %}">Library</a>
+                        </li>
+                    </ul>
+                </aside>
             {% endif %}
         </div>
         <div class="column is-9">
@@ -64,14 +64,13 @@
                             <a href="{% url 'forum_post' club.club_url_name post.id %}">{{ post.title }}</a>
                         </li>
                     {% else %}
-                        <li>        
+                        <li>
                             <a href="{% url 'global_forum' %}">Forums</a>
                         </li>
                         <li>
                             <a href="{% url 'forum_post' post.id %}">{{ post.title }}</a>
                         </li>
                     {% endif %}
-                    
                 </ul>
             </nav>
             <section class="hero is-link welcome is-small" style="margin: 10px 0px;">
@@ -84,7 +83,7 @@
             <div class="card">
                 <header class="card-header">
                     <p class="card-header-title is-vcentered">
-                        <span class="has-text-grey-light">Posted by: <a href="{{ post.user.get_absolute_url }}"> {{ post.creator }} </a> {{ post.created_on | timesince }} ago</span>
+                        <span class="has-text-grey-light">Posted by: <a href="{{ post.user.get_absolute_url }}">{{ post.creator }}</a> {{ post.created_on | timesince }} ago</span>
                     </p>
                     <div class="card-header-icon">
                         {% if user == post.creator %}

@@ -8,7 +8,8 @@
 {% block content %}
     <div class="columns">
         <div class="column is-3">
-            <a class="button is-fullwidth is-link" href="{% url 'book_view' book_id=book.pk %}"><b>Back to Book</b></a>
+            <a class="button is-fullwidth is-link"
+               href="{% url 'book_view' book_id=book.pk %}"><b>Back to Book</b></a>
             <hr class="solid">
             <div class="card">
                 <div class="card-image">
@@ -61,7 +62,9 @@
                     <form method="post">
                         {% csrf_token %}
                         {% include 'partials/bulma_form.html' with form=form %}
-                        <input type="submit" value="Submit Rating and Review" class="button is-link is-fullwidth">
+                        <input type="submit"
+                               value="Submit Rating and Review"
+                               class="button is-link is-fullwidth">
                     </form>
                 </div>
             </div>

@@ -7,9 +7,7 @@
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
-        <div class="column is-3">
-           {% include 'partials/aside_menu/club_aside.html' with current_club=club %}
-        </div>
+        <div class="column is-3">{% include 'partials/aside_menu/club_aside.html' with current_club=club %}</div>
         <div class="column is-9">
             <nav class="breadcrumb"
                  aria-label="breadcrumbs"
@@ -63,28 +61,32 @@
                                     <td>
                                         <div class="buttons">
                                             <button class="button is-link is-warning"
-                                                onclick="window.location='{% url 'meeting_details' club.club_url_name meeting.id %}';">View</button>
+                                                    onclick="window.location='{% url 'meeting_details' club.club_url_name meeting.id %}';">
+                                                View
+                                            </button>
                                             {% if meeting.organiser == user and meeting.get_is_not_past %}
                                                 <button class="button is-link"
-                                                        onclick="window.location='{% url 'edit_meeting' club.club_url_name meeting.id %}';">Manage</button>
+                                                        onclick="window.location='{% url 'edit_meeting' club.club_url_name meeting.id %}';">
+                                                    Manage
+                                                </button>
                                             {% else %}
                                                 {% if meeting.get_is_not_past %}
                                                     {% if user not in meeting.get_members %}
                                                         <form method="post"
-                                                            action="{% url 'join_meeting' club_url_name=club.club_url_name meeting_id=meeting.id %}">
+                                                              action="{% url 'join_meeting' club_url_name=club.club_url_name meeting_id=meeting.id %}">
                                                             {% csrf_token %}
                                                             <button type="submit" class="button is-info">Join</button>
                                                         </form>
                                                     {% elif user in meeting.get_members %}
                                                         <form method="post"
-                                                            action="{% url 'leave_meeting' club_url_name=club.club_url_name meeting_id=meeting.id %}">
+                                                              action="{% url 'leave_meeting' club_url_name=club.club_url_name meeting_id=meeting.id %}">
                                                             {% csrf_token %}
                                                             <button type="submit" class="button is-info">Leave</button>
                                                         </form>
                                                     {% endif %}
                                                 {% endif %}
                                             {% endif %}
-                                        </div> 
+                                        </div>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -95,9 +97,9 @@
             {% else %}
                 <!-- If there is no meetings available to the logged-in user -->
                 <hr>
-                    <p style="text-align: center" class="has-text-grey">
-                        There are no available meetings at the moment.
-                    </p>
+                <p style="text-align: center" class="has-text-grey">
+                    There are no available meetings at the moment.
+                </p>
                 <hr>
             {% endif %}
         </div>
