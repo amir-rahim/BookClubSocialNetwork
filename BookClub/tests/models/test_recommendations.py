@@ -1,5 +1,5 @@
 from django.forms import ValidationError
-from BookClub.models import UserRecommendations, ClubRecommendations
+from BookClub.models import UserRecommendations, ClubRecommendations, BookReview
 from django.test import TestCase, tag
 from BookClub.models.club import Club
 
@@ -8,49 +8,62 @@ from BookClub.models.user import User
 
 @tag('recommendations','user')
 class AbstractRecommendationTestCase(TestCase):
-    
+
     fixtures = ['BookClub/tests/fixtures/default_users.json']
-    
+
     def setUp(self):
         self.user1 = User.objects.get(pk=1)
         self.recommendation = UserRecommendations.objects.create(user=self.user1)
-        
+
     def test_defaults(self):
         self.assertEqual(self.recommendation.modified, True)
         self.assertEqual(self.recommendation.recommendations, [])
-        
+
     def test_modified_not_null(self):
         self.recommendation.modified = None
         with self.assertRaises(ValidationError):
             self.recommendation.full_clean()
-    
+
     def test_recommendation_not_null(self):
         self.recommendation.recommendations = None
         with self.assertRaises(ValidationError):
             self.recommendation.full_clean()
-            
+
     def test_recommendation_serialises_and_returns_correctly(self):
         testlist = ["Test!"]
         self.recommendation.recommendations = testlist
         self.recommendation.save()
         self.recommendation.refresh_from_db()
         self.assertEqual(self.recommendation.recommendations, testlist)
-        
+
 
 @tag('recommendations', 'user')
 class UserRecommendationTestCase(TestCase):
 
-    fixtures = ['BookClub/tests/fixtures/default_users.json']
+    fixtures = [
+        'BookClub/tests/fixtures/default_users.json',
+        'BookClub/tests/fixtures/default_books.json',
+        'BookClub/tests/fixtures/default_book_reviews.json',
+    ]
 
     def setUp(self):
         self.user1 = User.objects.get(pk=1)
         self.recommendation = UserRecommendations.objects.create(
             user=self.user1)
-        
+
     def test_user_cannot_be_none(self):
         self.recommendation.user = None
         with self.assertRaises(ValidationError):
             self.recommendation.full_clean()
+
+    def test_recommendation_set_as_modified_on_review_update(self):
+        self.recommendation.modified = False
+        self.recommendation.save()
+        review = BookReview.objects.get(pk=1)
+        review.book_rating = 5
+        review.save()
+        self.recommendation.refresh_from_db()
+        self.assertTrue(self.recommendation.modified)
 
 
 @tag('recommendations', 'club')

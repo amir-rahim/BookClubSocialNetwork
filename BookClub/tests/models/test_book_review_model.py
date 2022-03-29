@@ -1,6 +1,6 @@
 import datetime
 from django.forms import ValidationError
-from BookClub.models import Book, User, BookReview, BookReviewComment
+from BookClub.models import Book, User, BookReview, BookReviewComment, UserRecommendations
 from django.db import IntegrityError, models
 from django.urls import reverse
 from django.test import TestCase, tag
@@ -127,6 +127,14 @@ class BookReviewModelTestCase(TestCase):
         self.assertEqual(self.review1.str(),"1/10 rating & review by johndoe on \"Classical Mythology\"")
         self.assertEqual(str(self.review1),"1/10 rating & review by johndoe on \"Classical Mythology\"")
         self.assertEqual(self.review1.get_delete_str(),"1/10 rating & review by johndoe on \"Classical Mythology\"")
+
+    def test_save_executes_safely_when_user_has_no_modifications(self):
+        recommendation_exists = UserRecommendations.objects.filter(user=self.user1).exists()
+        self.assertFalse(recommendation_exists)
+        self.review1.book_rating = 5
+        self.review1.save()
+        recommendation_exists = UserRecommendations.objects.filter(user=self.user1).exists()
+        self.assertFalse(recommendation_exists)
 
 @tag('models', 'reviewcomment')
 class BookReviewCommentTestCase(TestCase):
