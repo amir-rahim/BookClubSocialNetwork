@@ -381,3 +381,16 @@ class PromoteMemberView(TestCase, LogInTester):
         self.assertTrue(ClubMembership.objects.filter(user=self.owner, club=self.club,
                                                       membership=ClubMembership.UserRoles.OWNER).exists())
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_promote_invalid_user(self):
+        """Test for promoting invalid user"""
+
+        self.client.login(username=self.owner.username, password='Password123')
+
+        response = self.client.post(self.url, {'user': 'invalid'})
+        redirect_url = reverse('member_list', kwargs={'club_url_name': self.club.club_url_name})
+        response_message = self.client.get(redirect_url)
+        messages_list = list(response_message.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.ERROR)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
