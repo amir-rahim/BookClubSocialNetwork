@@ -46,7 +46,7 @@ class MeetingListTest(TestCase):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 302)
         self.assertTemplateNotUsed(response, 'club_meetings.html')
-        
+
     """Testing to see what information is displayed"""
 
     def test_owner_can_see_meeting_information(self):
@@ -59,7 +59,7 @@ class MeetingListTest(TestCase):
         self.assertContains(response, 'Feb. 22, 2022, 7 p.m.')
         self.assertContains(response, 'johndoe')
         meetings = list(response.context['meetings'])
-        self.assertEqual(len(meetings), 5)
+        self.assertEqual(len(meetings), 6)
 
     def test_moderator_can_see_meeting_information(self):
         self.client.login(username=self.moderator.username, password="Password123")
@@ -71,7 +71,7 @@ class MeetingListTest(TestCase):
         self.assertContains(response, 'Feb. 22, 2022, 7 p.m.')
         self.assertContains(response, 'johndoe')
         meetings = list(response.context['meetings'])
-        self.assertEqual(len(meetings), 5)
+        self.assertEqual(len(meetings), 6)
 
     def test_member_can_see_meeting_information(self):
         self.client.login(username=self.member.username, password="Password123")
@@ -82,7 +82,7 @@ class MeetingListTest(TestCase):
         self.assertContains(response, 'Feb. 22, 2022, 7 p.m.')
         self.assertContains(response, 'johndoe')
         meetings = list(response.context['meetings'])
-        self.assertEqual(len(meetings), 5)
+        self.assertEqual(len(meetings), 6)
 
     def test_allowed_user_can_see_multiple_meetings(self):
         self.meeting3 = Meeting.objects.create(
@@ -111,7 +111,7 @@ class MeetingListTest(TestCase):
         self.assertContains(response, 'Feb. 22, 2022, 9 p.m.')
 
         meetings = list(response.context['meetings'])
-        self.assertEqual(len(meetings), 6)
+        self.assertEqual(len(meetings), 7)
 
     def test_allowed_user_can_see_join_button(self):
         self.client.login(username=self.owner.username, password="Password123")
