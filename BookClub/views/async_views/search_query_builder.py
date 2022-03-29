@@ -1,5 +1,5 @@
 from enum import Enum
-from BookClub.helpers import get_clubs_user_is_member_of, get_memberships_with_access
+from BookClub.helpers import get_memberships_with_access
 from BookClub.models import Book, User, Club, Meeting, BookList, ClubMembership, TextPost, TextComment, UserCreatedObject, ForumPost, ForumComment
 from django.db.models import Q, Model
 from BookClub.models.forum import Forum
@@ -69,12 +69,12 @@ class ClubQuery(SearchQuery):
         self.q_objects.add(Q(tagline__icontains=self.query_string)
                            & ~Q(pk__in=user_clubs), Q.OR)
         return self.q_objects
-    
-    
+
+
 class UserQuery(SearchQuery):
-    
+
     match_models = User
-    
+
     def query(self, **kwargs):
         self.q_objects.add(Q(username__icontains=self.query_string), Q.OR)
         return self.q_objects

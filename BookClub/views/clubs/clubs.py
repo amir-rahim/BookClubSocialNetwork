@@ -11,7 +11,7 @@ from django.views.generic.edit import CreateView
 from django.views.generic.edit import UpdateView
 
 from BookClub.forms import ClubForm
-from BookClub.helpers import create_membership, get_club_from_url_name, has_membership_with_access, has_owner_rank, get_club_reputation, has_member_rank, has_moderator_rank
+from BookClub.helpers import create_membership, get_club_from_url_name, has_owner_rank, get_club_reputation, has_member_rank, has_moderator_rank
 from BookClub.models import Club, ClubMembership, FeaturedBooks, Book
 from BookClub.forms.club import FeatureBookForm
 from BookClub.authentication_mixins import PrivateClubMixin
