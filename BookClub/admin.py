@@ -150,3 +150,10 @@ class FeaturedBooksAdmin(admin.ModelAdmin):
     list_display = [
         'club', 'book', 'reason'
     ]
+
+@admin.register(UserRecommendations)
+class UserRecAdmin(admin.ModelAdmin):
+
+    list_display = [
+        'user', 'recommendations'
+    ]
