@@ -5,6 +5,7 @@ import random
 
 import pytz
 from BookClub.models import *
+from django.db.models import Count
 from django.db.utils import IntegrityError
 from django.core.management import call_command
 from randomtimestamp import randomtimestamp
@@ -21,7 +22,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('percent', type=int, nargs='?', default=10)
 
-        parser.add_argument('--count', '--c', type=int, default=5)
+        parser.add_argument('--count', '--c', type=int, default=15)
         
         parser.add_argument('--deploy', action="store_true")
 
@@ -60,9 +61,9 @@ class Command(BaseCommand):
             call_command("importbookreviews")
             
         elif options['deploy']:
-            call_command("importusers", "--deploy")
-            call_command("importbooksrandom","--deploy")
-            call_command("importbookreviews")
+            #call_command("importuserstargeted")
+            call_command("importbookstargeted")
+            call_command("importbookreviewstargeted")
         else:
             for i in range(0, 150):
                 self.generateUser()
@@ -94,6 +95,21 @@ class Command(BaseCommand):
         self.add_following()
         self.create_booklists()
         self.add_reviews()
+        self.add_following_to_admin()
+        self.follow_from_admin()
+        self.trim_reviews()
+        
+    def trim_reviews(self):
+        books_with_excess = Book.objects.alias(
+            reviews=Count('bookreview')).filter(reviews__gt=15)
+        
+        for book in books_with_excess:
+            reviews = book.bookreview_set.count()
+            while reviews > 15:
+                review = book.bookreview_set.order_by('?')[0]
+                review.delete()
+                reviews = book.bookreview_set.count()
+                
         
     def add_reviews(self):
         count = BookReview.objects.all().count()
@@ -125,7 +141,10 @@ class Command(BaseCommand):
     def create_club(self):
         owner = User.objects.order_by('?')[0]
         name = self.faker.unique.sentence(nb_words=1)
-        privacy = random.getrandbits(1)
+        rand = random.randrange(0, 10)
+        privacy = False
+        if(rand == 1):
+            privacy = True
         club = Club.objects.create(
             name=name,
             club_url_name=Club.convertNameToUrl(None, name),
@@ -196,10 +215,11 @@ class Command(BaseCommand):
                 m.join_member(user)
                 
     def feature_book(self,club):
-        feature = FeaturedBooks.objects.create(club=club, book=Book.objects.order_by('?')[0], reason=self.faker.text(max_nb_chars=50))
+        for i in range(0, random.randrange(3,10)):
+            feature = FeaturedBooks.objects.create(club=club, book=Book.objects.order_by('?')[0], reason=self.faker.text(max_nb_chars=50))
         
     def add_books_to_shelf(self):
-        for i in range (0, 50):
+        for i in range(0, 150):
             user = self.get_random_user()
             for x in range(1, 3):
                 book = Book.objects.order_by('?')[0]
@@ -225,7 +245,7 @@ class Command(BaseCommand):
                 forum=globalForum,
             )
             self.add_votes_public(curPost)
-            for x in range(1, random.randrange(0, 5)):
+            for x in range(1, random.randrange(3, 5)):
                 commentUser = User.objects.order_by('?')[0]
                 curComment = ForumComment.objects.create(
                     content=self.faker.text(max_nb_chars=240),
@@ -235,15 +255,32 @@ class Command(BaseCommand):
                 self.add_votes_public(curComment)
                 
     def add_following(self):
-        for i in (0,random.randrange(30, 50)):
+        for i in range(0,random.randrange(30, 50)):
             user = self.get_random_user()
             for x in range(2,4):
                 other = self.get_random_user()
                 if user != other:
-                    UserToUserRelationship.objects.create(source_user=user, target_user=other, relationship_type=1)
+                    UserToUserRelationship.objects.get_or_create(
+                        source_user=user, target_user=other, relationship_type=1)
+                    
+    def add_following_to_admin(self):
+        target = User.objects.get(username="Admin")
+        for i in range (0, random.randrange(50, 70)):
+            other = self.get_random_user()
+            if target != other:
+                UserToUserRelationship.objects.get_or_create(source_user=other, target_user=target, relationship_type=1)
+                
+    def follow_from_admin(self):
+        admin = User.objects.get(username="Admin")
+        for i in range(0, random.randrange(50, 70)):
+            target = self.get_random_user()
+            if target != admin:
+                UserToUserRelationship.objects.get_or_create(
+                    source_user=admin, target_user=target, relationship_type=1)
+            
     
     def add_votes_public(self, content):
-        for i in (0,random.randrange(0, 7)):
+        for i in range(0,random.randrange(0, 7)):
             user = self.get_random_user()
             type = random.getrandbits(1)
             con = ContentType.objects.get_for_model(content.__class__)
@@ -254,7 +291,7 @@ class Command(BaseCommand):
                 continue
             
     def add_votes_private(self, content, club):
-        for i in (0,random.randrange(0, 7)):
+        for i in range(0,random.randrange(0, 7)):
             user = self.get_random_user_from_club(club)
             type = random.getrandbits(1)
             con = ContentType.objects.get_for_model(content.__class__)
@@ -266,7 +303,7 @@ class Command(BaseCommand):
                 continue
             
     def create_booklists(self):
-        for i in (0,random.randrange(10, 20)):
+        for i in range(0,random.randrange(10, 40, 1)):
             user = self.get_random_user()
             b = BookList.objects.create(creator=user,title=self.faker.text(max_nb_chars=120), description=self.faker.text(max_nb_chars=240))
             for x in (0,random.randrange(3, 30)):
