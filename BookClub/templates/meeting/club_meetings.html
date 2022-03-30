@@ -55,7 +55,7 @@
                                 <!-- For each meeting, add a row linked to the corresponding meeeting -->
                                 <!-- Need to change onclick location to actual meeting dashboard.-->
                                 <tr>
-                                    <td>{{ meeting.title }}</td>
+                                    <td>{{ meeting.title |truncatechars:30 }}</td>
                                     <td>{{ meeting.organiser.username }}</td>
                                     <td>{{ meeting.meeting_time }}</td>
                                     <td>

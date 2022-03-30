@@ -79,7 +79,7 @@
                                 <div class="card joined_card">
                                     <header class="card-header">
                                         <p class="card-header-title">
-                                            {{ meeting.title }}
+                                            {{ meeting.title |truncatechars:30 }}
                                         </p>
                                         <button class="card-header-icon" aria-label="more options">
                                             <span>Joined</span>
@@ -150,7 +150,7 @@
                                 <div class="card not_joined_card">
                                     <header class="card-header">
                                         <p class="card-header-title">
-                                            {{ meeting.title }}
+                                            {{ meeting.title |truncatechars:30 }}
                                         </p>
                                     </header>
                                     {% include 'partials/agenda_card.html' %}
@@ -179,7 +179,7 @@
                                 <div class="card not_joined_card">
                                     <header class="card-header">
                                         <p class="card-header-title">
-                                            {{ meeting.title }}
+                                            {{ meeting.title |truncatechars:30 }}
                                         </p>
                                     </header>
                                     {% include 'partials/agenda_card.html' %}
@@ -210,7 +210,7 @@
                                     <div class="card joined_card">
                                         <header class="card-header">
                                             <p class="card-header-title">
-                                                {{ meeting.title }}
+                                                {{ meeting.title |truncatechars:30 }}
                                             </p>
                                             <button class="card-header-icon" aria-label="Joined">
                                                 <span>Joined</span>
@@ -228,7 +228,7 @@
                                     <div class="card not_joined_card">
                                         <header class="card-header">
                                             <p class="card-header-title">
-                                                {{ meeting.title }}
+                                                {{ meeting.title |truncatechars:30 }}
                                             </p>
                                         </header>
                                         {% include 'partials/agenda_card.html' %}
@@ -259,7 +259,7 @@
                                     <div class="card joined_card">
                                         <header class="card-header">
                                             <p class="card-header-title">
-                                                {{ meeting.title }}
+                                                {{ meeting.title |truncatechars:30 }}
                                             </p>
                                             <button class="card-header-icon" aria-label="Joined">
                                                 <span>Joined</span>
@@ -277,7 +277,7 @@
                                     <div class="card not_joined_card">
                                         <header class="card-header">
                                             <p class="card-header-title">
-                                                {{ meeting.title }}
+                                                {{ meeting.title |truncatechars:30 }}
                                             </p>
                                         </header>
                                         {% include 'partials/agenda_card.html' %}
