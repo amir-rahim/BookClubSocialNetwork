@@ -8,6 +8,7 @@ from BookClub.models import BookShelf, Book
 
 
 class UpdateBookShelfView(LoginRequiredMixin, View):
+    """View for updating books in the book shelf."""
 
     redirect_url = 'bookshelf'
     

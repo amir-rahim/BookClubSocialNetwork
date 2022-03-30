@@ -8,6 +8,7 @@ from BookClub.models import BookShelf, Book
 
 
 class AddToBookShelfView(LoginRequiredMixin, View):
+    """View for adding a book to book shelf."""
 
     redirect_url = 'library_books'
     
@@ -15,17 +16,17 @@ class AddToBookShelfView(LoginRequiredMixin, View):
         return redirect(self.redirect_url)
 
     def is_actionable(self, book, status):
-        """Check if user can remove a book"""
+        """Check if user can add a book"""
 
         return (not BookShelf.objects.filter(user=self.request.user, book=book).exists()) and int(status) <= 3 and int(status) >= 0
 
     def is_not_actionable(self):
-        """If user cannot remove book"""
+        """If user cannot add book"""
 
         return messages.error(self.request, "You cannot add that book!")
 
     def action(self, book, status):
-        """User removes the book"""
+        """User adds the book"""
         
         entry = BookShelf.objects.create(user=self.request.user, book=book, status=status)
         entry.save()

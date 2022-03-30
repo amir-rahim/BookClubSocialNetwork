@@ -8,6 +8,8 @@ from BookClub.models import BookShelf, Book
 
 
 class BookShelfView(LoginRequiredMixin, ListView):
+    """View for the book shelf."""
+
     model = BookShelf
     template_name = 'library/bookshelf.html'
     context_object_name = 'all_books'

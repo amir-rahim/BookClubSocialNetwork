@@ -8,6 +8,7 @@ from BookClub.models import BookShelf, Book
 
 
 class RemoveFromBookShelfView(LoginRequiredMixin, View):
+    """View for removing a book from book shelf."""
 
     redirect_url = 'bookshelf'
     
