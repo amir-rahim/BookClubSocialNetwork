@@ -3,13 +3,12 @@ from BookClub.models import *
 from BookClub.models.forum import ForumPost
 
 
-
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for users."""
 
     list_display = [
-        'id', 'username', 'email'
+        'id', 'username', 'email', 'public_bio'
     ]
 
 
@@ -54,15 +53,16 @@ class BookReviewAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for Books Reviews ."""
 
     list_display = [
-        'book', 'creator', 'book_rating' , 'title' , 'created_on','content'
+        'book', 'creator', 'book_rating', 'title', 'created_on', 'content', 'rating'
     ]
+
 
 @admin.register(BookReviewComment)
 class BookReviewCommentAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for Books Review Comments ."""
 
     list_display = [
-        'book_review','creator','created_on','content'
+        'book_review', 'creator', 'created_on', 'content', 'rating'
     ]
 
 
@@ -119,6 +119,7 @@ class VoteAdmin(admin.ModelAdmin):
         'creator', 'created_on', 'content_type', 'object_id', 'target'
     ]
 
+
 @admin.register(Poll)
 class PollAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for club polls."""
@@ -126,6 +127,7 @@ class PollAdmin(admin.ModelAdmin):
     list_display = [
         'club', 'title', 'deadline', 'created_on', 'active'
     ]
+
 
 @admin.register(Option)
 class OptionAdmin(admin.ModelAdmin):
@@ -135,6 +137,7 @@ class OptionAdmin(admin.ModelAdmin):
         'poll', 'text', 'book'
     ]
 
+
 @admin.register(BookShelf)
 class BookShelfAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for Book Shelf."""
@@ -142,6 +145,7 @@ class BookShelfAdmin(admin.ModelAdmin):
     list_display = [
         'user', 'book', 'status'
     ]
+
 
 @admin.register(FeaturedBooks)
 class FeaturedBooksAdmin(admin.ModelAdmin):
@@ -151,9 +155,9 @@ class FeaturedBooksAdmin(admin.ModelAdmin):
         'club', 'book', 'reason'
     ]
 
+
 @admin.register(UserRecommendations)
 class UserRecAdmin(admin.ModelAdmin):
-
     list_display = [
         'user', 'recommendations'
     ]
