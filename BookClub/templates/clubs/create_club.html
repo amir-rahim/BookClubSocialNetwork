@@ -39,6 +39,14 @@
                     <form action="{% url 'create_club' %}" method="post">
                         {% csrf_token %}
                         {% include 'partials/bulma_form.html' with form=form %}
+                        <article class="message is-info">
+                            <div class="message-body">
+                                <span class="icon is-small">
+                                    <i class="fa-solid fa-circle-info"></i>
+                                </span>
+                                Info: You cannot change the name of the club after creation. Please consider your name choice.
+                            </div>
+                        </article>
                         <input type="submit" value="Create Club" class="button is-link">
                     </form>
                 </div>
