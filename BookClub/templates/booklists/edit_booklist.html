@@ -7,9 +7,7 @@
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
-        <div class="column is-3">
-            {% include 'partials/aside_menu/library_aside.html' %}
-        </div>
+        <div class="column is-3">{% include 'partials/aside_menu/library_aside.html' %}</div>
         <div class="column is-9">
             <nav class="breadcrumb"
                  aria-label="breadcrumbs"
@@ -39,8 +37,7 @@
             </section>
             <div class="container">
                 <div class="card-content">
-                    <form action="{% url 'edit_booklist' booklist_id=id %}"
-                            method="post">
+                    <form action="{% url 'edit_booklist' booklist_id=id %}" method="post">
                         {% csrf_token %}
                         {% include 'partials/bulma_form.html' with form=form %}
                         <input type="submit" value="Update" class="button is-link">

@@ -1,9 +1,12 @@
+"""Views related to user to user relationships."""
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from BookClub.models import User, UserToUserRelationship
 
 
 class FollowerListView(LoginRequiredMixin, TemplateView):
+    """Render the list of other users with a following
+    or follower relationship with the current user."""
     model = User
     paginate_by = 20
     template_name = 'user/following_followers.html'

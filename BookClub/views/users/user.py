@@ -1,4 +1,4 @@
-"""User Related Views"""
+"""User related views."""
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -13,7 +13,7 @@ from BookClub.models.user2user import UserToUserRelationship
 
 
 class UserDashboardView(LoginRequiredMixin, TemplateView):
-    """Class based view for user dashboard"""
+    """View for the user dashboard."""
     model = User
     template_name = 'user/user_dashboard.html'
 
@@ -43,12 +43,13 @@ class UserDashboardView(LoginRequiredMixin, TemplateView):
 
 
 class UserProfileMembershipsView(LoginRequiredMixin, TemplateView):
-    """Class based view for user profile memberships"""
+    """List of another user's club memberships."""
     model = Club
     template_name = 'user/user_profile_memberships.html'
     context_object_name = 'posts'
 
     def get_queryset(self):
+        """Get the other user's details from kwargs."""
         user = User.objects.get(username=self.kwargs['username'])
         subquery = ClubMembership.objects.filter(user=user, club=OuterRef('pk'))
         clubs = Club.objects.filter(
@@ -66,18 +67,16 @@ class UserProfileMembershipsView(LoginRequiredMixin, TemplateView):
         return context
 
 class EditProfileView(LoginRequiredMixin, UpdateView):
-    """Class based view for editing user profile"""
+    """Allow user to edit their profile."""
     model = User
     form_class = EditProfileForm
     template_name = 'user/edit_profile.html'
 
     def get_object(self):
-        """Return the object (user) to be updated."""
         user = self.request.user
         return user
 
     def get_success_url(self):
-        """Return redirect URL after successful update."""
         messages.add_message(self.request, messages.SUCCESS, "Profile updated!")
         return reverse('user_dashboard')
 
@@ -87,13 +86,12 @@ class EditProfileView(LoginRequiredMixin, UpdateView):
 
 
 class ChangePasswordView(LoginRequiredMixin, FormView):
-    """Class based view for changing user password"""
+    """Allow the user to change their password."""
     form_class = ChangePasswordForm
     template_name = 'user/password_change.html'
 
     def get_form_kwargs(self, **kwargs):
         """Pass the current user to the password change form."""
-
         kwargs = super().get_form_kwargs(**kwargs)
         kwargs.update({'user': self.request.user})
         return kwargs
@@ -109,12 +107,11 @@ class ChangePasswordView(LoginRequiredMixin, FormView):
         return super().form_invalid(form)
 
     def get_success_url(self):
-        """Redirect the user after successful password change."""
-
         messages.add_message(self.request, messages.SUCCESS, "Password updated!")
         return reverse('user_dashboard')
 
 class DeleteUserAccountView(LoginRequiredMixin, View):
+    """Allow the user to permanently delete their account."""
     redirect_location = 'home'
 
     def action(self, user):

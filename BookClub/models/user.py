@@ -1,3 +1,4 @@
+"""User model."""
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from django.db import models
@@ -6,7 +7,13 @@ from libgravatar import Gravatar
 
 
 class User(AbstractUser):
-    """User model used for authentication."""
+    """User model used for authentication.
+    
+    Attributes:
+        email: The Email the User creates their account with.
+        public_bio: A string containing the User's public bio.
+        saved_booklists: A list of the Book Lists saved by this User, made by other Users.
+    """
 
     class Meta:
         ordering = ['username']

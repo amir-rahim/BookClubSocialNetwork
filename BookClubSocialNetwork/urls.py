@@ -80,7 +80,6 @@ urlpatterns = [
     path('club/<str:club_url_name>/members/', views.MembersListView.as_view(), name='member_list'),
     path('club/<str:club_url_name>/edit/', views.EditClubView.as_view(), name='edit_club'),
     path('club/<str:club_url_name>/applicants/', views.ApplicantListView.as_view(), name='applicant_list'),
-    path('club/<str:club_url_name>/polls/create/', views.CreateClubPollView.as_view(), name='create_club_poll'),
     path('club/<str:club_url_name>/featured/', views.FeatureBookView.as_view(), name='edit_featured_books'),
     path('club/<str:club_url_name>/featured/<int:book_id>/remove', views.RemoveFeaturedBookView.as_view(), name='remove_featured_book'),
 

@@ -1,9 +1,11 @@
+"""Meeting related forms."""
 from django.forms import HiddenInput, ModelForm, Textarea, TextInput, ValidationError
 from BookClub.forms.widgets import BookSelectorInput,DateTimePickerInput
 from BookClub.models.meeting import Meeting
 
 
 class MeetingForm(ModelForm):
+    """Form containing all Meeting model fields."""
     class Meta:
         model = Meeting
         fields = [

@@ -50,7 +50,6 @@
 
         </script>
         <style>
-
             .carousel{
               	overflow: hidden;
             }
@@ -67,7 +66,7 @@
         <title>
             {% block page_title %}
             {% endblock page_title %}
-        	| Novella</title>
+        | Novella</title>
         {% block head %}
         {% endblock head %}
     </head>
@@ -104,9 +103,8 @@
 				console.log(datepicker.data.value());
 			});
         }
-        </script>
-
-        <script>
+    </script>
+    <script>
 			var carousels = bulmaCarousel.attach('.carousel', {
 				pagination: false,
 				slidesToShow: 3, 
@@ -130,8 +128,9 @@
 					console.log(state);
 				});
 			}
-      	</script>
-      	<script>
+      	
+    </script>
+    <script>
 			document.addEventListener('DOMContentLoaded', () => {
 			// Functions to open and close a modal
 			function openModal($el) {
@@ -177,9 +176,9 @@
 				}
           	});
         });
-      	</script>
-
-      	<script>
+      	
+    </script>
+    <script>
 			$('.voteform').on('submit', catchVote);
 
 			function catchVote(event){
@@ -240,9 +239,9 @@
 			function minimise_downvote(identifier){
 				$('#downvote'+identifier).removeClass('is-danger')
 			}
-      	</script>
-
-      	<script>
+      	
+    </script>
+    <script>
 		  	document.addEventListener('DOMContentLoaded', () => {
 			// Functions to open and close a modal
 				function openModal($el) {
@@ -288,8 +287,9 @@
 					}
 				});
 			});
-		</script>
-		<script>
+		
+    </script>
+    <script>
 			let tabsWithContent = (function () {
 				let tabs = document.querySelectorAll('.tabs li');
 				let tabsContent = document.querySelectorAll('.tab-content');
@@ -325,8 +325,9 @@
 
               	tabs[0].click();
             })();
-		</script>
-		<script>
+		
+    </script>
+    <script>
               //Show Hide password
             $(".toggle-password").click(function() {
 
@@ -339,8 +340,8 @@
 				}
 
             });
-        </script>
-        <script>
+    </script>
+    <script>
 			$(window).on("load", function() {
 				active = $('a[href="{{ request.path }}"')
 				active.addClass("is-active")
@@ -348,9 +349,8 @@
 				activehtml = "<b>"+activehtml+"</b>"
 				active.html(activehtml)
 			})
-        </script>
-
-	  <style>
+    </script>
+    <style>
         #tabs-with-content .tabs:not(:last-child) {
           margin-bottom: 0;
         }
