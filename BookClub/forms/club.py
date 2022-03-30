@@ -12,11 +12,13 @@ class ClubForm(ModelForm):
 
         widgets = {
             'description': Textarea,
+            'rules': Textarea,
         }
 
         labels = {
             'is_private': 'Set book club as private'
         }
+
 
 class FeatureBookForm(ModelForm):
     class Meta:
