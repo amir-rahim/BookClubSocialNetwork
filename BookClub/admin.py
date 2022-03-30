@@ -14,7 +14,7 @@ class UserAdmin(admin.ModelAdmin):
 
 
 @admin.register(UserToUserRelationship)
-class UserAdmin(admin.ModelAdmin):
+class UserToUserAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for User to User relationships."""
 
     list_display = [
@@ -157,3 +157,10 @@ class UserRecAdmin(admin.ModelAdmin):
     list_display = [
         'user', 'recommendations'
     ]
+    
+@admin.register(ClubRecommendations)
+class ClubRecAdmin(admin.ModelAdmin):
+    
+    list_display = [
+        'club', 'recommendations'
+                    ]
