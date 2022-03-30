@@ -3,11 +3,8 @@
 {% block error_title %}403 Error{% endblock %}
 {% block error_subtitle %}Resource access forbidden.{% endblock %}
 {% block error_body %}
-      <img
-        src="https://images.unsplash.com/photo-1506704810770-7e9bbab1094b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80"
-        alt="404-image"
-        width="auto">
-
-        <a href="{% url 'home' %}" class="button is-link is-fullwidth">Return to the home page</a>
-
+    <img src="https://images.unsplash.com/photo-1506704810770-7e9bbab1094b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80"
+         alt="404-image"
+         width="auto">
+    <a href="{% url 'home' %}" class="button is-link is-fullwidth">Return to the home page</a>
 {% endblock %}

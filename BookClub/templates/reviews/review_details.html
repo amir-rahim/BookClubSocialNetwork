@@ -8,13 +8,15 @@
 {% block content %}
     <div class="columns">
         <div class="column is-3">
-            <a class="button is-fullwidth is-link" href="{% url 'book_view' book_id=review.book.id %}"><b>Back to Book</b></a>
+            <a class="button is-fullwidth is-link"
+               href="{% url 'book_view' book_id=review.book.id %}"><b>Back to Book</b></a>
             <hr class="solid">
             <div class="card">
                 <div class="card-image">
                     <figure class="image">
                         {% if book.get_l_size > 50 %}
-                            <img src="//images.weserv.nl/?url={{ review.book.imageL }}" alt="Book Cover">
+                            <img src="//images.weserv.nl/?url={{ review.book.imageL }}"
+                                 alt="Book Cover">
                         {% else %}
                             <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
                                  alt="Book Cover">
@@ -43,7 +45,6 @@
                     <li>
                         <a href="{% url 'community_reviews' %}">Reviews</a>
                     </li>
-                    
                     <li>
                         <a href="{% url 'book_review' book_id=review.book.id review_id=review.id %}">Review by {{ review.creator }}</a>
                     </li>
@@ -60,7 +61,7 @@
                 <header class="card-header">
                     <p class="card-header-title is-vcentered">
                         <span class="has-text-black"><b>{{ review.title }}</b> - Rating: {{ review.book_rating }}/10 &nbsp;·&nbsp; </span>
-                        <span class="has-text-grey-light">Posted by: <a href="{{ review.creator.get_absolute_url }}"> {{ review.creator }}</a> {{ review.created_on | timesince }} ago</span>
+                        <span class="has-text-grey-light">Posted by: <a href="{{ review.creator.get_absolute_url }}">{{ review.creator }}</a> {{ review.created_on | timesince }} ago</span>
                     </p>
                     <div class="card-header-icon">
                         <div class="field is-grouped">
@@ -120,7 +121,7 @@
                                             </p>
                                             <div class="buttons">
                                                 {% if comment.creator == user %}
-                                                {% include 'partials/delete_button_and_modal.html' with delete_item=comment delete_modal_id=comment.pk %}
+                                                    {% include 'partials/delete_button_and_modal.html' with delete_item=comment delete_modal_id=comment.pk %}
                                                 {% endif %}
                                             </div>
                                         </div>
@@ -152,7 +153,8 @@
                                 </p>
                             </div>
                             <div class="card-content">
-                                <form method="post" action="{% url 'comment_review' book_id=review.book.id review_id=review.id %}">
+                                <form method="post"
+                                      action="{% url 'comment_review' book_id=review.book.id review_id=review.id %}">
                                     <div class="card-content">
                                         <div class="container">
                                             {% csrf_token %}
@@ -160,12 +162,12 @@
                                         </div>
                                     </div>
                                     <footer class="card-footer">
-                                    <input type="button"
-                                        value="Reset"
-                                        id="resetBtn"
-                                        onClick="this.form.reset()"
-                                        class="button is-danger is-fullwidth"/>
-                                    <input type="submit" value="Comment" class="button is-link is-fullwidth"/>
+                                        <input type="button"
+                                               value="Reset"
+                                               id="resetBtn"
+                                               onClick="this.form.reset()"
+                                               class="button is-danger is-fullwidth"/>
+                                        <input type="submit" value="Comment" class="button is-link is-fullwidth"/>
                                     </footer>
                                 </form>
                             </div>

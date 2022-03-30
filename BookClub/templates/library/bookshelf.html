@@ -60,9 +60,9 @@
                         {% if all_books %}
                             <div class="table-container">
                                 <table class="table is-hoverable is-fullwidth"
-                                    id="table-books"
-                                    data-toggle="table"
-                                    data-pagination="true">
+                                       id="table-books"
+                                       data-toggle="table"
+                                       data-pagination="true">
                                     <thead>
                                         <tr>
                                             <th scope="col">Cover</th>
@@ -73,69 +73,73 @@
                                             <th scope="col">Actions</th>
                                         </tr>
                                     </thead>
-                                <tbody>
-                                    {% for entry in all_books %}
-                                        <tr>
-                                            <td>
-                                                {% if entry.book.get_m_size > 50 %}
-                                                    <img src="//images.weserv.nl/?url={{ entry.book.imageM }}" alt=""/>
-                                                {% else %}
-                                                    <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?h=160&w=108"
-                                                        alt=""/>
-                                                {% endif %}
-                                            </td>
-                                            <td>{{ entry.book.title }}</td>
-                                            <td>{{ entry.book.author }}</td>
-                                            <td>{{ entry.book.publisher }}</td>
-                                            <td>
-                                                <form action="{% url 'update_from_bookshelf' book_id=entry.book.id %}" method="post">
-                                                    {% csrf_token %}
-                                                    <div class="field has-addons">
-                                                        <div class="control is-expanded">
-                                                            <div class="select is-fullwidth">
-                                                                <select required id="status" name="status">
-                                                                    <option value="" selected disabled hidden>
-                                                                        Status
-                                                                    </option>
-                                                                    <option value="0">
-                                                                        To Read
-                                                                    </option>
-                                                                    <option value="1">
-                                                                        Reading
-                                                                    </option>
-                                                                    <option value="2">
-                                                                        On Hold
-                                                                    </option>
-                                                                    <option value="3">
-                                                                        Completed
-                                                                    </option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="control">
-                                                            <input type="submit" value="Update" class="button is-info"/>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </td>
-                                            <td>
-                                                <div class="field is-grouped">
-                                                    <div class="control">
-                                                    <button class="button is-fullwidth is-link"
-                                                            onclick="window.location='{% url 'book_view' entry.book.id %}';">View</button>
-                                                    </div>
-                                                    <div class="control">
-                                                    <form action="{% url 'remove_from_bookshelf' book_id=entry.book.id %}" method="post">
+                                    <tbody>
+                                        {% for entry in all_books %}
+                                            <tr>
+                                                <td>
+                                                    {% if entry.book.get_m_size > 50 %}
+                                                        <img src="//images.weserv.nl/?url={{ entry.book.imageM }}" alt=""/>
+                                                    {% else %}
+                                                        <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?h=160&w=108"
+                                                             alt=""/>
+                                                    {% endif %}
+                                                </td>
+                                                <td>{{ entry.book.title }}</td>
+                                                <td>{{ entry.book.author }}</td>
+                                                <td>{{ entry.book.publisher }}</td>
+                                                <td>
+                                                    <form action="{% url 'update_from_bookshelf' book_id=entry.book.id %}"
+                                                          method="post">
                                                         {% csrf_token %}
-                                                        <div class="field">
-                                                            <div class="control is-fullwidth">
-                                                                <input type="submit" value="Remove" class="button is-warning"/>
+                                                        <div class="field has-addons">
+                                                            <div class="control is-expanded">
+                                                                <div class="select is-fullwidth">
+                                                                    <select required id="status" name="status">
+                                                                        <option value="" selected disabled hidden>
+                                                                            Status
+                                                                        </option>
+                                                                        <option value="0">
+                                                                            To Read
+                                                                        </option>
+                                                                        <option value="1">
+                                                                            Reading
+                                                                        </option>
+                                                                        <option value="2">
+                                                                            On Hold
+                                                                        </option>
+                                                                        <option value="3">
+                                                                            Completed
+                                                                        </option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="control">
+                                                                <input type="submit" value="Update" class="button is-info"/>
                                                             </div>
                                                         </div>
                                                     </form>
+                                                </td>
+                                                <td>
+                                                    <div class="field is-grouped">
+                                                        <div class="control">
+                                                            <button class="button is-fullwidth is-link"
+                                                                    onclick="window.location='{% url 'book_view' entry.book.id %}';">
+                                                                View
+                                                            </button>
+                                                        </div>
+                                                        <div class="control">
+                                                            <form action="{% url 'remove_from_bookshelf' book_id=entry.book.id %}"
+                                                                  method="post">
+                                                                {% csrf_token %}
+                                                                <div class="field">
+                                                                    <div class="control is-fullwidth">
+                                                                        <input type="submit" value="Remove" class="button is-warning"/>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </td>
+                                                </td>
                                             </tr>
                                         {% endfor %}
                                     </tbody>
@@ -153,89 +157,93 @@
                     </section>
                     <section class="tab-content">
                         {% if to_read %}
-                        <div class="table-container">
-                            <table class="table is-hoverable is-fullwidth"
-                                id="table-books"
-                                data-toggle="table"
-                                data-pagination="true">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Cover</th>
-                                        <th scope="col">Title</th>
-                                        <th scope="col">Author</th>
-                                        <th scope="col">Publisher</th>
-                                        <th scope="col">Update</th>
-                                        <th scope="col">Actions</th>
-                                    </tr>
-                                </thead>
-                            <tbody>
-                                {% for entry in to_read %}
-                                    <tr>
-                                        <td>
-                                            {% if entry.book.get_m_size > 50 %}
-                                                <img src="//images.weserv.nl/?url={{ entry.book.imageM }}" alt=""/>
-                                            {% else %}
-                                                <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?h=160&w=108"
-                                                    alt=""/>
-                                            {% endif %}
-                                        </td>
-                                        <td>{{ entry.book.title }}</td>
-                                        <td>{{ entry.book.author }}</td>
-                                        <td>{{ entry.book.publisher }}</td>
-                                        <td>
-                                                <form action="{% url 'update_from_bookshelf' book_id=entry.book.id %}" method="post">
-                                                    {% csrf_token %}
-                                                    <div class="field has-addons">
-                                                        <div class="control is-expanded">
-                                                            <div class="select is-fullwidth">
-                                                                <select required id="status" name="status">
-                                                                    <option value="" selected disabled hidden>
-                                                                        Status
-                                                                    </option>
-                                                                    <option value="0">
-                                                                        To Read
-                                                                    </option>
-                                                                    <option value="1">
-                                                                        Reading
-                                                                    </option>
-                                                                    <option value="2">
-                                                                        On Hold
-                                                                    </option>
-                                                                    <option value="3">
-                                                                        Completed
-                                                                    </option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="control">
-                                                            <input type="submit" value="Update" class="button is-info"/>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </td>
-                                            <td>
-                                                <div class="field is-grouped">
-                                                    <div class="control">
-                                                    <button class="button is-fullwidth is-link"
-                                                            onclick="window.location='{% url 'book_view' entry.book.id %}';">View</button>
-                                                    </div>
-                                                    <div class="control">
-                                                    <form action="{% url 'remove_from_bookshelf' book_id=entry.book.id %}" method="post">
+                            <div class="table-container">
+                                <table class="table is-hoverable is-fullwidth"
+                                       id="table-books"
+                                       data-toggle="table"
+                                       data-pagination="true">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Cover</th>
+                                            <th scope="col">Title</th>
+                                            <th scope="col">Author</th>
+                                            <th scope="col">Publisher</th>
+                                            <th scope="col">Update</th>
+                                            <th scope="col">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for entry in to_read %}
+                                            <tr>
+                                                <td>
+                                                    {% if entry.book.get_m_size > 50 %}
+                                                        <img src="//images.weserv.nl/?url={{ entry.book.imageM }}" alt=""/>
+                                                    {% else %}
+                                                        <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?h=160&w=108"
+                                                             alt=""/>
+                                                    {% endif %}
+                                                </td>
+                                                <td>{{ entry.book.title }}</td>
+                                                <td>{{ entry.book.author }}</td>
+                                                <td>{{ entry.book.publisher }}</td>
+                                                <td>
+                                                    <form action="{% url 'update_from_bookshelf' book_id=entry.book.id %}"
+                                                          method="post">
                                                         {% csrf_token %}
-                                                        <div class="field">
-                                                            <div class="control is-fullwidth">
-                                                                <input type="submit" value="Remove" class="button is-warning"/>
+                                                        <div class="field has-addons">
+                                                            <div class="control is-expanded">
+                                                                <div class="select is-fullwidth">
+                                                                    <select required id="status" name="status">
+                                                                        <option value="" selected disabled hidden>
+                                                                            Status
+                                                                        </option>
+                                                                        <option value="0">
+                                                                            To Read
+                                                                        </option>
+                                                                        <option value="1">
+                                                                            Reading
+                                                                        </option>
+                                                                        <option value="2">
+                                                                            On Hold
+                                                                        </option>
+                                                                        <option value="3">
+                                                                            Completed
+                                                                        </option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="control">
+                                                                <input type="submit" value="Update" class="button is-info"/>
                                                             </div>
                                                         </div>
                                                     </form>
+                                                </td>
+                                                <td>
+                                                    <div class="field is-grouped">
+                                                        <div class="control">
+                                                            <button class="button is-fullwidth is-link"
+                                                                    onclick="window.location='{% url 'book_view' entry.book.id %}';">
+                                                                View
+                                                            </button>
+                                                        </div>
+                                                        <div class="control">
+                                                            <form action="{% url 'remove_from_bookshelf' book_id=entry.book.id %}"
+                                                                  method="post">
+                                                                {% csrf_token %}
+                                                                <div class="field">
+                                                                    <div class="control is-fullwidth">
+                                                                        <input type="submit" value="Remove" class="button is-warning"/>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
                         {% else %}
                             <hr>
                             <p style="text-align: center" class="has-text-grey">
@@ -247,84 +255,106 @@
                     </section>
                     <section class="tab-content">
                         {% if currently_reading %}
-                        <div class="table-container">
-                            <table class="table is-hoverable is-fullwidth"
-                                id="table-books"
-                                data-toggle="table"
-                                data-pagination="true">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Cover</th>
-                                        <th scope="col">Title</th>
-                                        <th scope="col">Author</th>
-                                        <th scope="col">Publisher</th>
-                                        <th scope="col">Update</th>
-                                        <th scope="col">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for entry in currently_reading %}
+                            <div class="table-container">
+                                <table class="table is-hoverable is-fullwidth"
+                                       id="table-books"
+                                       data-toggle="table"
+                                       data-pagination="true">
+                                    <thead>
                                         <tr>
-                                            <td>
-                                                {% if entry.book.get_m_size > 50 %}
-                                                    <img src="//images.weserv.nl/?url={{ entry.book.imageM }}" alt=""/>
-                                                {% else %}
-                                                    <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?h=160&w=108"
-                                                        alt=""/>
-                                                {% endif %}
-                                            </td>
-                                            <td>{{ entry.book.title }}</td>
-                                            <td>{{ entry.book.author }}</td>
-                                            <td>{{ entry.book.publisher }}</td>
-                                            <td>
-                                                <form action="{% url 'update_from_bookshelf' book_id=entry.book.id %}" method="post">
-                                                    {% csrf_token %}
-                                                    <div class="field has-addons">
-                                                        <div class="control is-expanded">
-                                                            <div class="select is-fullwidth">
-                                                                <select required id="status" name="status">
-                                                                    <option value="" selected disabled hidden>
-                                                                        Status
-                                                                    </option>
-                                                                    <option value="0">
-                                                                        To Read
-                                                                    </option>
-                                                                    <option value="1">
-                                                                        Reading
-                                                                    </option>
-                                                                    <option value="2">
-                                                                        On Hold
-                                                                    </option>
-                                                                    <option value="3">
-                                                                        Completed
-                                                                    </option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="control">
-                                                            <input type="submit" value="Update" class="button is-info"/>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </td>
-                                            <td>
-                                                <div class="field is-grouped">
-                                                    <div class="control">
-                                                    <button class="button is-fullwidth is-link"
-                                                            onclick="window.location='{% url 'book_view' entry.book.id %}';">View</button>
-                                                    </div>
-                                                    <div class="control">
-                                                    <form action="{% url 'remove_from_bookshelf' book_id=entry.book.id %}" method="post">
+                                            <th scope="col">
+                                                Cover
+                                            </th>
+                                            <th scope="col">
+                                                Title
+                                            </th>
+                                            <th scope="col">
+                                                Author
+                                            </th>
+                                            <th scope="col">
+                                                Publisher
+                                            </th>
+                                            <th scope="col">
+                                                Update
+                                            </th>
+                                            <th scope="col">
+                                                Actions
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for entry in currently_reading %}
+                                            <tr>
+                                                <td>
+                                                    {% if entry.book.get_m_size > 50 %}
+                                                        <img src="//images.weserv.nl/?url={{ entry.book.imageM }}" alt=""/>
+                                                    {% else %}
+                                                        <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?h=160&w=108"
+                                                             alt=""/>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {{ entry.book.title }}
+                                                </td>
+                                                <td>
+                                                    {{ entry.book.author }}
+                                                </td>
+                                                <td>
+                                                    {{ entry.book.publisher }}
+                                                </td>
+                                                <td>
+                                                    <form action="{% url 'update_from_bookshelf' book_id=entry.book.id %}"
+                                                          method="post">
                                                         {% csrf_token %}
-                                                        <div class="field">
-                                                            <div class="control is-fullwidth">
-                                                                <input type="submit" value="Remove" class="button is-warning"/>
+                                                        <div class="field has-addons">
+                                                            <div class="control is-expanded">
+                                                                <div class="select is-fullwidth">
+                                                                    <select required id="status" name="status">
+                                                                        <option value="" selected disabled hidden>
+                                                                            Status
+                                                                        </option>
+                                                                        <option value="0">
+                                                                            To Read
+                                                                        </option>
+                                                                        <option value="1">
+                                                                            Reading
+                                                                        </option>
+                                                                        <option value="2">
+                                                                            On Hold
+                                                                        </option>
+                                                                        <option value="3">
+                                                                            Completed
+                                                                        </option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="control">
+                                                                <input type="submit" value="Update" class="button is-info"/>
                                                             </div>
                                                         </div>
                                                     </form>
+                                                </td>
+                                                <td>
+                                                    <div class="field is-grouped">
+                                                        <div class="control">
+                                                            <button class="button is-fullwidth is-link"
+                                                                    onclick="window.location='{% url 'book_view' entry.book.id %}';">
+                                                                View
+                                                            </button>
+                                                        </div>
+                                                        <div class="control">
+                                                            <form action="{% url 'remove_from_bookshelf' book_id=entry.book.id %}"
+                                                                  method="post">
+                                                                {% csrf_token %}
+                                                                <div class="field">
+                                                                    <div class="control is-fullwidth">
+                                                                        <input type="submit" value="Remove" class="button is-warning"/>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </td>
+                                                </td>
                                             </tr>
                                         {% endfor %}
                                     </tbody>
@@ -336,25 +366,37 @@
                                 There are no books in this shelf.
                                 Go to the <a class="has-text-success is-link" href="{% url 'library_books' %}"><i>Library</i></a>.
                             </p>
-                            </p>
-                            <hr>
-                        {% endif %}
-                    </section>
-                    <section class="tab-content">
-                        {% if on_hold %}
+                        </p>
+                        <hr>
+                    {% endif %}
+                </section>
+                <section class="tab-content">
+                    {% if on_hold %}
                         <div class="table-container">
                             <table class="table is-hoverable is-fullwidth"
-                                id="table-books"
-                                data-toggle="table"
-                                data-pagination="true">
+                                   id="table-books"
+                                   data-toggle="table"
+                                   data-pagination="true">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Cover</th>
-                                        <th scope="col">Title</th>
-                                        <th scope="col">Author</th>
-                                        <th scope="col">Publisher</th>
-                                        <th scope="col">Update</th>
-                                        <th scope="col">Actions</th>
+                                        <th scope="col">
+                                            Cover
+                                        </th>
+                                        <th scope="col">
+                                            Title
+                                        </th>
+                                        <th scope="col">
+                                            Author
+                                        </th>
+                                        <th scope="col">
+                                            Publisher
+                                        </th>
+                                        <th scope="col">
+                                            Update
+                                        </th>
+                                        <th scope="col">
+                                            Actions
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -365,14 +407,21 @@
                                                     <img src="//images.weserv.nl/?url={{ entry.book.imageM }}" alt=""/>
                                                 {% else %}
                                                     <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?h=160&w=108"
-                                                        alt=""/>
+                                                         alt=""/>
                                                 {% endif %}
                                             </td>
-                                            <td>{{ entry.book.title }}</td>
-                                            <td>{{ entry.book.author }}</td>
-                                            <td>{{ entry.book.publisher }}</td>
                                             <td>
-                                                <form action="{% url 'update_from_bookshelf' book_id=entry.book.id %}" method="post">
+                                                {{ entry.book.title }}
+                                            </td>
+                                            <td>
+                                                {{ entry.book.author }}
+                                            </td>
+                                            <td>
+                                                {{ entry.book.publisher }}
+                                            </td>
+                                            <td>
+                                                <form action="{% url 'update_from_bookshelf' book_id=entry.book.id %}"
+                                                      method="post">
                                                     {% csrf_token %}
                                                     <div class="field has-addons">
                                                         <div class="control is-expanded">
@@ -405,50 +454,65 @@
                                             <td>
                                                 <div class="field is-grouped">
                                                     <div class="control">
-                                                    <button class="button is-fullwidth is-link"
-                                                            onclick="window.location='{% url 'book_view' entry.book.id %}';">View</button>
+                                                        <button class="button is-fullwidth is-link"
+                                                                onclick="window.location='{% url 'book_view' entry.book.id %}';">
+                                                            View
+                                                        </button>
                                                     </div>
                                                     <div class="control">
-                                                    <form action="{% url 'remove_from_bookshelf' book_id=entry.book.id %}" method="post">
-                                                        {% csrf_token %}
-                                                        <div class="field">
-                                                            <div class="control is-fullwidth">
-                                                                <input type="submit" value="Remove" class="button is-warning"/>
+                                                        <form action="{% url 'remove_from_bookshelf' book_id=entry.book.id %}"
+                                                              method="post">
+                                                            {% csrf_token %}
+                                                            <div class="field">
+                                                                <div class="control is-fullwidth">
+                                                                    <input type="submit" value="Remove" class="button is-warning"/>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </form>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </td>
-                                            </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        {% else %}
-                            <hr>
-                            <p style="text-align: center" class="has-text-grey">
-                                There are no books in this shelf.
-                                Go to the <a class="has-text-success is-link" href="{% url 'library_books' %}"><i>Library</i></a>.
-                            </p>
-                            <hr>
-                        {% endif %}
-                    </section>
-                    <section class="tab-content">
-                        {% if completed %}
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <hr>
+                        <p style="text-align: center" class="has-text-grey">
+                            There are no books in this shelf.
+                            Go to the <a class="has-text-success is-link" href="{% url 'library_books' %}"><i>Library</i></a>.
+                        </p>
+                        <hr>
+                    {% endif %}
+                </section>
+                <section class="tab-content">
+                    {% if completed %}
                         <div class="table-container">
                             <table class="table is-hoverable is-fullwidth"
-                                id="table-books"
-                                data-toggle="table"
-                                data-pagination="true">
+                                   id="table-books"
+                                   data-toggle="table"
+                                   data-pagination="true">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Cover</th>
-                                        <th scope="col">Title</th>
-                                        <th scope="col">Author</th>
-                                        <th scope="col">Publisher</th>
-                                        <th scope="col">Update</th>
-                                        <th scope="col">Actions</th>
+                                        <th scope="col">
+                                            Cover
+                                        </th>
+                                        <th scope="col">
+                                            Title
+                                        </th>
+                                        <th scope="col">
+                                            Author
+                                        </th>
+                                        <th scope="col">
+                                            Publisher
+                                        </th>
+                                        <th scope="col">
+                                            Update
+                                        </th>
+                                        <th scope="col">
+                                            Actions
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -459,14 +523,21 @@
                                                     <img src="//images.weserv.nl/?url={{ entry.book.imageM }}" alt=""/>
                                                 {% else %}
                                                     <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?h=160&w=108"
-                                                        alt=""/>
+                                                         alt=""/>
                                                 {% endif %}
                                             </td>
-                                            <td>{{ entry.book.title }}</td>
-                                            <td>{{ entry.book.author }}</td>
-                                            <td>{{ entry.book.publisher }}</td>
                                             <td>
-                                                <form action="{% url 'update_from_bookshelf' book_id=entry.book.id %}" method="post">
+                                                {{ entry.book.title }}
+                                            </td>
+                                            <td>
+                                                {{ entry.book.author }}
+                                            </td>
+                                            <td>
+                                                {{ entry.book.publisher }}
+                                            </td>
+                                            <td>
+                                                <form action="{% url 'update_from_bookshelf' book_id=entry.book.id %}"
+                                                      method="post">
                                                     {% csrf_token %}
                                                     <div class="field has-addons">
                                                         <div class="control is-expanded">
@@ -499,45 +570,49 @@
                                             <td>
                                                 <div class="field is-grouped">
                                                     <div class="control">
-                                                    <button class="button is-fullwidth is-link"
-                                                            onclick="window.location='{% url 'book_view' entry.book.id %}';">View</button>
+                                                        <button class="button is-fullwidth is-link"
+                                                                onclick="window.location='{% url 'book_view' entry.book.id %}';">
+                                                            View
+                                                        </button>
                                                     </div>
                                                     <div class="control">
-                                                    <form action="{% url 'remove_from_bookshelf' book_id=entry.book.id %}" method="post">
-                                                        {% csrf_token %}
-                                                        <div class="field">
-                                                            <div class="control is-fullwidth">
-                                                                <input type="submit" value="Remove" class="button is-warning"/>
+                                                        <form action="{% url 'remove_from_bookshelf' book_id=entry.book.id %}"
+                                                              method="post">
+                                                            {% csrf_token %}
+                                                            <div class="field">
+                                                                <div class="control is-fullwidth">
+                                                                    <input type="submit" value="Remove" class="button is-warning"/>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </form>
+                                                        </form>
                                                     </div>
                                                     <div class="control">
-                                                    <button class="button is-fullwidth is-info"
-                                                            onclick="window.location='{% url 'book_reviews' entry.book.id %}';">Reviews</button>
+                                                        <button class="button is-fullwidth is-info"
+                                                                onclick="window.location='{% url 'book_reviews' entry.book.id %}';">
+                                                            Reviews
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </td>
-                                            </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        {% else %}
-                            <hr>
-                            <p style="text-align: center" class="has-text-grey">
-                                There are no books in this shelf.
-                                Go to the <a class="has-text-success is-link" href="{% url 'library_books' %}"><i>Library</i></a>.
-                            </p>
-                            <hr>
-                        {% endif %}
-                    </section>
-                </div>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <hr>
+                        <p style="text-align: center" class="has-text-grey">
+                            There are no books in this shelf.
+                            Go to the <a class="has-text-success is-link" href="{% url 'library_books' %}"><i>Library</i></a>.
+                        </p>
+                        <hr>
+                    {% endif %}
+                </section>
             </div>
         </div>
     </div>
-
-    <style>
+</div>
+<style>
         #tabs-with-content .tabs:not(:last-child) {
           margin-bottom: 0;
         }
@@ -550,9 +625,8 @@
         #tabs-with-content .tab-content.is-active {
           display: block;
         }
-    </style>
-
-    <script>
+</style>
+<script>
         let tabsWithContent = (function () {
             let tabs = document.querySelectorAll('.tabs li');
             let tabsContent = document.querySelectorAll('.tab-content');
@@ -595,5 +669,5 @@
             {select: [1], sortable:false}
             ]
         })
-    </script>
+</script>
 {% endblock content %}

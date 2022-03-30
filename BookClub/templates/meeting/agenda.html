@@ -6,7 +6,6 @@
     View your upcoming events
 {% endblock page_subtitle %}
 {% block content %}
-
     <div class="modal" id="confirm_export_modal">
         <div class="modal-background"></div>
         <div class="modal-card">
@@ -26,22 +25,22 @@
                         {% csrf_token %}
                         <button type="submit is-half" class="button is-info">Export</button>
                     </form>
-                    <button class="button is-half" onclick="document.getElementById('confirm_export_modal').style.display='none'">Cancel</button>
+                    <button class="button is-half"
+                            onclick="document.getElementById('confirm_export_modal').style.display='none'">
+                        Cancel
+                    </button>
                 </div>
             </footer>
         </div>
     </div>
-
     <!--Tabs-->
     <div id="tabs-with-content">
         <div class="buttons is-right">
-            <button
-                class="js-modal-trigger button is-info"
-                style="margin: 0px 10px;"
-                onclick="document.getElementById('confirm_export_modal').style.display='block'">
+            <button class="js-modal-trigger button is-info"
+                    style="margin: 0px 10px;"
+                    onclick="document.getElementById('confirm_export_modal').style.display='block'">
                 <span>Export</span>
             </button>
-        
             <div class="tabs is-toggle is-right">
                 <ul>
                     <li class="is-active">
@@ -64,8 +63,7 @@
                     </li>
                 </ul>
             </div>
-        </div>    
-        
+        </div>
         <!--Joined tab section-->
         <div>
             <section class="tab-content">
@@ -74,27 +72,27 @@
                 </p>
                 <hr class="solid"/>
                 {% if joined_today %}
-                <div class="columns is-multiline">
-                    {% for meeting in joined_today %}
-                        <div class="column is-one-third">
-                            <!--Card Template-->
-                            <div class="card joined_card">
-                                <header class="card-header">
-                                    <p class="card-header-title">
-                                        {{ meeting.title }}
-                                    </p>
-                                    <button class="card-header-icon" aria-label="more options">
-                                        <span>Joined</span>
-                                        <span class="icon">
-                                            <i class="fa-solid fa-check" aria-hidden="true"></i>
-                                        </span>
-                                    </button>
-                                </header>
-                                {% include 'partials/agenda_card.html' %}
+                    <div class="columns is-multiline">
+                        {% for meeting in joined_today %}
+                            <div class="column is-one-third">
+                                <!--Card Template-->
+                                <div class="card joined_card">
+                                    <header class="card-header">
+                                        <p class="card-header-title">
+                                            {{ meeting.title }}
+                                        </p>
+                                        <button class="card-header-icon" aria-label="more options">
+                                            <span>Joined</span>
+                                            <span class="icon">
+                                                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                                            </span>
+                                        </button>
+                                    </header>
+                                    {% include 'partials/agenda_card.html' %}
+                                </div>
                             </div>
-                        </div>
-                    {% endfor %}
-                </div>
+                        {% endfor %}
+                    </div>
                 {% else %}
                     <hr>
                     <p style="text-align: center" class="has-text-grey">
@@ -102,7 +100,6 @@
                     </p>
                     <hr>
                 {% endif %}
-
                 <!--JOINED UPCOMING MEETINGS-->
                 <hr class="solid"/>
                 <p class="title is-3">
@@ -110,27 +107,27 @@
                 </p>
                 <hr class="solid"/>
                 {% if joined_upcoming %}
-                <div class="columns is-multiline">
-                    {% for meeting in joined_upcoming %}
-                        <div class="column is-one-third">
-                            <!--Card Template-->
-                            <div class="card joined_card">
-                                <header class="card-header">
-                                    <p class="card-header-title">
-                                        {{ meeting.title |truncatechars:30 }}
-                                    </p>
-                                    <button class="card-header-icon" aria-label="more options">
-                                        <span>Joined</span>
-                                        <span class="icon">
-                                            <i class="fa-solid fa-check" aria-hidden="true"></i>
-                                        </span>
-                                    </button>
-                                </header>
-                                {% include 'partials/agenda_card.html' %}
+                    <div class="columns is-multiline">
+                        {% for meeting in joined_upcoming %}
+                            <div class="column is-one-third">
+                                <!--Card Template-->
+                                <div class="card joined_card">
+                                    <header class="card-header">
+                                        <p class="card-header-title">
+                                            {{ meeting.title |truncatechars:30 }}
+                                        </p>
+                                        <button class="card-header-icon" aria-label="more options">
+                                            <span>Joined</span>
+                                            <span class="icon">
+                                                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                                            </span>
+                                        </button>
+                                    </header>
+                                    {% include 'partials/agenda_card.html' %}
+                                </div>
                             </div>
-                        </div>
-                    {% endfor %}
-                </div>
+                        {% endfor %}
+                    </div>
                 {% else %}
                     <hr>
                     <p style="text-align: center" class="has-text-grey">
@@ -139,7 +136,6 @@
                     <hr>
                 {% endif %}
             </section>
-
             <!--Not Joined section-->
             <section class="tab-content">
                 <p class="title is-3">
@@ -147,21 +143,21 @@
                 </p>
                 <hr class="solid"/>
                 {% if not_joined_today %}
-                <div class="columns is-multiline">
-                    {% for meeting in not_joined_today %}
-                        <div class="column is-one-third">
-                            <!--Card Template-->
-                            <div class="card not_joined_card">
-                                <header class="card-header">
-                                    <p class="card-header-title">
-                                        {{ meeting.title }}
-                                    </p>
-                                </header>
-                                {% include 'partials/agenda_card.html' %}
+                    <div class="columns is-multiline">
+                        {% for meeting in not_joined_today %}
+                            <div class="column is-one-third">
+                                <!--Card Template-->
+                                <div class="card not_joined_card">
+                                    <header class="card-header">
+                                        <p class="card-header-title">
+                                            {{ meeting.title }}
+                                        </p>
+                                    </header>
+                                    {% include 'partials/agenda_card.html' %}
+                                </div>
                             </div>
-                        </div>
-                    {% endfor %}
-                </div>
+                        {% endfor %}
+                    </div>
                 {% else %}
                     <hr>
                     <p style="text-align: center" class="has-text-grey">
@@ -169,7 +165,6 @@
                     </p>
                     <hr>
                 {% endif %}
-
                 <!--NOT JOINED UPCOMING MEETINGS-->
                 <hr class="solid"/>
                 <p class="title is-3">
@@ -177,21 +172,21 @@
                 </p>
                 <hr class="solid"/>
                 {% if not_joined_upcoming %}
-                <div class="columns is-multiline">
-                    {% for meeting in not_joined_upcoming %}
-                        <div class="column is-one-third">
-                            <!--Card Template-->
-                            <div class="card not_joined_card">
-                                <header class="card-header">
-                                    <p class="card-header-title">
-                                        {{ meeting.title }}
-                                    </p>
-                                </header>
-                                {% include 'partials/agenda_card.html' %}
+                    <div class="columns is-multiline">
+                        {% for meeting in not_joined_upcoming %}
+                            <div class="column is-one-third">
+                                <!--Card Template-->
+                                <div class="card not_joined_card">
+                                    <header class="card-header">
+                                        <p class="card-header-title">
+                                            {{ meeting.title }}
+                                        </p>
+                                    </header>
+                                    {% include 'partials/agenda_card.html' %}
+                                </div>
                             </div>
-                        </div>
-                    {% endfor %}
-                </div>
+                        {% endfor %}
+                    </div>
                 {% else %}
                     <hr>
                     <p style="text-align: center" class="has-text-grey">
@@ -200,7 +195,6 @@
                     <hr>
                 {% endif %}
             </section>
-
             <!--Both section-->
             <section class="tab-content">
                 <p class="title is-3">
@@ -208,41 +202,41 @@
                 </p>
                 <hr class="solid"/>
                 {% if all_meetings_today %}
-                <div class="columns is-multiline">
-                    {% for meeting in all_meetings_today %}
-                        {% if current_user in meeting.members.all %}
-                            <div class="column is-one-third">
-                                <!--Card Template-->
-                                <div class="card joined_card">
-                                    <header class="card-header">
-                                        <p class="card-header-title">
-                                            {{ meeting.title }}
-                                        </p>
-                                        <button class="card-header-icon" aria-label="Joined">
-                                            <span>Joined</span>
-                                            <span class="icon">
-                                                <i class="fa-solid fa-check" aria-hidden="true"></i>
-                                            </span>
-                                        </button>
-                                    </header>
-                                    {% include 'partials/agenda_card.html' %}
+                    <div class="columns is-multiline">
+                        {% for meeting in all_meetings_today %}
+                            {% if current_user in meeting.members.all %}
+                                <div class="column is-one-third">
+                                    <!--Card Template-->
+                                    <div class="card joined_card">
+                                        <header class="card-header">
+                                            <p class="card-header-title">
+                                                {{ meeting.title }}
+                                            </p>
+                                            <button class="card-header-icon" aria-label="Joined">
+                                                <span>Joined</span>
+                                                <span class="icon">
+                                                    <i class="fa-solid fa-check" aria-hidden="true"></i>
+                                                </span>
+                                            </button>
+                                        </header>
+                                        {% include 'partials/agenda_card.html' %}
+                                    </div>
                                 </div>
-                            </div>
-                        {% else %}
-                            <div class="column is-one-third">
-                                <!--Card Template-->
-                                <div class="card not_joined_card">
-                                    <header class="card-header">
-                                        <p class="card-header-title">
-                                            {{ meeting.title }}
-                                        </p>
-                                    </header>
-                                    {% include 'partials/agenda_card.html' %}
+                            {% else %}
+                                <div class="column is-one-third">
+                                    <!--Card Template-->
+                                    <div class="card not_joined_card">
+                                        <header class="card-header">
+                                            <p class="card-header-title">
+                                                {{ meeting.title }}
+                                            </p>
+                                        </header>
+                                        {% include 'partials/agenda_card.html' %}
+                                    </div>
                                 </div>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
                 {% else %}
                     <hr>
                     <p style="text-align: center" class="has-text-grey">
@@ -250,7 +244,6 @@
                     </p>
                     <hr>
                 {% endif %}
-
                 <!--Upcoming meetings for both-->
                 <hr class="solid">
                 <p class="title is-3">
@@ -258,41 +251,41 @@
                 </p>
                 <hr class="solid">
                 {% if all_meetings_upcoming %}
-                <div class="columns is-multiline">
-                    {% for meeting in all_meetings_upcoming %}
-                        {% if current_user in meeting.members.all %}
-                            <div class="column is-one-third">
-                                <!--Card Template-->
-                                <div class="card joined_card">
-                                    <header class="card-header">
-                                        <p class="card-header-title">
-                                            {{ meeting.title }}
-                                        </p>
-                                        <button class="card-header-icon" aria-label="Joined">
-                                            <span>Joined</span>
-                                            <span class="icon">
-                                                <i class="fa-solid fa-check" aria-hidden="true"></i>
-                                            </span>
-                                        </button>
-                                    </header>
-                                    {% include 'partials/agenda_card.html' %}
+                    <div class="columns is-multiline">
+                        {% for meeting in all_meetings_upcoming %}
+                            {% if current_user in meeting.members.all %}
+                                <div class="column is-one-third">
+                                    <!--Card Template-->
+                                    <div class="card joined_card">
+                                        <header class="card-header">
+                                            <p class="card-header-title">
+                                                {{ meeting.title }}
+                                            </p>
+                                            <button class="card-header-icon" aria-label="Joined">
+                                                <span>Joined</span>
+                                                <span class="icon">
+                                                    <i class="fa-solid fa-check" aria-hidden="true"></i>
+                                                </span>
+                                            </button>
+                                        </header>
+                                        {% include 'partials/agenda_card.html' %}
+                                    </div>
                                 </div>
-                            </div>
-                        {% else %}
-                            <div class="column is-one-third">
-                                <!--Card Template-->
-                                <div class="card not_joined_card">
-                                    <header class="card-header">
-                                        <p class="card-header-title">
-                                            {{ meeting.title }}
-                                        </p>
-                                    </header>
-                                    {% include 'partials/agenda_card.html' %}
+                            {% else %}
+                                <div class="column is-one-third">
+                                    <!--Card Template-->
+                                    <div class="card not_joined_card">
+                                        <header class="card-header">
+                                            <p class="card-header-title">
+                                                {{ meeting.title }}
+                                            </p>
+                                        </header>
+                                        {% include 'partials/agenda_card.html' %}
+                                    </div>
                                 </div>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
                 {% else %}
                     <hr>
                     <p style="text-align: center" class="has-text-grey">
