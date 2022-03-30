@@ -1,4 +1,4 @@
-"""Action Related Views"""
+"""Action related views."""
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
@@ -10,7 +10,7 @@ from BookClub.models import Club, User, ClubMembership
 
 
 class ActionView(TemplateView):
-    """Class for views that make an action"""
+    """Class for views that make an action."""
 
     def get(self, request, *args, **kwargs):
         return redirect('home')
@@ -38,23 +38,23 @@ class ActionView(TemplateView):
         return redirect(self.redirect_location, kwargs['club_url_name'])
 
     def is_actionable(self, current_user, target_user, club):
-        """Check if the action is legal"""
+        """Check if the action is legal."""
 
         raise NotImplementedError("This method isn't implemented yet.")
 
     def is_not_actionable(self, current_user, target_user, club):
-        """Displays a message if the action is illegal"""
+        """Displays a message if the action is illegal."""
 
         messages.error(self.request, f"You cannot do that!")
 
     def action(self, current_user, target_user, club):
-        """Runs the action"""
+        """Runs the action."""
 
         raise NotImplementedError("This method isn't implemented yet.")
 
 
 class PromoteMemberView(LoginRequiredMixin, ActionView):
-    """Promoting a member to a moderator"""
+    """Promoting a member to a moderator."""
 
     redirect_location = 'member_list'
 
@@ -64,7 +64,7 @@ class PromoteMemberView(LoginRequiredMixin, ActionView):
         return (has_owner_rank(current_user, club) and has_member_rank(target_user, club))
 
     def action(self, current_user, target_user, club):
-        """Promotes the member to moderator"""
+        """Promotes the member to moderator."""
 
         messages.success(self.request, f"You have successfully promoted the member.")
         set_rank(target_user, club, ClubMembership.UserRoles.MODERATOR)
@@ -74,17 +74,17 @@ class PromoteMemberView(LoginRequiredMixin, ActionView):
 
 
 class DemoteMemberView(LoginRequiredMixin, ActionView):
-    """Demoting a moderator to a member"""
+    """Demoting a moderator to a member."""
 
     redirect_location = 'member_list'
 
     def is_actionable(self, current_user, target_user, club):
-        """Check if moderator can be demoted"""
+        """Check if moderator can be demoted."""
 
         return has_owner_rank(current_user, club) and has_moderator_rank(target_user, club)
 
     def action(self, current_user, target_user, club):
-        """Demote moderator to a member"""
+        """Demote moderator to a member."""
 
         messages.success(self.request, f"You have successfully demoted the moderator.")
         set_rank(target_user, club, ClubMembership.UserRoles.MEMBER)
@@ -94,7 +94,7 @@ class DemoteMemberView(LoginRequiredMixin, ActionView):
 
 
 class ApproveApplicantView(LoginRequiredMixin, ActionView):
-    """Approving an applicant to a member"""
+    """Approving an applicant to a member."""
 
     redirect_location = 'applicant_list'
 
@@ -105,13 +105,13 @@ class ApproveApplicantView(LoginRequiredMixin, ActionView):
             target_user, club))
 
     def is_not_actionable(self, current_user, target_user, club):
-        """Displays a message if the action is illegal"""
+        """Displays a message if the action is illegal."""
 
         redirect_location = 'home'
         messages.error(self.request, f"You cannot do that!")
 
     def action(self, current_user, target_user, club):
-        """Approves the applicant to a member"""
+        """Approves the applicant to a member."""
 
         messages.success(self.request, f"You have successfully approved the applicant.")
         set_rank(target_user, club, ClubMembership.UserRoles.MEMBER)
@@ -132,7 +132,7 @@ class RejectApplicantView(LoginRequiredMixin, ActionView):
             target_user, club))
 
     def is_not_actionable(self, current_user, target_user, club):
-        """Displays a message if the action is illegal"""
+        """Displays a message if the action is illegal."""
 
         redirect_location = 'home'
         messages.error(self.request, f"You cannot do that!")
@@ -148,17 +148,17 @@ class RejectApplicantView(LoginRequiredMixin, ActionView):
 
 
 class KickMemberView(LoginRequiredMixin, ActionView):
-    """Kicks the target user from the club"""
+    """Kicks the target user from the club."""
 
     redirect_location = 'member_list'
 
     def is_actionable(self, current_user, target_user, club):
-        """Check if currentUser can kick targetUser"""
+        """Check if currentUser can kick targetUser."""
 
         return can_kick(club, current_user, target_user)
 
     def action(self, current_user, target_user, club):
-        """Kick targetUser"""
+        """Kick the targetUser."""
 
         messages.success(self.request, f"You have successfully kicked the member.")
         remove_from_club(target_user, club)
@@ -168,17 +168,17 @@ class KickMemberView(LoginRequiredMixin, ActionView):
 
 
 class TransferOwnershipView(LoginRequiredMixin, ActionView):
-    """Transfer ownership to another moderator"""
+    """Transfer ownership of a club to another moderator."""
 
     redirect_location = 'member_list'
 
     def is_actionable(self, current_user, target_user, club):
-        """Check if the ownership can be transferred to a valid moderator"""
+        """Check if the ownership can be transferred to a valid moderator."""
 
         return has_owner_rank(current_user, club) and has_moderator_rank(target_user, club)
 
     def action(self, current_user, target_user, club):
-        """Transfer ownership to moderator and demote owner to moderator"""
+        """Transfer ownership to moderator and demote owner to moderator."""
 
         messages.success(self.request, f"You have transferred the ownership successfully.")
         set_rank(target_user, club, ClubMembership.UserRoles.OWNER)
@@ -189,7 +189,7 @@ class TransferOwnershipView(LoginRequiredMixin, ActionView):
 
 
 class JoinClubView(LoginRequiredMixin, View):
-    """Users can join/apply to clubs"""
+    """Users can join/apply to clubs."""
 
     redirect_location = 'available_clubs'
 
@@ -197,12 +197,12 @@ class JoinClubView(LoginRequiredMixin, View):
         return redirect(self.redirect_location)
 
     def is_actionable(self, current_user, club):
-        """Check if user can join/apply to a club"""
+        """Check if user can join/apply to a club."""
 
         return not has_membership(club, current_user)
 
     def is_not_actionable(self, current_user, club):
-        """If user has a membership with the club already"""
+        """If user has a membership with the club already."""
 
         if club.is_private:
             messages.info(self.request, "You have already applied to this club.")
@@ -210,7 +210,7 @@ class JoinClubView(LoginRequiredMixin, View):
             messages.info(self.request, "You are already a member of this club.")
 
     def action(self, current_user, club):
-        """Create membership for user with the club depending on privacy"""
+        """Create membership for user with the club depending on privacy."""
 
         if club.is_private:
             create_membership(club, current_user, ClubMembership.UserRoles.APPLICANT)
@@ -237,7 +237,7 @@ class JoinClubView(LoginRequiredMixin, View):
 
 
 class LeaveClubView(LoginRequiredMixin, View):
-    """User can leave their club"""
+    """User can leave a club."""
 
     redirect_location = 'my_club_memberships'
 
@@ -245,18 +245,18 @@ class LeaveClubView(LoginRequiredMixin, View):
         return redirect(self.redirect_location)
 
     def is_actionable(self, current_user, club):
-        """Check if currentUser is in the club"""
+        """Check if currentUser is in the club."""
 
         return (has_membership(club, current_user) or has_applicant_rank(current_user, club)) and not (has_owner_rank(current_user, club))
 
     def is_not_actionable(self, current_user, club):
-        """If the user is unable to leave the club"""
+        """User cannot leave club if they are the owner."""
 
         if has_owner_rank(current_user, club):
             messages.error(self.request, "The owner of the club cannot leave.")
 
     def action(self, current_user, club):
-        """User leaves the club, membership with the club is deleted"""
+        """User leaves the club, membership with the club is deleted."""
 
         messages.success(self.request, "You have left the club.")
         remove_from_club(current_user, club)
@@ -278,11 +278,12 @@ class LeaveClubView(LoginRequiredMixin, View):
         return redirect(self.redirect_location)
 
 
-# Still unsure about where to redirect in successful/unsuccessful action
 class DeleteClubView(LoginRequiredMixin, View):
+    """User can delete a club."""
     redirect_location = 'available_clubs'
 
     def is_actionable(self, current_user, club):
+        """Only allow the owner of a club to delete it."""
         return has_owner_rank(current_user, club)
 
     def is_not_actionable(self):
@@ -305,5 +306,4 @@ class DeleteClubView(LoginRequiredMixin, View):
         except:
             messages.error(self.request, "Error, user or club not found.")
 
-        # Redirects to home if user cannot delete club
         return redirect('home')
