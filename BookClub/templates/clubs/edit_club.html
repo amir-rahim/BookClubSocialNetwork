@@ -39,9 +39,44 @@
             </section>
             <div class="container">
                 <div class="card-content">
+                    <div class="field">
+                        <label for="name" class="label">Club Name</label>
+                        <div class="control" style="padding-bottom: 20px;">
+                            <input name="name" class="input" type="text" placeholder="Tagline" value="{{ club.name }}" disabled>
+                        </div>
+                    </div>
                     <form method="post">
                         {% csrf_token %}
-                        {% include 'partials/bulma_form.html' with form=form %}
+                        <div class="field">
+                            <label for="description" class="label">{{ form.description.label }}</label>
+                            <div class="control" style="padding-bottom: 20px;">
+                                <textarea name="description" class="textarea" placeholder="Description" rows="3">{{ form.description.value }}</textarea>
+                                <div style="font-size: 10pt; color: red;"> {{ form.description.errors }} </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="tagline" class="label">{{ form.tagline.label }}</label>
+                            <div class="control" style="padding-bottom: 20px;">
+                                <input name="tagline" class="input" type="text" placeholder="Tagline" value="{{ form.tagline.value }}">
+                                <div style="font-size: 10pt; color: red;"> {{ form.rules.errors }} </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="description" class="label">{{ form.rules.label }}</label>
+                            <div class="control" style="padding-bottom: 20px;">
+                                <textarea name="rules" class="textarea" placeholder="Rules" rows="3">{{ form.rules.value }}</textarea>
+                                <div style="font-size: 10pt; color: red;"> {{ form.rules.errors }} </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="control" style="padding-bottom: 20px;">
+                                <label for="{{ form.is_private.auto_id }}" class="checkbox">
+                                    <input name="is_private" type="checkbox" {% if form.is_private.value %} checked {% endif %}>
+                                    {{ form.is_private.label }}
+                                </label>
+                                <div style="font-size: 10pt; color: red;"> {{ form.rules.errors }} </div>
+                            </div>
+                        </div>
                         <input type="submit" value="Update Club" class="button is-link">
                     </form>
                 </div>
