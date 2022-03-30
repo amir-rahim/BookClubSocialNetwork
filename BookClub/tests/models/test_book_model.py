@@ -79,13 +79,13 @@ class BookTestCase(TestCase):
         self.assertEqual(url, correct_url)
 
     def test_get_s_size(self):
-        self.assertEqual(1378, self.book.get_s_size())
+        self.assertTrue(1300 < self.book.get_s_size())
 
     def test_get_m_size(self):
-        self.assertEqual(3978, self.book.get_m_size())
+        self.assertTrue(3900 < self.book.get_m_size())
 
     def test_get_l_size(self):
-        self.assertEqual(31578, self.book.get_l_size())
+        self.assertTrue(30000 < self.book.get_l_size())
 
     def test_get_short_description(self):
         self.assertEqual(self.book.get_short_description(), '"Classical Mythology" by Mark P. O. Morford')
