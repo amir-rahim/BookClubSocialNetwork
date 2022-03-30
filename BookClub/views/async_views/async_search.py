@@ -1,3 +1,4 @@
+"""Search table related views."""
 from django.http import JsonResponse
 from django.views.generic import TemplateView
 from django.db.models import Q
@@ -9,7 +10,7 @@ from BookClub.views.async_views.search_query_builder import ClubQuery, UserQuery
 
 
 class SearchView(TemplateView):
-
+    """Render search table with pagination."""
     paginate_by = 10
     search_queries = [ClubQuery, BookQuery, UserQuery, BookListQuery]
 

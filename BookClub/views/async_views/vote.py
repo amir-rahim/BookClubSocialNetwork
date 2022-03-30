@@ -1,3 +1,4 @@
+"""Vote related views."""
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.contenttypes.models import ContentType
 from django.http import JsonResponse
@@ -9,11 +10,13 @@ from BookClub.models import Vote
 
 
 class CreateVoteView(LoginRequiredMixin, CreateView):
+    """Allow the user to vote."""
     model = Vote
     http_method_names = ['post']
     form_class = VoteForm
 
     def post(self, request, *args, **kwargs):
+        """Checks if the user has already voted on the current comment, post or review."""
         form = self.get_form()
         if form.is_valid():
             return self.form_valid(form)
@@ -35,6 +38,7 @@ class CreateVoteView(LoginRequiredMixin, CreateView):
         return super().post(request, *args, **kwargs)
 
     def get_response_json(self, form, vote):
+        """Checks if user has upvoted or downvoted."""
         try:
             object_type = ContentType.objects.get(pk=form.instance.content_type.id)
             target = object_type.get_object_for_this_type(pk=form.instance.object_id)
