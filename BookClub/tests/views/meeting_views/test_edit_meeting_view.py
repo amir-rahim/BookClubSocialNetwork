@@ -36,16 +36,13 @@ class EditMeetingTestCase(TestCase, LogInTester):
             "type": "B",
             "book": 1
         }
-        self.remove_member_kwargs = copy.deepcopy(self.kwargs)
-        self.remove_member_kwargs['member_id'] = self.member.id
-        self.remove_member_url = reverse(
-            'remove_meeting_member', kwargs=self.remove_member_kwargs)
+        self.remove_member_url = reverse('remove_meeting_member', kwargs=self.kwargs)
 
     def test_url(self):
         self.assertEqual('/club/'+self.club.club_url_name+'/meetings/'+str(self.meeting.id)+'/edit/', self.url)
 
     def test_remove_member_url(self):
-        self.assertEqual('/club/' + self.club.club_url_name + '/meetings/' + str(self.meeting.id) + '/edit/remove_member/' + str(self.member.id), self.remove_member_url)
+        self.assertEqual('/club/' + self.club.club_url_name + '/meetings/' + str(self.meeting.id) + '/edit/remove_member/', self.remove_member_url)
 
     def test_redirects_if_just_member_and_not_organiser_moderator_or_owner(self):
         self.client.login(username=self.member.username,
@@ -159,39 +156,37 @@ class EditMeetingTestCase(TestCase, LogInTester):
         self.assertEqual(pre_test.location, post_test.location)
         self.assertEqual(pre_test.description, post_test.description)
 
-    def test_remove_member_owner_organiser(self):
+    def test_owner_removes_member_from_meeting(self):
         self.meeting.members.add(self.member)
         self.client.login(username=self.owner.username, password="Password123")
         self.assertTrue(self._is_logged_in())
         pre_test_response = self.client.get(self.url)
         self.assertContains(pre_test_response, self.member.username)
         pre_test = self.meeting
-        response = self.client.post(self.remove_member_url, follow=True)
+        response = self.client.post(self.remove_member_url, {'user': self.member.username}, follow=True)
         self.assertTemplateUsed(response, 'edit_meeting.html')
         post_test = Meeting.objects.get(pk=1)
         self.assertNotEqual(pre_test.members.all(), post_test.members.all())
         post_test_response = self.client.get(self.url)
         self.assertNotContains(post_test_response, self.member.username)
 
-    def test_remove_member_remove_organiser(self):
+    def test_owner_removes_organiser_from_meeting(self):
         self.client.login(username=self.owner.username, password="Password123")
         self.assertTrue(self._is_logged_in())
         pre_test = self.meeting
-        self.remove_member_kwargs['member_id'] = self.moderator.id
-        self.remove_member_url = reverse('remove_meeting_member', kwargs=self.remove_member_kwargs)
-        response = self.client.post(self.remove_member_url, follow=True)
-        self.assertTemplateUsed(response, 'edit_meeting.html')
+        response = self.client.post(self.remove_member_url, {'user': self.moderator.username}, follow=True)
+        self.assertTemplateUsed(response, 'meeting_details.html')
         post_test = Meeting.objects.get(pk=1)
         self.assertEqual(pre_test.members.all().count(), post_test.members.all().count())
 
-    def test_remove_member_moderator(self):
+    def test_organiser_removes_member_from_meeting(self):
         self.meeting.members.add(self.member)
         self.client.login(username=self.moderator.username, password="Password123")
         self.assertTrue(self._is_logged_in())
         pre_test_response = self.client.get(self.url)
         self.assertContains(pre_test_response, self.member.username)
         pre_test = Meeting.objects.get(pk=1)
-        response = self.client.post(self.remove_member_url, follow=True)
+        response = self.client.post(self.remove_member_url, {'user': self.member.username}, follow=True)
         self.assertTemplateUsed(response, 'edit_meeting.html')
         post_test = Meeting.objects.get(pk=1)
         self.assertNotEqual(pre_test.members.all(), post_test.members.all())
@@ -199,23 +194,43 @@ class EditMeetingTestCase(TestCase, LogInTester):
         self.assertNotContains(post_test_response, self.member.username)
 
     def test_remove_member_fails_as_non_owner_or_moderator_or_organiser(self):
-        self.client.login(username=self.member.username,
-                          password="Password123")
+        self.client.login(username=self.member.username, password="Password123")
         self.assertTrue(self._is_logged_in())
         pre_test = self.meeting
-        response = self.client.post(self.remove_member_url, follow=True)
+        response = self.client.post(self.remove_member_url, {'user': self.member.username}, follow=True)
         self.assertRedirects(response, reverse('meeting_list', kwargs={'club_url_name': self.club.club_url_name}),
                              status_code=302, target_status_code=200)
         post_test = Meeting.objects.get(pk=1)
         self.assertEqual(pre_test.members.all().count(), post_test.members.all().count())
 
-    def test_remove_invalid_member(self):
-        self.client.login(username=self.owner.username,
-                          password='Password123')
+    def test_remove_member_from_invalid_meeting(self):
+        self.client.login(username=self.owner.username, password='Password123')
         self.assertTrue(self._is_logged_in())
-        self.remove_member_kwargs['meeting_id'] = self.meeting.id+9999
-        self.remove_member_url = reverse('remove_meeting_member', kwargs=self.remove_member_kwargs)
-        response = self.client.post(self.remove_member_url, follow=True)
+        self.kwargs['meeting_id'] = self.meeting.id+9999
+        self.remove_member_url = reverse('remove_meeting_member', kwargs=self.kwargs)
+        response = self.client.post(self.remove_member_url, {'user': self.member.username}, follow=True)
         messages_list = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
         self.assertTemplateUsed(response, 'club_meetings.html')
+
+    def test_organiser_cannot_remove_themselves(self):
+        self.client.login(username=self.moderator.username, password="Password123")
+        self.assertTrue(self._is_logged_in())
+        pre_test = Meeting.objects.get(pk=1)
+        response = self.client.post(self.remove_member_url, {'user': self.moderator.username}, follow=True)
+        self.assertTemplateUsed(response, 'meeting_details.html')
+        messages_list = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list), 1)
+        post_test = Meeting.objects.get(pk=1)
+        self.assertEqual(pre_test.members.all().count(), post_test.members.all().count())
+
+    def test_organiser_removes_no_user(self):
+        self.client.login(username=self.moderator.username, password="Password123")
+        self.assertTrue(self._is_logged_in())
+        pre_test = Meeting.objects.get(pk=1)
+        response = self.client.post(self.remove_member_url, {'user': 'wronguser'}, follow=True)
+        self.assertTemplateUsed(response, 'meeting_details.html')
+        messages_list = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list), 1)
+        post_test = Meeting.objects.get(pk=1)
+        self.assertEqual(pre_test.members.all().count(), post_test.members.all().count())
