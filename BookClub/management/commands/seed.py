@@ -175,7 +175,7 @@ class Command(BaseCommand):
 
     def add_to_club_forum(self, club):
         forum = Forum.objects.get(associated_with=club)
-        for i in range(1, random.randrange(20, 35)):
+        for i in range(1, random.randrange(13, 20)):
             user = User.objects.filter(
                 clubmembership__club=club).order_by('?')[0]
             curPost = ForumPost.objects.create(
@@ -265,14 +265,14 @@ class Command(BaseCommand):
                     
     def add_following_to_admin(self):
         target = User.objects.get(username="Admin")
-        for i in range (0, random.randrange(50, 70)):
+        for i in range (0, random.randrange(30, 40)):
             other = self.get_random_user()
             if target != other:
                 UserToUserRelationship.objects.get_or_create(source_user=other, target_user=target, relationship_type=1)
                 
     def follow_from_admin(self):
         admin = User.objects.get(username="Admin")
-        for i in range(0, random.randrange(50, 70)):
+        for i in range(0, random.randrange(30, 40)):
             target = self.get_random_user()
             if target != admin:
                 UserToUserRelationship.objects.get_or_create(
