@@ -61,14 +61,14 @@
                             <a href="{% url 'club_forum' club_url_name=club.club_url_name %}">Forums</a>
                         </li>
                         <li>
-                            <a href="{% url 'forum_post' club.club_url_name post.id %}">{{ post.title }}</a>
+                            <a href="{% url 'forum_post' club.club_url_name post.id %}">{{ post.title |truncatechars:20 }}</a>
                         </li>
                     {% else %}
                         <li>
                             <a href="{% url 'global_forum' %}">Forums</a>
                         </li>
                         <li>
-                            <a href="{% url 'forum_post' post.id %}">{{ post.title }}</a>
+                            <a href="{% url 'forum_post' post.id %}">{{ post.title |truncatechars:20 }}</a>
                         </li>
                     {% endif %}
                 </ul>
