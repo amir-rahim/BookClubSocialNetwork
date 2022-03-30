@@ -34,6 +34,8 @@ class ExportCalendarViewTestCase(TestCase):
             book=self.book
         )
 
+        self.meeting.members.add(self.user)
+
     def test_url(self):
         self.assertEqual(self.url, '/agenda/export')
 
