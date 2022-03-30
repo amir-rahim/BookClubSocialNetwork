@@ -1,9 +1,10 @@
-
+"""Custom form widgets."""
 from django.forms.widgets import Input
 from django.forms import DateInput, DateTimeInput
 from django.contrib.contenttypes.models import ContentType
 
 class BookSelectorInput(Input):
+    """Render a book search with radio buttons."""
     input_type = 'hidden'
     template_name = 'partials/book_search_select.html/'
     
@@ -13,6 +14,7 @@ class BookSelectorInput(Input):
         return context
 
 class BookCheckInput(Input):
+    """Render a book search with checkboxes."""
     input_type = 'hidden'
     template_name = 'partials/book_search_check.html/'
 
@@ -22,10 +24,11 @@ class BookCheckInput(Input):
         return context
     
 
-
 class DateTimePickerInput(DateTimeInput):
+    """Renders a calendar that takes datetime input."""
     input_type = 'datetime'
     
 
 class DatePickerInput(DateInput):
+    """Renders a calendar that takes date input."""
     input_type = 'date'

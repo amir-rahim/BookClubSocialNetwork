@@ -1,3 +1,4 @@
+"""Search related views."""
 from enum import Enum
 from BookClub.helpers import get_clubs_user_is_member_of, get_memberships_with_access
 from BookClub.models import Book, User, Club, Meeting, BookList, ClubMembership, TextPost, TextComment, UserCreatedObject, ForumPost, ForumComment
@@ -6,10 +7,18 @@ from BookClub.models.forum import Forum
 
 
 class SearchQuery():
+    """Allow user to search all objects.
+        
+    Abstract base class for creating search queries with.
+    Set the class to match using match_models, then define a custom query to add to our q object in query.
 
-    """
-        Abstract base class for creating search queries with.
-        Set the class to match using match_models, then define a custom query to add to our q object in query.
+    Attributes:
+        model: The class of the model we are searching through.
+        match_models: The model class the query should be applied to.
+            Is defined when we define a query.
+        exclude_models: The model classes we exclude and do not add the query to. Is defined when we define a query
+        q_objects: The query we add to.
+        query_string: The string we are searching for.
     """
     model = None
     match_models = None
@@ -40,7 +49,7 @@ class SearchQuery():
 
 
 class BookQuery(SearchQuery):
-
+    """Search all books."""
     match_models = Book
 
     def query(self, **kwargs):
@@ -49,7 +58,7 @@ class BookQuery(SearchQuery):
         return self.q_objects
 
 class BookListQuery(SearchQuery):
-
+    """Search all book lists."""
     match_models = BookList
 
     def query(self, **kwargs):
@@ -58,7 +67,7 @@ class BookListQuery(SearchQuery):
 
 
 class ClubQuery(SearchQuery):
-
+    """Search all clubs, excluding information the user cannot access"""
     match_models = Club
 
     def query(self, **kwargs):
@@ -72,7 +81,7 @@ class ClubQuery(SearchQuery):
     
     
 class UserQuery(SearchQuery):
-    
+    """Search all users."""
     match_models = User
     
     def query(self, **kwargs):

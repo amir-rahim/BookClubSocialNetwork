@@ -1,3 +1,4 @@
+"""Forum model."""
 from django.db import models
 from django.utils.text import slugify
 from django.urls import reverse
@@ -6,6 +7,13 @@ from BookClub.models import TextPost, TextComment
 
 
 class Forum(models.Model):
+    """Forum model for Users to post and interact in.
+    
+    Attributes:
+        title: A string containing the title of the Forum.
+        associated_with: A Club the Forum can be associated with, else is global.
+        slug: The Slug for the Forum.
+    """
     class Meta:
         unique_together = [['title', 'associated_with']]
 
@@ -33,6 +41,10 @@ class Forum(models.Model):
 
 
 class ForumPost(TextPost):
+    """Model for a ForumPost
+
+        forum: A forum that this post has been posted on. Required.
+    """
     class Meta:
         ordering = ['-created_on']
 
@@ -55,6 +67,10 @@ class ForumPost(TextPost):
 
 
 class ForumComment(TextComment):
+    """ Model for Forum Comments
+
+        post: The ForumPost object that this was commented on.
+    """
     class Meta:
         ordering = ['-created_on']
 

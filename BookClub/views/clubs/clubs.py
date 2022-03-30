@@ -1,4 +1,4 @@
-"""Club Related Views"""
+"""Club related views."""
 from venv import create
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -18,6 +18,7 @@ from BookClub.authentication_mixins import PrivateClubMixin
 
 
 class CreateClubView(LoginRequiredMixin, CreateView):
+    """Allow the user to create a club."""
     template_name = 'clubs/create_club.html'
     model = Club
     form_class = ClubForm
@@ -35,6 +36,7 @@ class CreateClubView(LoginRequiredMixin, CreateView):
 
 
 class ClubDashboardView(LoginRequiredMixin, PrivateClubMixin, DetailView):
+    """Render the club dashboard."""
     template_name = "clubs/club_dashboard.html"
     model = Club
     slug_url_kwarg = 'club_url_name'
@@ -57,6 +59,7 @@ class ClubDashboardView(LoginRequiredMixin, PrivateClubMixin, DetailView):
 
 
 class EditClubView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    """Allow the owner of a club to edit the club's details."""
     model = Club
     form_class = ClubForm
     template_name = 'clubs/edit_club.html'
@@ -86,12 +89,13 @@ class EditClubView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 
 class FeatureBookView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    """Allow the owner and moderators of a club to feature books on the club dashboard."""
     template_name = 'clubs/edit_featured_books.html'
     model = FeaturedBooks
     form_class = FeatureBookForm
 
-    # Redirect if user is not a moderator or owner of the club
     def test_func(self):
+        """Redirect user if they are not the owner or moderator of the club."""
         try:
             club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
             if not (has_owner_rank(self.request.user, club) or has_moderator_rank(self.request.user, club)):
@@ -127,7 +131,6 @@ class FeatureBookView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return super().form_invalid(form)
 
     def get_success_url(self):
-        # Change to redirect to list of meetings
         return reverse('club_dashboard', kwargs={'club_url_name': self.kwargs['club_url_name']})
 
     def get_context_data(self, **kwargs):
@@ -138,9 +141,9 @@ class FeatureBookView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return context
 
 class RemoveFeaturedBookView(LoginRequiredMixin, View):
-    redirect_location = 'club_dashboard'
+    """Allow the owner and moderators of a club to remove featured books from the club dashboard."""
 
-    # Redirect if user is not a moderator or owner of the club
+    redirect_location = 'club_dashboard'
 
     def is_actionable(self, current_user, club, book):
         return (has_owner_rank(current_user, club) or has_moderator_rank(current_user, club)) and (FeaturedBooks.objects.filter(club=club, book=book).exists())

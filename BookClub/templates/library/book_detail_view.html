@@ -70,7 +70,7 @@
                         <div class="columns">
                             <div class="column is-6">
                                 <div class="box">
-                                <b>Author:</b>
+                                    <b>Author:</b>
                                     <p>
                                         {{ book.author }}
                                     </p>
@@ -78,12 +78,10 @@
                             </div>
                             <div class="column is-6">
                                 <div class="box">
-                                <b>Publisher:</b>
+                                    <b>Publisher:</b>
                                     <p>
-                                        {{ book.publisher }} 
-                                        {% if book.getPublicationYear != 1 %}
-                                            ({{ book.getPublicationYear }})
-                                        {% endif %}
+                                        {{ book.publisher }}
+                                        {% if book.getPublicationYear != 1 %}({{ book.getPublicationYear }}){% endif %}
                                     </p>
                                 </div>
                             </div>
@@ -131,18 +129,16 @@
                                     <div class="card-content">
                                         <div class="content">
                                             <span class="has-text-black"><b>Rating:</b> {{ review.book_rating }}/10</span>
-                                            <br/>
+                                            <br />
                                             <span class="has-text-grey"><b>Review:</b> {{ review.content |truncatechars:240 }}</span>
                                         </div>
                                     </div>
                                     <footer class="card-footer">
-                                        <a class="card-footer-item" href="{% url 'book_review' book_id=review.book.id review_id=review.id %}">
-                                            View
-                                        </a>
+                                        <a class="card-footer-item"
+                                           href="{% url 'book_review' book_id=review.book.id review_id=review.id %}">View</a>
                                     </footer>
                                 </div>
                             {% endfor %}
-                            
                             <div class="columns">
                                 <div class="column is-half">
                                     <form method="get" action="{% url 'create_review' book.id %}">
@@ -154,191 +150,181 @@
                                         <button class="button is-link is-fullwidth">See more</button>
                                     </form>
                                 </div>
-                        {% else %}
-                            <div class="box">
-                                <p class="has-text-centered">
-                                    No reviews as of yet
-                                </p>
-                            </div>
+                            {% else %}
+                                <div class="box">
+                                    <p class="has-text-centered">
+                                        No reviews as of yet
+                                    </p>
+                                </div>
                                 <form method="get" action="{% url 'create_review' book.id %}">
                                     <button class="button is-info is-fullwidth">Add Review</button>
                                 </form>
-                        {% endif %}
-                    </section>
-                    <section class="tab-content">
-                        {% if user.is_authenticated %}
-                            {% if not in_bookshelf %}
-                            <div class="card">
-                                <header class="card-header">
-                                    <p class="card-header-title is-vcentered">
-                                        <span class="has-text-black"><b>Add to your Bookshelf: </b></span>
-                                    </p>
-                                </header>
-                                <div class="card-content">
-                                    <div class="content">
-                                        <form action="{% url 'add_to_bookshelf' book_id=book.id %}" method="post">
-                                            {% csrf_token %}
-                                            <div class="field has-addons">
-                                                <div class="control is-expanded">
-                                                    <div class="select is-fullwidth">
-                                                        <select required id="status" name="status">
-                                                            <option value="" selected disabled hidden>
-                                                                Choose here
-                                                            </option>
-                                                            <option value="0">
-                                                                To Read
-                                                            </option>
-                                                            <option value="1">
-                                                                Reading
-                                                            </option>
-                                                            <option value="2">
-                                                                On Hold
-                                                            </option>
-                                                            <option value="3">
-                                                                Completed
-                                                            </option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="control">
-                                                    <input type="submit" value="Add" class="button is-link"/>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                                <footer class="card-footer">
-                                    <a class="card-footer-item" href="{% url 'bookshelf' %}">
-                                        View your bookshelf
-                                    </a>
-                                </footer>
-                            </div>
-                            {% else %}
-                            <div class="card">
-                                <header class="card-header">
-                                    <p class="card-header-title is-vcentered">
-                                        <span class="has-text-black"><b>Update in your Bookshelf: </b></span>
-                                    </p>
-                                </header>
-                                <div class="card-content">
-                                    <form action="{% url 'update_from_bookshelf' book_id=book.id %}" method="post">
-                                        {% csrf_token %}
-                                        <div class="field has-addons">
-                                            <div class="control is-expanded">
-                                                <div class="select is-fullwidth">
-                                                    <select required id="status" name="status">
-                                                        <option value="" selected disabled hidden>
-                                                            Choose here
-                                                        </option>
-                                                        <option value="0">
-                                                            To Read
-                                                        </option>
-                                                        <option value="1">
-                                                            Reading
-                                                        </option>
-                                                        <option value="2">
-                                                            On Hold
-                                                        </option>
-                                                        <option value="3">
-                                                            Completed
-                                                        </option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="control">
-                                                <input type="submit" value="Update" class="button is-info"/>
-                                            </div>
-                                        </div>
-                                    </form>
-
-                                    <br>
-                                    <form action="{% url 'remove_from_bookshelf' book_id=book.id %}" method="post">
-                                        {% csrf_token %}
-                                        <div class="field">
-                                            <div class="control is-expanded">
-                                                <input type="submit" value="Remove from Bookshelf" class="button is-danger is-outlined is-fullwidth"/>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-
-                                <footer class="card-footer">
-                                    <a class="card-footer-item" href="{% url 'bookshelf' %}">
-                                        View your bookshelf
-                                    </a>
-                                </footer>
-                            </div>
                             {% endif %}
-
-                            <br/>
-
-                            <div class="card">
-                                <header class="card-header">
-                                    <p class="card-header-title is-vcentered">
-                                        <span class="has-text-black"><b>Add to a Booklist: </b></span>
-                                    </p>
-                                </header>
-                                <div class="card-content">
-                                    <div class="content">
-                                        <form action="{% url 'add_to_book_list' %}" method="post">
-                                            {% csrf_token %}
-                                            <input type="hidden" id="book" name="book" value="{{ book.id }}"/>
-                                            <div class="field has-addons">
-                                                <div class="control is-expanded">
-                                                    <div class="select is-fullwidth">
-                                                        <select required id="booklist" name="booklist">
-                                                            <option value="" selected disabled hidden>
-                                                                Choose here
-                                                            </option>
-                                                            {% for list in lists %}
-                                                                <option value="{{ list.id }}">
-                                                                    {{ list.title }}
+                        </section>
+                        <section class="tab-content">
+                            {% if user.is_authenticated %}
+                                {% if not in_bookshelf %}
+                                    <div class="card">
+                                        <header class="card-header">
+                                            <p class="card-header-title is-vcentered">
+                                                <span class="has-text-black"><b>Add to your Bookshelf: </b></span>
+                                            </p>
+                                        </header>
+                                        <div class="card-content">
+                                            <div class="content">
+                                                <form action="{% url 'add_to_bookshelf' book_id=book.id %}" method="post">
+                                                    {% csrf_token %}
+                                                    <div class="field has-addons">
+                                                        <div class="control is-expanded">
+                                                            <div class="select is-fullwidth">
+                                                                <select required id="status" name="status">
+                                                                    <option value="" selected disabled hidden>
+                                                                        Choose here
+                                                                    </option>
+                                                                    <option value="0">
+                                                                        To Read
+                                                                    </option>
+                                                                    <option value="1">
+                                                                        Reading
+                                                                    </option>
+                                                                    <option value="2">
+                                                                        On Hold
+                                                                    </option>
+                                                                    <option value="3">
+                                                                        Completed
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="control">
+                                                            <input type="submit" value="Add" class="button is-link"/>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <footer class="card-footer">
+                                            <a class="card-footer-item" href="{% url 'bookshelf' %}">View your bookshelf</a>
+                                        </footer>
+                                    </div>
+                                {% else %}
+                                    <div class="card">
+                                        <header class="card-header">
+                                            <p class="card-header-title is-vcentered">
+                                                <span class="has-text-black"><b>Update in your Bookshelf: </b></span>
+                                            </p>
+                                        </header>
+                                        <div class="card-content">
+                                            <form action="{% url 'update_from_bookshelf' book_id=book.id %}"
+                                                  method="post">
+                                                {% csrf_token %}
+                                                <div class="field has-addons">
+                                                    <div class="control is-expanded">
+                                                        <div class="select is-fullwidth">
+                                                            <select required id="status" name="status">
+                                                                <option value="" selected disabled hidden>
+                                                                    Choose here
                                                                 </option>
-                                                            {% endfor %}
-                                                        </select>
+                                                                <option value="0">
+                                                                    To Read
+                                                                </option>
+                                                                <option value="1">
+                                                                    Reading
+                                                                </option>
+                                                                <option value="2">
+                                                                    On Hold
+                                                                </option>
+                                                                <option value="3">
+                                                                    Completed
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="control">
+                                                        <input type="submit" value="Update" class="button is-info"/>
                                                     </div>
                                                 </div>
-                                                <div class="control">
-                                                    <input type="submit" value="Add" class="button is-link"/>
+                                            </form>
+                                            <br>
+                                            <form action="{% url 'remove_from_bookshelf' book_id=book.id %}"
+                                                  method="post">
+                                                {% csrf_token %}
+                                                <div class="field">
+                                                    <div class="control is-expanded">
+                                                        <input type="submit"
+                                                               value="Remove from Bookshelf"
+                                                               class="button is-danger is-outlined is-fullwidth"/>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </form>
+                                            </form>
+                                        </div>
+                                        <footer class="card-footer">
+                                            <a class="card-footer-item" href="{% url 'bookshelf' %}">View your bookshelf</a>
+                                        </footer>
                                     </div>
-                                </div>
-                                <footer class="card-footer">
-                                    <a class="card-footer-item" href="{% url 'booklists_list' %}">
-                                        View your booklists
-                                    </a>
-                                </footer>
-                            </div>
-                        {% else %}
-                            <div class="card">
-                                <header class="card-header">
-                                    <p class="card-header-title is-vcentered">
-                                        <span class="has-text-black"><b>Sign in or sign up to do more!</b></span>
-                                    </p>
-                                </header>
-                                <div class="card-content">
-                                    <div class="content">
-                                        <span>Track your reading or create your own booklists when you sign up!</span>
+                                {% endif %}
+                                <br />
+                                <div class="card">
+                                    <header class="card-header">
+                                        <p class="card-header-title is-vcentered">
+                                            <span class="has-text-black"><b>Add to a Booklist: </b></span>
+                                        </p>
+                                    </header>
+                                    <div class="card-content">
+                                        <div class="content">
+                                            <form action="{% url 'add_to_book_list' %}" method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" id="book" name="book" value="{{ book.id }}"/>
+                                                <div class="field has-addons">
+                                                    <div class="control is-expanded">
+                                                        <div class="select is-fullwidth">
+                                                            <select required id="booklist" name="booklist">
+                                                                <option value="" selected disabled hidden>
+                                                                    Choose here
+                                                                </option>
+                                                                {% for list in lists %}
+                                                                    <option value="{{ list.id }}">
+                                                                        {{ list.title }}
+                                                                    </option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="control">
+                                                        <input type="submit" value="Add" class="button is-link"/>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
+                                    <footer class="card-footer">
+                                        <a class="card-footer-item" href="{% url 'booklists_list' %}">View your booklists</a>
+                                    </footer>
                                 </div>
-                                <footer class="card-footer">
-                                    <a class="card-footer-item" href="{% url 'login' %}">
-                                        Log In
-                                    </a>
-                                    <a class="card-footer-item" href="{% url 'sign_up' %}">
-                                        Sign Up
-                                    </a>
-                                </footer>
-                            </div>
-                        {% endif %}
-                    </section>
+                            {% else %}
+                                <div class="card">
+                                    <header class="card-header">
+                                        <p class="card-header-title is-vcentered">
+                                            <span class="has-text-black"><b>Sign in or sign up to do more!</b></span>
+                                        </p>
+                                    </header>
+                                    <div class="card-content">
+                                        <div class="content">
+                                            <span>Track your reading or create your own booklists when you sign up!</span>
+                                        </div>
+                                    </div>
+                                    <footer class="card-footer">
+                                        <a class="card-footer-item" href="{% url 'login' %}">Log In</a>
+                                        <a class="card-footer-item" href="{% url 'sign_up' %}">Sign Up</a>
+                                    </footer>
+                                </div>
+                            {% endif %}
+                        </section>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <script>
+        <script>
         window.onload = function() {
 
             if ("{{ book.ISBN }}".length <= 9) {
@@ -377,5 +363,5 @@
             xhttp.send();
         }
 
-</script>
-{% endblock %}
+        </script>
+    {% endblock %}

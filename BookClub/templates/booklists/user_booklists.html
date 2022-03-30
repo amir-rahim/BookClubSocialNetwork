@@ -16,21 +16,21 @@
         </div>
         <div class="column is-9">
             {% if own %}
-            <nav class="breadcrumb"
-                 aria-label="breadcrumbs"
-                 style="padding-left: 5px;">
-                <ul>
-                    <li>
-                        <a href="{% url 'home' %}">Home</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'user_dashboard' %}">{{ creator.username }}</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'booklists_list' %}">Book Lists</a>
-                    </li>
-                </ul>
-            </nav>
+                <nav class="breadcrumb"
+                     aria-label="breadcrumbs"
+                     style="padding-left: 5px;">
+                    <ul>
+                        <li>
+                            <a href="{% url 'home' %}">Home</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'user_dashboard' %}">{{ creator.username }}</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'booklists_list' %}">Book Lists</a>
+                        </li>
+                    </ul>
+                </nav>
             {% else %}
                 <nav class="breadcrumb"
                      aria-label="breadcrumbs"
@@ -78,9 +78,7 @@
                                                 {{ list.title }}
                                             </p>
                                         </td>
-                                        <td class="container">
-                                            {{ creator.username }}
-                                        </td>
+                                        <td class="container">{{ creator.username }}</td>
                                         <td class="container">
                                             {% if list.description %}
                                                 <p>
@@ -91,9 +89,9 @@
                                         {% if own %}
                                             <td style="width:30%; text-align:right;">
                                                 <div class="buttons">
-                                                    <button onclick="window.location='{% url 'user_booklist' list.id %}';" class="button is-warning">View</button>
-                                                    <form method="get"
-                                                        action="{% url 'edit_booklist' booklist_id=list.id %}">
+                                                    <button onclick="window.location='{% url 'user_booklist' list.id %}';"
+                                                            class="button is-warning">View</button>
+                                                    <form method="get" action="{% url 'edit_booklist' booklist_id=list.id %}">
                                                         <button class="button is-link" style="margin-right: 5px">
                                                             <span>Edit</span>
                                                         </button>
@@ -104,8 +102,7 @@
                                         {% else %}
                                             {% if not list in saved_booklists %}
                                                 <td>
-                                                    <form method="post"
-                                                        action="{% url 'save_booklist' booklist_id=list.id %}">
+                                                    <form method="post" action="{% url 'save_booklist' booklist_id=list.id %}">
                                                         {% csrf_token %}
                                                         <button type="submit" class="button is-info">Save</button>
                                                     </form>
@@ -113,7 +110,7 @@
                                             {% else %}
                                                 <td>
                                                     <form method="post"
-                                                        action="{% url 'remove_saved_booklist' booklist_id=list.id %}">
+                                                          action="{% url 'remove_saved_booklist' booklist_id=list.id %}">
                                                         {% csrf_token %}
                                                         <button type="submit" class="button is-info">Remove from saved</button>
                                                     </form>
@@ -123,12 +120,12 @@
                                     </tr>
                                 {% empty %}
                                     <hr>
-                                        <p style="text-align: center" class="has-text-grey">
-                                            No lists. 
-                                            {% if own %}
-                                                <a href="{% url 'create_booklist' %}" class="is-link"><i>Create one?</i></a>
-                                            {% endif %}
-                                        </p>
+                                    <p style="text-align: center" class="has-text-grey">
+                                        No lists.
+                                        {% if own %}
+                                            <a href="{% url 'create_booklist' %}" class="is-link"><i>Create one?</i></a>
+                                        {% endif %}
+                                    </p>
                                     <hr>
                                 {% endfor %}
                             </tbody>

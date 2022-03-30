@@ -1,3 +1,4 @@
+"""Club Membership model."""
 from django.core.exceptions import ValidationError
 from django.db import models
 
@@ -5,12 +6,21 @@ from BookClub.models.user import User
 
 
 class ClubMembership(models.Model):
+    """Club Membership model to created a relation between the User and a Club.
+    
+    Attributes:
+        user: The User in the relationship.
+        club: The Club the User is in.
+        membership: The UserRole to specify the User's role in the Club.
+        joined_on: The Date the User joined the Club.
+    """
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['user', 'club'], name='unique_member')
         ]
 
     class UserRoles(models.IntegerChoices):
+        """User Role model to specify the User role in the Club."""
         APPLICANT = -1
         MEMBER = 0
         MODERATOR = 1

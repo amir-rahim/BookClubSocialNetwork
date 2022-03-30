@@ -53,9 +53,9 @@
                         <div class="column is-3">
                             <div class="table-container">
                                 <table class="table is-hoverable"
-                                    id="table-clubs"
-                                    data-toggle="table"
-                                    data-pagination="true">
+                                       id="table-clubs"
+                                       data-toggle="table"
+                                       data-pagination="true">
                                     <thead>
                                         <tr>
                                             <th scope="col">Gravatar</th>
@@ -70,15 +70,15 @@
                                                 <td>
                                                     <figure class="image is-48x48">
                                                         <img class="is-rounded"
-                                                            src="{{ member.gravatar }}"
-                                                            alt="Placeholder image">
+                                                             src="{{ member.gravatar }}"
+                                                             alt="Placeholder image">
                                                     </figure>
                                                 </td>
                                                 <td>{{ member.username }}</td>
                                                 <td>
                                                     <form id="{{ member.id }}"
-                                                        action="{% url 'remove_meeting_member' club.club_url_name meeting.id member.id %}"
-                                                        method="post">
+                                                          action="{% url 'remove_meeting_member' club.club_url_name meeting.id member.id %}"
+                                                          method="post">
                                                         {% csrf_token %}
                                                         <button type='submit' class="button is-danger is-outlined">
                                                             <span>Kick</span>

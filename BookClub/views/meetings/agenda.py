@@ -1,4 +1,4 @@
-"""Agenda Related Views"""
+"""Agenda related views."""
 import datetime
 import pytz
 
@@ -13,7 +13,7 @@ from BookClub.models import Meeting
 
 
 class AgendaView(LoginRequiredMixin, ListView):
-    """View to display agenda"""
+    """Render all meetings in the user's agenda."""
     template_name = 'meeting/agenda.html'
 
     def get_queryset(self):
@@ -43,6 +43,7 @@ class AgendaView(LoginRequiredMixin, ListView):
 
 
 class ExportCalendarView(View):
+    """Allow the user to export their agenda."""
 
     def get(self, *args, **kwargs):
         user = User.objects.get(id=self.request.user.id)

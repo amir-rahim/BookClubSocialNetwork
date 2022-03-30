@@ -6,12 +6,8 @@
     Check upcoming events and interact with like-minded readers
 {% endblock page_subtitle %}
 {% block content %}
-
     <div class="columns">
-        <div class="column is-3">
-            {% include 'partials/aside_menu/club_aside.html' %}
-        </div>
-
+        <div class="column is-3">{% include 'partials/aside_menu/club_aside.html' %}</div>
         <div class="column is-9">
             <nav class="breadcrumb"
                  aria-label="breadcrumbs"
@@ -32,7 +28,7 @@
                 <div class="hero-body">
                     <div class="container">
                         <h1 class="title">{{ current_club.name }}</h1>
-                        <h2 class="subtitle">{{ current_club.tagline}}</h2>
+                        <h2 class="subtitle">{{ current_club.tagline }}</h2>
                     </div>
                 </div>
             </section>
@@ -46,9 +42,7 @@
                             <div class="media">
                                 <div class="media-left">
                                     <figure class="image is-128x128">
-                                        <img class="is-rounded"
-                                             src="{{ owner.gravatar }}"
-                                             alt="Placeholder image">
+                                        <img class="is-rounded" src="{{ owner.gravatar }}" alt="Placeholder image">
                                     </figure>
                                 </div>
                                 <div class="media-content">
@@ -90,7 +84,6 @@
                     </div>
                 </div>
             </div>
-
             <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
                 <div class="hero-body">
                     <div class="container">
@@ -98,67 +91,60 @@
                     </div>
                 </div>
             </section>
-
             {% if featured_books %}
-
                 <div class="container is-clipped">
                     <div id="slider">
-
                         {% for featured in featured_books %}
-                            <a href="{% url 'book_view' featured.book.id %}"><div class="card card-equal-height">
-                                <div class="card-image">
-                                    <figure class="image is-3by4 is-covered">
-                                        {% if featured.book.get_l_size > 50 %}
-                                            <img src="//images.weserv.nl/?url={{ featured.book.imageL }}" alt=""/>
-                                                {% else %}
-                                            <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?h=160&w=108"
-                                            alt=""/>
-                                        {% endif %}
-                                    </figure>
-                                </div>
-                                <div class="card-content">
-                                    <div class="item__title">
-                                        <b>{{ featured.book.title }} - by {{ featured.book.author }}</b>
+                            <a href="{% url 'book_view' featured.book.id %}">
+                                <div class="card card-equal-height">
+                                    <div class="card-image">
+                                        <figure class="image is-3by4 is-covered">
+                                            {% if featured.book.get_l_size > 50 %}
+                                                <img src="//images.weserv.nl/?url={{ featured.book.imageL }}" alt=""/>
+                                            {% else %}
+                                                <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?h=160&w=108"
+                                                     alt=""/>
+                                            {% endif %}
+                                        </figure>
                                     </div>
-                                    <div class="item__description">
-                                        {{ featured.reason }}
+                                    <div class="card-content">
+                                        <div class="item__title">
+                                            <b>{{ featured.book.title }} - by {{ featured.book.author }}</b>
+                                        </div>
+                                        <div class="item__description">{{ featured.reason }}</div>
                                     </div>
                                 </div>
-                            </div></a>
+                            </a>
                         {% endfor %}
-
                         {% if featured_books.count < 5 %}
                             {% for replacement in featured_replacement_range %}
                                 <div class="card card-equal-height">
                                     <div class="card-image">
                                         <figure class="image is-3by4 is-covered">
-                                            <img src="https://images.unsplash.com/photo-1487260211189-670c54da558d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fGJvb2slMjBxdW90ZXN8ZW58MHwxfDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60" alt="">
+                                            <img src="https://images.unsplash.com/photo-1487260211189-670c54da558d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fGJvb2slMjBxdW90ZXN8ZW58MHwxfDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
+                                                 alt="">
                                         </figure>
                                     </div>
                                 </div>
                             {% endfor %}
-                        {% endif %} 
-
+                        {% endif %}
                     </div>
                 </div>
-
             {% else %}
-
                 <hr>
                 <p class="is-grey has-text-centered">
                     There are currently no featured books.
                 </p>
                 <hr>
-
             {% endif %}
-
             {% if can_edit_featured %}
                 <br>
-                    <button class="button is-success is-fullwidth" onclick="window.location='{% url 'edit_featured_books' current_club.club_url_name %}';">Edit Featured</button>
+                <button class="button is-success is-fullwidth"
+                        onclick="window.location='{% url 'edit_featured_books' current_club.club_url_name %}';">
+                    Edit Featured
+                </button>
                 <br>
-
             {% endif %}
-
             <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
                 <div class="hero-body">
                     <div class="container">
@@ -166,7 +152,6 @@
                     </div>
                 </div>
             </section>
-
             <div class="tile is-ancestor has-text-centered">
                 <div class="tile is-parent"
                      onclick="location.href='{% url 'member_list' current_club.club_url_name %}'"
@@ -216,23 +201,23 @@
                 </div>
             </div>
             <br>
-
             {% if user in current_club.get_members %}
                 <div class="control has-text-centered">
-                    <button class="js-modal-trigger button is-danger is-outlined is-fullwidth" data-target="modal-leave-club-confirmation">
+                    <button class="js-modal-trigger button is-danger is-outlined is-fullwidth"
+                            data-target="modal-leave-club-confirmation">
                         <span>Leave Club</span>
                         <span class="icon is-small">
-                        <i class="fas fa-times"></i>
+                            <i class="fas fa-times"></i>
                         </span>
                     </button>
                 </div>
-
                 <div id="modal-leave-club-confirmation" class="modal">
                     <div class="modal-background"></div>
-                
                     <div class="modal-card">
                         <header class="modal-card-head">
-                            <p class="modal-card-title">Leave Club</p>
+                            <p class="modal-card-title">
+                                Leave Club
+                            </p>
                             <button class="delete" aria-label="close"></button>
                         </header>
                         <section class="modal-card-body">
@@ -241,7 +226,8 @@
                         <footer class="modal-card-foot">
                             <div class="field is-grouped">
                                 <div class="control">
-                                    <form method="post" action="{% url 'leave_club' current_club.club_url_name %}">
+                                    <form method="post"
+                                          action="{% url 'leave_club' current_club.club_url_name %}">
                                         {% csrf_token %}
                                         <button type="submit" class="button is-fullwidth is-outline is-danger">Leave club</button>
                                     </form>
@@ -257,7 +243,6 @@
             {% endif %}
         </div>
     </div>
-
     <script>
         var number_featured_books = "{{ featured_books.count }}";
         if (number_featured_books > 4) {
@@ -280,5 +265,4 @@
             });
         }
     </script>
-
 {% endblock %}

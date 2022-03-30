@@ -8,7 +8,8 @@
 {% block content %}
     <div class="columns">
         <div class="column is-3">
-            <a class="button is-fullwidth is-link" href="{% url 'book_view' book_id=book.pk %}"><b>Back to Book</b></a>
+            <a class="button is-fullwidth is-link"
+               href="{% url 'book_view' book_id=book.pk %}"><b>Back to Book</b></a>
             <hr class="solid">
             <div class="card">
                 <div class="card-image">
@@ -55,9 +56,9 @@
                         <!-- If there are clubs available to the logged-in user -->
                         <div class="table-container">
                             <table class="table is-hoverable is-fullwidth"
-                                id="table-books"
-                                data-toggle="table"
-                                data-pagination="true">
+                                   id="table-books"
+                                   data-toggle="table"
+                                   data-pagination="true">
                                 <thead>
                                     <tr>
                                         <th scope="col">User</th>
@@ -77,7 +78,8 @@
                                             {% if review.creator == request.creator %}
                                                 <td>
                                                     <div class="buttons">
-                                                        <form method="get" action="{% url 'book_review' book_id=review.book.id review_id=review.id %}">
+                                                        <form method="get"
+                                                              action="{% url 'book_review' book_id=review.book.id review_id=review.id %}">
                                                             <button class="button is-info is-small" style="margin-right: 5px">
                                                                 <span>View</span>
                                                             </button>
@@ -98,7 +100,8 @@
                                             {% else %}
                                                 <td>
                                                     <div class="buttons">
-                                                        <form method="get" action="{% url 'book_review' review.book.id review.id %}">
+                                                        <form method="get"
+                                                              action="{% url 'book_review' review.book.id review.id %}">
                                                             <button class="button is-info" style="margin-right: 5px">
                                                                 <span>View</span>
                                                             </button>
@@ -114,9 +117,9 @@
                         {% include 'partials/pagination.html' %}
                     {% else %}
                         <hr>
-                            <p style="text-align: center" class="has-text-grey">
-                                No reviews as of yet.
-                            </p>
+                        <p style="text-align: center" class="has-text-grey">
+                            No reviews as of yet.
+                        </p>
                         <hr>
                     {% endif %}
                 </div>
