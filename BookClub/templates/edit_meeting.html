@@ -74,10 +74,11 @@
                                         </td>
                                         <td>{{ member.username }}</td>
                                         <td>
-                                            <form id="{{ member.id }}"
-                                                  action="{% url 'remove_meeting_member' club.club_url_name meeting.id member.id %}"
+                                            <form id="{{ member.username }}"
+                                                  action="{% url 'remove_meeting_member' club.club_url_name meeting.id %}"
                                                   method="post">
                                                 {% csrf_token %}
+                                                <input type="hidden" name="user" value="{{ member.username }}" />
                                                 <button type='submit' class="button is-info">
                                                     <i class="fa-solid fa-xmark fa-2xl " style="color:#E3170A"></i>
                                                 </button>
