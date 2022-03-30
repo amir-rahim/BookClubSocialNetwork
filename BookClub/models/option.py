@@ -1,3 +1,4 @@
+"""Option model."""
 from django.db import models
 
 from BookClub.models.user import User

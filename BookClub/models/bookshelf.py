@@ -1,13 +1,22 @@
+"""Bookshelf model."""
 from django.db import models
 
 from BookClub.models import User, Book
 
 
 class BookShelf(models.Model):
+    """Bookshelf model to allow the User to track Books they are reading.
+    
+    Attributes:
+        user: A User who the Bookshelf belongs to.
+        book: A Book that is stored in the Bookshelf.
+        status: A ListType to track where the Book is in the Bookshelf.
+    """
     class Meta:
         ordering = ['-id']
 
     class ListType(models.IntegerChoices):
+        """List type representing where the book is stored in the bookshelf."""
         TO_READ = 0
         READING = 1
         ON_HOLD = 2
