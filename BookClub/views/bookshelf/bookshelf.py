@@ -1,4 +1,4 @@
-"""Book Related Views"""
+"""View for the bookshelf."""
 from django.contrib import messages
 from django.views.generic import View, ListView
 from django.shortcuts import redirect, reverse
@@ -8,8 +8,7 @@ from BookClub.models import BookShelf, Book
 
 
 class BookShelfView(LoginRequiredMixin, ListView):
-    """View for the book shelf."""
-
+    """Render the user's bookshelf."""
     model = BookShelf
     template_name = 'library/bookshelf.html'
     context_object_name = 'all_books'

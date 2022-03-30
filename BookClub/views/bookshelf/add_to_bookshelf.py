@@ -1,4 +1,4 @@
-"""Add to Bookshelf Related Views"""
+"""Add to bookshelf related views."""
 from django.contrib import messages
 from django.views.generic import View
 from django.shortcuts import redirect, reverse
@@ -8,7 +8,7 @@ from BookClub.models import BookShelf, Book
 
 
 class AddToBookShelfView(LoginRequiredMixin, View):
-    """View for adding a book to book shelf."""
+    """View for adding a book to bookshelf."""
 
     redirect_url = 'library_books'
     
@@ -16,24 +16,25 @@ class AddToBookShelfView(LoginRequiredMixin, View):
         return redirect(self.redirect_url)
 
     def is_actionable(self, book, status):
-        """Check if user can add a book"""
+        """Check if the user can add the book to their bookshelf."""
 
         return (not BookShelf.objects.filter(user=self.request.user, book=book).exists()) and int(status) <= 3 and int(status) >= 0
 
     def is_not_actionable(self):
-        """If user cannot add book"""
+        """Throw error message if user cannot add to their bookshelf."""
 
         return messages.error(self.request, "You cannot add that book!")
 
     def action(self, book, status):
-        """User adds the book"""
+        """Add the book to the user's bookshelf."""
         
         entry = BookShelf.objects.create(user=self.request.user, book=book, status=status)
         entry.save()
         messages.success(self.request, "You have added the book to your bookshelf.")
 
     def post(self, *args, **kwargs):
-
+        """Get book and shelf data.
+        Try to add the book to the user's bookshelf."""
         try:
             status = self.request.POST.get('status')
             book = Book.objects.get(id=self.kwargs['book_id'])
