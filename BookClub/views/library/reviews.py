@@ -1,4 +1,4 @@
-"""Review Related Views"""
+"""Review related views."""
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect
@@ -13,6 +13,7 @@ from BookClub.forms import ReviewForm, BookReviewCommentForm
 from BookClub.models import Book, BookReview, BookReviewComment
 
 class CreateReviewView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    """Allow the user to create a review for a book."""
     template_name = 'reviews/create_review.html'
     model = BookReview
     form_class = ReviewForm
@@ -26,6 +27,7 @@ class CreateReviewView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return redirect(url)
 
     def test_func(self):
+        """Check if the user has already made a review for the given book."""
         try:
             book = Book.objects.get(pk=self.kwargs['book_id'])
             if BookReview.objects.filter(book=book, creator=self.request.user).exists():
@@ -60,6 +62,7 @@ class CreateReviewView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
 
 class EditReviewView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    """Allow a user to edit their own book review."""
     model = BookReview
     form_class = ReviewForm
     template_name = 'reviews/edit_review.html'
@@ -67,6 +70,7 @@ class EditReviewView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     redirect_location = 'book_reviews'
 
     def test_func(self):
+        """Check if the review exists."""
         try:
             book = Book.objects.get(pk=self.kwargs['book_id'])
             book_review = BookReview.objects.get(book=book, creator=self.request.user)
@@ -101,20 +105,22 @@ class EditReviewView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 
 class DeleteReviewView(LoginRequiredMixin, View):
+    """Allow the user to delete their own book reviews."""
 
     def get_redirect_location(self):
         return reverse('book_reviews', kwargs=self.kwargs)
-
-    """Handles no permssion and Reviews that don't exist"""
 
     def is_not_actionable(self):
         messages.error(self.request, "You are not allowed to delete this review or Review doesn\'t exist")
 
     def action(self, review):
+        """Delete the review."""
         review.delete()
         messages.success(self.request, "You have deleted the review")
 
     def post(self, request, *args, **kwargs):
+        """Get data for book, user and review.
+        Try to delete review."""
         try:
             book = Book.objects.get(id=self.kwargs['book_id'])
             current_user = self.request.user
@@ -132,7 +138,7 @@ class DeleteReviewView(LoginRequiredMixin, View):
 
 
 class ReviewDetailView(ListView):
-    """Review to display review details"""
+    """Render the details of a given review."""
     model = BookReviewComment
     paginate_by = 10
     template_name = 'reviews/review_details.html'
@@ -159,6 +165,7 @@ class ReviewDetailView(ListView):
 
 
 class CreateCommentForReviewView(LoginRequiredMixin, CreateView):
+    """Allow the user to create a comment for a given review."""
     model = BookReviewComment
     form_class = BookReviewCommentForm
     http_method_names = ['post']
@@ -185,6 +192,8 @@ class CreateCommentForReviewView(LoginRequiredMixin, CreateView):
 
 
 class DeleteCommentForReviewView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    """Allow the user to delete their own comment from a review."""
+
     model = BookReviewComment
     http_method_names = ['post']
     pk_url_kwarg = 'comment_id'
@@ -196,6 +205,7 @@ class DeleteCommentForReviewView(LoginRequiredMixin, UserPassesTestMixin, Delete
             return redirect(self.get_success_url())
 
     def test_func(self):
+        """Check if the owner of the comment is the current user."""
         try:
             comment = BookReviewComment.objects.get(pk=self.kwargs['comment_id'])
             if comment.creator != self.request.user:
