@@ -41,6 +41,10 @@ class Forum(models.Model):
 
 
 class ForumPost(TextPost):
+    """Model for a ForumPost
+
+        forum: A forum that this post has been posted on. Required.
+    """
     class Meta:
         ordering = ['-created_on']
 
@@ -63,6 +67,10 @@ class ForumPost(TextPost):
 
 
 class ForumComment(TextComment):
+    """ Model for Forum Comments
+
+        post: The ForumPost object that this was commented on.
+    """
     class Meta:
         ordering = ['-created_on']
 

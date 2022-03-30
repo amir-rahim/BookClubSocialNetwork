@@ -28,7 +28,7 @@ class RecommendationBaseView(LoginRequiredMixin, TemplateView):
     
 
 class RecommendationUserListView(LoginRequiredMixin, TemplateView):
-    """List of user recommendations."""
+    """List of user recommendations. If Recommendations do not exist, or have been modified, the code also loads the recommendations from file for this user."""
     model = Book
     template_name = "partials/recommendation_list_view.html"
     context_object_name = "recommendations"
@@ -59,7 +59,7 @@ class RecommendationUserListView(LoginRequiredMixin, TemplateView):
         return JsonResponse(data=data_dict, safe=False)
     
 class RecommendationClubListView(LoginRequiredMixin, TemplateView):
-    """List of recommendation for a club."""
+    """List of recommendation for a club. If Recommendations do not exist, or have been modified, the code also loads the recommendations from file for this club."""
     model = Book
     template_name = "partials/recommendation_list_view.html"
     context_object_name = "recommendations"

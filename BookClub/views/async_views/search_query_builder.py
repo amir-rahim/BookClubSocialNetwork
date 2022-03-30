@@ -13,10 +13,10 @@ class SearchQuery():
     Set the class to match using match_models, then define a custom query to add to our q object in query.
 
     Attributes:
-        model: The model class we are filtering.
+        model: The class of the model we are searching through.
         match_models: The model class the query should be applied to.
             Is defined when we define a query.
-        exclude_models: The model classes we exclude and do not add the query to.
+        exclude_models: The model classes we exclude and do not add the query to. Is defined when we define a query
         q_objects: The query we add to.
         query_string: The string we are searching for.
     """
@@ -67,7 +67,7 @@ class BookListQuery(SearchQuery):
 
 
 class ClubQuery(SearchQuery):
-    """Search all clubs."""
+    """Search all clubs, excluding information the user cannot access"""
     match_models = Club
 
     def query(self, **kwargs):

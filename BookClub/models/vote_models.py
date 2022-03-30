@@ -12,7 +12,7 @@ class RatedContent(UserCreatedObject):
 
     Attributes:
         rating: A integer storing the rating the User chooses.
-        votes: A list of all upvotes and downvotes the object has.
+        votes: A list of all Vote objects the object has.
     """
 
     class Meta:

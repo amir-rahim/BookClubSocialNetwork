@@ -7,8 +7,8 @@ class AbstractRecommendations(models.Model):
     """An abstract recommendations model.
     
     Attributes:
-        recommendations: A JSON of the AI generated recommendations.
-        modified: A boolean to track whether the recommendations have been updated.
+        recommendations: A JSON object representing a list of the AI generated recommendations.
+        modified: A boolean to flag whether the recommendations have been updated.
     """
     recommendations = models.JSONField(null=False, blank=False, default=list)
     modified = models.BooleanField(null=False,blank=False, default=True)
