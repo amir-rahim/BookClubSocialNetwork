@@ -82,7 +82,7 @@ class ForumView(ClubMemberTestMixin, ListView):
 
         for post in context['forum'].get_posts():
             replies += post.get_comments().count()
-            votes_cast = post.votes.all().count()
+            votes_cast += post.votes.all().count()
 
         context['replies'] = replies
         context['votes'] = votes_cast

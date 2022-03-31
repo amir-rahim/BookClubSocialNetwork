@@ -3,13 +3,12 @@ from BookClub.models import *
 from BookClub.models.forum import ForumPost
 
 
-
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for users."""
 
     list_display = [
-        'id', 'username', 'email'
+        'id', 'username', 'email', 'public_bio'
     ]
 
 
@@ -54,15 +53,16 @@ class BookReviewAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for Books Reviews ."""
 
     list_display = [
-        'book', 'creator', 'book_rating' , 'title' , 'created_on','content'
+        'book', 'creator', 'book_rating', 'title', 'created_on', 'content', 'rating'
     ]
+
 
 @admin.register(BookReviewComment)
 class BookReviewCommentAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for Books Review Comments ."""
 
     list_display = [
-        'book_review','creator','created_on','content'
+        'book_review', 'creator', 'created_on', 'content', 'rating'
     ]
 
 
@@ -127,6 +127,7 @@ class BookShelfAdmin(admin.ModelAdmin):
         'user', 'book', 'status'
     ]
 
+
 @admin.register(FeaturedBooks)
 class FeaturedBooksAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for Featured Books."""
@@ -135,9 +136,9 @@ class FeaturedBooksAdmin(admin.ModelAdmin):
         'club', 'book', 'reason'
     ]
 
+
 @admin.register(UserRecommendations)
 class UserRecAdmin(admin.ModelAdmin):
-
     list_display = [
         'user', 'recommendations'
     ]

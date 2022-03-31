@@ -107,13 +107,23 @@ def create_membership(club, user, membership):
 
 
 def get_user_reputation(user):
-    forum_post_rating = ForumPost.objects.filter(creator=user).aggregate(Sum('rating'))
-    forum_comment_rating = ForumComment.objects.filter(creator=user).aggregate(Sum('rating'))
-    review_rating = BookReview.objects.filter(creator=user).aggregate(Sum('rating'))
-    review_comment_rating = BookReviewComment.objects.filter(creator=user).aggregate(Sum('rating'))
+    forum_post_rating = 0
+    for post in ForumPost.objects.filter(creator=user):
+        forum_post_rating += post.get_rating()
 
-    return ((forum_post_rating["rating__sum"] or 0) + (forum_comment_rating["rating__sum"] or 0)
-            + (review_rating["rating__sum"] or 0) + (review_comment_rating["rating__sum"] or 0))
+    forum_comment_rating = 0
+    for post in ForumComment.objects.filter(creator=user):
+        forum_comment_rating += post.get_rating()
+
+    review_rating = 0
+    for post in BookReview.objects.filter(creator=user):
+        review_rating += post.get_rating()
+
+    review_comment_rating = 0
+    for post in BookReviewComment.objects.filter(creator=user):
+        review_comment_rating += post.get_rating()
+
+    return forum_post_rating + forum_comment_rating + review_rating + review_comment_rating
 
 def get_club_reputation(club):
     members = ClubMembership.objects.filter(club=club, membership__gte=ClubMembership.UserRoles.MEMBER)
