@@ -7,9 +7,7 @@
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
-        <div class="column is-3">
-            {% include 'partials/aside_menu/profile_aside.html' %}
-        </div>
+        <div class="column is-3">{% include 'partials/aside_menu/profile_aside.html' %}</div>
         <div class="column is-9">
             <nav class="breadcrumb"
                  aria-label="breadcrumbs"
@@ -58,16 +56,19 @@
                                 <td>{{ club.tagline }}</td>
                                 <td>{{ club.description }}</td>
                                 <td>
-                                    <button class="button is-fullwidth is-success" onclick="window.location='{% url 'club_dashboard' club.club_url_name %}';">View</button>
+                                    <button class="button is-fullwidth is-success"
+                                            onclick="window.location='{% url 'club_dashboard' club.club_url_name %}';">
+                                        View
+                                    </button>
                                 </tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 {% else %}
                     <hr>
-                        <p style="text-align: center" class="has-text-grey">
-                            This user is not a member of any club, you can find clubs <a href="{% url 'available_clubs' %}" class="is-link"><i>here</i></a>.
-                        </p>
+                    <p style="text-align: center" class="has-text-grey">
+                        This user is not a member of any club, you can find clubs <a href="{% url 'available_clubs' %}" class="is-link"><i>here</i></a>.
+                    </p>
                     <hr>
                 {% endif %}
             </div>

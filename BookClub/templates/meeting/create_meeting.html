@@ -7,9 +7,7 @@
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
-        <div class="column is-3">
-            {% include 'partials/aside_menu/club_aside.html' with current_club=current_club %}
-        </div>
+        <div class="column is-3">{% include 'partials/aside_menu/club_aside.html' with current_club=current_club %}</div>
         <div class="column is-9">
             <nav class="breadcrumb"
                  aria-label="breadcrumbs"

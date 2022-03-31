@@ -7,9 +7,7 @@
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
-        <div class="column is-3">
-            {% include 'partials/aside_menu/club_aside.html' with current_club=club %}
-        </div>
+        <div class="column is-3">{% include 'partials/aside_menu/club_aside.html' with current_club=club %}</div>
         <div class="column is-9">
             <nav class="breadcrumb"
                  aria-label="breadcrumbs"
@@ -37,13 +35,10 @@
                     </div>
                 </div>
             </section>
-
             <br>
-            
             <p class="subtitle">
                 Owner
             </p>
-            
             <div class="columns">
                 <div class="column is-12">
                     <div class="card">
@@ -63,11 +58,15 @@
                                             <b>Public Bio: </b> {{ owner.public_bio }}
                                         </p>
                                     </div>
-                                    <br> 
+                                    <br>
                                 </div>
                                 <div class="column is-3">
                                     <div class="buttons media-right is-vcentered" style="display: block;">
-                                        <button onclick="window.location='{% url 'user_profile' owner.username %}';" class="button is-warning is-fullwidth" style="margin-right: 5px">View</button>
+                                        <button onclick="window.location='{% url 'user_profile' owner.username %}';"
+                                                class="button is-warning is-fullwidth"
+                                                style="margin-right: 5px">
+                                            View
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -75,9 +74,7 @@
                     </div>
                 </div>
             </div>
-            
             <br>
-
             <p class="subtitle">
                 Moderators
             </p>
@@ -109,38 +106,40 @@
                                         </div>
                                         <div class="column is-3">
                                             <div class="buttons media-right is-vcentered" style="display: block;">
-                                                <button onclick="window.location='{% url 'user_profile' moderator.username %}';" class="button is-warning is-fullwidth" style="margin-right: 5px">View</button>
+                                                <button onclick="window.location='{% url 'user_profile' moderator.username %}';"
+                                                        class="button is-warning is-fullwidth"
+                                                        style="margin-right: 5px">
+                                                    View
+                                                </button>
                                                 {% if request_user.membership == 2 %}
                                                     <div class="control has-text-centered">
-                                                        <button class="js-modal-trigger button is-success is-fullwidth" data-target="modal-transfer-ownership-confirmation">
+                                                        <button class="js-modal-trigger button is-success is-fullwidth"
+                                                                data-target="modal-transfer-ownership-confirmation">
                                                             <span>Transfer Ownership</span>
                                                         </button>
                                                     </div>
-                                        
                                                     <div id="modal-transfer-ownership-confirmation" class="modal">
                                                         <div class="modal-background"></div>
                                                         <div class="modal-card">
                                                             <header class="modal-card-head">
-                                                                <p class="modal-card-title">Transfer Ownership</p>
+                                                                <p class="modal-card-title">
+                                                                    Transfer Ownership
+                                                                </p>
                                                                 <button class="delete" aria-label="close"></button>
                                                             </header>
                                                             <section class="modal-card-body">
                                                                 Are you sure you want to transfer ownership of the club to this member?
                                                             </section>
                                                             <footer class="modal-card-foot">
-
-
                                                                 <div class="field is-grouped">
                                                                     <div class="control">
                                                                         <form method="post"
-                                                                            action="{% url 'transfer_ownership' club_url_name=club.club_url_name %}">
+                                                                              action="{% url 'transfer_ownership' club_url_name=club.club_url_name %}">
                                                                             <input type="hidden" name="user" value="{{ moderator.username }}" />
                                                                             {% csrf_token %}
                                                                             <button type="submit"
                                                                                     class="button is-success is-fullwidth"
-                                                                                    style="margin-right: 5px">
-                                                                                Transfer Ownership
-                                                                            </button>
+                                                                                    style="margin-right: 5px">Transfer Ownership</button>
                                                                         </form>
                                                                     </div>
                                                                     <div class="control">
@@ -150,31 +149,30 @@
                                                             </footer>
                                                         </div>
                                                     </div>
-
                                                     <form method="post"
                                                           action="{% url 'demote_member' club_url_name=club.club_url_name %}">
                                                         <input type="hidden" name="user" value="{{ moderator.username }}" />
                                                         {% csrf_token %}
                                                         <button type="submit"
                                                                 class="button is-danger is-fullwidth"
-                                                                style="margin-right: 5px">
-                                                            Demote
-                                                        </button>
+                                                                style="margin-right: 5px">Demote</button>
                                                     </form>
                                                     <div class="control has-text-centered">
-                                                        <button class="js-modal-trigger button is-danger is-outlined is-fullwidth" data-target="modal-kick-confirmation">
+                                                        <button class="js-modal-trigger button is-danger is-outlined is-fullwidth"
+                                                                data-target="modal-kick-confirmation">
                                                             <span>Kick</span>
                                                             <span class="icon is-small">
-                                                              <i class="fas fa-times"></i>
+                                                                <i class="fas fa-times"></i>
                                                             </span>
                                                         </button>
                                                     </div>
-                                        
                                                     <div id="modal-kick-confirmation" class="modal">
                                                         <div class="modal-background"></div>
                                                         <div class="modal-card">
                                                             <header class="modal-card-head">
-                                                                <p class="modal-card-title">Kick</p>
+                                                                <p class="modal-card-title">
+                                                                    Kick
+                                                                </p>
                                                                 <button class="delete" aria-label="close"></button>
                                                             </header>
                                                             <section class="modal-card-body">
@@ -184,14 +182,12 @@
                                                                 <div class="field is-grouped">
                                                                     <div class="control">
                                                                         <form method="post"
-                                                                            action="{% url 'kick_member' club_url_name=club.club_url_name %}">
+                                                                              action="{% url 'kick_member' club_url_name=club.club_url_name %}">
                                                                             <input type="hidden" name="user" value="{{ moderator.username }}" />
                                                                             {% csrf_token %}
                                                                             <button type="submit"
                                                                                     class="button is-danger is-fullwidth"
-                                                                                    style="margin-right: 5px">
-                                                                                Kick
-                                                                            </button>
+                                                                                    style="margin-right: 5px">Kick</button>
                                                                         </form>
                                                                     </div>
                                                                     <div class="control">
@@ -203,7 +199,7 @@
                                                     </div>
                                                 {% endif %}
                                             </div>
-                                        </div> 
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -243,11 +239,14 @@
                                                     <b>Public Bio: </b> {{ member.public_bio }}
                                                 </p>
                                             </div>
-                                            <br> 
+                                            <br>
                                         </div>
                                         <div class="column is-3">
                                             <div class="buttons media-right is-vcentered" style="display: block;">
-                                                <button onclick="window.location='{% url 'user_profile' member.username %}';" class="button is-warning is-fullwidth">View</button>
+                                                <button onclick="window.location='{% url 'user_profile' member.username %}';"
+                                                        class="button is-warning is-fullwidth">
+                                                    View
+                                                </button>
                                                 {% if request_user.membership == 2 %}
                                                     <form method="post"
                                                           action="{% url 'promote_member' club_url_name=club.club_url_name %}">
@@ -255,26 +254,26 @@
                                                         {% csrf_token %}
                                                         <button type="submit"
                                                                 class="button is-success is-fullwidth"
-                                                                style="margin-right: 5px">
-                                                            Promote
-                                                        </button>
+                                                                style="margin-right: 5px">Promote</button>
                                                     </form>
                                                 {% endif %}
                                                 {% if request_user.membership == 2 or request_user.membership == 1 %}
                                                     <div class="control has-text-centered">
-                                                        <button class="js-modal-trigger button is-danger is-outlined is-fullwidth" data-target="modal-kick-confirmation">
+                                                        <button class="js-modal-trigger button is-danger is-outlined is-fullwidth"
+                                                                data-target="modal-kick-confirmation">
                                                             <span>Kick</span>
                                                             <span class="icon is-small">
-                                                            <i class="fas fa-times"></i>
+                                                                <i class="fas fa-times"></i>
                                                             </span>
                                                         </button>
                                                     </div>
-                                        
                                                     <div id="modal-kick-confirmation" class="modal">
                                                         <div class="modal-background"></div>
                                                         <div class="modal-card">
                                                             <header class="modal-card-head">
-                                                                <p class="modal-card-title">Kick</p>
+                                                                <p class="modal-card-title">
+                                                                    Kick
+                                                                </p>
                                                                 <button class="delete" aria-label="close"></button>
                                                             </header>
                                                             <section class="modal-card-body">
@@ -284,18 +283,18 @@
                                                                 <div class="field is-grouped">
                                                                     <div class="control">
                                                                         <form method="post"
-                                                                            action="{% url 'kick_member' club_url_name=club.club_url_name %}">
+                                                                              action="{% url 'kick_member' club_url_name=club.club_url_name %}">
                                                                             <input type="hidden" name="user" value="{{ moderator.username }}" />
                                                                             {% csrf_token %}
                                                                             <button type="submit"
                                                                                     class="button is-danger is-fullwidth"
-                                                                                    style="margin-right: 5px">
-                                                                                Kick
-                                                                            </button>
+                                                                                    style="margin-right: 5px">Kick</button>
                                                                         </form>
                                                                     </div>
                                                                     <div class="control">
-                                                                        <button class="button">Cancel</button>
+                                                                        <button class="button">
+                                                                            Cancel
+                                                                        </button>
                                                                     </div>
                                                                 </div>
                                                             </footer>

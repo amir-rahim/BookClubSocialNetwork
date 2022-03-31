@@ -1,3 +1,4 @@
+"""Club related forms."""
 from django import forms
 from django.forms import HiddenInput, ModelForm, Textarea
 
@@ -6,6 +7,7 @@ from BookClub.forms.widgets import BookSelectorInput
 
 
 class ClubForm(ModelForm):
+    """Create club form."""
     class Meta:
         model = Club
         fields = ['name', 'description', 'tagline', 'rules', 'is_private']
@@ -21,6 +23,7 @@ class ClubForm(ModelForm):
 
 
 class FeatureBookForm(ModelForm):
+    """Allow users to feature books in a club."""
     class Meta:
         model = FeaturedBooks
         fields = ['book','reason']

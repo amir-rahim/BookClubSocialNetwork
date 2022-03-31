@@ -6,12 +6,8 @@
     {{ current_club.tagline }}
 {% endblock page_subtitle %}
 {% block content %}
-
     <div class="columns">
-        <div class="column is-3">
-            {% include 'partials/aside_menu/club_aside.html' %}
-        </div>
-
+        <div class="column is-3">{% include 'partials/aside_menu/club_aside.html' %}</div>
         <div class="column is-9">
             <nav class="breadcrumb"
                  aria-label="breadcrumbs"
@@ -40,12 +36,11 @@
                 </div>
             </section>
             <form action="{% url 'edit_featured_books' current_club.club_url_name %}"
-                        method="post">
+                  method="post">
                 {% csrf_token %}
                 {% include 'partials/bulma_form.html' with form=form %}
                 <input type="submit" value="Add" class="button is-link"/>
             </form>
-
             <br>
             <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
                 <div class="hero-body">
@@ -54,14 +49,13 @@
                     </div>
                 </div>
             </section>
-
             {% if featured_books %}
                 <br>
                 <div class="table-container is-fullwidth">
                     <table class="table is-hoverable is-fullwidth"
-                            id="table-featured"
-                            data-toggle="table"
-                            data-pagination="true">
+                           id="table-featured"
+                           data-toggle="table"
+                           data-pagination="true">
                         <thead>
                             <tr>
                                 <th scope="col">Book</th>
@@ -82,7 +76,7 @@
                                                         <img src="//images.weserv.nl/?url={{ featured.book.imageS }}" alt=""/>
                                                     {% else %}
                                                         <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=36&w=22"
-                                                            alt=""/>
+                                                             alt=""/>
                                                     {% endif %}
                                                 </figure>
                                             </div>
@@ -91,17 +85,18 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td> {{ featured.book.author }} </td>
+                                    <td>{{ featured.book.author }}</td>
+                                    <td>{{ featured.reason }}</td>
                                     <td>
-                                        {{ featured.reason }}
+                                        <button class="button is-link"
+                                                onclick="window.location='{% url 'book_view' featured.book.id %}';">View</button>
                                     </td>
                                     <td>
-                                        <button class="button is-link" onclick="window.location='{% url 'book_view' featured.book.id %}';">View</button>
-                                    </td>
-                                    <td>
-                                        <form action="{% url 'remove_featured_book' current_club.club_url_name featured.book.id %}" method="post">
+                                        <form action="{% url 'remove_featured_book' current_club.club_url_name featured.book.id %}"
+                                              method="post">
                                             {% csrf_token %}
-                                            <button class="button is-danger is-outlined" onclick="window.location='{% url 'remove_featured_book' current_club.club_url_name featured.book.id %}'">
+                                            <button class="button is-danger is-outlined"
+                                                    onclick="window.location='{% url 'remove_featured_book' current_club.club_url_name featured.book.id %}'">
                                                 <span>Delete</span>
                                                 <span class="icon is-small">
                                                     <i class="fas fa-times"></i>
@@ -116,15 +111,13 @@
                 </div>
             {% else %}
                 <hr>
-                
-                    <p style="text-align: center" class="has-text-grey">
-                        There are not featured books in this club yet.
-                    </p>
+                <p style="text-align: center" class="has-text-grey">
+                    There are not featured books in this club yet.
+                </p>
                 <hr>
             {% endif %}
         </div>
     </div>
-
     <script>
         const dataTable = new simpleDatatables.DataTable("#table-featured", {
             fixedHeight: true,

@@ -7,9 +7,7 @@
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
-        <div class="column is-3">
-            {% include 'partials/aside_menu/library_aside.html' %}
-        </div>
+        <div class="column is-3">{% include 'partials/aside_menu/library_aside.html' %}</div>
         <div class="column is-9">
             <nav class="breadcrumb"
                  aria-label="breadcrumbs"
@@ -45,7 +43,6 @@
                             <h1 class="title">Community Reviews</h1>
                             <h2 class="subtitle">Feed of reviews from the community</h2>
                         {% endif %}
-                        
                     </div>
                 </div>
             </section>
@@ -65,7 +62,7 @@
                         <div class="card-content">
                             <div class="content">
                                 Book: {{ post.book.title }} - Rating: {{ post.book_rating }}/10
-                                <br/>
+                                <br />
                                 <span class="has-text-grey">{{ post.content |truncatechars:240 }}</span>
                             </div>
                         </div>
@@ -76,7 +73,8 @@
                             <p class="card-footer-item has-text-grey-light">
                                 {{ post.created_on | timesince }} ago
                             </p>
-                            <a href="{% url 'book_review' book_id=post.book.id review_id=post.id %}" class="card-footer-item">
+                            <a href="{% url 'book_review' book_id=post.book.id review_id=post.id %}"
+                               class="card-footer-item">
                                 {% if post.get_comments.count > 0 %}
                                     See {{ post.get_comments.count }} comments
                                 {% else %}
@@ -90,11 +88,11 @@
                 {% include 'partials/pagination.html' %}
             {% else %}
                 <!-- If there is no reviews to show -->
-                    <hr>
-                        <p style="text-align: center" class="has-text-grey">
-                            There are no book reviews yet, you can find books in the library <a href="{% url 'library_books' %}" class="is-link"><i>here</i></a>.
-                        </p>
-                    <hr>
+                <hr>
+                <p style="text-align: center" class="has-text-grey">
+                    There are no book reviews yet, you can find books in the library <a href="{% url 'library_books' %}" class="is-link"><i>here</i></a>.
+                </p>
+                <hr>
             {% endif %}
         </div>
     </div>

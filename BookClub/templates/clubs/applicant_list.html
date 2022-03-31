@@ -7,9 +7,7 @@
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
-        <div class="column is-3">
-            {% include 'partials/aside_menu/club_aside.html' with current_club=club %}
-        </div>
+        <div class="column is-3">{% include 'partials/aside_menu/club_aside.html' with current_club=club %}</div>
         <div class="column is-9">
             <nav class="breadcrumb"
                  aria-label="breadcrumbs"
@@ -47,8 +45,8 @@
                                         <div class="media-left">
                                             <figure class="image is-64x64">
                                                 <img class="is-rounded"
-                                                    src="{{ applicant.gravatar }}"
-                                                    alt="Placeholder image">
+                                                     src="{{ applicant.gravatar }}"
+                                                     alt="Placeholder image">
                                             </figure>
                                         </div>
                                         <div class="media-content">
@@ -64,27 +62,26 @@
                                         </div>
                                         <div class="media-right">
                                             <div class="buttons is-vcentered are-one-third" style="display: block;">
-                                                <button class="button is-warning is-fullwidth" onclick="window.location='{% url 'user_profile' applicant.username %}';">View</button>
+                                                <button class="button is-warning is-fullwidth"
+                                                        onclick="window.location='{% url 'user_profile' applicant.username %}';">
+                                                    View
+                                                </button>
                                                 {% if request_user.membership == 2 or request_user.membership == 1 %}
                                                     <form method="post"
-                                                        action="{% url 'approve_applicant' club.club_url_name %}">
+                                                          action="{% url 'approve_applicant' club.club_url_name %}">
                                                         <input type="hidden" name="user" value="{{ applicant.username }}" />
                                                         {% csrf_token %}
                                                         <button type="submit"
                                                                 class="button is-success is-fullwidth"
-                                                                style="margin-right: 5px">
-                                                            Approve
-                                                        </button>
+                                                                style="margin-right: 5px">Approve</button>
                                                     </form>
                                                     <form method="post"
-                                                        action="{% url 'reject_applicant' club.club_url_name %}">
+                                                          action="{% url 'reject_applicant' club.club_url_name %}">
                                                         <input type="hidden" name="user" value="{{ applicant.username }}" />
                                                         {% csrf_token %}
                                                         <button type="submit"
                                                                 class="button is-danger is-fullwidth"
-                                                                style="margin-right: 5px">
-                                                            Reject
-                                                        </button>
+                                                                style="margin-right: 5px">Reject</button>
                                                     </form>
                                                 {% endif %}
                                             </div>
@@ -98,9 +95,9 @@
             {% else %}
                 <br>
                 <hr>
-                    <p style="text-align: center" class="has-text-grey">
-                        There are no applicants for this club.
-                    </p>
+                <p style="text-align: center" class="has-text-grey">
+                    There are no applicants for this club.
+                </p>
                 <hr>
             {% endif %}
         </div>

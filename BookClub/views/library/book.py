@@ -1,10 +1,11 @@
-"""Book Related Views"""
+"""Book related views."""
 from django.views.generic import DetailView, ListView
 
 from BookClub.models import Book, BookReview, BookList, BookShelf
 
 
 class BookDetailView(DetailView):
+    """Render the details, reviews and actions for a book."""
     model = Book
     template_name = 'library/book_detail_view.html'
     pk_url_kwarg = 'book_id'
@@ -43,6 +44,7 @@ class BookDetailView(DetailView):
 
 
 class BookReviewListView(ListView):
+    """Render a table of reviews for a given book."""
     model = BookReview
     template_name = 'library/book_reviews.html'
     context_object_name = 'reviews'

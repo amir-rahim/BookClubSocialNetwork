@@ -1,3 +1,4 @@
+"""Forms related to user authentication."""
 from django import forms
 from django.core.validators import RegexValidator
 

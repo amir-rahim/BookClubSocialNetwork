@@ -1,4 +1,4 @@
-"""Library Related Views"""
+"""Library related views."""
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
@@ -11,11 +11,12 @@ from BookClub.models import Book, BookList
 
 
 def library_dashboard(request):
-    """This is the library dashboard view."""
+    """Render the library dashboard page."""
     return render(request, 'library/library_dashboard.html')
 
 
 class BookListView(ListView):
+    """Render the table of books in the library"""
     model = Book
     template_name = "library/library_books.html"
     context_object_name = 'books'
@@ -37,6 +38,7 @@ class BookListView(ListView):
 
 
 class AddToBookListView(LoginRequiredMixin, FormView):
+    """Allow the user to add a book to their book list."""
     model = BookList
     form_class = AddBookForm
     http_method_names = ['post']

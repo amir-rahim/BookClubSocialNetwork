@@ -7,9 +7,7 @@
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
-        <div class="column is-3">
-            {% include 'partials/aside_menu/membership_aside.html' %}
-        </div>
+        <div class="column is-3">{% include 'partials/aside_menu/membership_aside.html' %}</div>
         <div class="column is-9">
             <nav class="breadcrumb"
                  aria-label="breadcrumbs"
@@ -56,13 +54,12 @@
                                 <td>{{ club.tagline }}</td>
                                 <td>{{ club.description }}</td>
                                 <td>
-                                    <form method="post"
-                                            action="{% url 'leave_club' club.club_url_name %}">
+                                    <form method="post" action="{% url 'leave_club' club.club_url_name %}">
                                         {% csrf_token %}
                                         <button type="submit" class="button is-danger is-outlined">
                                             <span>Cancel</span>
                                             <span class="icon is-small">
-                                            <i class="fas fa-times"></i>
+                                                <i class="fas fa-times"></i>
                                             </span>
                                         </button>
                                     </form>

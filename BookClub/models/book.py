@@ -1,9 +1,22 @@
+"""Book model."""
 from django.db import models
 from django.urls import reverse
 import urllib
 
 
 class Book(models.Model):
+    """Model for book objects for the library.
+    
+    Attributes:
+        title: A string that contains the title of the Book.
+        ISBN: A string that contains the ISBN of the Book.
+        author: A string that contains the author of the Book.
+        publicationYear: A Date that the Book was published on.
+        publisher: A string that takes the name of the Book's publisher.
+        imageS: A URL of the Book's cover, small size.
+        imageM: A URL of the Book's cover, medium size.
+        imageL: A URL of the Book's cover, large size.
+    """
     class Meta:
         ordering = ['-id']
 

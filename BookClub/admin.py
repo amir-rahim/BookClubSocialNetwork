@@ -119,25 +119,6 @@ class VoteAdmin(admin.ModelAdmin):
         'creator', 'created_on', 'content_type', 'object_id', 'target'
     ]
 
-
-@admin.register(Poll)
-class PollAdmin(admin.ModelAdmin):
-    """Configuration of the admin interface for club polls."""
-
-    list_display = [
-        'club', 'title', 'deadline', 'created_on', 'active'
-    ]
-
-
-@admin.register(Option)
-class OptionAdmin(admin.ModelAdmin):
-    """Configuration of the admin interface for poll options."""
-
-    list_display = [
-        'poll', 'text', 'book'
-    ]
-
-
 @admin.register(BookShelf)
 class BookShelfAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for Book Shelf."""
