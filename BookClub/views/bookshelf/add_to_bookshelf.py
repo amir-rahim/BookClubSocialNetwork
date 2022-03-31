@@ -47,4 +47,4 @@ class AddToBookShelfView(LoginRequiredMixin, View):
         else:
             self.is_not_actionable()
 
-        return redirect('book_view', book_id=self.kwargs['book_id'])
+        return redirect('bookshelf')
