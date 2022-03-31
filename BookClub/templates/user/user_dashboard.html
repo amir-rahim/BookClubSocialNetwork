@@ -268,9 +268,9 @@
                                                             <a class="card-footer-item" href="{% url 'booklists_list' %}">View All</a>
                                                         {% else %}
                                                             <a class="card-footer-item"
-                                                               href="{% url 'saved_booklists' user.username %}">Saved Lists</a>
+                                                               href="{% url 'saved_booklists' username %}">Saved Lists</a>
                                                             <a class="card-footer-item"
-                                                               href="{% url 'booklists_list' user.username %}">View All</a>
+                                                               href="{% url 'booklists_list' username %}">View All</a>
                                                         {% endif %}
                                                     </div>
                                                 </div>
@@ -290,9 +290,15 @@
                                                             </figure>
                                                         </div>
                                                         <div class="card-content">
-                                                            <p class="title">
-                                                                Reviews
-                                                            </p>
+                                                            {% if own_profile %}
+                                                                <p class="title">
+                                                                    Reviews
+                                                                </p>
+                                                            {% else %}
+                                                                <p class="title">
+                                                                    Community Reviews
+                                                                </p>
+                                                            {% endif %}
                                                         </div>
                                                         <div class="card-footer">
                                                             {% if own_profile %}

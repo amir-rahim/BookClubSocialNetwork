@@ -83,7 +83,7 @@
             <div class="card">
                 <header class="card-header">
                     <p class="card-header-title is-vcentered">
-                        <span class="has-text-grey-light">Posted by: <a href="{{ post.user.get_absolute_url }}">{{ post.creator }}</a> {{ post.created_on | timesince }} ago</span>
+                        <span class="has-text-grey-light">Posted by: <a href="{{ post.creator.get_absolute_url }}">{{ post.creator }}</a> {{ post.created_on | timesince }} ago</span>
                     </p>
                     <div class="card-header-icon">
                         {% if user == post.creator %}
