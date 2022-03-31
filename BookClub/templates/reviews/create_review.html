@@ -39,7 +39,7 @@
                         <a href="{% url 'library_books' %}">Books</a>
                     </li>
                     <li>
-                        <a href="{% url 'book_view' book.pk %}">{{ book.title }}</a>
+                        <a href="{% url 'book_view' book.pk %}">{{ book.title |truncatechars:20 }}</a>
                     </li>
                     <li>
                         <a href="{% url 'community_reviews' %}">Reviews</a>

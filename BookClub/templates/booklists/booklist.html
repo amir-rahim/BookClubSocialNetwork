@@ -24,7 +24,7 @@
                             <a href="{% url 'booklists_list' %}">Book Lists</a>
                         </li>
                         <li>
-                            <a href="{% url 'user_booklist' booklist.id %}">{{ booklist.title }}</a>
+                            <a href="{% url 'user_booklist' booklist.id %}">{{ booklist.title |truncatechars:20 }}</a>
                         </li>
                     </ul>
                 </nav>
@@ -37,13 +37,13 @@
                             <a href="{% url 'home' %}">Home</a>
                         </li>
                         <li>
-                            <a href="{% url 'user_profile' creator.username %}">{{ creator.username }}</a>
+                            <a href="{% url 'user_profile' creator.username %}">{{ creator.username |truncatechars:20 }}</a>
                         </li>
                         <li>
                             <a href="{% url 'booklists_list' creator.username %}">Book Lists</a>
                         </li>
                         <li>
-                            <a href="{% url 'user_booklist' booklist.id %}">{{ booklist.title }}</a>
+                            <a href="{% url 'user_booklist' booklist.id %}">{{ booklist.title |truncatechars:20 }}</a>
                         </li>
                     </ul>
                 </nav>
@@ -108,7 +108,7 @@
             {% else %}
                 <hr>
                 <p class="has-text-grey" style="text-align: center;">
-                    There are no books in this list.
+                    There are no books in this list. Go to the <a class="has-text-success is-link" href="{% url 'library_books' %}"><i>library</i></a>.
                 </p>
                 <hr>
             {% endif %}

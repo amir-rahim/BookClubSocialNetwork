@@ -40,33 +40,31 @@
                     </nav>
                 </div>
             </section>
-            {% if user.is_authenticated %}
-                <section class="hero is-warning welcome is-small" style="margin: 10px 0px;">
-                    <div class="hero-body">
+            <section class="hero is-warning welcome is-small" style="margin: 10px 0px;">
+                <div class="hero-body">
+                    <div class="container">
+                        <h1 class="title">Book Lists</h1>
+                        <h2 class="subtitle">View and Create book lists, which are compiled lists of books.</h2>
+                    </div>
+                </div>
+                <div class="hero-foot">
+                    <nav class="tabs is-boxed is-fullwidth">
                         <div class="container">
-                            <h1 class="title">Book Lists</h1>
-                            <h2 class="subtitle">View and Create book lists, which are compiled lists of books.</h2>
+                            <ul>
+                                <li>
+                                    <a href="{% url 'booklists_list' %}">View Book Lists</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'saved_booklists' %}">Saved Book Lists</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'create_booklist' %}">Create Book Lists</a>
+                                </li>
+                            </ul>
                         </div>
-                    </div>
-                    <div class="hero-foot">
-                        <nav class="tabs is-boxed is-fullwidth">
-                            <div class="container">
-                                <ul>
-                                    <li>
-                                        <a href="{% url 'booklists_list' %}">View Book Lists</a>
-                                    </li>
-                                    <li>
-                                        <a href="{% url 'saved_booklists' %}">Saved Book Lists</a>
-                                    </li>
-                                    <li>
-                                        <a href="{% url 'create_booklist' %}">Create Book Lists</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </nav>
-                    </div>
-                </section>
-            {% endif %}
+                    </nav>
+                </div>
+            </section>
             <section class="hero is-primary welcome is-small" style="margin: 10px 0px;">
                 <div class="hero-body">
                     <div class="container">
@@ -86,30 +84,28 @@
                     </nav>
                 </div>
             </section>
-            {% if user.is_authenticated %}
-                <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
-                    <div class="hero-body">
+            <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
+                <div class="hero-body">
+                    <div class="container">
+                        <h1 class="title">Reviews</h1>
+                        <h2 class="subtitle">Create reviews for your read books and view your previous reviews.</h2>
+                    </div>
+                </div>
+                <div class="hero-foot">
+                    <nav class="tabs is-boxed is-fullwidth">
                         <div class="container">
-                            <h1 class="title">Reviews</h1>
-                            <h2 class="subtitle">Create reviews for your read books and view your previous reviews.</h2>
+                            <ul>
+                                <li>
+                                    <a href="{% url 'personal_reviews' %}">View Personal Reviews</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'community_reviews' %}">View Community Reviews</a>
+                                </li>
+                            </ul>
                         </div>
-                    </div>
-                    <div class="hero-foot">
-                        <nav class="tabs is-boxed is-fullwidth">
-                            <div class="container">
-                                <ul>
-                                    <li>
-                                        <a href="{% url 'personal_reviews' %}">View Personal Reviews</a>
-                                    </li>
-                                    <li>
-                                        <a href="{% url 'community_reviews' %}">View Community Reviews</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </nav>
-                    </div>
-                </section>
-            {% endif %}
+                    </nav>
+                </div>
+            </section>
         </div>
     </div>
     <script>

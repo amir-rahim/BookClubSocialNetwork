@@ -22,13 +22,13 @@
                         <a href="{% url 'available_clubs' %}">Clubs</a>
                     </li>
                     <li>
-                        <a href="{% url 'club_dashboard' current_club.club_url_name %}">{{ current_club.name }}</a>
+                        <a href="{% url 'club_dashboard' current_club.club_url_name %}">{{ current_club.name |truncatechars:20 }}</a>
                     </li>
                     <li>
                         <a href="{% url 'meeting_list' current_club.club_url_name %}">Meetings</a>
                     </li>
                     <li>
-                        <a href="{% url 'meeting_details' current_club.club_url_name current_meeting.id %}">{{ current_meeting.title }}</a>
+                        <a href="{% url 'meeting_details' current_club.club_url_name current_meeting.id %}">{{ current_meeting.title |truncatechars:20 }}</a>
                     </li>
                     <li>
                         <a href="{% url 'meeting_participants' current_club.club_url_name current_meeting.id %}">Participants</a>
@@ -80,6 +80,8 @@
                                             Moderator
                                         {% elif participant == current_club.get_club_owner %}
                                             Owner
+                                        {% else %}
+                                            <i>Left Club</i>
                                         {% endif %}
                                     </td>
                                 </tr>

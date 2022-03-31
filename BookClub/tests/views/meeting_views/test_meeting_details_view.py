@@ -22,6 +22,7 @@ class MeetingDetailsViewTestCase(TestCase, LogInTester):
     def setUp(self):
         self.organiser = User.objects.get(username='johndoe')
         self.user = User.objects.get(username='janedoe')
+        self.thirduser= User.objects.get(pk=3)
         self.meeting = Meeting.objects.get(pk='1')
         self.private_meeting = Meeting.objects.get(pk='4')
         self.club = Club.objects.get(pk='1')
@@ -209,7 +210,7 @@ class MeetingDetailsViewTestCase(TestCase, LogInTester):
         self.assertContains(response, "Manage Meeting")
 
     def test_user_has_no_admin_options(self):
-        self.client.login(username=self.user.username, password="Password123")
+        self.client.login(username=self.thirduser.username , password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "meeting/meeting_details.html")
