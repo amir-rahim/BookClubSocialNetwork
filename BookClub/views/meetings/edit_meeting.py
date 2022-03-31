@@ -98,21 +98,17 @@ class RemoveMeetingMember(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         return redirect(url)
 
     def post(self, request, *args, **kwargs):
-        meeting = self.get_object()
-        user = self.kwargs.get('member_id')
-        if user is not None and meeting is not None:
-            user = User.objects.get(pk=user)
-            if meeting.organiser is not user:
-                meeting.members.remove(user)
-                meeting.save()
-                kwargs.pop('member_id')
-                return redirect(reverse('edit_meeting', kwargs=kwargs))
-            else:
-                kwargs.pop('member_id')
-                messages.error(request, "Cannot kick organiser!")
-                return redirect(reverse('meeting_details', kwargs=kwargs))
-
-        else:
-            kwargs.pop('member_id')
+        try:
+            meeting = self.get_object()
+            user = User.objects.get(username=self.request.POST.get('user'))
+        except:
             messages.error(request, "User not found!")
+            return redirect(reverse('meeting_details', kwargs=kwargs))
+
+        if meeting.organiser.id is not user.id:
+            meeting.members.remove(user)
+            meeting.save()
+            return redirect(reverse('edit_meeting', kwargs=kwargs))
+        else:
+            messages.error(request, "Cannot kick organiser!")
             return redirect(reverse('meeting_details', kwargs=kwargs))

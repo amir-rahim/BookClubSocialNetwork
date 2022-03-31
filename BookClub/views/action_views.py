@@ -29,6 +29,7 @@ class ActionView(TemplateView):
             target_user = User.objects.get(username=self.request.POST.get('user'))
         except ObjectDoesNotExist:
             messages.error(self.request, "Error, user or club not found.")
+            return redirect(self.redirect_location, kwargs['club_url_name'])
 
         if self.is_actionable(current_user, target_user, club):
             self.action(current_user, target_user, club)

@@ -6,7 +6,7 @@ from BookClub.models.booklist import BookList
 from BookClub.models.user import User
 
 
-@tag('models', 'booklist')
+@tag('models', 'booklistmodel')
 class BookListTestCase(TestCase):
     fixtures = [
         'BookClub/tests/fixtures/default_books.json',
@@ -170,7 +170,14 @@ class BookListTestCase(TestCase):
         correct_url = '/library/lists/1/'
         self.assertEqual(url, correct_url)
 
-    def test_get_short_contents(self):
+    def test_get_short_contents_returns_valid_str_under_75_characters(self):
+        self.bookList.books.clear()
+        self.bookList.books.add(self.book_one)
+        short_contents = self.bookList.get_short_contents()
+        correct_short_contents = '"Classical Mythology" by Mark P. O. Morford; '
+        self.assertEqual(short_contents, correct_short_contents)
+
+    def test_get_short_contents_cuts_string_after_75_characters(self):
         short_contents = self.bookList.get_short_contents()
         correct_short_contents = '"Classical Mythology" by Mark P. O. Morford; "The Greek Myths: The Compl...'
         self.assertEqual(short_contents, correct_short_contents)

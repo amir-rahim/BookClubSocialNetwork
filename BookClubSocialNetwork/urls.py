@@ -94,7 +94,7 @@ urlpatterns = [
 
     # '''Meeting URLs'''
     path('club/<str:club_url_name>/meetings/<int:meeting_id>/edit/', views.EditMeetingView.as_view(), name='edit_meeting'),
-    path('club/<str:club_url_name>/meetings/<int:meeting_id>/edit/remove_member/<int:member_id>', views.RemoveMeetingMember.as_view(), name='remove_meeting_member'),
+    path('club/<str:club_url_name>/meetings/<int:meeting_id>/edit/remove_member/', views.RemoveMeetingMember.as_view(), name='remove_meeting_member'),
     path('club/<str:club_url_name>/meetings/',views.MeetingListView.as_view(), name='meeting_list'),
     path('club/<str:club_url_name>/meetings/<int:meeting_id>/join/', views.JoinMeetingView.as_view(), name='join_meeting'),
     path('club/<str:club_url_name>/meetings/<int:meeting_id>/leave/', views.LeaveMeetingView.as_view(), name='leave_meeting'),
@@ -102,7 +102,7 @@ urlpatterns = [
     path('club/<str:club_url_name>/meetings/<int:meeting_id>/participants/', views.MeetingParticipantsView.as_view(), name='meeting_participants'),
     path('club/<str:club_url_name>/meetings/create/', views.CreateMeetingView.as_view(), name='create_meeting'),
     path('club/<str:club_url_name>/meetings/<int:meeting_id>/delete/', views.DeleteMeetingView.as_view(), name='delete_meeting'),
-    
+
 
     # '''Library URLs'''
     path('library/', views.library_dashboard, name='library_dashboard'),
@@ -152,14 +152,14 @@ urlpatterns = [
     # '''Agenda URLs'''
     path('agenda/', views.AgendaView.as_view(), name='agenda'),
     path('agenda/export', views.ExportCalendarView.as_view(), name='agenda_export'),
-    
+
     # '''Bookshelf URLs'''
     path('bookshelf/', views.BookShelfView.as_view(), name='bookshelf'),
     path('bookshelf/<int:book_id>/add/', views.AddToBookShelfView.as_view(), name='add_to_bookshelf'),
     path('bookshelf/<int:book_id>/update/', views.UpdateBookShelfView.as_view(), name='update_from_bookshelf'),
     path('bookshelf/<int:book_id>/remove/', views.RemoveFromBookShelfView.as_view(), name='remove_from_bookshelf'),
-    
-    # '''Asyn Views'''
+
+    # '''Async Views'''
     path('search/', views.SearchView.as_view(), name='async_search'),
     path('user_recommendations/', views.RecommendationUserListView.as_view(), name='async_user_recommendations'),
     path('club_recommendations/<str:club_url_name>/', views.RecommendationClubListView.as_view(), name='async_club_recommendations'),

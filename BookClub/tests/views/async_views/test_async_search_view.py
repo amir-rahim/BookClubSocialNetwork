@@ -1,18 +1,13 @@
-
-
 from django.test import RequestFactory, TestCase, tag
 from django.urls import reverse
-from BookClub.models import Book, User,BookList, Club
-from BookClub.models.book import Book
+from BookClub.models import Book, User, BookList, Club, ClubMembership
 from django.db.models import Q
-from BookClub.models.booklist import BookList
 from django.contrib.contenttypes.models import ContentType
 
-from BookClub.models.user import User
 from BookClub.views.async_views.async_search import SearchView
 # testcases
 # test club, user, booklist get_templates
-# test book get_template and book select and book check 
+# test book get_template and book select and book check
 # test pagination
 
 
@@ -26,7 +21,7 @@ class BookSearchTestCase(TestCase):
     ]
 
     def setUp(self):
-        
+
         self.user = User.objects.get(pk=1)
         self.book1 = Book.objects.get(pk=1)
         self.rf = RequestFactory()
@@ -153,7 +148,7 @@ class BookSearchTestCase(TestCase):
             Q(title__icontains=query) | Q(author__icontains=query) | Q(
                 publisher__icontains=query)
         ).count())
-        
+
     def test_get_select_is_set_paginate_by_is_set_to_5(self):
         self.bookdata['select'] = True
         request = self.rf.get(
@@ -163,7 +158,7 @@ class BookSearchTestCase(TestCase):
         view.request = request
         view.get(request)
         self.assertTrue(view.paginate_by, 5)
-        
+
     def test_get_select_is_none_paginate_by_is_set_to_20(self):
         request = self.rf.get(
             self.url, data=self.bookdata)
@@ -172,7 +167,7 @@ class BookSearchTestCase(TestCase):
         view.request = request
         view.get(request)
         self.assertTrue(view.paginate_by, 20)
-        
+
     def test_get_user_logged_in(self):
         self.bookdata['query'] = ""
         self.client.login(username=self.user.username, password="Password123")
@@ -183,7 +178,7 @@ class BookSearchTestCase(TestCase):
         self.bookdata['query'] = ""
         response = self.client.get(self.url, data=self.bookdata)
         self.assertNotContains(response, self.booklist.title)
-        
+
     def test_get_template_club(self):
         request = self.rf.get(self.url, data=self.clubdata)
         request.user = self.user
@@ -192,7 +187,7 @@ class BookSearchTestCase(TestCase):
         view.request = request
         self.assertEqual(view.get_template_names(self.clubcontenttype), [
                          'partials/club_search_list.html'])
-        
+
     def test_get_template_user(self):
         request = self.rf.get(self.url, data=self.userdata)
         request.user = self.user
@@ -201,7 +196,7 @@ class BookSearchTestCase(TestCase):
         view.request = request
         self.assertEqual(view.get_template_names(self.usercontenttype), [
                          'partials/user_search_list.html'])
-        
+
     def test_get_template_booklist(self):
         request = self.rf.get(self.url, data=self.booklistdata)
         request.user = self.user
@@ -210,7 +205,7 @@ class BookSearchTestCase(TestCase):
         view.request = request
         self.assertEqual(view.get_template_names(self.booklistcontenttype), [
                          'partials/booklist_search_list.html'])
-        
+
     def test_get_template_book_check(self):
         self.bookdata['check'] = True
         request = self.rf.get(self.url, data=self.bookdata)
@@ -222,7 +217,10 @@ class BookSearchTestCase(TestCase):
                          'partials/book_check_list.html'])
 
     def test_get_template_exception_raised_bad_argument(self):
+        request = self.rf.get(self.url, data={'content_type' : 9999})
+        request.user = self.user
+
         view = SearchView()
+        view.request = request
         with self.assertRaises(Exception):
-            view.get_template_names(content_type="twelve"), [
-                         'partials/booklist_search_list.html']
+            view.get_template_names(ContentType.objects.get_for_model(ClubMembership))

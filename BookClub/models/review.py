@@ -2,9 +2,8 @@
 from django.db import models
 from django.urls import reverse
 from BookClub.models.rated_content import *
-from BookClub.models.recommendations import UserRecommendations
-
-
+from BookClub.models.recommendations import ClubRecommendations, UserRecommendations
+from BookClub.models import ClubMembership
 class BookReview(TextPost):
     """Allow the User to Review a Book.
     
@@ -39,8 +38,16 @@ class BookReview(TextPost):
     def save(self, **kwargs):
         super().save(**kwargs)
         if UserRecommendations.objects.filter(user=self.creator).exists():
-            UserRecommendations.objects.get(user=self.creator).modified = True
-
+            recommendation = UserRecommendations.objects.get(user=self.creator)
+            recommendation.modified = True
+            recommendation.save()
+        clubs = self.creator.clubmembership_set.exclude(
+            membership=ClubMembership.UserRoles.APPLICANT).values_list('club__pk')
+        clubRecs = ClubRecommendations.objects.filter(club__pk__in=clubs)
+        for club in clubRecs:
+            club.modified = True
+            club.save()
+                
 
 class BookReviewComment(TextComment):
     """Allow the User to Comment under a Review.

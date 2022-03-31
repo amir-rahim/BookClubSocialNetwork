@@ -19,7 +19,7 @@ class EditPostViewTestCase(TestCase):
 
     def setUp(self):
         self.user = User.objects.get(username="johndoe")
-        self.non_user = User.objects.get(pk=6)
+        self.non_user = User.objects.get(pk=7)
         self.club = Club.objects.get(pk=1)
         self.my_post = ForumPost.objects.get(pk=1)
         self.other_post = ForumPost.objects.get(pk=2)

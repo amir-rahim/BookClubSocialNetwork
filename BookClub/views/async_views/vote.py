@@ -28,12 +28,11 @@ class CreateVoteView(LoginRequiredMixin, CreateView):
             this_vote_type = form.instance.type
             existing_vote = Vote.objects.filter(creator=user, content_type=content_type, object_id=object_id)
 
-            if existing_vote.exists():
-                existing_vote = existing_vote.get()
-                existing_vote_type = existing_vote.type
-                existing_vote.delete()
-                if(this_vote_type == existing_vote_type):
-                    return self.get_response_json(form, None)
+            existing_vote = existing_vote.get()
+            existing_vote_type = existing_vote.type
+            existing_vote.delete()
+            if(this_vote_type == existing_vote_type):
+                return self.get_response_json(form, None)
 
         return super().post(request, *args, **kwargs)
 

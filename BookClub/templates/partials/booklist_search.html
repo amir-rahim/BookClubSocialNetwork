@@ -9,7 +9,7 @@
     {% include 'partials/booklist_search_list.html' with content=content %}
 </div>
 {% load getcontenttype %}
-{% get_content_type_from_queryset content as content_type %}
+{% get_book_list_content_type as content_type %}
 <script>
     const user_input = $("#user_input")
     const books_div = $("#replaceable_content")

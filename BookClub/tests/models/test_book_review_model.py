@@ -1,9 +1,11 @@
 import datetime
 from django.forms import ValidationError
-from BookClub.models import Book, User, BookReview, BookReviewComment
+from BookClub.models import Book, User, BookReview, BookReviewComment, UserRecommendations
 from django.db import IntegrityError, models
 from django.urls import reverse
 from django.test import TestCase, tag
+from BookClub.models.club import Club
+from BookClub.models.recommendations import ClubRecommendations
 
 from BookClub.models.user import User
 
@@ -15,7 +17,9 @@ class BookReviewModelTestCase(TestCase):
         'BookClub/tests/fixtures/default_books.json',
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_book_reviews.json',
-        'BookClub/tests/fixtures/default_book_review_comments.json'
+        'BookClub/tests/fixtures/default_book_review_comments.json',
+        'BookClub/tests/fixtures/default_clubs.json',
+        'BookClub/tests/fixtures/default_club_members.json'
     ]
 
     def setUp(self):
@@ -127,6 +131,43 @@ class BookReviewModelTestCase(TestCase):
         self.assertEqual(self.review1.str(),"1/10 rating & review by johndoe on \"Classical Mythology\"")
         self.assertEqual(str(self.review1),"1/10 rating & review by johndoe on \"Classical Mythology\"")
         self.assertEqual(self.review1.get_delete_str(),"1/10 rating & review by johndoe on \"Classical Mythology\"")
+
+    def test_save_executes_safely_when_user_has_no_modifications(self):
+        recommendation_exists = UserRecommendations.objects.filter(user=self.user1).exists()
+        self.assertFalse(recommendation_exists)
+        self.review1.book_rating = 5
+        self.review1.save()
+        recommendation_exists = UserRecommendations.objects.filter(user=self.user1).exists()
+        self.assertFalse(recommendation_exists)
+        
+    def test_save_changes_user_modified(self):
+        rec = UserRecommendations.objects.create(user=self.user1)
+        rec.modified = False
+        rec.save()
+        recommendation_exists = UserRecommendations.objects.filter(
+            user=self.user1).exists()
+        self.review1.book_rating = 5
+        self.review1.save()
+        recommendation_exists = UserRecommendations.objects.filter(
+            user=self.user1)
+        self.assertTrue(recommendation_exists)
+        rec.refresh_from_db()
+        self.assertTrue(rec.modified)
+        
+    def test_save_changes_club_modified(self):
+        club = Club.objects.get(pk=1)
+        rec = ClubRecommendations.objects.create(club=club)
+        rec.modified = False
+        rec.save()
+        recommendation_exists = ClubRecommendations.objects.filter(
+            club=club).exists()
+        self.review1.book_rating = 5
+        self.review1.save()
+        recommendation_exists = ClubRecommendations.objects.filter(
+            club=club)
+        self.assertTrue(recommendation_exists)
+        rec.refresh_from_db()
+        self.assertTrue(rec.modified)
 
 @tag('models', 'reviewcomment')
 class BookReviewCommentTestCase(TestCase):

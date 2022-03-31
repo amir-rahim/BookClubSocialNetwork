@@ -173,7 +173,11 @@
                                 </p>
                             </div>
                             <div class="card-content">
-                                <form method="post" action="{% url 'create_forum_comment' post.id %}">
+                                {% if club %}
+                                    <form method="post" action="{% url 'create_forum_comment' club.club_url_name post.id %}">
+                                {% else %}
+                                    <form method="post" action="{% url 'create_forum_comment' post.id %}">
+                                {% endif %}
                                     <div class="card-content">
                                         <div class="container">
                                             {% csrf_token %}

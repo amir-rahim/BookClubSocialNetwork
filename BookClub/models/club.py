@@ -11,18 +11,6 @@ from BookClub.models import ClubMembership, User
 
 
 class Club(models.Model):
-    """The Club model to allow Users to form groups.
-    
-    Attributes:
-        name: A string containing the name of the Club.
-        club_url_name: A string that the URL uses to identify the Club.
-        description: A string describing the Club.
-        tagline: A string for the owner to set a motto for the Club.
-        rules: A string containing the rules for the Club.
-        is_private: A boolean specifying whether the Club is private.
-        created_on: A Date for when the Club was created.
-    """
-    
     class Meta:
         ordering = ['name']
     name = models.CharField(unique=True, max_length=100, blank=False)

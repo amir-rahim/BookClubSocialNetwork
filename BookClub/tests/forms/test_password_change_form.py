@@ -51,3 +51,9 @@ class PasswordFormTestCase(TestCase):
         self.form_input['password_confirmation'] = 'WrongPassword123'
         form = ChangePasswordForm(data=self.form_input)
         self.assertFalse(form.is_valid())
+
+    def test_form_does_not_save_when_user_is_not_provided(self):
+        form = ChangePasswordForm(data=self.form_input)
+        self.assertFalse(form.is_valid())
+        user = form.save()
+        self.assertEqual(user, None)
