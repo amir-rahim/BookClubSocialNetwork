@@ -1,8 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from BookClub.models.rated_content import *
-from BookClub.models.recommendations import UserRecommendations
-
+from BookClub.models.recommendations import ClubRecommendations, UserRecommendations
 
 class BookReview(TextPost):
     class Meta:
@@ -35,7 +34,13 @@ class BookReview(TextPost):
             recommendation = UserRecommendations.objects.get(user=self.creator)
             recommendation.modified = True
             recommendation.save()
-
+            clubs = BookClub.helpers.et_memberships_with_access(self.creator)
+            clubRecs = ClubRecommendations.objects.get(club__pk__in=clubs)
+            for club in clubRecs:
+                print("reset " + club)
+                club.modified = True
+                club.save()
+                
 
 class BookReviewComment(TextComment):
     book_review = models.ForeignKey('BookReview', blank=False, null=False, on_delete=models.CASCADE)
