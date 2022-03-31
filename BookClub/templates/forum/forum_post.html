@@ -55,7 +55,10 @@
                     </li>
                     {% if club %}
                         <li>
-                            <a href="{% url 'club_dashboard' club.club_url_name %}">{{ club.name }}</a>
+                            <a href="{% url 'available_clubs' %}">Clubs</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'club_dashboard' club.club_url_name %}">{{ club.name |truncatechars:20 }}</a>
                         </li>
                         <li>
                             <a href="{% url 'club_forum' club_url_name=club.club_url_name %}">Forums</a>

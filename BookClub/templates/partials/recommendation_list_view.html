@@ -9,7 +9,7 @@
                             <a href="{% url 'book_view' book.id %}">
                                 <div class="card-image">
                                     <figure class="image is-3by5">
-                                        <img src="{{ book.imageL }}" alt="Image of {{ book.title }}" />
+                                        <img src="//images.weserv.nl/?url={{ book.imageL }}" alt="Image of {{ book.title }}" />
                                     </figure>
                                 </div>
                                 <div class="card-content">{{ book.title }}</div>

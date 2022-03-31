@@ -17,7 +17,7 @@
                         <a href="{% url 'home' %}">Home</a>
                     </li>
                     <li>
-                        <a href="{% url 'user_dashboard' %}">{{ user.username }}</a>
+                        <a href="{% url 'user_dashboard' %}">{{ user.username |truncatechars:20 }}</a>
                     </li>
                     <li>
                         <a href="{% url 'booklists_list' %}">Book Lists</a>

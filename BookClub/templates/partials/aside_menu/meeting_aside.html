@@ -34,7 +34,7 @@
         </ul>
     {% endif %}
     <p class="menu-label">
-        Forums & Reviews
+        Forums
     </p>
     <ul class="menu-list">
         <li>
@@ -54,7 +54,7 @@
                 <li>
                     <a href="{% url 'meeting_participants' current_club.club_url_name meeting.id %}">Meeting Participants</a>
                 </li>
-                {% if user == meeting.get_organiser %}
+                {% if meeting.organiser == user or club.get_club_owner == user %}
                     <li>
                         <a href="{% url 'edit_meeting' current_club.club_url_name meeting.id %}">Manage Meeting</a>
                     </li>

@@ -24,7 +24,7 @@
                             <a href="{% url 'home' %}">Home</a>
                         </li>
                         <li>
-                            <a href="{% url 'user_dashboard' %}">{{ creator.username }}</a>
+                            <a href="{% url 'user_dashboard' %}">{{ creator.username |truncatechars:20 }}</a>
                         </li>
                         <li>
                             <a href="{% url 'booklists_list' %}">Book Lists</a>
@@ -40,7 +40,7 @@
                             <a href="{% url 'home' %}">Home</a>
                         </li>
                         <li>
-                            <a href="{% url 'user_profile' username=creator.username %}">{{ creator.username }}</a>
+                            <a href="{% url 'user_profile' username=creator.username %}">{{ creator.username |truncatechars:20 }}</a>
                         </li>
                         <li>
                             <a href="{% url 'booklists_list' username=creator.username %}">Book Lists</a>

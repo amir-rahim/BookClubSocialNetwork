@@ -46,7 +46,7 @@
                         <a href="{% url 'community_reviews' %}">Reviews</a>
                     </li>
                     <li>
-                        <a href="{% url 'book_review' book_id=review.book.id review_id=review.id %}">Review by {{ review.creator }}</a>
+                        <a href="{% url 'book_review' book_id=review.book.id review_id=review.id %}">Review by {{ review.creator |truncatechars:20 }}</a>
                     </li>
                 </ul>
             </nav>
