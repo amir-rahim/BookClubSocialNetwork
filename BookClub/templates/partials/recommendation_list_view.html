@@ -20,11 +20,14 @@
                         </div>
                         <!-- Slide Content -->
                     </div>
-                    <!-- Slide Content -->
-                </div>
-            {% empty %}
-                Sorry, you don't have any recommendations right now. Please contact the administrators of the website, as this is likely an issue with how it has been configured
-            {% endfor %}
+                {% empty %}
+                
+                        
+                    Error, no recommendations found. Please contact the site adminstrator as there is likely an issue with the site configuration.
+                        
+                    
+                {% endfor %}
+            </div>
             <!-- End Carousel -->
         </div>
     </section>
