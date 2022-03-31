@@ -114,4 +114,14 @@
             {% endif %}
         </div>
     </div>
+    <script>
+    let tabs = document.querySelectorAll('.tabs li');
+
+    $('document').ready(function () {
+        tabs.forEach(function (tab) {
+            tab.classList.remove('is-active');
+        });
+    });
+    </script>
+
 {% endblock %}
