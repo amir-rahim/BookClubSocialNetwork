@@ -1,9 +1,7 @@
 {% if page_obj %}
     <div class="table-container">
         {% for object in page_obj %}
-            {% for field in object %}
-                {{ field }}
-            {% endfor %}
+            {% for field in object %}{{ field }}{% endfor %}
         {% endfor %}
     </div>
     {% include 'partials/pagination_ajax.html' with page_obj=page_obj %}

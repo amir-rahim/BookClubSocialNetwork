@@ -1,9 +1,11 @@
+"""Review related forms."""
 from django.forms import ModelForm, Textarea
 
 from BookClub.models import BookReview, BookReviewComment
 
 
 class ReviewForm(ModelForm):
+    """Form for book reviews."""
     class Meta:
         model = BookReview
 
@@ -19,6 +21,7 @@ class ReviewForm(ModelForm):
 
 
 class BookReviewCommentForm(ModelForm):
+    """Form for a comment on a book review."""
     class Meta:
         model = BookReviewComment
 

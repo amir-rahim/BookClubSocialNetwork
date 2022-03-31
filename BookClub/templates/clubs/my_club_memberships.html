@@ -7,9 +7,7 @@
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
-        <div class="column is-3">
-            {% include 'partials/aside_menu/membership_aside.html' %}
-        </div>
+        <div class="column is-3">{% include 'partials/aside_menu/membership_aside.html' %}</div>
         <div class="column is-9">
             <nav class="breadcrumb"
                  aria-label="breadcrumbs"
@@ -61,7 +59,10 @@
                                     {% endif %}
                                 </td>
                                 <td>
-                                    <button class="button is-success" onclick="window.location='{% url 'club_dashboard' club.club_url_name %}';">View</button>
+                                    <button class="button is-success"
+                                            onclick="window.location='{% url 'club_dashboard' club.club_url_name %}';">
+                                        View
+                                    </button>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -70,9 +71,9 @@
             {% else %}
                 <!-- If there is no club available to the logged-in user -->
                 <hr>
-                    <p style="text-align: center" class="has-text-grey">
-                        You are not a member of any club, you can find clubs <a href="{% url 'available_clubs' %}" class="is-link"><i>here</i></a>.
-                    </p>
+                <p style="text-align: center" class="has-text-grey">
+                    You are not a member of any club, you can find clubs <a href="{% url 'available_clubs' %}" class="is-link"><i>here</i></a>.
+                </p>
                 <hr>
             {% endif %}
         </div>

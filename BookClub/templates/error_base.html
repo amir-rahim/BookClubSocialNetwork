@@ -14,25 +14,24 @@
         | Novella</title>
     </head>
     <body>
-      <section class="hero is-fullheight">
-          <div class="hero-body is-link">
-              <div class="container has-text-centered">
-                  <div class="column is-6 is-offset-3">
-                      <h3 class="title has-text-black">{% block error_title %}{% endblock %}</h3>
-                      <hr>
-                      <p class="subtitle has-text-black">
-                          {% block error_subtitle %} {% endblock %}
-                      </p>
-                      <div class="box">
-                        {% block error_body %}
-
-                        {% endblock %}
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </section>
+        <section class="hero is-fullheight">
+            <div class="hero-body is-link">
+                <div class="container has-text-centered">
+                    <div class="column is-6 is-offset-3">
+                        <h3 class="title has-text-black">
+                            {% block error_title %}{% endblock %}
+                        </h3>
+                        <hr>
+                        <p class="subtitle has-text-black">
+                            {% block error_subtitle %}{% endblock %}
+                        </p>
+                        <div class="box">
+                            {% block error_body %}{% endblock %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </body>
-
     {% block js %}{% endblock %}
 </html>

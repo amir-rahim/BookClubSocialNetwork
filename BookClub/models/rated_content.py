@@ -1,9 +1,15 @@
+"""Rated content model."""
 from django.db import models
 from BookClub.models import RatedContent
 from django.utils.text import slugify
 
 
 class TextComment(RatedContent):
+    """An abstract model allowing Users to make Comments.
+    
+    Attributes:
+        content: A string containing the content of the Comment.
+    """
     class Meta:
         abstract = True
 
@@ -11,6 +17,13 @@ class TextComment(RatedContent):
 
 
 class TextPost(RatedContent):
+    """An abstract model allowing Users to make Posts.
+    
+    Attributes:
+        title: A string containing the title of the Post.
+        content: A string containing the contents of the Post.
+        slug: A Slug for the URL.
+    """
     class Meta:
         abstract = True
 

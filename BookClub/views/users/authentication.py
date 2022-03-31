@@ -1,4 +1,4 @@
-"""Authentication Related Views"""
+"""Authentication related views."""
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -12,7 +12,7 @@ from BookClub.authentication_mixins import LoginProhibitedMixin
 
 
 class SignUpView(LoginProhibitedMixin, FormView):
-    """View class for handling user sign-ups"""
+    """Allow user to sign up and create an account for the site."""
     form_class = SignUpForm
     template_name = 'authentication/sign_up.html'
     redirect_when_logged_in_url = 'home'
@@ -31,9 +31,7 @@ class SignUpView(LoginProhibitedMixin, FormView):
 
 
 class LogInView(LoginProhibitedMixin, FormView):
-    """
-        View class for handling logging the user in and setting the club_id session key
-    """
+    """Allow the user to log in to the site and sets the club_id session key."""
     form_class = LogInForm
     template_name = 'authentication/login.html'
 
@@ -58,11 +56,7 @@ class LogInView(LoginProhibitedMixin, FormView):
 
 
 class LogOutView(LoginRequiredMixin, View):
-    """
-
-        Class that handles logging a user out.
-
-    """
+    """Allow the user to log out."""
 
     def get(self, request):
         logout(request)

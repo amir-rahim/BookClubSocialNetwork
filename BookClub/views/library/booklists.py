@@ -1,3 +1,4 @@
+"""Book list related views."""
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
@@ -12,6 +13,7 @@ from BookClub.models import User, BookList, Book
 
 
 class BooklistListView(LoginRequiredMixin, ListView):
+    """Render a table of the current user's book lists."""
     http_method_names = ['get']
     model = BookList
     context_object_name = 'booklists'
@@ -41,6 +43,7 @@ class BooklistListView(LoginRequiredMixin, ListView):
 
 
 class CreateBookListView(LoginRequiredMixin, CreateView):
+    """Allow the user to create a book list."""
     template_name = 'booklists/create_booklist.html'
     model = BookList
     form_class = CreateBookListForm
@@ -57,6 +60,7 @@ class CreateBookListView(LoginRequiredMixin, CreateView):
 
 
 class EditBookListView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    """Allow the user to edit their own book lists."""
     model = BookList
     form_class = CreateBookListForm
     template_name = 'booklists/edit_booklist.html'
@@ -64,6 +68,7 @@ class EditBookListView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     redirect_location = 'booklists_list'
 
     def test_func(self):
+        """Only allow the owner of a book list to edit it."""
         try:
             booklist = BookList.objects.get(pk=self.kwargs['booklist_id'])
             user = booklist.creator
@@ -99,6 +104,7 @@ class EditBookListView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 
 class DeleteBookListView(LoginRequiredMixin, View):
+    """Allow the user to delete their own book lists."""
     http_method_names = ['post']
 
     def http_method_not_allowed(self, request, *args, **kwargs):
@@ -122,6 +128,7 @@ class DeleteBookListView(LoginRequiredMixin, View):
 
 
 class UserBookListView(LoginRequiredMixin, ListView):
+    """Render the list of books within a book list."""
     http_method_names = ['get']
     model = BookList
     context_object_name = 'books'
@@ -143,7 +150,7 @@ class UserBookListView(LoginRequiredMixin, ListView):
 
 
 class RemoveFromBookListView(LoginRequiredMixin, ListView):
-    """Users can leave meetings"""
+    """Allow the owner of a book list to remove a book."""
 
     redirect_location = 'user_booklist'
 
@@ -151,23 +158,21 @@ class RemoveFromBookListView(LoginRequiredMixin, ListView):
         return redirect(self.redirect_location, booklist_id=self.kwargs['booklist_id'])
 
     def is_actionable(self, booklist, book):
-        """Check if user can remove a book"""
-
+        """Check the current user is the owner and if the book can be removed."""
         return (booklist.get_books().filter(pk=book.id)) and (self.request.user == booklist.creator)
 
     def is_not_actionable(self):
-        """If user cannot remove book"""
-
+        """Throw a message if the book cannot be removed."""
         return messages.info(self.request, "You cannot remove that book!")
 
     def action(self, booklist, book):
-        """User removes the book"""
-
+        """Remove the book from the book list."""
         messages.success(self.request, "You have removed the book.")
         booklist.remove_book(book)
 
     def post(self, *args, **kwargs):
-
+        """Get book and book list data.
+        Try to remove book from the book list."""
         try:
             booklist = BookList.objects.get(id=self.kwargs['booklist_id'])
             book = Book.objects.get(id=self.kwargs['book_id'])

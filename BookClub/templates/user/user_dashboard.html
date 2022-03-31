@@ -17,8 +17,8 @@
         <div class="column is-9">
             {% if own_profile %}
                 <nav class="breadcrumb"
-                    aria-label="breadcrumbs"
-                    style="padding-left: 5px;">
+                     aria-label="breadcrumbs"
+                     style="padding-left: 5px;">
                     <ul>
                         <li>
                             <a href="{% url 'home' %}">Home</a>
@@ -33,8 +33,8 @@
                 </nav>
             {% else %}
                 <nav class="breadcrumb"
-                    aria-label="breadcrumbs"
-                    style="padding-left: 5px;">
+                     aria-label="breadcrumbs"
+                     style="padding-left: 5px;">
                     <ul>
                         <li>
                             <a href="{% url 'home' %}">Home</a>
@@ -48,315 +48,317 @@
                     </ul>
                 </nav>
             {% endif %}
-                <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
-                    <div class="hero-body">
-                        <div class="container">
-                            <h1 class="title">{{ username }}'s Dashboard</h1>
-                        </div>
+            <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
+                <div class="hero-body">
+                    <div class="container">
+                        <h1 class="title">{{ username }}'s Dashboard</h1>
                     </div>
-                </section>
-
-                <div class="columns">
-                    <div class="column is-12">
-                        <div class="card">
-                            <div class="card-content">
-                                <p class="title">
-                                    User Details
-                                </p>
-                                <div class="media">
-                                    <div class="media-left">
-                                        <figure class="image is-128x128">
-                                            <img class="is-rounded" src="{{ gravatar }}" alt="Placeholder image">
-                                        </figure>
-                                    </div>
-                                    <div class="media-content">
-                                        <div class="content">
+                </div>
+            </section>
+            <div class="columns">
+                <div class="column is-12">
+                    <div class="card">
+                        <div class="card-content">
+                            <p class="title">
+                                User Details
+                            </p>
+                            <div class="media">
+                                <div class="media-left">
+                                    <figure class="image is-128x128">
+                                        <img class="is-rounded" src="{{ gravatar }}" alt="Placeholder image">
+                                    </figure>
+                                </div>
+                                <div class="media-content">
+                                    <div class="content">
+                                        <p class="subtitle is-5">
+                                            <b>Username: </b> {{ username }}
+                                        </p>
+                                        {% if own_profile %}
                                             <p class="subtitle is-5">
-                                                <b>Username: </b> {{ username }}
+                                                <b>Email: </b> {{ email }}
                                             </p>
-                                            {% if own_profile %}
-                                                <p class="subtitle is-5">
-                                                    <b>Email: </b> {{ email }}
-                                                </p>
-                                            {% endif %}
-                                            <p class="subtitle is-5">
-                                                <b>Public Bio: </b> {{ public_bio }}
-                                            </p>
-                                        </div>
+                                        {% endif %}
+                                        <p class="subtitle is-5">
+                                            <b>Public Bio: </b> {{ public_bio }}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
+            </div>
             {% if user.username != username %}
                 <div class="columns">
                     <div class="column is-12">
                         <div class="container">
-                            <button type="button" name="follow-button" id="follow-button" onclick="followButtonClick()"></button>
+                            <button type="button"
+                                    name="follow-button"
+                                    id="follow-button"
+                                    onclick="followButtonClick()"></button>
                         </div>
                     </div>
                 </div>
             {% endif %}
-
             <div class="columns">
                 <div class="column is-6">
                     <div class="card card-equal-height">
                         <div class="card-image">
                             {% if own_profile %}
                                 <a href="{% url 'user_following' %}">
-                            {% else %}
-                                <a href="{% url 'user_following' username %}">
-                            {% endif %}
-                            <figure class="image is-16by9">
-                                <img src="https://images.unsplash.com/photo-1474403078171-7f199e9d1335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1471&q=80"
-                                     alt="Image">
-                            </figure>
-                            </a>
-                        </div>
-                        <div class="card-content">
-                            <p class="title">
-                                Following
-                            </p>
-                        </div>
-                        <div class="card-footer">
-                            {% if own_profile %}
-                                <a class="card-footer-item" href="{% url 'user_following' %}">View All</a>
-                            {% else %}
-                                <a class="card-footer-item" href="{% url 'user_following' username %}">View All</a>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-                <div class="column is-6">
-                    <div class="card card-equal-height">
-                        <div class="card-image">
-                            <figure class="image is-16by9">
-                                {% if own_profile %}
-                                    <a href="{% url 'my_club_memberships' %}">
                                 {% else %}
-                                    <a href="{% url 'user_memberships' username %}">
-                                {% endif %}
-                                <img src="https://images.unsplash.com/photo-1615791287388-6f1bd87ace4e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=876&q=80"
-                                     alt="Image">
+                                    <a href="{% url 'user_following' username %}">
+                                    {% endif %}
+                                    <figure class="image is-16by9">
+                                        <img src="https://images.unsplash.com/photo-1474403078171-7f199e9d1335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1471&q=80"
+                                             alt="Image">
+                                    </figure>
                                 </a>
-                            </figure>
-                        </div>
-                        <div class="card-content">
-                            <p class="title">
-                                Clubs
-                            </p>
-                        </div>
-                        <div class="card-footer">
-                            {% if own_profile %}
-                                <a class="card-footer-item" href="{% url 'my_club_memberships' %}">View All</a>
-                            {% else %}
-                                <a class="card-footer-item" href="{% url 'user_memberships' username %}">View All</a>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
-                <div class="hero-body">
-                    <div class="container">
-                        <h2 class="subtitle">Statistics</h2>
-                    </div>
-                </div>
-            </section>
-
-            <div class="tile is-ancestor has-text-centered">
-                {% if own_profile %}
-                <div class="tile is-parent"
-                     onclick="window.location='{% url 'booklists_list' %}';"
-                     style="cursor:pointer;">
-                {% else %}
-                <div class="tile is-parent"
-                     onclick="window.location='{% url 'booklists_list' user.username %}';"
-                     style="cursor:pointer;">
-                {% endif %}
-                    <article class="tile is-child box">
-                        <p class="title">
-                            {{ booklist_count }}
-                        </p>
-                        <p class="subtitle">
-                            Book Lists
-                        </p>
-                    </article>
-                </div>
-                {% if own_profile %}
-                <div class="tile is-parent" onclick="window.location='{% url 'user_following' %}';" style="cursor:pointer;">
-                {% else %}
-                <div class="tile is-parent" onclick="window.location='{% url 'user_following' username %}';" style="cursor:pointer;">
-                {% endif %}
-                    <article class="tile is-child box">
-                        <p class="title">
-                            {{ number_of_following }}
-                        </p>
-                        <p class="subtitle">
-                            Following
-                        </p>
-                    </article>
-                </div>
-                {% if own_profile %}
-                    <div class="tile is-parent" onclick="window.location='{% url 'my_club_memberships' %}';" style="cursor:pointer;">
-                {% else %}
-                    <div class="tile is-parent" onclick="window.location='{% url 'user_memberships' username %}';" style="cursor:pointer;">
-                {% endif %}
-                    <article class="tile is-child box">
-                        <p class="title">
-                            {{ club_count }}
-                        </p>
-                        <p class="subtitle">
-                            Clubs Joined
-                        </p>
-                    </article>
-                </div>
-                {% if own_profile %}
-                    <div class="tile is-parent">
-                {% else %}
-                    <div class="tile is-parent">
-                {% endif %}
-                    <article class="tile is-child box">
-                        <p class="title">
-                            {{ reputation }}
-                        </p>
-                        <p class="subtitle">
-                            Reputation
-                        </p>
-                    </article>
-                </div>
-            </div>
-
-            <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
-                <div class="hero-body">
-                    <div class="container">
-                        <h2 class="subtitle">Community Contributions</h2>
-                    </div>
-                </div>
-            </section>
-
-            <div class="columns">
-                <div class="column is-6">
-                    <div class="card card-equal-height">
-                        <div class="card-image">
-                            <figure class="image is-16by9">
+                            </div>
+                            <div class="card-content">
+                                <p class="title">
+                                    Following
+                                </p>
+                            </div>
+                            <div class="card-footer">
                                 {% if own_profile %}
-                                    <a href="{% url 'booklists_list' %}">
+                                    <a class="card-footer-item" href="{% url 'user_following' %}">View All</a>
                                 {% else %}
-                                    <a href="{% url 'booklists_list' user.username %}">
+                                    <a class="card-footer-item" href="{% url 'user_following' username %}">View All</a>
                                 {% endif %}
-                                <img src="https://images.unsplash.com/photo-1628046903351-992bd4b583e6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-                                     alt="Image">
-                                </a>
-                            </figure>
-                        </div>
-                        <div class="card-content">
-                            <p class="title">
-                                Book Lists
-                            </p>
-                        </div>
-                        <div class="card-footer">
-                            {% if own_profile %}
-                                <a class="card-footer-item" href="{% url 'saved_booklists' %}">Saved Lists</a>
-                                <a class="card-footer-item" href="{% url 'booklists_list' %}">View All</a>
-                            {% else %}
-                                <a class="card-footer-item" href="{% url 'saved_booklists' user.username %}">Saved Lists</a>
-                                <a class="card-footer-item" href="{% url 'booklists_list' user.username %}">View All</a>
-                            {% endif %}
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="column is-6">
-                    <div class="card">
-                        <div class="card-image">
-                            <figure class="image is-16by9">
+                    <div class="column is-6">
+                        <div class="card card-equal-height">
+                            <div class="card-image">
+                                <figure class="image is-16by9">
+                                    {% if own_profile %}
+                                        <a href="{% url 'my_club_memberships' %}">
+                                        {% else %}
+                                            <a href="{% url 'user_memberships' username %}">
+                                            {% endif %}
+                                            <img src="https://images.unsplash.com/photo-1615791287388-6f1bd87ace4e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=876&q=80"
+                                                 alt="Image">
+                                        </a>
+                                    </figure>
+                                </div>
+                                <div class="card-content">
+                                    <p class="title">
+                                        Clubs
+                                    </p>
+                                </div>
+                                <div class="card-footer">
+                                    {% if own_profile %}
+                                        <a class="card-footer-item" href="{% url 'my_club_memberships' %}">View All</a>
+                                    {% else %}
+                                        <a class="card-footer-item" href="{% url 'user_memberships' username %}">View All</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
+                        <div class="hero-body">
+                            <div class="container">
+                                <h2 class="subtitle">Statistics</h2>
+                            </div>
+                        </div>
+                    </section>
+                    <div class="tile is-ancestor has-text-centered">
+                        {% if own_profile %}
+                            <div class="tile is-parent"
+                                 onclick="window.location='{% url 'booklists_list' %}';"
+                                 style="cursor:pointer;">
+                            {% else %}
+                                <div class="tile is-parent"
+                                     onclick="window.location='{% url 'booklists_list' user.username %}';"
+                                     style="cursor:pointer;">
+                                {% endif %}
+                                <article class="tile is-child box">
+                                    <p class="title">
+                                        {{ booklist_count }}
+                                    </p>
+                                    <p class="subtitle">
+                                        Book Lists
+                                    </p>
+                                </article>
+                            </div>
+                            {% if own_profile %}
+                                <div class="tile is-parent"
+                                     onclick="window.location='{% url 'user_following' %}';"
+                                     style="cursor:pointer;">
+                                {% else %}
+                                    <div class="tile is-parent"
+                                         onclick="window.location='{% url 'user_following' username %}';"
+                                         style="cursor:pointer;">
+                                    {% endif %}
+                                    <article class="tile is-child box">
+                                        <p class="title">
+                                            {{ number_of_following }}
+                                        </p>
+                                        <p class="subtitle">
+                                            Following
+                                        </p>
+                                    </article>
+                                </div>
                                 {% if own_profile %}
-                                    <a href="{% url 'personal_reviews' %}">
-                                {% else %}
-                                    <a href="{% url 'community_reviews' %}">
-                                {% endif %}
-                                <img src="https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=773&q=80"
-                                     alt="Image">
-                                </a>
-                            </figure>
-                        </div>
-                        <div class="card-content">
-                            <p class="title">
-                                Reviews
-                            </p>
-                        </div>
-                        <div class="card-footer">
-                            {% if own_profile %}
-                                <a class="card-footer-item" href="{% url 'personal_reviews' %}">View All</a>
-                            {% else %}
-                                <a class="card-footer-item" href="{% url 'community_reviews' %}">View All</a>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
-                <div class="hero-body">
-                    <div class="container">
-                        <h2 class="subtitle">Bookshelf</h2>
-                    </div>
-                </div>
-            </section>
-
-            <section class="info-tiles">
-                <div class="tile is-ancestor has-text-centered">
-                    <div class="tile is-parent">
-                        <article class="tile is-child box">
-                            <p class="title">
-                                {{ number_of_to_read }}
-                            </p>
-                            <p class="subtitle">
-                                Plan to Read
-                            </p>
-                        </article>
-                    </div>
-                    <div class="tile is-parent">
-                        <article class="tile is-child box">
-                            <p class="title">
-                                {{ number_of_reading }}
-                            </p>
-                            <p class="subtitle">
-                                Currently Reading
-                            </p>
-                        </article>
-                    </div>
-                    <div class="tile is-parent">
-                        <article class="tile is-child box">
-                            <p class="title">
-                                {{ number_of_on_hold }}
-                            </p>
-                            <p class="subtitle">
-                                On-hold
-                            </p>
-                        </article>
-                    </div>
-                    <div class="tile is-parent">
-                        <article class="tile is-child box">
-                            <p class="title">
-                                {{ number_of_completed }}
-                            </p>
-                            <p class="subtitle">
-                                Completed Books
-                            </p>
-                        </article>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </div>
-
-    {% block js %}
-      <script type="text/javascript">
-
+                                    <div class="tile is-parent"
+                                         onclick="window.location='{% url 'my_club_memberships' %}';"
+                                         style="cursor:pointer;">
+                                    {% else %}
+                                        <div class="tile is-parent"
+                                             onclick="window.location='{% url 'user_memberships' username %}';"
+                                             style="cursor:pointer;">
+                                        {% endif %}
+                                        <article class="tile is-child box">
+                                            <p class="title">
+                                                {{ club_count }}
+                                            </p>
+                                            <p class="subtitle">
+                                                Clubs Joined
+                                            </p>
+                                        </article>
+                                    </div>
+                                    {% if own_profile %}
+                                        <div class="tile is-parent">
+                                        {% else %}
+                                            <div class="tile is-parent">
+                                            {% endif %}
+                                            <article class="tile is-child box">
+                                                <p class="title">
+                                                    {{ reputation }}
+                                                </p>
+                                                <p class="subtitle">
+                                                    Reputation
+                                                </p>
+                                            </article>
+                                        </div>
+                                    </div>
+                                    <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
+                                        <div class="hero-body">
+                                            <div class="container">
+                                                <h2 class="subtitle">Community Contributions</h2>
+                                            </div>
+                                        </div>
+                                    </section>
+                                    <div class="columns">
+                                        <div class="column is-6">
+                                            <div class="card card-equal-height">
+                                                <div class="card-image">
+                                                    <figure class="image is-16by9">
+                                                        {% if own_profile %}
+                                                            <a href="{% url 'booklists_list' %}">
+                                                            {% else %}
+                                                                <a href="{% url 'booklists_list' user.username %}">
+                                                                {% endif %}
+                                                                <img src="https://images.unsplash.com/photo-1628046903351-992bd4b583e6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
+                                                                     alt="Image">
+                                                            </a>
+                                                        </figure>
+                                                    </div>
+                                                    <div class="card-content">
+                                                        <p class="title">
+                                                            Book Lists
+                                                        </p>
+                                                    </div>
+                                                    <div class="card-footer">
+                                                        {% if own_profile %}
+                                                            <a class="card-footer-item" href="{% url 'saved_booklists' %}">Saved Lists</a>
+                                                            <a class="card-footer-item" href="{% url 'booklists_list' %}">View All</a>
+                                                        {% else %}
+                                                            <a class="card-footer-item"
+                                                               href="{% url 'saved_booklists' user.username %}">Saved Lists</a>
+                                                            <a class="card-footer-item"
+                                                               href="{% url 'booklists_list' user.username %}">View All</a>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="column is-6">
+                                                <div class="card">
+                                                    <div class="card-image">
+                                                        <figure class="image is-16by9">
+                                                            {% if own_profile %}
+                                                                <a href="{% url 'personal_reviews' %}">
+                                                                {% else %}
+                                                                    <a href="{% url 'community_reviews' %}">
+                                                                    {% endif %}
+                                                                    <img src="https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=773&q=80"
+                                                                         alt="Image">
+                                                                </a>
+                                                            </figure>
+                                                        </div>
+                                                        <div class="card-content">
+                                                            <p class="title">
+                                                                Reviews
+                                                            </p>
+                                                        </div>
+                                                        <div class="card-footer">
+                                                            {% if own_profile %}
+                                                                <a class="card-footer-item" href="{% url 'personal_reviews' %}">View All</a>
+                                                            {% else %}
+                                                                <a class="card-footer-item" href="{% url 'community_reviews' %}">View All</a>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
+                                                <div class="hero-body">
+                                                    <div class="container">
+                                                        <h2 class="subtitle">Bookshelf</h2>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                            <section class="info-tiles">
+                                                <div class="tile is-ancestor has-text-centered">
+                                                    <div class="tile is-parent">
+                                                        <article class="tile is-child box">
+                                                            <p class="title">
+                                                                {{ number_of_to_read }}
+                                                            </p>
+                                                            <p class="subtitle">
+                                                                Plan to Read
+                                                            </p>
+                                                        </article>
+                                                    </div>
+                                                    <div class="tile is-parent">
+                                                        <article class="tile is-child box">
+                                                            <p class="title">
+                                                                {{ number_of_reading }}
+                                                            </p>
+                                                            <p class="subtitle">
+                                                                Currently Reading
+                                                            </p>
+                                                        </article>
+                                                    </div>
+                                                    <div class="tile is-parent">
+                                                        <article class="tile is-child box">
+                                                            <p class="title">
+                                                                {{ number_of_on_hold }}
+                                                            </p>
+                                                            <p class="subtitle">
+                                                                On-hold
+                                                            </p>
+                                                        </article>
+                                                    </div>
+                                                    <div class="tile is-parent">
+                                                        <article class="tile is-child box">
+                                                            <p class="title">
+                                                                {{ number_of_completed }}
+                                                            </p>
+                                                            <p class="subtitle">
+                                                                Completed Books
+                                                            </p>
+                                                        </article>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
+                                    {% block js %}
+                                        <script type="text/javascript">
         const follow_view_url = "{% url 'follow_user' username%}";
 
         function getCookie(name) {
@@ -428,7 +430,6 @@
     }
 
         followButtonRefresh(null);
-      </script>
-    {% endblock %}
-
-{% endblock %}
+                                        </script>
+                                    {% endblock %}
+                                {% endblock %}
