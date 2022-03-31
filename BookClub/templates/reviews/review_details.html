@@ -14,7 +14,7 @@
             <div class="card">
                 <div class="card-image">
                     <figure class="image">
-                        {% if book.get_l_size > 50 %}
+                        {% if review.book.get_l_size > 50 %}
                             <img src="//images.weserv.nl/?url={{ review.book.imageL }}"
                                  alt="Book Cover">
                         {% else %}
