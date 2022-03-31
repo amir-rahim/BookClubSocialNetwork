@@ -20,8 +20,11 @@
                         </div>
                         <!-- Slide Content -->
                     </div>
-                {% endfor %}
-            </div>
+                    <!-- Slide Content -->
+                </div>
+            {% empty %}
+                Sorry, you don't have any recommendations right now. Please contact the administrators of the website, as this is likely an issue with how it has been configured
+            {% endfor %}
             <!-- End Carousel -->
         </div>
     </section>

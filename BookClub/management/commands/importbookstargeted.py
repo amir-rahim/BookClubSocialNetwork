@@ -4,6 +4,7 @@ import random
 
 from faker import Faker
 from numpy import append
+from BookClub.management.commands.helper import get_top_n_books, get_top_n_books_shifted
 from BookClub.models import Book
 import pandas as pd
 from pandas import DataFrame
@@ -18,17 +19,16 @@ from BookClub.models.user import User
 class Command(BaseCommand):
     """The database seeder."""
 
-    def add_arguments(self, parser):
-        parser.add_argument('books', type=int, nargs='?', default=5)
-
     def handle(self, *args, **options):
-        file_path = "static/dataset/BX_Books_deployed.csv"
+        file_path = "static/dataset/BX_Books.csv"
+        
+        
 
-        data = DataFrame(pd.read_csv(file_path, header=0, encoding="ISO-8859-1", sep=';'))
-
-        df_records = data.to_dict('records')
-        percent = options.get('books', None)
-
+        book_data = DataFrame(pd.read_csv(file_path, header=0, encoding="ISO-8859-1", sep=';'))
+        isbns = get_top_n_books_shifted(300)
+        
+        chosen_books = book_data[book_data['ISBN'].isin(isbns)]
+        chosen_books_records = chosen_books.to_dict('records')
         model_instances = [Book(
             title=record['Book-Title'],
             ISBN=record['ISBN'],
@@ -38,15 +38,15 @@ class Command(BaseCommand):
             imageS=record['Image-URL-S'],
             imageM=record['Image-URL-M'],
             imageL=record['Image-URL-L'],
-        ) for record in df_records]
-        count = int(len(model_instances) * (percent / 100))
-        random_sample = random.sample(model_instances, count)
+        ) for record in chosen_books_records]
         try:
-            Book.objects.bulk_create(random_sample)
-        except:
-            print('unique error')
+            Book.objects.bulk_create(model_instances)
+        except Exception as e:
+            print(e)
+            print("no books added")
+            return
             
-        print(str(len(random_sample)) + " books created")
+        print(str(len(model_instances)) + " books created")
 
     def cleanYear(self, year):
         string = str(year)
