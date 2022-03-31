@@ -1,0 +1,19 @@
+[
+  {
+    "model": "BookClub.AbstractRecommendations",
+    "pk": 1,
+    "fields": {
+      "recommendations": ["0123456789", "0000000000"],
+      "modified": false
+    }
+  },
+
+  {
+    "model": "BookClub.AbstractRecommendations",
+    "pk": 2,
+    "fields": {
+      "recommendations": ["0123456789", "1111111111"],
+      "modified": true
+    }
+  }
+]

@@ -14,3 +14,4 @@ class Command(BaseCommand):
             min_ratings_threshold = options.get('min_ratings_threshold', None)
             print("Started training popularity recommender...")
             recommendations_provider.retrain_popularity_recommender(min_ratings_threshold=min_ratings_threshold)
+            print("Done training popularity recommender.")

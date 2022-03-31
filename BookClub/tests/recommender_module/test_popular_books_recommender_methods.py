@@ -10,7 +10,7 @@ class PopularBooksRecommenderMethodsTestCase(TestCase):
     def setUp(self):
         data_provider = DataProvider(get_data_from_csv=True)
         self.trainset = data_provider.get_filtered_ratings_trainset()
-        self.popular_books_methods = PopularBooksMethods(print_status=False, trainset=self.trainset)
+        self.popular_books_methods = PopularBooksMethods(print_status=False, trainset=self.trainset, parameters={'ranking_method': 'combination'})
         self.book_id = self.trainset.to_raw_iid(1)
 
     def test_get_average_rating(self):
@@ -116,3 +116,34 @@ class PopularBooksRecommenderMethodsTestCase(TestCase):
         self.assertEqual(len(combination_recommendations_2), 10)
         self.assertFalse(read_books[0] in combination_recommendations_2)
         self.assertFalse(read_books[1] in combination_recommendations_2)
+
+    def test_get_number_of_recommendable_books(self):
+        number_of_recommendable_books = self.popular_books_methods.get_number_of_recommendable_books()
+        self.assertEqual(number_of_recommendable_books, len(self.popular_books_methods.sorted_combination_scores))
+
+    def test_get_recommendations_average(self):
+        self.popular_books_methods = PopularBooksMethods(print_status=False, trainset=self.trainset,
+                                                         parameters={'ranking_method': 'average'})
+        recommendations1 = self.popular_books_methods.get_recommendations()
+        recommendations2 = self.popular_books_methods.get_recommendations_from_average()
+        self.assertEqual(recommendations1, recommendations2)
+
+    def test_get_recommendations_median(self):
+        self.popular_books_methods = PopularBooksMethods(print_status=False, trainset=self.trainset,
+                                                         parameters={'ranking_method': 'median'})
+        recommendations1 = self.popular_books_methods.get_recommendations()
+        recommendations2 = self.popular_books_methods.get_recommendations_from_median()
+        self.assertEqual(recommendations1, recommendations2)
+
+    def test_get_recommendations_combination(self):
+        self.popular_books_methods = PopularBooksMethods(print_status=False, trainset=self.trainset,
+                                                         parameters={'ranking_method': 'combination'})
+        recommendations1 = self.popular_books_methods.get_recommendations()
+        recommendations2 = self.popular_books_methods.get_recommendations_from_average_and_median()
+        self.assertEqual(recommendations1, recommendations2)
+
+    def test_get_recommendations_wrong_ranking_method(self):
+        self.popular_books_methods = PopularBooksMethods(print_status=False, trainset=self.trainset,
+                                                         parameters={'ranking_method': 'x'})
+        with self.assertRaises(ValueError):
+            recommendations = self.popular_books_methods.get_recommendations()
