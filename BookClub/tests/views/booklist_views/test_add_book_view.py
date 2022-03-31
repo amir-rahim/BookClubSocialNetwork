@@ -25,13 +25,13 @@ class AddBookViewTestCase(TestCase):
     def test_if_not_logged_in_show_link(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "library_books.html")
+        self.assertTemplateUsed(response, "library/library_books.html")
 
     def test_user_can_see_list_of_book_lists(self):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "library_books.html")
+        self.assertTemplateUsed(response, "library/library_books.html")
         self.assertContains(response, "Mythical List")
         self.assertContains(response, "Empty List")
 
@@ -42,7 +42,7 @@ class AddBookViewTestCase(TestCase):
         self.client.login(username=user_with_no_lists.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "library_books.html")
+        self.assertTemplateUsed(response, "library/library_books.html")
         html_code = '<select required id="booklist" name="booklist">\n <option value="" selected disabled hidden>Choose here</option>\n</select>'
         self.assertNotContains(response, html_code, html=True)
 
@@ -51,7 +51,7 @@ class AddBookViewTestCase(TestCase):
         response = self.client.post(reverse('add_to_book_list'), {'book': 2, 'booklist': 1})
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "library_books.html")
+        self.assertTemplateUsed(response, "library/library_books.html")
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]), 'The book has been saved to ' + self.booklist.title)
@@ -62,7 +62,7 @@ class AddBookViewTestCase(TestCase):
         response = self.client.post(reverse('add_to_book_list'), {'book': 2, 'booklist': 1})
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "library_books.html")
+        self.assertTemplateUsed(response, "library/library_books.html")
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]), 'This book is already in the list')

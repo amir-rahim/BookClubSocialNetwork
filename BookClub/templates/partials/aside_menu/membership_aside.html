@@ -1,0 +1,33 @@
+<aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+    <p class="menu-label">
+        Clubs
+    </p>
+    <ul class="menu-list">
+        <li>
+            <a href="{% url 'available_clubs' %}">Clubs</a>
+        </li>
+        <li>
+            <a href="{% url 'my_club_memberships' %}">Memberships</a>
+        </li>
+        <li>
+            <a href="{% url 'applications' %}">My Applications</a>
+        </li>
+        <li>
+            <a href="{% url 'create_club' %}">Create Club</a>
+        </li>
+    </ul>
+    <p class="menu-label">
+        Useful Links
+    </p>
+    <ul class="menu-list">
+        <li>
+            <a href="{% url 'user_dashboard' %}">User Profile</a>
+        </li>
+        <li>
+            <a href="{% url 'library_dashboard' %}">Library</a>
+        </li>
+        <li>
+            <a href="{% url 'global_forum' %}">Global Forum</a>
+        </li>
+    </ul>
+</aside>

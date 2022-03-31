@@ -1,3 +1,4 @@
+"""Club model."""
 import re
 
 from django.apps import apps
@@ -10,7 +11,6 @@ from BookClub.models import ClubMembership, User
 
 
 class Club(models.Model):
-
     class Meta:
         ordering = ['name']
     name = models.CharField(unique=True, max_length=100, blank=False)
@@ -131,7 +131,6 @@ class Club(models.Model):
         if not ClubMembership.objects.filter(club=self, membership=ClubMembership.UserRoles.OWNER).exists():
             self.add_user(user, ClubMembership.UserRoles.OWNER)
         else:
-            # print("Owner already set")
             pass
 
     def add_applicant(self, user):

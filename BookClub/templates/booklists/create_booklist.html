@@ -1,0 +1,49 @@
+{% extends 'base_content.html' %}
+{% block page_title %}
+    Book Lists
+{% endblock page_title %}
+{% block page_subtitle %}
+    Collections of your favourite reads
+{% endblock page_subtitle %}
+{% block content %}
+    <div class="columns">
+        <div class="column is-3">{% include 'partials/aside_menu/library_aside.html' %}</div>
+        <div class="column is-9">
+            <nav class="breadcrumb"
+                 aria-label="breadcrumbs"
+                 style="padding-left: 5px;">
+                <ul>
+                    <li>
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'library_books' %}">Library</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'booklists_list' %}">Book Lists</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'create_booklist' %}">Create</a>
+                    </li>
+                </ul>
+            </nav>
+            <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
+                <div class="hero-body">
+                    <div class="container">
+                        <h1 class="title">Create book list</h1>
+                        <h2 class="subtitle">Enter details for a new book list</h2>
+                    </div>
+                </div>
+            </section>
+            <div class="container">
+                <div class="card-content">
+                    <form action="{% url 'create_booklist' %}" method="post">
+                        {% csrf_token %}
+                        {% include 'partials/bulma_form.html' with form=form %}
+                        <input type="submit" value="Create Book List" class="button is-link">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,4 +1,4 @@
-"""Club Related Views"""
+"""Club related views."""
 from venv import create
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -10,15 +10,15 @@ from django.views.generic import DetailView
 from django.views.generic.edit import CreateView
 from django.views.generic.edit import UpdateView
 
-from BookClub.forms import ClubForm
 from BookClub.helpers import create_membership, get_club_from_url_name, has_owner_rank, get_club_reputation, has_member_rank, has_moderator_rank
+from BookClub.forms import ClubForm, FeatureBookForm
 from BookClub.models import Club, ClubMembership, FeaturedBooks, Book
-from BookClub.forms.club import FeatureBookForm
 from BookClub.authentication_mixins import PrivateClubMixin
 
 
 class CreateClubView(LoginRequiredMixin, CreateView):
-    template_name = 'create_club.html'
+    """Allow the user to create a club."""
+    template_name = 'clubs/create_club.html'
     model = Club
     form_class = ClubForm
 
@@ -35,7 +35,8 @@ class CreateClubView(LoginRequiredMixin, CreateView):
 
 
 class ClubDashboardView(LoginRequiredMixin, PrivateClubMixin, DetailView):
-    template_name = "club_dashboard.html"
+    """Render the club dashboard."""
+    template_name = "clubs/club_dashboard.html"
     model = Club
     slug_url_kwarg = 'club_url_name'
     slug_field = 'club_url_name'
@@ -57,9 +58,10 @@ class ClubDashboardView(LoginRequiredMixin, PrivateClubMixin, DetailView):
 
 
 class EditClubView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    """Allow the owner of a club to edit the club's details."""
     model = Club
-    form_class = ClubForm
-    template_name = 'edit_club.html'
+    fields = ['description', 'tagline', 'rules', 'is_private']
+    template_name = 'clubs/edit_club.html'
     slug_url_kwarg = 'club_url_name'
     slug_field = 'club_url_name'
     context_object_name = 'club'
@@ -86,12 +88,13 @@ class EditClubView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 
 class FeatureBookView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
-    template_name = 'edit_featured_books.html'
+    """Allow the owner and moderators of a club to feature books on the club dashboard."""
+    template_name = 'clubs/edit_featured_books.html'
     model = FeaturedBooks
     form_class = FeatureBookForm
 
-    # Redirect if user is not a moderator or owner of the club
     def test_func(self):
+        """Redirect user if they are not the owner or moderator of the club."""
         try:
             club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
             if not (has_owner_rank(self.request.user, club) or has_moderator_rank(self.request.user, club)):
@@ -114,7 +117,7 @@ class FeatureBookView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def form_valid(self, form):
         club = Club.objects.get(club_url_name=self.kwargs['club_url_name'])
-        if FeaturedBooks.objects.filter(book = self.request.POST.get("book")).exists():
+        if FeaturedBooks.objects.filter(club=club, book = self.request.POST.get("book")).exists():
             messages.error(self.request, 'Book is already featured!')
             return super().form_invalid(form)
         featuredBook = form.save(commit=False)
@@ -127,7 +130,6 @@ class FeatureBookView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return super().form_invalid(form)
 
     def get_success_url(self):
-        # Change to redirect to list of meetings
         return reverse('club_dashboard', kwargs={'club_url_name': self.kwargs['club_url_name']})
 
     def get_context_data(self, **kwargs):
@@ -138,9 +140,9 @@ class FeatureBookView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return context
 
 class RemoveFeaturedBookView(LoginRequiredMixin, View):
-    redirect_location = 'club_dashboard'
+    """Allow the owner and moderators of a club to remove featured books from the club dashboard."""
 
-    # Redirect if user is not a moderator or owner of the club
+    redirect_location = 'club_dashboard'
 
     def is_actionable(self, current_user, club, book):
         return (has_owner_rank(current_user, club) or has_moderator_rank(current_user, club)) and (FeaturedBooks.objects.filter(club=club, book=book).exists())

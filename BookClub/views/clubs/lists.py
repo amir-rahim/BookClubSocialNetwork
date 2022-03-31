@@ -1,4 +1,4 @@
-"""View for lists"""
+"""Views related to club lists."""
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse
 from django.views.generic import TemplateView, ListView
@@ -9,9 +9,8 @@ from BookClub.models import User, Club, ClubMembership, Meeting
 
 
 class MembersListView(LoginRequiredMixin, PrivateClubMixin, TemplateView):
-    """View to display member list"""
-
-    template_name = 'club_members.html'
+    """Render the list of members for a given club."""
+    template_name = 'clubs/club_members.html'
 
     def handle_no_permission(self):
         url = reverse('club_dashboard', kwargs=self.kwargs)
@@ -19,7 +18,6 @@ class MembersListView(LoginRequiredMixin, PrivateClubMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         """Generate context data to be shown in the template."""
-
         context = super().get_context_data(**kwargs)
         club = get_club_from_url_name(self.kwargs.get('club_url_name'))
         user = User.objects.get(id=self.request.user.id)
@@ -37,11 +35,11 @@ class MembersListView(LoginRequiredMixin, PrivateClubMixin, TemplateView):
 
 
 class ApplicantListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
-    """View to display applicant list"""
-
-    template_name = 'applicant_list.html'
+    """Render a table of applicants for a private club."""
+    template_name = 'clubs/applicant_list.html'
 
     def test_func(self):
+        """Allow only the owner and moderators of a club to view the table of applicants."""
         try:
             user = self.request.user
             current_club = get_club_from_url_name(
@@ -64,7 +62,6 @@ class ApplicantListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         """Generate context data to be shown in the template."""
-
         context = super().get_context_data(**kwargs)
         club = get_club_from_url_name(self.kwargs.get('club_url_name'))
         user = User.objects.get(id=self.request.user.id)
@@ -79,12 +76,13 @@ class ApplicantListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
 
 
 class MeetingListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
-    """View to display meeting list"""
-
-    template_name = 'club_meetings.html'
+    """Render a table of meetings for a given club."""
+    template_name = 'meeting/club_meetings.html'
     context_object_name = 'meetings'
+    paginate_by = 10
 
     def test_func(self):
+        """Don't allow applicants of private clubs to view the list of meetings."""
         try:
             current_club = get_club_from_url_name(
                 self.kwargs.get('club_url_name'))
@@ -120,14 +118,14 @@ class MeetingListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 
 
 class MeetingParticipantsView(LoginRequiredMixin, UserPassesTestMixin, ListView):
-    """View to display list of meeting participants"""
-
-    template_name = 'meeting_participants.html'
+    """Render a list of participants for a given meeting."""
+    template_name = 'meeting/meeting_participants.html'
     context_object_name = 'participants'
 
     # Redirect if club is private and user is not a member
 
     def test_func(self):
+        """Don't allow applicants of private clubs to view the table of meeting participants."""
         try:
             current_club = get_club_from_url_name(
                 self.kwargs.get('club_url_name'))

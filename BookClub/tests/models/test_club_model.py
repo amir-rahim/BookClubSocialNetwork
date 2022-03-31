@@ -197,10 +197,6 @@ class ClubModelTestCase(TestCase):
     def test_get_number_of_posts(self):
         pass
 
-    # unimplemented
-    def test_get_review_score(self):
-        pass
-
     def test_get_users_with_applicants(self):
         self.assertQuerysetEqual(self.club1.get_users(ClubMembership.UserRoles.APPLICANT), [self.applicant], ordered = False)
 

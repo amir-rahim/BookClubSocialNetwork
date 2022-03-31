@@ -1,0 +1,17 @@
+[
+  {
+    "model": "BookClub.UserRecommendations",
+    "pk": 1,
+    "fields": {
+      "user": 1
+    }
+  },
+
+  {
+    "model": "BookClub.UserRecommendations",
+    "pk": 2,
+    "fields": {
+      "user": 2
+    }
+  }
+]

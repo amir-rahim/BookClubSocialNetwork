@@ -45,7 +45,7 @@ class ClubDashboardViewTest(TestCase):
         url = reverse("club_dashboard", kwargs={"club_url_name": self.club.club_url_name})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "club_dashboard.html")
+        self.assertTemplateUsed(response, "clubs/club_dashboard.html")
         self.assertContains(response, "Johnathan Club")
         self.assertContains(response,
                             "This is a very cool club that is owned by a certain Johnathan. Reading certain books...")
@@ -59,7 +59,7 @@ class ClubDashboardViewTest(TestCase):
         url = reverse("club_dashboard", kwargs={"club_url_name": self.club.club_url_name})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "club_dashboard.html")
+        self.assertTemplateUsed(response, "clubs/club_dashboard.html")
         self.assertContains(response, self.club.get_number_of_members())
         self.assertContains(response, self.club.get_number_of_meetings())
         self.assertContains(response, get_club_reputation(self.club))
@@ -69,7 +69,7 @@ class ClubDashboardViewTest(TestCase):
         url = reverse("club_dashboard", kwargs={"club_url_name": self.club.club_url_name})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "club_dashboard.html")
+        self.assertTemplateUsed(response, "clubs/club_dashboard.html")
         self.assertContains(response, "janedoe")
         self.assertContains(response, "janedoe@example.com")
 
@@ -83,14 +83,14 @@ class ClubDashboardViewTest(TestCase):
         url = reverse("club_dashboard", kwargs={"club_url_name": self.private_club.club_url_name})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "club_dashboard.html")
+        self.assertTemplateUsed(response, "clubs/club_dashboard.html")
 
     def test_owner_has_admin_options(self):
         self.client.login(username=self.jane.username, password="Password123")
         url = reverse("club_dashboard", kwargs={"club_url_name": self.club.club_url_name})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "club_dashboard.html")
+        self.assertTemplateUsed(response, "clubs/club_dashboard.html")
         self.assertContains(response, "Club Administration")
         self.assertContains(response, "Manage Club")
 
@@ -99,7 +99,7 @@ class ClubDashboardViewTest(TestCase):
         url = reverse("club_dashboard", kwargs={"club_url_name": self.club.club_url_name})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "club_dashboard.html")
+        self.assertTemplateUsed(response, "clubs/club_dashboard.html")
         self.assertContains(response, "Club Administration")
         self.assertNotContains(response, "Manage Club")
 
@@ -108,7 +108,7 @@ class ClubDashboardViewTest(TestCase):
         url = reverse("club_dashboard", kwargs={"club_url_name": self.club.club_url_name})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "club_dashboard.html")
+        self.assertTemplateUsed(response, "clubs/club_dashboard.html")
         self.assertNotContains(response, "Club Administration")
         self.assertNotContains(response, "Manage Club")
 
@@ -122,7 +122,7 @@ class ClubDashboardViewTest(TestCase):
         url = reverse("club_dashboard", kwargs={"club_url_name": self.club.club_url_name})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "club_dashboard.html")
+        self.assertTemplateUsed(response, "clubs/club_dashboard.html")
         self.assertContains(response, "Classical Mythology")
         self.assertContains(response, "Mark P. O. Morford")
 

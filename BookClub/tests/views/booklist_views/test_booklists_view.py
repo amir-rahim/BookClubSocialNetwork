@@ -32,14 +32,14 @@ class UserBooklistsViewTestCase(TestCase):
         self.assertRedirects(response, redirect_url,
             status_code=302, target_status_code=200, fetch_redirect_response=True
         )
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
 
     def test_get_template_logged_in(self):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'user_booklists.html')
+        self.assertTemplateUsed(response, 'booklists/user_booklists.html')
 
     def test_get_user_template_logged_in(self):
         self.client.login(username=self.user.username, password="Password123")
@@ -47,14 +47,14 @@ class UserBooklistsViewTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'], self.user)
-        self.assertTemplateUsed(response, 'user_booklists.html')
+        self.assertTemplateUsed(response, 'booklists/user_booklists.html')
 
     def test_contains_lists_created_by_user(self):
         self.client.login(username=self.user.username, password='Password123')
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'user_booklists.html')
+        self.assertTemplateUsed(response, 'booklists/user_booklists.html')
         response_lists = list(response.context['booklists'])
         user_lists = list(BookList.objects.filter(creator=self.user))
 
@@ -66,7 +66,7 @@ class UserBooklistsViewTestCase(TestCase):
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'user_booklists.html')
+        self.assertTemplateUsed(response, 'booklists/user_booklists.html')
         response_lists = list(response.context['booklists'])
         lists_by_other_users = list(BookList.objects.exclude(creator=self.user))
 
@@ -77,7 +77,7 @@ class UserBooklistsViewTestCase(TestCase):
         self.client.login(username=self.user.username, password='Password123')
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'user_booklists.html')
+        self.assertTemplateUsed(response, 'booklists/user_booklists.html')
         self.assertEqual(response.context['own'], True)
         self.assertContains(response, '<span>Edit</span>')
 
@@ -85,7 +85,7 @@ class UserBooklistsViewTestCase(TestCase):
         self.client.login(username=self.user.username, password='Password123')
         response = self.client.get(self._get_url_for_user('janedoe'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'user_booklists.html')
+        self.assertTemplateUsed(response, 'booklists/user_booklists.html')
         self.assertEqual(response.context['own'], False)
 
     def test_view_lists_of_another_user_without_lists(self):
@@ -93,7 +93,7 @@ class UserBooklistsViewTestCase(TestCase):
         response = self.client.get(self._get_url_for_user('sebdoe'))
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'user_booklists.html')
+        self.assertTemplateUsed(response, 'booklists/user_booklists.html')
         response_lists = list(response.context['booklists'])
         self.assertEqual(len(response_lists), 0)
         self.assertContains(response, 'No lists.')
@@ -104,7 +104,7 @@ class UserBooklistsViewTestCase(TestCase):
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'user_booklists.html')
+        self.assertTemplateUsed(response, 'booklists/user_booklists.html')
         response_lists = list(response.context['booklists'])
         self.assertEqual(len(response_lists), 0)
         self.assertContains(response, "No lists.")

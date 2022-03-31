@@ -1,0 +1,257 @@
+{% extends 'base_content.html' %}
+{% block page_title %}
+    {{ forum.associated_with.name }} Forums
+{% endblock page_title %}
+{% block page_subtitle %}
+    Post, upvote and converse with other users
+{% endblock page_subtitle %}
+{% block content %}
+    <div class="columns">
+        <div class="column is-3">
+            <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
+                <div class="hero-body">
+                    <nav class="level">
+                        <div class="level-item has-text-centered">
+                            <div>
+                                <p class="heading">
+                                    Posts
+                                </p>
+                                <p class="title">
+                                    {{ posts.count }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="level-item has-text-centered">
+                            <div>
+                                <p class="heading">
+                                    Replies
+                                </p>
+                                <p class="title">
+                                    {{ replies }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="level-item has-text-centered">
+                            <div>
+                                <p class="heading">
+                                    Votes Cast
+                                </p>
+                                <p class="title">
+                                    {{ votes }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="level-item has-text-centered">
+                            <div>
+                                <p class="heading">
+                                    Users
+                                </p>
+                                <p class="title">
+                                    {{ usercount }}
+                                </p>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </section>
+            <hr class="solid">
+            {% if forum.associated_with %}
+                {% include 'partials/aside_menu/club_aside.html' with current_club=club %}
+            {% else %}
+                <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
+                    <p class="menu-label">
+                        Global Forums
+                    </p>
+                    <ul class="menu-list">
+                        <li>
+                            <a href="{% url 'global_forum' %}" class="is-active"><b>Forums</b></a>
+                        </li>
+                    </ul>
+                    <p class="menu-label">
+                        Clubs
+                    </p>
+                    <ul class="menu-list">
+                        <li>
+                            <a href="{% url 'available_clubs' %}">Available Clubs</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'my_club_memberships' %}">Memberships</a>
+                        </li>
+                    </ul>
+                    <p class="menu-label">
+                        Useful Links
+                    </p>
+                    <ul class="menu-list">
+                        <li>
+                            <a href="{% url 'user_dashboard' %}">User Profile</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'library_dashboard' %}">Library</a>
+                        </li>
+                    </ul>
+                </aside>
+            {% endif %}
+        </div>
+        <div class="column is-9">
+            <div class="columns">
+                <div class="column is-10">
+                    <nav class="breadcrumb"
+                         aria-label="breadcrumbs"
+                         style="padding-left: 10px;">
+                        <ul>
+                            <li>
+                                <a href="{% url 'home' %}">Home</a>
+                            </li>
+                            {% if forum.associated_with %}
+                                <li>
+                                    <a href="{% url 'club_dashboard' club.club_url_name %}">{{ club.name }}</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'club_forum' club.club_url_name %}">Forums</a>
+                                </li>
+                            {% else %}
+                                <li>
+                                    <a href="{% url 'global_forum' %}">Forums</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+                <div class="column is-2">
+                    <button class="button is-link js-modal-trigger is-fullwidth is-rounded"
+                            data-target="modal-create-post">
+                        Create Post
+                    </button>
+                </div>
+            </div>
+            {% if posts %}
+                {% for post in posts %}
+                    <br />
+                    <div class="card">
+                        <header class="card-header">
+                            <a {% if club %} href="{% url 'forum_post' post_id=post.id club_url_name=club.club_url_name %}" {% else %} href="{% url 'forum_post' post.id %}" {% endif %}
+                               class="card-footer-item">
+                                <div class="card-header-title">
+                                    <p class="subtitle">
+                                        <b>{{ post.title }}</b>
+                                    </p>
+                                </div>
+                            </a>
+                            <div class="card-header-icon">{% include 'partials/voting.html' with content=post %}</div>
+                        </header>
+                        <div class="card-content">
+                            <div class="content">
+                                <span class="has-text-grey">{{ post.content |truncatechars:240 }}</span>
+                            </div>
+                        </div>
+                        <footer class="card-footer">
+                            <p class="card-footer-item">
+                                <span class="is-small has-text-grey-light">Posted by: <a href="{{ post.creator.get_absolute_url }}">{{ post.creator }}</a></span>
+                            </p>
+                            <p class="card-footer-item has-text-grey-light">
+                                {{ post.created_on | timesince }} ago
+                            </p>
+                            <a {% if club %} href="{% url 'forum_post' post_id=post.id club_url_name=club.club_url_name %}" {% else %} href="{% url 'forum_post' post.id %}" {% endif %}
+                               class="card-footer-item">
+                                {% if post.get_comments.count > 0 %}
+                                    See {{ post.get_comments.count }} comments
+                                {% else %}
+                                    Be the first to comment!
+                                {% endif %}
+                            </a>
+                        </footer>
+                    </div>
+                {% endfor %}
+                <br />
+                {% include 'partials/pagination.html' %}
+            {% else %}
+                <p style="text-align: center" class="has-text-grey">
+                    There are no posts at the moment. Be first to post!
+                </p>
+            {% endif %}
+            <div id="modal-create-post" class="modal">
+                <div class="modal-background"></div>
+                <div class="modal-content">
+                    <div class="card">
+                        <div class="card-header">
+                            <button class="card-header-icon" aria-label="more options">
+                                <span class="icon">
+                                    <i class="card-header-icon fa-solid fa-pen-clip"></i>
+                                </span>
+                            </button>
+                            <p class="card-header-title">
+                                Create Discussion Post
+                            </p>
+                        </div>
+                        <form method="post"
+                              {% if club %} action="{% url 'create_forum_post' club.club_url_name %}" {% else %} action="{% url 'create_forum_post' %}" {% endif %}>
+                            <div class="card-content">
+                                <div class="container">
+                                    {% csrf_token %}
+                                    {% include 'partials/bulma_form.html' with form=forum_post_form %}
+                                </div>
+                            </div>
+                            <footer class="card-footer">
+                                <input type="button"
+                                       value="Reset"
+                                       id="resetBtn"
+                                       onClick="this.form.reset()"
+                                       class="button is-danger is-fullwidth"/>
+                                <input type="submit" value="Make Post" class="button is-link is-fullwidth"/>
+                            </footer>
+                        </form>
+                    </div>
+                </div>
+                <button class="modal-close is-large" aria-label="close"></button>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          // Functions to open and close a modal
+          function openModal($el) {
+            $el.classList.add('is-active');
+          }
+
+          function closeModal($el) {
+            $el.classList.remove('is-active');
+          }
+
+          function closeAllModals() {
+            (document.querySelectorAll('.modal') || []).forEach(($modal) => {
+              closeModal($modal);
+            });
+          }
+
+          // Add a click event on buttons to open a specific modal
+          (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
+            const modal = $trigger.dataset.target;
+            const $target = document.getElementById(modal);
+            console.log($target);
+
+            $trigger.addEventListener('click', () => {
+              openModal($target);
+            });
+          });
+
+          // Add a click event on various child elements to close the parent modal
+          (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
+            const $target = $close.closest('.modal');
+
+            $close.addEventListener('click', () => {
+              closeModal($target);
+            });
+          });
+
+          // Add a keyboard event to close all modals
+          document.addEventListener('keydown', (event) => {
+            const e = event || window.event;
+
+            if (e.keyCode === 27) { // Escape key
+              closeAllModals();
+            }
+          });
+        });
+
+    </script>
+{% endblock content %}

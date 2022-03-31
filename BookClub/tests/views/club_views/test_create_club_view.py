@@ -40,7 +40,7 @@ class CreateClubViewTestcase(TestCase):
         self.assertRedirects(response, redirect_url,
                              status_code=302, target_status_code=200, fetch_redirect_response=True
                              )
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
         club_count_after = Club.objects.count()
         self.assertEqual(club_count_after, club_count_before)
 
@@ -51,7 +51,7 @@ class CreateClubViewTestcase(TestCase):
         self.assertRedirects(response, redirect_url,
                              status_code=302, target_status_code=200, fetch_redirect_response=True
                              )
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
         club_count_after = Club.objects.count()
         self.assertEqual(club_count_after, club_count_before)
 
@@ -59,7 +59,7 @@ class CreateClubViewTestcase(TestCase):
         self.client.login(username=self.user.username, password='Password123')
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'create_club.html')
+        self.assertTemplateUsed(response, 'clubs/create_club.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, ClubForm))
         self.assertFalse(form.is_bound)
@@ -72,7 +72,7 @@ class CreateClubViewTestcase(TestCase):
         after_count = Club.objects.count()
         self.assertEqual(after_count, before_count)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'create_club.html')
+        self.assertTemplateUsed(response, 'clubs/create_club.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, ClubForm))
         self.assertTrue(form.is_bound)
@@ -87,7 +87,7 @@ class CreateClubViewTestcase(TestCase):
         self.assertEqual(after_count, before_count + 1)
         response_url = reverse('club_dashboard', kwargs={'club_url_name': club.club_url_name})
         self.assertRedirects(response, response_url, status_code=302, target_status_code=200)
-        self.assertTemplateUsed(response, 'club_dashboard.html')
+        self.assertTemplateUsed(response, 'clubs/club_dashboard.html')
         self.assertEqual(club.name, self.data['name'])
         self.assertEqual(club.description, self.data['description'])
         self.assertEqual(club.tagline, self.data['tagline'])

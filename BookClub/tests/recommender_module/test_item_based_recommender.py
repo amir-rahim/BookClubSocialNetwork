@@ -44,3 +44,7 @@ class ItemBasedRecommenderTestCase(TestCase):
     def test_get_club_recommendations_wrong_club_url_name(self):
         recommendations = self.item_based_recommender.get_club_recommendations("-")
         self.assertEqual(recommendations, [])
+
+    def test_get_number_of_recommendable_books(self):
+        number_of_recommendable_books = self.item_based_recommender.get_number_of_recommendable_books()
+        self.assertEqual(number_of_recommendable_books, self.item_based_methods.trainset.n_items)

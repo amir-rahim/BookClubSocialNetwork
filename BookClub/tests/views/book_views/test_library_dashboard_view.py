@@ -15,4 +15,4 @@ class LibraryDashboardViewTestCase(TestCase):
     def test_get_dashboard(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'library_dashboard.html')
+        self.assertTemplateUsed(response, 'library/library_dashboard.html')

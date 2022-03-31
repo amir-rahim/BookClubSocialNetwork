@@ -18,3 +18,7 @@ class AbstractRecommender:
     """Get the recommended books (up to 10) given a specified club_url_name, from all of the club's members' positively (> 6/10) rated books"""
     def get_club_recommendations(self, club_url_name):
         raise NotImplementedError("Attempting to use abstract method from BaseRecommender super class.")
+
+    """Get the number of books that can be recommender to the user, using this recommender algorithm"""
+    def get_number_of_recommendable_books(self):
+        raise NotImplementedError("Attempting to use abstract method from BaseRecommender super class.")

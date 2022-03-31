@@ -43,7 +43,7 @@ class ApplicantListTestCase(TestCase):
         url = reverse('applicant_list', kwargs={'club_url_name': self.club.club_url_name})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'applicant_list.html')
+        self.assertTemplateUsed(response, 'clubs/applicant_list.html')
 
     def test_redirect_when_not_logged_in(self):
         url = reverse('applicant_list', kwargs={'club_url_name': self.club.club_url_name})
@@ -61,7 +61,7 @@ class ApplicantListTestCase(TestCase):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'applicant_list.html')
+        self.assertTemplateUsed(response, 'clubs/applicant_list.html')
         self.assertContains(response, self.club.name)
 
     def test_owner_has_admin_options(self):
@@ -69,7 +69,7 @@ class ApplicantListTestCase(TestCase):
         url = reverse('applicant_list', kwargs={'club_url_name': self.club.club_url_name})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'applicant_list.html')
+        self.assertTemplateUsed(response, 'clubs/applicant_list.html')
         self.assertContains(response, "Club Administration")
         self.assertContains(response, "Manage Club")
 
@@ -77,7 +77,7 @@ class ApplicantListTestCase(TestCase):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'applicant_list.html')
+        self.assertTemplateUsed(response, 'clubs/applicant_list.html')
         self.assertContains(response, "Club Administration")
         self.assertNotContains(response, "Manage Club")
 
@@ -97,14 +97,14 @@ class ApplicantListTestCase(TestCase):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'applicant_list.html')
+        self.assertTemplateUsed(response, 'clubs/applicant_list.html')
         self.assertNotContains(response, self.owner.username)
 
     def test_cant_see_mods(self):
         self.client.login(username=self.jane.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'applicant_list.html')
+        self.assertTemplateUsed(response, 'clubs/applicant_list.html')
         for mod in self.moderators:
             self.assertNotContains(response, mod.username)
 
@@ -112,7 +112,7 @@ class ApplicantListTestCase(TestCase):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'applicant_list.html')
+        self.assertTemplateUsed(response, 'clubs/applicant_list.html')
         for member in self.members:
             self.assertNotContains(response, member.username)
 
@@ -120,7 +120,7 @@ class ApplicantListTestCase(TestCase):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'applicant_list.html')
+        self.assertTemplateUsed(response, 'clubs/applicant_list.html')
         for applicant in self.applicants:
             self.assertContains(response, applicant.username)
 
@@ -128,40 +128,40 @@ class ApplicantListTestCase(TestCase):
         self.client.login(username=self.jane.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'applicant_list.html')
+        self.assertTemplateUsed(response, 'clubs/applicant_list.html')
         self.assertContains(response, "View")
 
     def test_mod_can_see_view_button(self):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'applicant_list.html')
+        self.assertTemplateUsed(response, 'clubs/applicant_list.html')
         self.assertContains(response, "View")
 
     def test_owner_can_see_approve_button(self):
         self.client.login(username=self.jane.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'applicant_list.html')
+        self.assertTemplateUsed(response, 'clubs/applicant_list.html')
         self.assertContains(response, "Approve")
 
     def test_mod_can_see_approve_button(self):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'applicant_list.html')
+        self.assertTemplateUsed(response, 'clubs/applicant_list.html')
         self.assertContains(response, "Approve")
 
     def test_owner_can_see_reject_button(self):
         self.client.login(username=self.jane.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'applicant_list.html')
+        self.assertTemplateUsed(response, 'clubs/applicant_list.html')
         self.assertContains(response, "Reject")
 
     def test_mod_can_see_reject_button(self):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'applicant_list.html')
+        self.assertTemplateUsed(response, 'clubs/applicant_list.html')
         self.assertContains(response, "Reject")

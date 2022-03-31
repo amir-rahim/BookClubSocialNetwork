@@ -1,4 +1,4 @@
-"""Views related to review lists"""
+"""Review list related views."""
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse
 from django.views.generic import ListView
@@ -7,6 +7,7 @@ from BookClub.models import User, Club, BookReview
 
 
 class CommunityReviewFeedView(LoginRequiredMixin, ListView):
+    """Renders the list of community reviews feed."""
     model = BookReview
     paginate_by = 10
     context_object_name = 'reviews'
@@ -24,6 +25,7 @@ class CommunityReviewFeedView(LoginRequiredMixin, ListView):
 
 
 class PersonalReviewFeedView(LoginRequiredMixin, ListView):
+    """Renders the list of reviews made by the user."""
     model = BookReview
     paginate_by = 10
     context_object_name = 'reviews'

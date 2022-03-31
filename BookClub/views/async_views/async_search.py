@@ -1,4 +1,6 @@
+"""Search table related views."""
 from django.http import JsonResponse
+from django.template import TemplateDoesNotExist
 from django.views.generic import TemplateView
 from django.db.models import Q
 from django.template.loader import render_to_string
@@ -9,7 +11,9 @@ from BookClub.views.async_views.search_query_builder import ClubQuery, UserQuery
 
 
 class SearchView(TemplateView):
-
+    """Render search table with pagination. Returns rendered template to the user as a JSONResponse which is then displayed using JS.
+        Allows for generic searches for any content type that a Query has been created for.
+    """
     paginate_by = 10
     search_queries = [ClubQuery, BookQuery, UserQuery, BookListQuery]
 
@@ -67,7 +71,7 @@ class SearchView(TemplateView):
         if model == BookList:
             return ['partials/booklist_search_list.html']
         
-        raise Exception("No template found for " + content_type)
+        raise TemplateDoesNotExist("No template found for " + content_type)
 
     def get_query(self, model, query):
         q_objects = Q()

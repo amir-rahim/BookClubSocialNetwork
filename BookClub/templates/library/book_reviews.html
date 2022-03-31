@@ -1,0 +1,137 @@
+{% extends 'base_content.html' %}
+{% block page_title %}
+    {{ book.title }}
+{% endblock page_title %}
+{% block page_subtitle %}
+    All reviews for this book
+{% endblock page_subtitle %}
+{% block content %}
+    <div class="columns">
+        <div class="column is-3">
+            <a class="button is-fullwidth is-link"
+               href="{% url 'book_view' book_id=book.pk %}"><b>Back to Book</b></a>
+            <hr class="solid">
+            <div class="card">
+                <div class="card-image">
+                    <figure class="image">
+                        {% if book.get_l_size > 50 %}
+                            <img src="//images.weserv.nl/?url={{ book.imageL }}" alt="Book Cover">
+                        {% else %}
+                            <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+                                 alt="Book Cover">
+                        {% endif %}
+                    </figure>
+                </div>
+            </div>
+        </div>
+        <div class="column is-9">
+            <nav class="breadcrumb"
+                 aria-label="breadcrumbs"
+                 style="padding-left: 10px;">
+                <ul>
+                    <li>
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'library_dashboard' %}">Library</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'library_books' %}">Books</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'book_view' book.id %}">{{ book.title |truncatechars:20 }}</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'book_reviews' book.id %}">Reviews</a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="container">
+                <div class="card-content">
+                    <form method="get" action="{% url 'create_review' book.id %}">
+                        <button class="button is-info is-fullwidth">Add Review</button>
+                    </form>
+                    <br>
+                    {% if reviews %}
+                        <!-- If there are clubs available to the logged-in user -->
+                        <div class="table-container">
+                            <table class="table is-hoverable is-fullwidth"
+                                   id="table-books"
+                                   data-toggle="table"
+                                   data-pagination="true">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">User</th>
+                                        <th scope="col">Rating</th>
+                                        <th scope="col">Text</th>
+                                        <th scope="col">Reviewed On</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for review in reviews %}
+                                        <tr>
+                                            <td>{{ review.creator }}</td>
+                                            <td>{{ review.book_rating }}</td>
+                                            <td>{{ review.content |truncatechars:130 }}</td>
+                                            <td>{{ review.created_on }}</td>
+                                            {% if review.creator == request.creator %}
+                                                <td>
+                                                    <div class="buttons">
+                                                        <form method="get"
+                                                              action="{% url 'book_review' book_id=review.book.id review_id=review.id %}">
+                                                            <button class="button is-info is-small" style="margin-right: 5px">
+                                                                <span>View</span>
+                                                            </button>
+                                                        </form>
+                                                        <form method="get" action="{% url 'edit_review' book.id %}">
+                                                            <button class="button is-info is-small" style="margin-right: 5px">
+                                                                <span>Edit</span>
+                                                            </button>
+                                                        </form>
+                                                        <form method="post" action="{% url 'delete_review' book.id %}">
+                                                            {% csrf_token %}
+                                                            <button class="button is-danger is-small" style="margin-right: 5px">
+                                                                <span>Delete</span>
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                            {% else %}
+                                                <td>
+                                                    <div class="buttons">
+                                                        <form method="get"
+                                                              action="{% url 'book_review' review.book.id review.id %}">
+                                                            <button class="button is-info" style="margin-right: 5px">
+                                                                <span>View</span>
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                            {% endif %}
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% include 'partials/pagination.html' %}
+                    {% else %}
+                        <hr>
+                        <p style="text-align: center" class="has-text-grey">
+                            No reviews as of yet.
+                        </p>
+                        <hr>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    const dataTable = new simpleDatatables.DataTable("#table-books", {
+        fixedHeight: true,
+        columns: [
+          {select: [1], sortable:false}
+        ]
+    })
+    </script>
+{% endblock %}

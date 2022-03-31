@@ -2,7 +2,7 @@
 {% load votingtags %}
 {% getcontenttype content as contenttype %}
 {% if user.is_authenticated %}
-    {% get_votes_for_object content as votes%}
+    {% get_votes_for_object content as votes %}
     {% has_user_voted votes user as user_has_voted %}
     {% if user_has_voted %}
         {% get_user_vote_type votes user as vote_type %}
@@ -21,7 +21,7 @@
     <input type="hidden" name="object_id" value="{{ content.id }}"/>
     <p class="control" type="submit">
         <button id="upvote{{ contenttype }}{{ content.id }}"
-                class="button is-rounded is-white {% if vote_type == True %} is-primary{% endif %}"
+                class="button is-rounded is-white {% if vote_type == True %} is-success{% endif %}"
                 aria-label="Upvote">
             <span class="icon">
                 <i class="fa-solid fa-arrow-up"></i>

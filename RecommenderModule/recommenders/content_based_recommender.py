@@ -26,3 +26,7 @@ class ContentBasedRecommender(AbstractRecommender):
     """Get the recommended books (up to 10) given a specified club_id, from all of the club's members' positively (> 6/10) rated books"""
     def get_club_recommendations(self, club_url_name):
         return self.content_based_methods.get_recommendations_positive_ratings_only_from_club_url_name(club_url_name, min_rating=6)
+
+    """Get the number of books that can be recommender to the user, using this recommender algorithm"""
+    def get_number_of_recommendable_books(self):
+        return len(self.content_based_methods.book_content_list)

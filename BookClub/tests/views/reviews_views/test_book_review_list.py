@@ -29,7 +29,7 @@ class BookReviewListView(TestCase):
 
     def test_no_reviews_returns_empty(self):
         response = self.client.get(self.url)
-        self.assertTemplateUsed(response, 'book_reviews.html')
+        self.assertTemplateUsed(response, 'library/book_reviews.html')
         context = response.context
         self.assertEqual(len(context.get('reviews')), 0)
         self.assertContains(response, "No reviews")

@@ -21,3 +21,4 @@ class Command(BaseCommand):
                 parameters["min_support"] = min_support
             print("Started training item-based recommender...")
             recommendations_provider.retrain_item_based_recommender(parameters=parameters)
+            print("Done training item-based recommender.")

@@ -25,7 +25,7 @@ class EditMeetingTestCase(TestCase, LogInTester):
         self.member = User.objects.get(pk=3)
         self.club = Club.objects.get(pk=1)
         self.kwargs = {'club_url_name': self.club.club_url_name,
-                       'meeting_id': self.meeting.id}
+                       'meeting_id': self.meeting.id }
         self.url = reverse('edit_meeting', kwargs=self.kwargs)
         self.data = {
             "meeting_time": "2022-02-22T19:00+00:00",
@@ -55,34 +55,34 @@ class EditMeetingTestCase(TestCase, LogInTester):
         redirect_url = reverse_with_next('login', self.url)
         response = self.client.post(self.url, self.data, follow=True)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200, fetch_redirect_response=True)
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
 
     def test_post_remove_member_redirects_when_not_logged_in(self):
         redirect_url = reverse_with_next('login', self.remove_member_url)
         response = self.client.post(self.remove_member_url, follow=True)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200,
                              fetch_redirect_response=True)
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
 
     def test_can_access_if_owner(self):
         self.client.login(username=self.owner.username,
                           password='Password123')
         self.assertTrue(self._is_logged_in())
         response = self.client.get(self.url, follow=True)
-        self.assertTemplateUsed(response, 'edit_meeting.html')
+        self.assertTemplateUsed(response, 'meeting/edit_meeting.html')
 
     def test_can_access_if_moderator(self):
         self.client.login(username=self.moderator.username,
                           password='Password123')
         response = self.client.get(self.url, follow=True)
-        self.assertTemplateUsed(response, 'edit_meeting.html')
+        self.assertTemplateUsed(response, 'meeting/edit_meeting.html')
 
     def test_all_fields_displayed(self):
         self.client.login(username=self.owner.username,
                         password='Password123')
         self.assertTrue(self._is_logged_in())
         response = self.client.get(self.url, follow=True)
-        self.assertTemplateUsed(response, 'edit_meeting.html')
+        self.assertTemplateUsed(response, 'meeting/edit_meeting.html')
         self.assertContains(response, 'Title')
         self.assertContains(response, 'Description')
         self.assertContains(response, 'Meeting time')
@@ -95,7 +95,7 @@ class EditMeetingTestCase(TestCase, LogInTester):
                           password='Password123')
         self.assertTrue(self._is_logged_in())
         response = self.client.get(self.url, follow=True)
-        self.assertTemplateUsed(response, 'edit_meeting.html')
+        self.assertTemplateUsed(response, 'meeting/edit_meeting.html')
         self.assertContains(response, self.member.username)
 
     def test_members_displayed_but_not_owner(self):
@@ -105,7 +105,7 @@ class EditMeetingTestCase(TestCase, LogInTester):
                           password='Password123')
         self.assertTrue(self._is_logged_in())
         response = self.client.get(self.url, follow=True)
-        self.assertTemplateUsed(response, 'edit_meeting.html')
+        self.assertTemplateUsed(response, 'meeting/edit_meeting.html')
         self.assertContains(response, self.member.username)
         self.assertContains(response, self.owner.username)
         self.assertNotContains(response, self.moderator.username)
@@ -139,7 +139,7 @@ class EditMeetingTestCase(TestCase, LogInTester):
         self.assertEqual(len(messages_list), 2)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200,
                              fetch_redirect_response=True)
-        self.assertTemplateUsed(response, 'club_meetings.html')
+        self.assertTemplateUsed(response, 'meeting/club_meetings.html')
 
     def test_edit_meeting_post_invalid_data(self):
         self.client.login(username=self.owner.username,
@@ -150,7 +150,7 @@ class EditMeetingTestCase(TestCase, LogInTester):
         self.data['location'] = ""
         self.data['description'] = ""
         response = self.client.post(self.url, self.data)
-        self.assertTemplateUsed(response, 'edit_meeting.html')
+        self.assertTemplateUsed(response, 'meeting/edit_meeting.html')
         post_test = Meeting.objects.get(pk=1)
         self.assertEqual(pre_test.title, post_test.title)
         self.assertEqual(pre_test.location, post_test.location)
@@ -164,7 +164,7 @@ class EditMeetingTestCase(TestCase, LogInTester):
         self.assertContains(pre_test_response, self.member.username)
         pre_test = self.meeting
         response = self.client.post(self.remove_member_url, {'user': self.member.username}, follow=True)
-        self.assertTemplateUsed(response, 'edit_meeting.html')
+        self.assertTemplateUsed(response, 'meeting/edit_meeting.html')
         post_test = Meeting.objects.get(pk=1)
         self.assertNotEqual(pre_test.members.all(), post_test.members.all())
         post_test_response = self.client.get(self.url)
@@ -175,7 +175,7 @@ class EditMeetingTestCase(TestCase, LogInTester):
         self.assertTrue(self._is_logged_in())
         pre_test = self.meeting
         response = self.client.post(self.remove_member_url, {'user': self.moderator.username}, follow=True)
-        self.assertTemplateUsed(response, 'meeting_details.html')
+        self.assertTemplateUsed(response, 'meeting/meeting_details.html')
         post_test = Meeting.objects.get(pk=1)
         self.assertEqual(pre_test.members.all().count(), post_test.members.all().count())
 
@@ -187,7 +187,7 @@ class EditMeetingTestCase(TestCase, LogInTester):
         self.assertContains(pre_test_response, self.member.username)
         pre_test = Meeting.objects.get(pk=1)
         response = self.client.post(self.remove_member_url, {'user': self.member.username}, follow=True)
-        self.assertTemplateUsed(response, 'edit_meeting.html')
+        self.assertTemplateUsed(response, 'meeting/edit_meeting.html')
         post_test = Meeting.objects.get(pk=1)
         self.assertNotEqual(pre_test.members.all(), post_test.members.all())
         post_test_response = self.client.get(self.url)
@@ -211,14 +211,14 @@ class EditMeetingTestCase(TestCase, LogInTester):
         response = self.client.post(self.remove_member_url, {'user': self.member.username}, follow=True)
         messages_list = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
-        self.assertTemplateUsed(response, 'club_meetings.html')
+        self.assertTemplateUsed(response, 'meeting/club_meetings.html')
 
     def test_organiser_cannot_remove_themselves(self):
         self.client.login(username=self.moderator.username, password="Password123")
         self.assertTrue(self._is_logged_in())
         pre_test = Meeting.objects.get(pk=1)
         response = self.client.post(self.remove_member_url, {'user': self.moderator.username}, follow=True)
-        self.assertTemplateUsed(response, 'meeting_details.html')
+        self.assertTemplateUsed(response, 'meeting/meeting_details.html')
         messages_list = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
         post_test = Meeting.objects.get(pk=1)
@@ -229,7 +229,7 @@ class EditMeetingTestCase(TestCase, LogInTester):
         self.assertTrue(self._is_logged_in())
         pre_test = Meeting.objects.get(pk=1)
         response = self.client.post(self.remove_member_url, {'user': 'wronguser'}, follow=True)
-        self.assertTemplateUsed(response, 'meeting_details.html')
+        self.assertTemplateUsed(response, 'meeting/meeting_details.html')
         messages_list = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
         post_test = Meeting.objects.get(pk=1)

@@ -1,3 +1,4 @@
+"""Edit meeting related views."""
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect
@@ -11,12 +12,14 @@ from BookClub.models.club_membership import ClubMembership
 
 
 class EditMeetingView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    """Allow the organiser of a meeting or the owner of a club to edit the details of a given meeting."""
     model = Meeting
     form_class = MeetingForm
-    template_name = 'edit_meeting.html'
+    template_name = 'meeting/edit_meeting.html'
     pk_url_kwarg = 'meeting_id'
 
     def test_func(self):
+        """Check the current user is the owner of the club or the organiser of the meeting."""
         try:
             meeting = self.get_object()
             club = meeting.get_club()
@@ -35,7 +38,6 @@ class EditMeetingView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def get_success_url(self):
         """Return redirect URL after successful update."""
         messages.add_message(self.request, messages.SUCCESS, "Meeting updated!")
-        # Need to change to whatever the meeting page is called
         return reverse('meeting_details', kwargs=self.kwargs)
 
     def handle_no_permission(self):
@@ -63,11 +65,13 @@ class EditMeetingView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 
 class RemoveMeetingMember(LoginRequiredMixin, UserPassesTestMixin, DetailView):
+    """Allow the organiser of the meeting or the owner of a club to remove participants of a meeting."""
     model = Meeting
     pk_url_kwarg = 'meeting_id'
     http_method_names = ['post']
 
     def test_func(self):
+        """Check if the user is the organiser of the meeting or the owner of the club."""
         try:
             meeting = self.get_object()
             club = meeting.get_club()

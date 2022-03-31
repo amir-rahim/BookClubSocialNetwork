@@ -1,7 +1,7 @@
 <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
     <div class="hero-body">
         <div class="container">
-            <h1 class="title">{{ followees.count }} following</h1>
+            <h1 class="title">{{ followees.count }} Following</h1>
         </div>
     </div>
 </section>
@@ -24,27 +24,27 @@
                                 <div class="content">
                                     <p class="text">
                                         <b>Name: </b> {{ followee.username }}
-                                </p>
-                                <p class="text">
-                                    <b>Public Bio: </b> {{ followee.public_bio }}
-                            </p>
-                        </div>
-                        <div class="buttons">
-                            <a href="{% url 'user_profile' followee.username %}">
-                                <button class="button is-warning is-small">View</button>
-                            </a>
+                                    </p>
+                                    <p class="text">
+                                        <b>Public Bio: </b> {{ followee.public_bio }}
+                                    </p>
+                                </div>
+                                <div class="buttons">
+                                    <a href="{% url 'user_profile' followee.username %}">
+                                        <button class="button is-warning is-normal">View</button>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-{% endfor %}
+    {% endfor %}
 {% else %}
-<hr class="solid">
-<p style="text-align: center;">
-    <i>This user isn't following anyone.</i>
-</p>
-<hr class="solid">
+    <hr>
+    <p style="text-align: center;" class="has-text-grey">
+        This user isn't following anyone.
+    </p>
+    <hr>
 {% endif %}

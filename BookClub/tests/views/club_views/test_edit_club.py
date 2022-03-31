@@ -27,7 +27,6 @@ class EditClubViewTestCase(TestCase):
         self.club = Club.objects.get(pk=1)
         self.url = reverse('edit_club', kwargs={'club_url_name': self.club.club_url_name})
         self.data = {
-            'name': "Johnathan Club",
             'description': 'This is a very cool club that is owned by a certain Johnathan. Reading certain books...',
             'tagline': 'Welcome to Johnathan\'s club! We read the best books!!!',
             'rules': 'Don\'t be annoying',
@@ -44,7 +43,7 @@ class EditClubViewTestCase(TestCase):
         self.assertRedirects(response, redirect_url,
                              status_code=302, target_status_code=200, fetch_redirect_response=True
                              )
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
 
     def test_post_edit_club_when_non_existing_club(self):
         self.client.login(username=self.user.username, password='Password123')
@@ -54,7 +53,7 @@ class EditClubViewTestCase(TestCase):
         self.assertRedirects(response, redirect_url,
                              status_code=302, target_status_code=200, fetch_redirect_response=True
                              )
-        self.assertTemplateUsed(response, 'available_clubs.html')
+        self.assertTemplateUsed(response, 'clubs/available_clubs.html')
 
     def test_get_edit_club_redirects_when_not_logged_in_invalid_club(self):
         url = reverse('edit_club', kwargs={'club_url_name': 'fakeclub'})
@@ -63,7 +62,7 @@ class EditClubViewTestCase(TestCase):
         self.assertRedirects(response, redirect_url,
                              status_code=302, target_status_code=200, fetch_redirect_response=True
                              )
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
 
     def test_edit_create_club_logged_in_correct_rank(self):
         self.client.login(username=self.user.username, password='Password123')
@@ -73,7 +72,7 @@ class EditClubViewTestCase(TestCase):
         response = self.client.get(self.url)
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'edit_club.html')
+        self.assertTemplateUsed(response, 'clubs/edit_club.html')
         self.assertEqual(len(messages), 0)
 
     def test_edit_club_logged_in_not_in_club(self):
@@ -109,7 +108,6 @@ class EditClubViewTestCase(TestCase):
         self.club = Club.objects.get(pk=1)
         responseUrl = reverse('club_dashboard', kwargs={'club_url_name': self.club.club_url_name})
         self.assertRedirects(response, expected_url=responseUrl, status_code=302, target_status_code=200)
-        self.assertEqual(self.club.name, self.data['name'])
         self.assertEqual(self.club.description, self.data['description'])
         self.assertEqual(self.club.tagline, self.data['tagline'])
         self.assertEqual(self.club.rules, self.data['rules'])
@@ -126,7 +124,6 @@ class EditClubViewTestCase(TestCase):
         self.club = Club.objects.get(pk=1)
         responseUrl = reverse('club_dashboard', kwargs={'club_url_name': self.club.club_url_name})
         self.assertRedirects(response, expected_url=responseUrl, status_code=302, target_status_code=200)
-        self.assertEqual(self.club.name, self.data['name'])
         self.assertEqual(self.club.description, self.data['description'])
         self.assertEqual(self.club.tagline, self.data['tagline'])
         self.assertEqual(self.club.rules, self.data['rules'])
@@ -143,7 +140,6 @@ class EditClubViewTestCase(TestCase):
         responseUrl = reverse('club_dashboard', kwargs={'club_url_name': self.club.club_url_name})
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, expected_url=responseUrl, status_code=302, target_status_code=200)
-        self.assertEqual(self.club.name, self.data['name'])
         self.assertEqual(self.club.description, self.data['description'])
         self.assertEqual(self.club.tagline, self.data['tagline'])
         self.assertEqual(self.club.rules, self.data['rules'])
@@ -158,7 +154,6 @@ class EditClubViewTestCase(TestCase):
         self.club = Club.objects.get(pk=1)
         responseUrl = reverse('club_dashboard', kwargs={'club_url_name': self.club.club_url_name})
         self.assertRedirects(response, expected_url=responseUrl, status_code=302, target_status_code=200)
-        self.assertEqual(self.club.name, self.data['name'])
         self.assertEqual(self.club.description, self.data['description'])
         self.assertEqual(self.club.tagline, self.data['tagline'])
         self.assertEqual(self.club.rules, self.data['rules'])
@@ -174,27 +169,12 @@ class EditClubViewTestCase(TestCase):
         self.club = Club.objects.get(pk=1)
         responseUrl = reverse('club_dashboard', kwargs={'club_url_name': self.club.club_url_name})
         self.assertRedirects(response, expected_url=responseUrl, status_code=302, target_status_code=200)
-        self.assertEqual(self.club.name, self.data['name'])
         self.assertEqual(self.club.description, self.data['description'])
         self.assertEqual(self.club.tagline, self.data['tagline'])
         self.assertEqual(self.club.rules, self.data['rules'])
         self.assertEqual(self.club.is_private, self.data['is_private'])
         self.assertEqual(self.club.created_on, self.created_on_pre_test)
         self.assertEqual(response.status_code, 302)
-
-    def test_edit_club_post_invalid_data_name(self):
-        self.client.login(username=self.user.username, password='Password123')
-        self.created_on_pre_test = self.club.created_on
-        self.data['name'] = ""
-        response = self.client.post(self.url, self.data)
-        self.assertEqual(response.status_code, 200)
-        self.club = Club.objects.get(pk=1)
-        self.assertNotEqual(self.club.name, self.data['name'])
-        self.assertEqual(self.club.description, self.data['description'])
-        self.assertEqual(self.club.tagline, self.data['tagline'])
-        self.assertEqual(self.club.rules, self.data['rules'])
-        self.assertEqual(self.club.is_private, self.data['is_private'])
-        self.assertEqual(self.club.created_on, self.created_on_pre_test)
 
     def test_edit_club_post_invalid_data_description(self):
         self.client.login(username=self.user.username, password='Password123')
@@ -203,7 +183,6 @@ class EditClubViewTestCase(TestCase):
         response = self.client.post(self.url, self.data)
         self.assertEqual(response.status_code, 200)
         self.club = Club.objects.get(pk=1)
-        self.assertEqual(self.club.name, self.data['name'])
         self.assertNotEqual(self.club.description, self.data['description'])
         self.assertEqual(self.club.tagline, self.data['tagline'])
         self.assertEqual(self.club.rules, self.data['rules'])
