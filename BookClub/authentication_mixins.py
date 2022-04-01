@@ -20,11 +20,15 @@ class LoginProhibitedMixin:
 class ClubMemberTestMixin(UserPassesTestMixin):
 
     def test_func(self):
-        club_url_name = self.kwargs.get('club_url_name')
-        if club_url_name is not None:
-            return has_membership(club=get_club_from_url_name(club_url_name), user=self.request.user)
-        else:
-            return True
+        try:
+            club_url_name = self.kwargs.get('club_url_name')
+            if club_url_name is not None:
+                return has_membership(club=get_club_from_url_name(club_url_name), user=self.request.user)
+            else:
+                return True
+        except ObjectDoesNotExist:
+            return False
+
 
 
 class PrivateClubMixin(UserPassesTestMixin):
