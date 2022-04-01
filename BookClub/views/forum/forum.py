@@ -26,8 +26,13 @@ class ForumPostView(ClubMemberTestMixin, ListView):
         context = super().get_context_data(**kwargs)
         if self.kwargs.get('club_url_name'):
             try:
-                context['post'] = ForumPost.objects.get(pk=self.kwargs.get('post_id'))
-                context['club'] = Club.objects.get(club_url_name=self.kwargs.get('club_url_name'))
+                post = ForumPost.objects.get(pk=self.kwargs.get('post_id'))
+                club = Club.objects.get(club_url_name=self.kwargs.get('club_url_name'))
+                if post.forum == Forum.objects.get(associated_with=club):
+                    context['post'] = post
+                    context['club'] = club
+                else:
+                    raise Http404("Given club or post id not found....")
             except ObjectDoesNotExist:
                 raise Http404("Given club or post id not found....")
         else:
