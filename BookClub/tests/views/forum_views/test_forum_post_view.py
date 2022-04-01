@@ -1,7 +1,7 @@
 from django.test import TestCase, tag
 from django.urls import reverse
 
-from BookClub.models import User, ForumPost
+from BookClub.models import User, Club, ForumPost
 
 
 @tag('forum', 'forum_post')
@@ -93,3 +93,19 @@ class ForumPostViewTestCase(TestCase):
         comments = list(response.context['post'].get_comments())
         self.assertEqual(len(comments), 0)
         self.assertContains(response, "<i>There are no comments for this post. Comment using the reply button on the post.</i>")
+
+    def test_view_returns_404_when_non_existing_post_of_global_forum_is_requested(self):
+        wrong_post_id = 100
+        self.assertFalse(ForumPost.objects.filter(pk=wrong_post_id).exists())
+        wrong_post_id_url = reverse('forum_post', kwargs={'post_id': 100})
+        self.client.login(username=self.user.username, password="Password123")
+        response = self.client.get(wrong_post_id_url)
+        self.assertEqual(response.status_code, 404)
+
+    def test_view_returns_404_when_non_existing_post_of_club_forum_is_requested(self):
+        wrong_post_id = 100
+        self.assertFalse(ForumPost.objects.filter(pk=wrong_post_id).exists())
+        wrong_post_id_url = reverse('forum_post', kwargs={'post_id': 100, 'club_url_name': 'Johnathan_Club'})
+        self.client.login(username=self.user.username, password="Password123")
+        response = self.client.get(wrong_post_id_url)
+        self.assertEqual(response.status_code, 404)

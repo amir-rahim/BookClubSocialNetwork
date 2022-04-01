@@ -103,7 +103,7 @@ class EvaluationMetricsTestCase(TestCase):
         self.assertEqual(f1_score_1, f1_score_2)
 
     def test_get_book_coverage(self):
-        test_recommender = PopularBooksRecommender()
+        test_recommender = PopularBooksRecommender(print_status=False)
         test_recommender.fit(self.trainset)
         book_coverage_1 = self.evaluation_metrics.get_book_coverage(test_recommender)
         book_coverage_2 = len(test_recommender.popular_books_methods.filtered_books_list) / self.trainset.n_items
