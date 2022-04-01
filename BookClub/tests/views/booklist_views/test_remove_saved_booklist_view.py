@@ -36,13 +36,13 @@ class RemoveSavedBookListViewTestcase(TestCase):
         after_count = BookList.objects.count()
         self.assertEqual(before_count, after_count)
 
-    def test_get_remove_booklist_redirects_to_user_booklist(self):
+    def test_get_remove_booklist_redirects_to_saved_booklists(self):
         """Test for redirecting user to user booklist when used get method."""
 
         self.client.login(username=self.user.username, password='Password123')
 
         response = self.client.get(self.url)
-        redirect_url = reverse('user_booklist', kwargs={'booklist_id': self.booklist_to_save.id})
+        redirect_url = reverse('saved_booklists')
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_remove_invalid_booklist(self):
