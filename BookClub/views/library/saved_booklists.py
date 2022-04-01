@@ -1,3 +1,4 @@
+"""Saved book lists related views."""
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
@@ -7,10 +8,12 @@ from django.views.generic import ListView, View
 from BookClub.models import User, BookList
 
 class SavedBooklistsListView(LoginRequiredMixin, ListView):
+    """Users can view a list of book lists they save."""
+
     http_method_names = ['get']
     model = BookList
     context_object_name = 'booklists'
-    template_name = 'saved_booklists.html'
+    template_name = 'booklists/saved_booklists.html'
 
     def get_queryset(self):
         if self.kwargs.get('username') is not None:
@@ -31,12 +34,11 @@ class SavedBooklistsListView(LoginRequiredMixin, ListView):
             creator = self.request.user
             context['own'] = True
         context['creator'] = creator
-        # context['base_delete_url'] = reverse_lazy('delete_booklist', kwargs={'username': creator.username})
         return context
 
 
 class SaveBookListView(LoginRequiredMixin, View):
-    """Users can save other user's bookl ists"""
+    """Users can save other user's book lists."""
 
     redirect_location = 'user_booklist'
 
@@ -44,18 +46,18 @@ class SaveBookListView(LoginRequiredMixin, View):
         return redirect(self.redirect_location, booklist_id=self.kwargs['booklist_id'])
 
     def is_actionable(self, current_user, booklist):
-        """Check if user can save the book list"""
+        """Check if user can save the book list."""
 
         return (current_user != booklist.creator) and (
             not User.objects.filter(username=current_user.username, saved_booklists=booklist).exists())
 
     def is_not_actionable(self):
-        """If user cannot save the book list"""
+        """If user cannot save the book list."""
 
         messages.info(self.request, "You cannot save this book list.")
 
     def action(self, current_user, booklist):
-        """User saves the book list"""
+        """User saves the book list."""
 
         messages.success(self.request, "You have saved the book list.")
         current_user.save_booklist(booklist)
@@ -78,7 +80,7 @@ class SaveBookListView(LoginRequiredMixin, View):
 
 
 class RemoveSavedBookListView(LoginRequiredMixin, View):
-    """Users can remove a saved booklist"""
+    """Users can remove a saved booklist."""
 
     redirect_location = 'user_booklist'
 
@@ -86,17 +88,17 @@ class RemoveSavedBookListView(LoginRequiredMixin, View):
         return redirect(self.redirect_location, booklist_id=self.kwargs['booklist_id'])
 
     def is_actionable(self, booklist):
-        """Check if user can save the book list"""
+        """Check if user can save the book list."""
 
         return (self.request.user != booklist.creator) and (User.objects.filter(username=self.request.user.username, saved_booklists=booklist).exists())
 
     def is_not_actionable(self):
-        """If user cannot remove saved the book list"""
+        """If user cannot remove saved the book list."""
 
         messages.info(self.request, "You cannot remove this book list from saved.")
 
     def action(self, booklist):
-        """User removes saved book list"""
+        """User removes saved book list."""
 
         messages.success(self.request, "You have removed the book list from saved.")
         self.request.user.remove_from_saved_booklists(booklist)

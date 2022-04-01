@@ -1,3 +1,4 @@
+"""Book list model."""
 from django.db import models
 from django.urls import reverse
 
@@ -5,6 +6,13 @@ from BookClub.models import Book, UserCreatedObject
 
 
 class BookList(UserCreatedObject):
+    """A Book List to allow the user to store and categorise Books.
+    
+    Attributes:
+        title: A string that contains the title of the Book List.
+        description: A string that describes the Book List; created by the User.
+        books: A list of Books in the Book List.    
+    """
     title = models.CharField(unique=False, blank=False, max_length=120)
     description = models.CharField(unique=False, blank=True, max_length=240)
     books = models.ManyToManyField(Book, blank=True)

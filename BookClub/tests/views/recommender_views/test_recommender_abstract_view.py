@@ -25,9 +25,9 @@ class BaseUserRecommenderViewTestCase(TestCase):
     def test_correct_template_user_view(self):
         self.client.login(username=self.user1.username, password="Password123")
         response = self.client.get(self.user_url)
-        self.assertTemplateUsed(response, 'recommendation_base_user.html')
+        self.assertTemplateUsed(response, 'recommendations/recommendation_base_user.html')
 
     def test_correct_template_club_view(self):
         self.client.login(username=self.user1.username, password="Password123")
         response = self.client.get(self.club_url)
-        self.assertTemplateUsed(response, 'recommendation_base_club.html')
+        self.assertTemplateUsed(response, 'recommendations/recommendation_base_club.html')

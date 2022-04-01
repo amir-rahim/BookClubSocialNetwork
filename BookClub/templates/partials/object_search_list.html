@@ -1,16 +1,14 @@
 {% if page_obj %}
     <div class="table-container">
         {% for object in page_obj %}
-            {% for field in object %}
-                {{ field }}
-            {% endfor %}
+            {% for field in object %}{{ field }}{% endfor %}
         {% endfor %}
     </div>
     {% include 'partials/pagination_ajax.html' with page_obj=page_obj %}
 {% else %}
-    <hr />
-    <p style="text-align: center">
-        There are no available books at the moment.
+    <hr>
+    <p style="text-align: center" class='has-text-grey'>
+        There are books matching this search.
     </p>
-    <hr />
+    <hr>
 {% endif %}

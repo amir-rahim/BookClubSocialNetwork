@@ -1,10 +1,16 @@
+"""Review model."""
 from django.db import models
 from django.urls import reverse
 from BookClub.models.rated_content import *
-from BookClub.models.recommendations import UserRecommendations
-
-
+from BookClub.models.recommendations import ClubRecommendations, UserRecommendations
+from BookClub.models import ClubMembership
 class BookReview(TextPost):
+    """Allow the User to Review a Book.
+    
+    Attributes:
+        book: The Book that is being reviewed.
+        book_rating: The rating the User has given the Book.
+    """
     class Meta:
         ordering = ['-created_on']
         unique_together = ['book', 'creator']
@@ -35,9 +41,20 @@ class BookReview(TextPost):
             recommendation = UserRecommendations.objects.get(user=self.creator)
             recommendation.modified = True
             recommendation.save()
-
+        clubs = self.creator.clubmembership_set.exclude(
+            membership=ClubMembership.UserRoles.APPLICANT).values_list('club__pk')
+        clubRecs = ClubRecommendations.objects.filter(club__pk__in=clubs)
+        for club in clubRecs:
+            club.modified = True
+            club.save()
+                
 
 class BookReviewComment(TextComment):
+    """Allow the User to Comment under a Review.
+    
+    Attributes:
+        book_review: The Review the Comment is under.
+    """
     book_review = models.ForeignKey('BookReview', blank=False, null=False, on_delete=models.CASCADE)
 
     class Meta:

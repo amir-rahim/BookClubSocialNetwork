@@ -46,7 +46,7 @@ class CreateReviewViewTestcase(TestCase):
         self.assertRedirects(response, redirect_url,
                              status_code=302, target_status_code=200, fetch_redirect_response=True
                              )
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
         review_count_after = BookReview.objects.count()
         self.assertEqual(review_count_after, review_count_before)
 
@@ -57,7 +57,7 @@ class CreateReviewViewTestcase(TestCase):
         self.assertRedirects(response, redirect_url,
                              status_code=302, target_status_code=200, fetch_redirect_response=True
                              )
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
         review_count_after = BookReview.objects.count()
         self.assertEqual(review_count_after, review_count_before)
 
@@ -65,7 +65,7 @@ class CreateReviewViewTestcase(TestCase):
         self.client.login(username=self.user.username, password='Password123')
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'create_review.html')
+        self.assertTemplateUsed(response, 'reviews/create_review.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, ReviewForm))
         self.assertFalse(form.is_bound)
@@ -102,7 +102,7 @@ class CreateReviewViewTestcase(TestCase):
         self.assertEqual(after_count, before_count+1)
         response_url = reverse('book_reviews', kwargs={'book_id': self.book.id})
         self.assertRedirects(response, response_url, status_code=302, target_status_code=200)
-        self.assertTemplateUsed(response, 'book_reviews.html')
+        self.assertTemplateUsed(response, 'library/book_reviews.html')
         self.assertEqual(review.book_rating, self.data['book_rating'])
         self.assertEqual(review.content, self.data['content'])
         self.assertEqual(review.title,self.data['title'])

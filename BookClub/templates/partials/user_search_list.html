@@ -1,5 +1,5 @@
 {% for user in page_obj %}
-    <div class="card">
+    <div class="container">
         <div class="card-content">
             <div class="media">
                 <div class="media-left">
@@ -10,7 +10,7 @@
                 <div class="media-content">
                     <div class="content">
                         <p class="text">
-                            <a href="{% url 'user_profile' user.username %}"><b>Name: </b> {{ user.username }}</a>
+                            <a href="{% url 'user_profile' user.username %}"><b>Username: </b> {{ user.username }}</a>
                         </p>
                     </div>
                 </div>
@@ -18,6 +18,10 @@
         </div>
     </div>
 {% empty %}
-    No users found
+    <br>
+    <p style="text-align: center" class="has-text-grey">
+        No users found.
+    </p>
+    <br>
 {% endfor %}
 {% include 'partials/pagination_ajax.html' %}

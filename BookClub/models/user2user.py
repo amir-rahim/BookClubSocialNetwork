@@ -1,11 +1,19 @@
+"""User to User model."""
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import UniqueConstraint
 
-from BookClub.models.user import User
-
 class UserToUserRelationship(models.Model):
+    """A relationship between two Users.
+    
+    Attributes:
+        source_user: The User this relationship starts from.
+        target_user: The User this relationship targets.
+        relationship_type: The type of relationship between the source User and the target User.
+        created_on: A Date Time when the relationship was created.
+    """
     class UToURelationshipTypes(models.IntegerChoices):
+        """The type of relationship between Users."""
         FOLLOWING = 1
     class Meta:
         constraints = [

@@ -1,3 +1,4 @@
+"""Recommendation related views."""
 from django.http import JsonResponse
 from django.views.generic import TemplateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -8,8 +9,9 @@ from RecommenderModule.recommendations_provider import get_club_personalised_rec
 
 
 class RecommendationBaseView(LoginRequiredMixin, TemplateView):
+    """View of recommendation base."""
     model = Book
-    template_name = "recommendation_base.html"
+    template_name = "recommendations/recommendation_base.html"
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -21,11 +23,12 @@ class RecommendationBaseView(LoginRequiredMixin, TemplateView):
     def get_template_names(self):
         club = self.kwargs.get('club_url_name')
         if club is not None:
-            return "recommendation_base_club.html"
-        return "recommendation_base_user.html"
+            return "recommendations/recommendation_base_club.html"
+        return "recommendations/recommendation_base_user.html"
     
 
 class RecommendationUserListView(LoginRequiredMixin, TemplateView):
+    """List of user recommendations. If Recommendations do not exist, or have been modified, the code also loads the recommendations from file for this user."""
     model = Book
     template_name = "partials/recommendation_list_view.html"
     context_object_name = "recommendations"
@@ -56,6 +59,7 @@ class RecommendationUserListView(LoginRequiredMixin, TemplateView):
         return JsonResponse(data=data_dict, safe=False)
     
 class RecommendationClubListView(LoginRequiredMixin, TemplateView):
+    """List of recommendation for a club. If Recommendations do not exist, or have been modified, the code also loads the recommendations from file for this club."""
     model = Book
     template_name = "partials/recommendation_list_view.html"
     context_object_name = "recommendations"

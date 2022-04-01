@@ -53,7 +53,7 @@ class FeatureBookViewTestCase(TestCase):
         redirect_url = reverse_with_next('login', self.url)
         response = self.client.post(self.url, self.data, follow=True)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200, fetch_redirect_response=True)
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
         featured_book_count_after = FeaturedBooks.get_books(self.club).count()
         self.assertEqual(featured_book_count_before, featured_book_count_after)
 
@@ -62,7 +62,7 @@ class FeatureBookViewTestCase(TestCase):
         redirect_url = reverse_with_next('login', self.url)
         response = self.client.get(self.url, follow=True)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200, fetch_redirect_response=True)
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
         featured_book_count_after = FeaturedBooks.get_books(self.club).count()
         self.assertEqual(featured_book_count_before, featured_book_count_after)
 
@@ -72,7 +72,7 @@ class FeatureBookViewTestCase(TestCase):
         self.client.login(username=self.owner.username, password='Password123')
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'edit_featured_books.html')
+        self.assertTemplateUsed(response, 'clubs/edit_featured_books.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, FeatureBookForm))
         self.assertFalse(form.is_bound)
@@ -81,7 +81,7 @@ class FeatureBookViewTestCase(TestCase):
         self.client.login(username=self.moderator.username, password='Password123')
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'edit_featured_books.html')
+        self.assertTemplateUsed(response, 'clubs/edit_featured_books.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, FeatureBookForm))
         self.assertFalse(form.is_bound)
@@ -116,7 +116,7 @@ class FeatureBookViewTestCase(TestCase):
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]), 'Successfully featured book!')
         self.assertEqual(after_count, before_count + 1)
-        self.assertTemplateUsed(response, 'club_dashboard.html')
+        self.assertTemplateUsed(response, 'clubs/club_dashboard.html')
         self.assertTrue(FeaturedBooks.objects.filter(club=self.club, book=self.book).exists())
 
     def test_moderator_can_feature_book(self):
@@ -129,7 +129,7 @@ class FeatureBookViewTestCase(TestCase):
         self.assertEqual(str(messages[0]), 'Successfully featured book!')
         after_count = FeaturedBooks.get_books(self.club).count()
         self.assertEqual(after_count, before_count + 1)
-        self.assertTemplateUsed(response, 'club_dashboard.html')
+        self.assertTemplateUsed(response, 'clubs/club_dashboard.html')
         self.assertTrue(FeaturedBooks.objects.filter(club=self.club, book=self.book).exists())
 
     """Test for errors when creation is invalid"""

@@ -16,7 +16,7 @@ class ItemBasedCollaborativeFilteringMethods:
     library = None
 
     min_ratings_threshold = 15
-    min_support = 5
+    min_support = 7
     model_function_name = 'pearson_baseline'
 
     def __init__(self, parameters={}, retraining=False, retraining_and_saving=False, trainset=None, print_status=True):

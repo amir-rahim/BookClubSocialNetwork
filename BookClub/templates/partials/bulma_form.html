@@ -34,11 +34,11 @@
                 <div class="control">
                     {% if field|widget_type == 'textarea' %}
                         {% if form.is_bound and field.errors %}
-                            {% render_field field class="textarea is-danger" %}
+                            {% render_field field class="textarea is-danger" rows="3" %}
                         {% elif form.is_bound %}
-                            {% render_field field class="textarea is-success" %}
+                            {% render_field field class="textarea is-success" rows="3" %}
                         {% else %}
-                            {% render_field field class="textarea" %}
+                            {% render_field field class="textarea" rows="3" %}
                         {% endif %}
                     {% elif field|widget_type == 'select' %}
                         <div class="select">{% render_field field %}</div>

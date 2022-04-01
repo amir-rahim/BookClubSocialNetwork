@@ -33,19 +33,19 @@ class ForumPostViewTestCase(TestCase):
     def test_get_forum_post_not_logged_in(self):
         response = self.client.get(self.my_url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'forum_post.html')
+        self.assertTemplateUsed(response, 'forum/forum_post.html')
 
     def test_get_forum_post_logged_in(self):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.my_url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'forum_post.html')
+        self.assertTemplateUsed(response, 'forum/forum_post.html')
 
     def test_get_other_forum_post_logged_in(self):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.other_url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'forum_post.html')
+        self.assertTemplateUsed(response, 'forum/forum_post.html')
 
     def test_get_post_does_not_exist(self):
         ForumPost.objects.all().delete()
@@ -55,18 +55,18 @@ class ForumPostViewTestCase(TestCase):
     def test_post_details_show(self):
         response = self.client.get(self.my_url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'forum_post.html')
+        self.assertTemplateUsed(response, 'forum/forum_post.html')
         self.assertContains(response, "Lorem Ipsum")
         self.assertContains(response, "Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
                                       "Lorem Ipsum has been the industrial standard dummy text ever since the "
                                       "1500s, when an unknown printer took a galley of type and scrambled it to make "
                                       "a type specimen book.")
-        self.assertContains(response, "Posted by: johndoe")
+        self.assertContains(response, "johndoe")
 
     def test_has_no_buttons_not_own_post(self):
         response = self.client.get(self.my_url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'forum_post.html')
+        self.assertTemplateUsed(response, 'forum/forum_post.html')
         self.assertNotContains(response, "<a href=\"" + self.my_url + "edit/\">")
         self.assertNotContains(response,
                                "<button class=\"button is-danger is-rounded\" aria-label=\"Delete Post\" type=\"submit\">")
@@ -75,15 +75,13 @@ class ForumPostViewTestCase(TestCase):
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.get(self.my_url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'forum_post.html')
-        self.assertTemplateUsed(response, 'partials/delete_button_and_modal.html')
+        self.assertTemplateUsed(response, 'forum/forum_post.html')
         self.assertContains(response, "<a href=\"" + self.my_url + "edit/\">")
-        self.assertContains(response, """<form class="" action="/forum/1/delete/" method="post">""")
 
     def test_comments_shown(self):
         response = self.client.get(self.my_url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'forum_post.html')
+        self.assertTemplateUsed(response, 'forum/forum_post.html')
         comments = list(response.context['post'].get_comments())
         self.assertEqual(len(comments), 2)
         self.assertContains(response, "Wow this topic is so interesting, damn.")
@@ -91,7 +89,7 @@ class ForumPostViewTestCase(TestCase):
     def test_no_comments_shown(self):
         response = self.client.get(self.other_url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'forum_post.html')
+        self.assertTemplateUsed(response, 'forum/forum_post.html')
         comments = list(response.context['post'].get_comments())
         self.assertEqual(len(comments), 0)
         self.assertContains(response, "<i>There are no comments for this post. Comment using the reply button on the post.</i>")

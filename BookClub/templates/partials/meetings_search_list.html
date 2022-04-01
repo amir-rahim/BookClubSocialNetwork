@@ -1,44 +1,44 @@
 {% if page_obj %}
-<div class="table-container">
-    <table class="table is-hoverable is-fullwidth"
-           id="table-meetings"
-           data-toggle="table"
-           data-pagination="true">
-        <thead>
-            <tr>
-                <th scope="col">Club</th>
-                <th scope="col">Meeting Title</th>
-                <th scope="col">Time</th>
-                <th scope="col">Meeting Type</th>
-                <th scope="col">Description</th>
-                <th scope="col">Details</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for meeting in page_obj %}
+    <div class="table-container">
+        <table class="table is-hoverable is-fullwidth"
+               id="table-meetings"
+               data-toggle="table"
+               data-pagination="true">
+            <thead>
                 <tr>
-                    <td>
-                      <a href="{{meeting.club.get_absolute_url}}">{{meeting.club.name}}</a>
-                    </td>
-                    <td>{{ meeting.get_title }}</td>
-                    <td>{{ meeting.get_meeting_time }}</td>
-                    <td>{{ meeting.get_type_name }}</td>
-                    <td>{{ meeting.get_description }}</td>
-
-                    <td>
-                        <a class="button is-fullwidth is-link"
-                                href="{{meeting.get_absolute_url}}">View</button>
-                    </td>
+                    <th scope="col">Club</th>
+                    <th scope="col">Meeting Title</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">Meeting Type</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Details</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-{% include 'partials/pagination_ajax.html' %}
+            </thead>
+            <tbody>
+                {% for meeting in page_obj %}
+                    <tr>
+                        <td>
+                            <a href="{{ meeting.club.get_absolute_url }}">{{ meeting.club.name }}</a>
+                        </td>
+                        <td>{{ meeting.get_title }}</td>
+                        <td>{{ meeting.get_meeting_time }}</td>
+                        <td>{{ meeting.get_type_name }}</td>
+                        <td>{{ meeting.get_description }}</td>
+                        <td>
+                            <a class="button is-fullwidth is-link"
+                               href="{{ meeting.get_absolute_url }}">View
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% include 'partials/pagination_ajax.html' %}
 {% else %}
     <hr>
-    <p style="text-align: center">
-        There are no available meetings at the moment.
+    <p style="text-align: center" class='has-text-grey'>
+        There are no meetings matching this search.
     </p>
     <hr>
 {% endif %}

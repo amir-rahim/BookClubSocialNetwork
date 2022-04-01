@@ -36,7 +36,7 @@ class EditBookListViewTestCase(TestCase, LogInTester):
         redirect_url = reverse_with_next('login', self.url)
         response = self.client.post(self.url, self.data, follow=True)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200, fetch_redirect_response=True)
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
 
     def test_edit_booklist_redirects_when_trying_to_edit_another_users_booklist(self):
         self.client.login(username=self.another_user.username, password="Password123")
@@ -47,7 +47,7 @@ class EditBookListViewTestCase(TestCase, LogInTester):
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.ERROR)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200, fetch_redirect_response=True)
-        self.assertTemplateUsed(response, 'user_booklists.html')
+        self.assertTemplateUsed(response, 'booklists/user_booklists.html')
 
     '''Tests for user successfully editing the book list details'''
 
@@ -60,7 +60,7 @@ class EditBookListViewTestCase(TestCase, LogInTester):
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.SUCCESS)
         redirect_url = reverse('booklists_list')
-        self.assertTemplateUsed(response, 'user_booklists.html')
+        self.assertTemplateUsed(response, 'booklists/user_booklists.html')
         self.assertEqual(self.booklist.creator.id, self.user.id)
         self.assertEqual(self.booklist.title, self.data['title'])
         self.assertEqual(self.booklist.description, self.data['description'])
@@ -76,7 +76,7 @@ class EditBookListViewTestCase(TestCase, LogInTester):
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.SUCCESS)
         redirect_url = reverse('booklists_list')
-        self.assertTemplateUsed(response, 'user_booklists.html')
+        self.assertTemplateUsed(response, 'booklists/user_booklists.html')
         self.assertEqual(self.booklist.creator.id, self.user.id)
         self.assertEqual(self.booklist.title, self.data['title'])
         self.assertEqual(self.booklist.description, self.data['description'])
@@ -92,7 +92,7 @@ class EditBookListViewTestCase(TestCase, LogInTester):
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.SUCCESS)
         redirect_url = reverse('booklists_list')
-        self.assertTemplateUsed(response, 'user_booklists.html')
+        self.assertTemplateUsed(response, 'booklists/user_booklists.html')
         self.assertEqual(self.booklist.creator.id, self.user.id)
         self.assertEqual(self.booklist.title, self.data['title'])
         self.assertEqual(self.booklist.description, self.data['description'])
@@ -123,4 +123,4 @@ class EditBookListViewTestCase(TestCase, LogInTester):
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.ERROR)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200, fetch_redirect_response=True)
-        self.assertTemplateUsed(response, 'user_booklists.html')
+        self.assertTemplateUsed(response, 'booklists/user_booklists.html')

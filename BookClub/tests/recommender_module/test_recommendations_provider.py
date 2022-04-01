@@ -1,5 +1,5 @@
 from django.test import TestCase, tag
-from BookClub.models import User, Book, BookReview, Club
+from BookClub.models import User, Book, BookReview, Club, UserRecommendations, ClubRecommendations
 from RecommenderModule import recommendations_provider
 from RecommenderModule.recommenders.resources.item_based_collaborative_filtering_methods import ItemBasedCollaborativeFilteringMethods
 import joblib
@@ -12,7 +12,10 @@ class RecommendationsProviderTestCase(TestCase):
         'BookClub/tests/fixtures/default_books.json',
         'BookClub/tests/fixtures/default_book_reviews.json',
         'BookClub/tests/fixtures/default_clubs.json',
-        'BookClub/tests/fixtures/default_club_members.json'
+        'BookClub/tests/fixtures/default_club_members.json',
+        'BookClub/tests/fixtures/default_abstract_recommendations.json',
+        'BookClub/tests/fixtures/default_user_recommendations.json',
+        'BookClub/tests/fixtures/default_club_recommendations.json'
     ]
 
     def setUp(self):
@@ -144,3 +147,25 @@ class RecommendationsProviderTestCase(TestCase):
         for inner_id in trainset.all_items():
             books2.append(trainset.to_raw_iid(inner_id))
         self.assertEqual(books1, books2)
+
+    def test_update_all_recommendations_updates_user_recommendations(self):
+        user_recommendation_1 = UserRecommendations.objects.get(pk=1)
+        user_recommendation_2 = UserRecommendations.objects.get(pk=2)
+        self.assertFalse(user_recommendation_1.modified)
+        self.assertTrue(user_recommendation_2.modified)
+        recommendations_provider.update_all_recommendations()
+        user_recommendation_1 = UserRecommendations.objects.get(pk=1)
+        user_recommendation_2 = UserRecommendations.objects.get(pk=2)
+        self.assertTrue(user_recommendation_1.modified)
+        self.assertTrue(user_recommendation_2.modified)
+
+    def test_update_all_recommendations_updates_club_recommendations(self):
+        club_recommendation_1 = ClubRecommendations.objects.get(pk=1)
+        club_recommendation_2 = ClubRecommendations.objects.get(pk=2)
+        self.assertFalse(club_recommendation_1.modified)
+        self.assertTrue(club_recommendation_2.modified)
+        recommendations_provider.update_all_recommendations()
+        club_recommendation_1 = ClubRecommendations.objects.get(pk=1)
+        club_recommendation_2 = ClubRecommendations.objects.get(pk=2)
+        self.assertTrue(club_recommendation_1.modified)
+        self.assertTrue(club_recommendation_2.modified)

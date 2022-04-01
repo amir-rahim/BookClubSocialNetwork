@@ -2,6 +2,7 @@ from RecommenderModule.recommenders.popular_books_recommender import PopularBook
 from RecommenderModule.recommenders.item_based_recommender import ItemBasedRecommender
 from RecommenderModule.recommenders.content_based_recommender import ContentBasedRecommender
 from RecommenderModule.recommenders.resources.library import Library
+from BookClub.models.recommendations import UserRecommendations, ClubRecommendations
 
 """Get the 10 most popular books recommended to the user (that the user has not read yet).
     Returns a list of ISBN numbers."""
@@ -20,7 +21,8 @@ def get_club_popularity_recommendations(club_url_name):
 """Retrain the popularity recommender with the current data."""
 def retrain_popularity_recommender(min_ratings_threshold=300):
     popularity_recommender = PopularBooksRecommender()
-    popularity_recommender.fit_and_save(parameters={"min_ratings_threshold": min_ratings_threshold})
+    popularity_recommender.fit_and_save(parameters={"min_ratings_threshold": min_ratings_threshold, 'ranking_method': 'combination'})
+    update_all_recommendations()
 
 """Get (up to) 10 book recommendations, from books the user has rated.
     Returns a list of ISBN numbers."""
@@ -42,6 +44,7 @@ def get_club_personalised_recommendations(club_url_name):
 def retrain_item_based_recommender(parameters={}):
     item_based_recommender = ItemBasedRecommender()
     item_based_recommender.fit_and_save(parameters=parameters)
+    update_all_recommendations()
 
 """Get the ISBN value of all books in the item-based trainset"""
 def get_list_of_all_books_in_item_based_trainset():
@@ -52,3 +55,15 @@ def get_list_of_all_books_in_item_based_trainset():
 def retrain_content_based_recommender():
     content_based_recommender = ContentBasedRecommender()
     content_based_recommender.fit_and_save()
+    update_all_recommendations()
+
+"""Force the system to update all user and club recommendations with the newly trained recommenders"""
+def update_all_recommendations():
+    user_recommendations = UserRecommendations.objects.all()
+    for recommendation in user_recommendations:
+        recommendation.modified = True
+    UserRecommendations.objects.bulk_update(user_recommendations, ['modified'])
+    club_recommendations = ClubRecommendations.objects.all()
+    for recommendation in club_recommendations:
+        recommendation.modified = True
+    ClubRecommendations.objects.bulk_update(club_recommendations, ['modified'])

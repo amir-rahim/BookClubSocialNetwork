@@ -60,7 +60,7 @@ class DeleteCommentViewTestCase(TestCase):
         self.assertRedirects(response, redirect_url,
                              status_code=302, target_status_code=200, fetch_redirect_response=True
                              )
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'authentication/login.html')
 
     def test_redirect_when_not_creator(self):
         self.client.login(username=self.user.username, password="Password123")

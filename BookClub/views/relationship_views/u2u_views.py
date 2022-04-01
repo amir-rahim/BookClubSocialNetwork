@@ -1,3 +1,4 @@
+"""User relationship related views."""
 from django.http import HttpResponse, JsonResponse
 from django.views import View
 from django.shortcuts import render, redirect, get_object_or_404
@@ -8,8 +9,10 @@ from BookClub.models import User, UserToUserRelationship
 
 
 class FollowUserView(LoginRequiredMixin, View):
+    """Allow a user to follow another user."""
 
     def get_record_status(self):
+        """Check if the current relationship already exists."""
         source_user = self.request.user
         target_user = get_object_or_404(User, username=self.kwargs['username'])
         relationship_exists = UserToUserRelationship.objects.filter(source_user=source_user, target_user=target_user).exists()

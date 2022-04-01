@@ -1,3 +1,4 @@
+"""Meeting model."""
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
@@ -6,10 +7,25 @@ from BookClub.models import User, Club, Book
 
 
 class Meeting(models.Model):
-
+    """Meeting model allowing Users to create events in a Club.
+    
+    Attributes:
+        organiser: The User that created the Meeting.
+        club: The Club the Meeting is made in.
+        meeting_time: The Date Time that the Meeting is being held at.
+        meeting_end_time: The Date Time that the Meeting ends at.
+        created_on: The Date the Meeting was created on.
+        location: A string containing the location of the Meeting.
+        title: A string containing the title of the Meeting.
+        description: A string containing the description of the Meeting.
+        members: A list of Users that are attending the Meeting.
+        type: The MeetingType specifying the type of Meeting.
+        book: The Book the Meeting may be associated with.
+    """
     class Meta:
         ordering=['-meeting_time']
     class MeetingType(models.TextChoices):
+        """Attributes a type to the Meeting."""
         BOOK = 'B'
         CLUB = 'C'
         SOCIAL = 'S'

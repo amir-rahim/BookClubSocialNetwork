@@ -27,7 +27,7 @@ class AvailableClubsViewTestCase(TestCase):
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'available_clubs.html')
+        self.assertTemplateUsed(response, 'clubs/available_clubs.html')
 
     def test_redirect_when_not_logged_in(self):
         response = self.client.get(self.url)
@@ -42,17 +42,17 @@ class AvailableClubsViewTestCase(TestCase):
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'available_clubs.html')
+        self.assertTemplateUsed(response, 'clubs/available_clubs.html')
         clubs = list(response.context['clubs'])
         self.assertEqual(len(clubs), 0)
-        self.assertContains(response, "There are no available clubs at the moment.")
+        self.assertContains(response, "There are no clubs matching this search.")
 
     def test_contains_club_not_member_of(self):
         self.client.login(username=self.user.username, password='Password123')
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'available_clubs.html')
+        self.assertTemplateUsed(response, 'clubs/available_clubs.html')
         clubs = list(response.context['clubs'])
         self.assertIn(Club.objects.get(name="Jeannette Club"), clubs)
         self.assertContains(response, "<td>Jeannette Club</td>")
@@ -62,7 +62,7 @@ class AvailableClubsViewTestCase(TestCase):
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'available_clubs.html')
+        self.assertTemplateUsed(response, 'clubs/available_clubs.html')
         clubs = list(response.context['clubs'])
         self.assertNotIn(Club.objects.get(name="Johnathan Club"), clubs)
         self.assertNotContains(response, "<td>Johnathan Club</td>")
@@ -74,7 +74,7 @@ class AvailableClubsViewTestCase(TestCase):
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'available_clubs.html')
+        self.assertTemplateUsed(response, 'clubs/available_clubs.html')
         clubs = list(response.context['clubs'])
         self.assertIn(Club.objects.get(name="Jeannette Club"), clubs)
         self.assertContains(response, "<td>Jeannette Club</td>")
@@ -84,6 +84,6 @@ class AvailableClubsViewTestCase(TestCase):
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'available_clubs.html')
+        self.assertTemplateUsed(response, 'clubs/available_clubs.html')
         clubs = list(response.context['clubs'])
         self.assertEqual(len(clubs), 2)

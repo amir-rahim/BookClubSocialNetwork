@@ -1,4 +1,4 @@
-"""Authentication Related Views"""
+"""Authentication related views."""
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -12,9 +12,9 @@ from BookClub.authentication_mixins import LoginProhibitedMixin
 
 
 class SignUpView(LoginProhibitedMixin, FormView):
-    """View class for handling user sign-ups"""
+    """Allow user to sign up and create an account for the site."""
     form_class = SignUpForm
-    template_name = 'sign_up.html'
+    template_name = 'authentication/sign_up.html'
     redirect_when_logged_in_url = 'home'
 
     def form_valid(self, form):
@@ -31,11 +31,9 @@ class SignUpView(LoginProhibitedMixin, FormView):
 
 
 class LogInView(LoginProhibitedMixin, FormView):
-    """
-        View class for handling logging the user in and setting the club_id session key
-    """
+    """Allow the user to log in to the site and sets the club_id session key."""
     form_class = LogInForm
-    template_name = 'login.html'
+    template_name = 'authentication/login.html'
 
     def form_valid(self, form):
         username = form.cleaned_data.get('username')
@@ -50,7 +48,7 @@ class LogInView(LoginProhibitedMixin, FormView):
             return redirect(redirect_url)
         else:
             messages.add_message(self.request, messages.ERROR, "The credentials provided were invalid!")
-            return render(self.request, 'login.html')
+            return render(self.request, 'authentication/login.html')
 
     def form_invalid(self, form):
         messages.add_message(self.request, messages.ERROR, "The credentials provided were incomplete!")
@@ -58,11 +56,7 @@ class LogInView(LoginProhibitedMixin, FormView):
 
 
 class LogOutView(LoginRequiredMixin, View):
-    """
-
-        Class that handles logging a user out.
-
-    """
+    """Allow the user to log out."""
 
     def get(self, request):
         logout(request)

@@ -3,18 +3,17 @@ from BookClub.models import *
 from BookClub.models.forum import ForumPost
 
 
-
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for users."""
 
     list_display = [
-        'id', 'username', 'email'
+        'id', 'username', 'email', 'public_bio'
     ]
 
 
 @admin.register(UserToUserRelationship)
-class UserAdmin(admin.ModelAdmin):
+class UserToUserAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for User to User relationships."""
 
     list_display = [
@@ -54,15 +53,16 @@ class BookReviewAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for Books Reviews ."""
 
     list_display = [
-        'book', 'creator', 'book_rating' , 'title' , 'created_on','content'
+        'book', 'creator', 'book_rating', 'title', 'created_on', 'content', 'rating'
     ]
+
 
 @admin.register(BookReviewComment)
 class BookReviewCommentAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for Books Review Comments ."""
 
     list_display = [
-        'book_review','creator','created_on','content'
+        'book_review', 'creator', 'created_on', 'content', 'rating'
     ]
 
 
@@ -119,22 +119,6 @@ class VoteAdmin(admin.ModelAdmin):
         'creator', 'created_on', 'content_type', 'object_id', 'target'
     ]
 
-@admin.register(Poll)
-class PollAdmin(admin.ModelAdmin):
-    """Configuration of the admin interface for club polls."""
-
-    list_display = [
-        'club', 'title', 'deadline', 'created_on', 'active'
-    ]
-
-@admin.register(Option)
-class OptionAdmin(admin.ModelAdmin):
-    """Configuration of the admin interface for poll options."""
-
-    list_display = [
-        'poll', 'text', 'book'
-    ]
-
 @admin.register(BookShelf)
 class BookShelfAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for Book Shelf."""
@@ -143,6 +127,7 @@ class BookShelfAdmin(admin.ModelAdmin):
         'user', 'book', 'status'
     ]
 
+
 @admin.register(FeaturedBooks)
 class FeaturedBooksAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for Featured Books."""
@@ -150,3 +135,17 @@ class FeaturedBooksAdmin(admin.ModelAdmin):
     list_display = [
         'club', 'book', 'reason'
     ]
+
+
+@admin.register(UserRecommendations)
+class UserRecAdmin(admin.ModelAdmin):
+    list_display = [
+        'user', 'recommendations'
+    ]
+    
+@admin.register(ClubRecommendations)
+class ClubRecAdmin(admin.ModelAdmin):
+    
+    list_display = [
+        'club', 'recommendations'
+                    ]

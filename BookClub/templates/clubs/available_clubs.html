@@ -1,0 +1,45 @@
+{% extends 'base_content.html' %}
+{% block page_title %}
+    Clubs
+{% endblock page_title %}
+{% block page_subtitle %}
+    Join our community
+{% endblock page_subtitle %}
+{% block content %}
+    <div class="columns">
+        <div class="column is-3">{% include 'partials/aside_menu/membership_aside.html' %}</div>
+        <div class="column is-9">
+            <nav class="breadcrumb"
+                 aria-label="breadcrumbs"
+                 style="padding-left: 5px;">
+                <ul>
+                    <li>
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'available_clubs' %}">Clubs</a>
+                    </li>
+                </ul>
+            </nav>
+            <section class="hero is-info welcome is-small" style="margin: 10px 0px;">
+                <div class="hero-body">
+                    <div class="container">
+                        <h1 class="title">Available Clubs</h1>
+                        <h2 class="subtitle">Join a new club today</h2>
+                    </div>
+                </div>
+            </section>
+            {% if clubs %}
+                <!-- If there are clubs available to the logged-in user -->
+                {% include 'partials/club_search.html' with content=clubs %}
+            {% else %}
+                <!-- If there is no club available to the logged-in user -->
+                <hr>
+                <p style="text-align: center" class="has-text-grey">
+                    There are no clubs matching this search.
+                </p>
+                <hr>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
