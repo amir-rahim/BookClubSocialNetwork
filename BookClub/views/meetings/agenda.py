@@ -61,6 +61,7 @@ class ExportCalendarView(View):
             vevent.add('summary').value = meeting.title
             vevent.add('uid').value = str(meeting.id)
             vevent.add('location').value = meeting.location
+            vevent.add('description').value = meeting.description
         icalstream = cal.serialize()
         response = HttpResponse(icalstream, content_type='text/calendar')
         response['Filename'] = 'agenda.ics'  # IE needs this
