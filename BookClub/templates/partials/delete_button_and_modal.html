@@ -1,12 +1,21 @@
-<button type="button"
-        class="button is-danger is-outlined js-modal-trigger"
-        data-target="{{ delete_modal_id }}-delete-modal"
-        aria-haspopup="true">
-    <span>Delete</span>
-    <span class="icon is-small">
-        <i class="fas fa-times"></i>
-    </span>
-</button>
+<div class="control has-text-centered">
+  <button type="button"
+          class="button is-danger js-modal-trigger {% if fullwidth %}is-fullwidth{% endif %} {% if outlined %}is-outlined{% endif %}"
+          data-target="{{ delete_modal_id }}-delete-modal"
+          aria-haspopup="true">
+      <span>
+        {% if button_text %}
+        {{button_text}}
+        {% else %}
+        Delete
+        {% endif %}
+      </span>
+      <span class="icon is-small">
+          <i class="fas fa-times"></i>
+      </span>
+  </button>
+</div>
+
 <div class="modal" id="{{ delete_modal_id }}-delete-modal">
     <div class="modal-background"></div>
     <div class="modal-card">
@@ -17,9 +26,11 @@
             <button class="delete" aria-label="close"></button>
         </header>
         <section class="modal-card-body" style="text-align:left">
-            <p>
-                Are you sure you want to delete <strong>{{ delete_item.get_delete_str }}</strong>?
-            </p>
+          {% if modal_text %}
+          {{modal_text}}
+          {% else %}
+          Are you sure you want to permanently delete <strong>{{ delete_item.get_delete_str }}</strong>?
+          {% endif %}
         </section>
         <footer class="modal-card-foot">
             <div class="field is-grouped">
