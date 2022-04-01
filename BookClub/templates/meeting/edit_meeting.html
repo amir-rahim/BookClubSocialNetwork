@@ -43,14 +43,14 @@
             <div class="container">
                 <div class="card-content">
                     <div class="columns">
-                        <div class="column is-9">
+                        <div class="column is-8">
                             <form method="post">
                                 {% csrf_token %}
                                 {% include 'partials/bulma_form.html' with form=form %}
                                 <input type="submit" value="Update Meeting" class="button is-link"/>
                             </form>
                         </div>
-                        <div class="column is-3">
+                        <div class="column is-4">
                             <div class="table-container">
                                 <table class="table is-hoverable"
                                        id="table-clubs"
@@ -81,8 +81,11 @@
                                                           method="post">
                                                         {% csrf_token %}
                                                         <input type="hidden" name="user" value="{{ member.username }}" />
-                                                        <button type='submit' class="button is-info">
-                                                            <i class="fa-solid fa-xmark fa-2xl " style="color:#E3170A"></i>
+                                                        <button type='submit' class="button is-danger is-outlined">
+                                                            <span>Kick</span>
+                                                            <span class="icon is-small">
+                                                                <i class="fas fa-times"></i>
+                                                            </span>
                                                         </button>
                                                     </form>
                                                 </td>
