@@ -9,10 +9,12 @@
         <li>
             <a href="{% url 'member_list' current_club.club_url_name %}">Members</a>
         </li>
-        {% if user == current_club.get_club_owner or user in current_club.get_moderators %}
-            <li>
-                <a href="{% url 'applicant_list' current_club.club_url_name %}">Applicants</a>
-            </li>
+        {% if current_club.is_private %}
+            {% if user == current_club.get_club_owner or user in current_club.get_moderators %}
+                <li>
+                    <a href="{% url 'applicant_list' current_club.club_url_name %}">Applicants</a>
+                </li>
+            {% endif %}
         {% endif %}
         <li>
             <a href="{% url 'club_recommendations' current_club.club_url_name %}">Recommendations</a>
