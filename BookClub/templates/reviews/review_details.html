@@ -14,7 +14,7 @@
             <div class="card">
                 <div class="card-image">
                     <figure class="image">
-                        {% if book.get_l_size > 50 %}
+                        {% if review.book.get_l_size > 50 %}
                             <img src="//images.weserv.nl/?url={{ review.book.imageL }}"
                                  alt="Book Cover">
                         {% else %}
@@ -46,7 +46,7 @@
                         <a href="{% url 'community_reviews' %}">Reviews</a>
                     </li>
                     <li>
-                        <a href="{% url 'book_review' book_id=review.book.id review_id=review.id %}">Review by {{ review.creator }}</a>
+                        <a href="{% url 'book_review' book_id=review.book.id review_id=review.id %}">Review by {{ review.creator |truncatechars:20 }}</a>
                     </li>
                 </ul>
             </nav>

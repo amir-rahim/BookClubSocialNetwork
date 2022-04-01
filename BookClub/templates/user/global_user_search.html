@@ -1,53 +1,19 @@
 {% extends 'base_content.html' %}
 {% block page_title %}
-    Applications List
+    Global Search
 {% endblock page_title %}
 {% block page_subtitle %}
-    My list of club applications
+    List of users
 {% endblock page_subtitle %}
 {% block content %}
     <div class="columns">
-        <div class="column is-3">
-            <aside class="menu is-hidden-mobile" style="padding-left: 15px;">
-                <p class="menu-label">
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'available_clubs' %}">Available Clubs</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'my_club_memberships' %}">Memberships</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'applications' %}" class="is-active"><b>My Applications</b></a>
-                    </li>
-                    <li>
-                        <a href="{% url 'create_club' %}">Create Club</a>
-                    </li>
-                </ul>
-                <p class="menu-label">
-                    Useful Links
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="{% url 'user_dashboard' %}">User Profile</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'library_dashboard' %}">Library</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'global_forum' %}">Global Forum</a>
-                    </li>
-                </ul>
-            </aside>
-        </div>
-        <div class="column is-9">
+        <div class="column is-12">
             <nav class="breadcrumb"
                  aria-label="breadcrumbs"
                  style="padding-left: 5px;">
                 <ul>
                     <li>
-                        <a href="{% url 'home' %}">Home</a>
+                        <a href="{% url 'home' %}">Back to Home</a>
                     </li>
                 </ul>
             </nav>

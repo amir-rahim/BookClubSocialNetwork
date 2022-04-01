@@ -20,7 +20,7 @@
                         <a href="{% url 'user_profile' username %}">Profile</a>
                     </li>
                     <li>
-                        <a href="{% url 'user_profile' username %}">{{ username }}</a>
+                        <a href="{% url 'user_profile' username %}">{{ username |truncatechars:20 }}</a>
                     </li>
                     <li>
                         <a href="{% url 'user_memberships' username %}">Club Memberships</a>

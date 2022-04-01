@@ -1,20 +1,89 @@
-{% extends 'base_content.html' %}
-{% block page_title %}
-    Home
-{% endblock page_title %}
-{% block page_subtitle %}
-    Welcome to Novella!
-{% endblock page_subtitle %}
-{% block content %}
+<!DOCTYPE html>
+{% load bulma_tags %}
+{% load static %}
+<html>
+<head>
+    <title>Novella</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" />
+    <link rel="stylesheet" href="{% static 'bulma/css/mystyles.css' %}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.4/dist/css/bulma-carousel.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.4/dist/js/bulma-carousel.min.js"></script>
+    <script src="https://kit.fontawesome.com/4c481256fb.js" crossorigin="anonymous"></script>
+
+    <!-- <script defer src="scripts.js"></script> -->
+
+    <style>
+        html {
+            scroll-behavior: smooth !important;
+        }
+        
+        body {
+            background-color: #eff0eb;
+            /* eff0eb fcf5ed */ 
+        }
+
+        nav {
+            border-bottom: 5px solid #757763;
+        }
+
+        .parallax {            
+            background-image: url("{% static 'Novella.png' %}");
+            
+            /* Set a specific height */
+            min-height: 59.5vw;
+            
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .links {
+            border-top: 5px solid #757763;
+        }
+
+        .section {
+            overflow-y: scroll;
+        }
+
+        .card-equal-height {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .card-equal-height .card-footer {
+            margin-top: auto;
+        }
+
+    </style>
+</head>        
+
+<body>
+
+    {% include 'partials/navbar.html' %}
+
+    <div class="parallax"></div>
+
+    <div class="links has-text-centered">
+        <a href="#home" class="has-text-centered has-text-black">
+            <span class="icon is-large">
+                <i class="fa-solid fa-chevron-down"></i>
+            </span>
+    </div>
+    
     <div class="section">
+        
+        <a id="home"></a>
         <div class="row columns is-multiline">
             <div class="column is-4">
                 <div class="card large card-equal-height">
                     <div class="card-image">
                         <figure class="image is-16by9">
                             <a href="{% url 'library_dashboard' %}">
-                                <img src="https://i.pinimg.com/originals/04/14/50/041450d28a4236a0a666901b191cc609.png"
-                                     alt="Image">
+                            <img src="https://i.pinimg.com/originals/04/14/50/041450d28a4236a0a666901b191cc609.png"
+                                 alt="Image">
                             </a>
                         </figure>
                     </div>
@@ -35,8 +104,8 @@
                     <div class="card-image">
                         <figure class="image is-16by9">
                             <a href="{% url 'available_clubs' %}">
-                                <img src="https://images.unsplash.com/photo-1615791287388-6f1bd87ace4e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=876&q=80"
-                                     alt="Image">
+                            <img src="https://images.unsplash.com/photo-1615791287388-6f1bd87ace4e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=876&q=80"
+                                 alt="Image">
                             </a>
                         </figure>
                     </div>
@@ -57,8 +126,8 @@
                     <div class="card-image">
                         <figure class="image is-16by9">
                             <a href="{% url 'agenda' %}">
-                                <img src="https://images.unsplash.com/photo-1435527173128-983b87201f4d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=867&q=80"
-                                     alt="Image">
+                            <img src="https://images.unsplash.com/photo-1435527173128-983b87201f4d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=867&q=80"
+                                 alt="Image">
                             </a>
                         </figure>
                     </div>
@@ -78,8 +147,8 @@
                     <div class="card-image">
                         <figure class="image is-16by9">
                             <a href="{% url 'global_forum' %}">
-                                <img src="https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=773&q=80"
-                                     alt="Image">
+                            <img src="https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=773&q=80"
+                                 alt="Image">
                             </a>
                         </figure>
                     </div>
@@ -99,8 +168,8 @@
                     <div class="card-image">
                         <figure class="image is-16by9">
                             <a href="{% url 'user_dashboard' %}">
-                                <img src="https://images.unsplash.com/photo-1474403078171-7f199e9d1335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1471&q=80"
-                                     alt="Image">
+                            <img src="https://images.unsplash.com/photo-1474403078171-7f199e9d1335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1471&q=80"
+                                 alt="Image">
                             </a>
                         </figure>
                     </div>
@@ -121,8 +190,8 @@
                     <div class="card-image">
                         <figure class="image is-16by9">
                             <a href="{% url 'bookshelf' %}">
-                                <img src="https://images.unsplash.com/photo-1628046903351-992bd4b583e6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-                                     alt="Image">
+                            <img src="https://images.unsplash.com/photo-1628046903351-992bd4b583e6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
+                                 alt="Image">
                             </a>
                         </figure>
                     </div>
@@ -139,4 +208,5 @@
             </div>
         </div>
     </div>
-{% endblock %}
+    
+</body>

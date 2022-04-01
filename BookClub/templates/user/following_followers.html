@@ -23,7 +23,7 @@
                         <a href="{% url 'home' %}">Home</a>
                     </li>
                     <li>
-                        <a href="{% url 'user_profile' username %}">{{ username }}</a>
+                        <a href="{% url 'user_profile' username %}">{{ username |truncatechars:20 }}</a>
                     </li>
                     {% if own %}
                         <li>

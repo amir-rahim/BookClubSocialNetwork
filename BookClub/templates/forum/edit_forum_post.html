@@ -61,7 +61,7 @@
                         {% endif %}
                     </li>
                     <li>
-                        <a href="{% url 'edit_forum_post' post.id %}">{{ post.title }}</a>
+                        <a href="{% url 'edit_forum_post' post.id %}">{{ post.title |truncatechars:20 }}</a>
                     </li>
                 </ul>
             </nav>

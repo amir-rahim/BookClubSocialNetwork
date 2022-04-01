@@ -28,7 +28,7 @@
                         <a href="{% url 'meeting_list' club.club_url_name %}">Meetings</a>
                     </li>
                     <li>
-                        <a href="{% url 'meeting_details' club.club_url_name meeting.id %}">{{ meeting.get_title }}</a>
+                        <a href="{% url 'meeting_details' club.club_url_name meeting.id %}">{{ meeting.get_title |truncatechars:20 }}</a>
                     </li>
                 </ul>
             </nav>

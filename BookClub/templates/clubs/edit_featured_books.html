@@ -20,7 +20,7 @@
                         <a href="{% url 'available_clubs' %}">Clubs</a>
                     </li>
                     <li>
-                        <a href="{% url 'club_dashboard' current_club.club_url_name %}">{{ current_club.name }}</a>
+                        <a href="{% url 'club_dashboard' current_club.club_url_name %}">{{ current_club.name |truncatechars:20 }}</a>
                     </li>
                     <li>
                         <a href="{% url 'edit_featured_books' current_club.club_url_name %}">Featured</a>

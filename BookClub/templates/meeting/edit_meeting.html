@@ -19,13 +19,13 @@
                         <a href="{% url 'available_clubs' %}">Clubs</a>
                     </li>
                     <li>
-                        <a href="{% url 'club_dashboard' club.club_url_name %}">{{ club.club_url_name }}</a>
+                        <a href="{% url 'club_dashboard' club.club_url_name %}">{{ club.club_url_name |truncatechars:20 }}</a>
                     </li>
                     <li>
                         <a href="{% url 'meeting_list' club.club_url_name %}">Meetings</a>
                     </li>
                     <li>
-                        <a href="{% url 'meeting_details' club.club_url_name meeting.id %}">{{ meeting.get_title }}</a>
+                        <a href="{% url 'meeting_details' club.club_url_name meeting.id %}">{{ meeting.get_title |truncatechars:20 }}</a>
                     </li>
                     <li>
                         <a href="{% url 'edit_meeting' club.club_url_name meeting.id %}">Manage</a>
