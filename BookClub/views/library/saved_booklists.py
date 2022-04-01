@@ -82,7 +82,7 @@ class SaveBookListView(LoginRequiredMixin, View):
 class RemoveSavedBookListView(LoginRequiredMixin, View):
     """Users can remove a saved booklist."""
 
-    redirect_location = 'user_booklist'
+    redirect_location = 'saved_booklists'
 
     def get(self, *args, **kwargs):
         return redirect(self.redirect_location, booklist_id=self.kwargs['booklist_id'])
@@ -117,4 +117,4 @@ class RemoveSavedBookListView(LoginRequiredMixin, View):
         else:
             self.is_not_actionable()
 
-        return redirect(self.redirect_location, booklist_id=self.kwargs['booklist_id'])
+        return redirect(self.redirect_location)
