@@ -51,10 +51,13 @@
                                 <div class="media-content">
                                     <div class="content">
                                         <p class="subtitle is-5">
-                                            <b>Meeting Description: </b> {{ meeting.get_description }}
+                                            <b>Description: </b> {{ meeting.get_description }}
                                         </p>
                                         <p class="subtitle is-5">
-                                            <b>Meeting Time: </b> {{ meeting.get_meeting_time }}
+                                            <b>Start Time: </b> {{ meeting.get_meeting_time }}
+                                        </p>
+                                        <p class="subtitle is-5">
+                                            <b>End Time: </b> {{ meeting.meeting_end_time }}
                                         </p>
                                         <p class="subtitle is-5">
                                             <b>Location: </b> {{ meeting.get_location }}
