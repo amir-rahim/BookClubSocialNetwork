@@ -85,7 +85,7 @@ class RemoveSavedBookListView(LoginRequiredMixin, View):
     redirect_location = 'saved_booklists'
 
     def get(self, *args, **kwargs):
-        return redirect(self.redirect_location, booklist_id=self.kwargs['booklist_id'])
+        return redirect(self.redirect_location)
 
     def is_actionable(self, booklist):
         """Check if user can save the book list."""
@@ -107,10 +107,9 @@ class RemoveSavedBookListView(LoginRequiredMixin, View):
 
         try:
             booklist = BookList.objects.get(id=kwargs['booklist_id'])
-            creator = booklist.creator
         except:
             messages.error(self.request, "Error, invalid booklist.")
-            return redirect(self.redirect_location, booklist_id=self.kwargs['booklist_id'])
+            return redirect(self.redirect_location)
 
         if self.is_actionable(booklist):
             self.action(booklist)
