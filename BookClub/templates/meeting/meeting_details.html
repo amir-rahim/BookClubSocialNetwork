@@ -168,6 +168,21 @@
                     {% endif %}
                 </div>
             </div>
+            {% if meeting.get_is_not_past and not meeting.organiser == user %}
+                {% if user not in meeting.get_members %}
+                    <form method="post"
+                            action="{% url 'join_meeting' club_url_name=club.club_url_name meeting_id=meeting.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="button is-info is-medium is-fullwidth">Join</button>
+                    </form>
+                {% elif user in meeting.get_members %}
+                    <form method="post"
+                            action="{% url 'leave_meeting' club_url_name=club.club_url_name meeting_id=meeting.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="button is-info is-medium is-fullwidth">Leave</button>
+                    </form>
+                {% endif %}
+            {% endif %}
         </div>
     </div>
 {% endblock %}
