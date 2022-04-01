@@ -319,46 +319,89 @@
                                             </section>
                                             <section class="info-tiles">
                                                 <div class="tile is-ancestor has-text-centered">
-                                                    <div class="tile is-parent">
-                                                        <article class="tile is-child box">
-                                                            <p class="title">
-                                                                {{ number_of_to_read }}
-                                                            </p>
-                                                            <p class="subtitle">
-                                                                Plan to Read
-                                                            </p>
-                                                        </article>
-                                                    </div>
-                                                    <div class="tile is-parent">
-                                                        <article class="tile is-child box">
-                                                            <p class="title">
-                                                                {{ number_of_reading }}
-                                                            </p>
-                                                            <p class="subtitle">
-                                                                Currently Reading
-                                                            </p>
-                                                        </article>
-                                                    </div>
-                                                    <div class="tile is-parent">
-                                                        <article class="tile is-child box">
-                                                            <p class="title">
-                                                                {{ number_of_on_hold }}
-                                                            </p>
-                                                            <p class="subtitle">
-                                                                On-hold
-                                                            </p>
-                                                        </article>
-                                                    </div>
-                                                    <div class="tile is-parent">
-                                                        <article class="tile is-child box">
-                                                            <p class="title">
-                                                                {{ number_of_completed }}
-                                                            </p>
-                                                            <p class="subtitle">
-                                                                Completed Books
-                                                            </p>
-                                                        </article>
-                                                    </div>
+                                                    {% if own_profile %}
+                                                        <div class="tile is-parent" onclick="window.location='{% url 'bookshelf' %}';" style="cursor: pointer;">
+                                                            <article class="tile is-child box">
+                                                                <p class="title">
+                                                                    {{ number_of_to_read }}
+                                                                </p>
+                                                                <p class="subtitle">
+                                                                    Plan to Read
+                                                                </p>
+                                                            </article>
+                                                        </div>
+                                                        <div class="tile is-parent" onclick="window.location='{% url 'bookshelf' %}';" style="cursor: pointer;">
+                                                            <article class="tile is-child box">
+                                                                <p class="title">
+                                                                    {{ number_of_reading }}
+                                                                </p>
+                                                                <p class="subtitle">
+                                                                    Currently Reading
+                                                                </p>
+                                                            </article>
+                                                        </div>
+                                                        <div class="tile is-parent" onclick="window.location='{% url 'bookshelf' %}';" style="cursor: pointer;">
+                                                            <article class="tile is-child box">
+                                                                <p class="title">
+                                                                    {{ number_of_on_hold }}
+                                                                </p>
+                                                                <p class="subtitle">
+                                                                    On-hold
+                                                                </p>
+                                                            </article>
+                                                        </div>
+                                                        <div class="tile is-parent" onclick="window.location='{% url 'bookshelf' %}';" style="cursor: pointer;">
+                                                            <article class="tile is-child box">
+                                                                <p class="title">
+                                                                    {{ number_of_completed }}
+                                                                </p>
+                                                                <p class="subtitle">
+                                                                    Completed Books
+                                                                </p>
+                                                            </article>
+                                                        </div>
+                                                    {% else %}
+                                                        <div class="tile is-parent">
+                                                            <article class="tile is-child box">
+                                                                <p class="title">
+                                                                    {{ number_of_to_read }}
+                                                                </p>
+                                                                <p class="subtitle">
+                                                                    Plan to Read
+                                                                </p>
+                                                            </article>
+                                                        </div>
+                                                        <div class="tile is-parent">
+                                                            <article class="tile is-child box">
+                                                                <p class="title">
+                                                                    {{ number_of_reading }}
+                                                                </p>
+                                                                <p class="subtitle">
+                                                                    Currently Reading
+                                                                </p>
+                                                            </article>
+                                                        </div>
+                                                        <div class="tile is-parent">
+                                                            <article class="tile is-child box">
+                                                                <p class="title">
+                                                                    {{ number_of_on_hold }}
+                                                                </p>
+                                                                <p class="subtitle">
+                                                                    On-hold
+                                                                </p>
+                                                            </article>
+                                                        </div>
+                                                        <div class="tile is-parent">
+                                                            <article class="tile is-child box">
+                                                                <p class="title">
+                                                                    {{ number_of_completed }}
+                                                                </p>
+                                                                <p class="subtitle">
+                                                                    Completed Books
+                                                                </p>
+                                                            </article>
+                                                        </div>
+                                                    {% endif %}
                                                 </div>
                                             </section>
                                         </div>
