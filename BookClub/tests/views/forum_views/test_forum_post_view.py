@@ -1,7 +1,9 @@
 from django.test import TestCase, tag
 from django.urls import reverse
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
 
-from BookClub.models import User, ForumPost
+from BookClub.models import User, ForumPost, Club, ClubMembership, Forum
 
 
 @tag('forum', 'forum_post')
@@ -23,6 +25,16 @@ class ForumPostViewTestCase(TestCase):
         self.other_post = ForumPost.objects.get(pk=2)
         self.other_url = reverse('forum_post', kwargs={'post_id': self.other_post.pk})
         self.user = User.objects.get(username="johndoe")
+        self.other_user = User.objects.get(pk=2)
+        self.club = Club.objects.get(pk=1)
+        self.other_club = Club.objects.get(pk=3)
+        
+        self.club_post = ForumPost.objects.get(pk=4)
+
+        Forum.objects.create(
+                title='forum for other club',
+                associated_with=self.other_club
+        )
 
     def test_my_forum_post_url(self):
         self.assertEqual(self.my_url, '/forum/' + str(self.my_post.id) + '/')
@@ -62,6 +74,12 @@ class ForumPostViewTestCase(TestCase):
                                       "1500s, when an unknown printer took a galley of type and scrambled it to make "
                                       "a type specimen book.")
         self.assertContains(response, "johndoe")
+
+    def test_invalid_post_for_club_post(self):
+        self.client.login(username=self.other_user.username, password="Password123")
+        url = reverse('forum_post', kwargs={'club_url_name': self.other_club.club_url_name, 'post_id': self.club_post.pk})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
 
     def test_has_no_buttons_not_own_post(self):
         response = self.client.get(self.my_url)
