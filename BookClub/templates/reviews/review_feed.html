@@ -51,7 +51,7 @@
                 {% for post in reviews %}
                     <br />
                     <div class="card">
-                        <header class="card-header">
+                        <header class="card-header" onclick="window.location='{% url 'book_review' book_id=post.book.id review_id=post.id %}';" style="cursor: pointer;">
                             <div class="card-header-title">
                                 <p class="subtitle">
                                     <b>{{ post.title }}</b>
