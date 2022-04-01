@@ -51,6 +51,11 @@
                             </form>
                         </div>
                         <div class="column is-4">
+                            <div class="box">
+                             {% include 'partials/delete_button_and_modal.html' with delete_item=meeting delete_modal_id=meeting.pk button_text='Delete meeting' fullwidth=True outlined=True %}
+                            </div>
+                            <hr/>
+                            <h3 class="title is-3">Attendees</h3>
                             <div class="table-container">
                                 <table class="table is-hoverable"
                                        id="table-clubs"
