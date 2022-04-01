@@ -32,7 +32,7 @@ class ForumPostView(ClubMemberTestMixin, ListView):
                     context['post'] = post
                     context['club'] = club
                 else:
-                    raise Http404("Given club or post id not found....")
+                    raise Http404("This forum does not contain this post....")
             except ObjectDoesNotExist:
                 raise Http404("Given club or post id not found....")
         else:
