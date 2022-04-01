@@ -88,7 +88,7 @@ class Meeting(models.Model):
             'B': 'Book',
             'C': 'Club',
             'S': 'Social',
-            'O': 'Other'
+            'O': '"Other" type'
         }
         return type_names[self.type]
 
