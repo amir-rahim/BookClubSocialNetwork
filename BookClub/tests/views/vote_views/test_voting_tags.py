@@ -1,25 +1,26 @@
+"""Unit testing for the Voting Tags"""
+from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase, tag
+
 from BookClub.models import User, ForumPost, Vote
 from BookClub.templatetags.votingtags import has_user_voted, get_user_vote_type
-from django.contrib.contenttypes.models import ContentType
 
-@tag('vote','post','tag')
+
+@tag('tags', 'vote')
 class HasUserVotedTagTestCase(TestCase):
+    """Tests of the HasUserVoted tag"""
     fixtures = [
         'BookClub/tests/fixtures/default_clubs.json',
         'BookClub/tests/fixtures/default_forum.json',
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_posts.json',
     ]
-    #test cases
-    #test user has voted, has not voted
-    #test user has voted, has voted
+
     def setUp(self):
         self.user = User.objects.get(pk=1)
         self.post = ForumPost.objects.get(pk=1)
-        self.forummpostcontenttypepk = ContentType.objects.get_for_model(
+        self.forum_post_content_type_pk = ContentType.objects.get_for_model(
             self.post.__class__).pk
-
 
     def test_user_has_voted_has_not_voted(self):
         self.votes = self.post.votes.all()
@@ -29,7 +30,7 @@ class HasUserVotedTagTestCase(TestCase):
         Vote.objects.create(
             creator=self.user,
             content_type=ContentType.objects.get(
-                pk=self.forummpostcontenttypepk),
+                pk=self.forum_post_content_type_pk),
             object_id=self.post.pk,
             type=False
         )
@@ -40,29 +41,28 @@ class HasUserVotedTagTestCase(TestCase):
         Vote.objects.create(
             creator=self.user,
             content_type=ContentType.objects.get(
-                pk=self.forummpostcontenttypepk),
+                pk=self.forum_post_content_type_pk),
             object_id=self.post.pk,
             type=True
         )
         self.votes = self.post.votes.all()
         self.assertTrue(has_user_voted(None, self.votes, self.user))
 
-@tag('tag')
+
+@tag('tags', 'vote')
 class GetUserVoteTagTestCase(TestCase):
+    """Tests of the GetUserVote tag"""
     fixtures = [
         'BookClub/tests/fixtures/default_clubs.json',
         'BookClub/tests/fixtures/default_forum.json',
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_posts.json',
     ]
-    #test cases
-    #test get vote, upvoted
-    #test get vote, downvoted
 
     def setUp(self):
         self.user = User.objects.get(pk=1)
         self.post = ForumPost.objects.get(pk=1)
-        self.forummpostcontenttypepk = ContentType.objects.get_for_model(
+        self.forum_post_content_type_pk = ContentType.objects.get_for_model(
             self.post.__class__).pk
 
     def test_get_vote_has_not_voted(self):
@@ -73,7 +73,7 @@ class GetUserVoteTagTestCase(TestCase):
         vote = Vote.objects.create(
             creator=self.user,
             content_type=ContentType.objects.get(
-                pk=self.forummpostcontenttypepk),
+                pk=self.forum_post_content_type_pk),
             object_id=self.post.pk,
             type=True
         )
@@ -84,7 +84,7 @@ class GetUserVoteTagTestCase(TestCase):
         vote = Vote.objects.create(
             creator=self.user,
             content_type=ContentType.objects.get(
-                pk=self.forummpostcontenttypepk),
+                pk=self.forum_post_content_type_pk),
             object_id=self.post.pk,
             type=False
         )

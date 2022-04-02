@@ -1,4 +1,4 @@
-"""Tests for editing book list details"""
+"""Unit testing for Edit Booklist view"""
 from django.contrib import messages
 from django.contrib.messages import get_messages
 from django.test import TestCase, tag
@@ -10,7 +10,7 @@ from BookClub.tests.helpers import LogInTester, reverse_with_next
 
 @tag("booklist", "edit_list")
 class EditBookListViewTestCase(TestCase, LogInTester):
-    """Tests for editing book list details"""
+    """Edit Booklist view testing"""
 
     fixtures = [
         'BookClub/tests/fixtures/default_books.json',

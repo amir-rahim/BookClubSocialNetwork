@@ -1,3 +1,4 @@
+"""Unit testing of the Create Booklist view"""
 from datetime import datetime
 import pytz
 
@@ -11,6 +12,7 @@ from BookClub.tests.helpers import reverse_with_next
 
 @tag("booklist", "create_list")
 class CreateBooklistViewTestcase(TestCase):
+    """Create booklist view testing"""
     fixtures = [
         "BookClub/tests/fixtures/default_users.json",
         "BookClub/tests/fixtures/booklists.json",

@@ -1,3 +1,4 @@
+"""Unit testing of Add Book to Booklist view"""
 from django.contrib.messages import get_messages
 from django.test import TestCase, tag
 from django.urls import reverse
@@ -7,6 +8,7 @@ from BookClub.models import Book, BookList, User
 
 @tag("booklist", "add_book")
 class AddBookViewTestCase(TestCase):
+    """Add Book to Booklist view testing"""
     fixtures = [
         'BookClub/tests/fixtures/default_books.json',
         'BookClub/tests/fixtures/default_users.json',

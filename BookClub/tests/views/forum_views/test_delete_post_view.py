@@ -1,3 +1,4 @@
+"""Unit testing of the Delete Post view"""
 from django.test import TestCase, tag
 from django.urls import reverse
 
@@ -5,9 +6,9 @@ from BookClub.models import User, ForumPost, Club
 from BookClub.tests.helpers import reverse_with_next
 
 
-@tag('forum', 'delete_post')
+@tag('views', 'forum', 'delete_post')
 class DeletePostViewTestCase(TestCase):
-    """Tests of the Edit Posts view."""
+    """Tests of the Delete Posts view."""
 
     fixtures = [
         'BookClub/tests/fixtures/default_users.json',

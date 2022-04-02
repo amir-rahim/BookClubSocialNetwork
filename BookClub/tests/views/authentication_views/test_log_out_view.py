@@ -1,4 +1,4 @@
-"""Tests of the log out view."""
+"""Unit testing of the log out view."""
 from django.test import TestCase, tag
 from django.urls import reverse
 

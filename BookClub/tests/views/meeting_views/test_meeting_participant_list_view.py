@@ -1,4 +1,4 @@
-"""Tests for Meeting Participants List View"""
+"""Unit testing for Meeting Participants List View"""
 from django.test import TestCase, tag
 from django.urls import reverse
 
@@ -6,8 +6,9 @@ from BookClub.models import Meeting, User, Club, ClubMembership
 from BookClub.tests.helpers import LogInTester
 
 
-@tag('meeting', 'participants_list')
+@tag('views', 'meeting', 'participants_list')
 class MeetingParticipantListTestCase(TestCase, LogInTester):
+    """Tests for Meeting Participants List View"""
     fixtures = [
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_clubs.json',
@@ -25,7 +26,8 @@ class MeetingParticipantListTestCase(TestCase, LogInTester):
         self.private_club = Club.objects.get(pk='3')
 
         self.url = reverse('meeting_participants',
-                           kwargs={'club_url_name': self.club.club_url_name, 'meeting_id': self.meeting.id})
+                           kwargs={'club_url_name': self.club.club_url_name,
+                                   'meeting_id': self.meeting.id})
 
     def test_url(self):
         self.assertEqual(self.url, f'/club/{self.club.club_url_name}/meetings/{self.meeting.id}/participants/')

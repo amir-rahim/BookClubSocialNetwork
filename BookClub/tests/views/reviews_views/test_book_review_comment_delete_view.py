@@ -1,15 +1,14 @@
-from django.forms import ValidationError
-from django.shortcuts import redirect
-from django.test import TestCase, tag
-from django.contrib import messages
+"""Unit testing of the Delete Book Review Comment"""
 from django.contrib.messages import get_messages
+from django.test import TestCase, tag
 from django.urls import reverse
 
-from BookClub.models import BookReview, Book, BookReviewComment, User
+from BookClub.models import BookReviewComment, User
 from BookClub.tests.helpers import LogInTester, reverse_with_next
 
-@tag('delete','review','reviews','delete_book_review_comment','delete_comment')
-class DeleteBookReviewCommentTestCase(TestCase,LogInTester):
+
+@tag('views', 'review', 'delete_comment')
+class DeleteBookReviewCommentTestCase(TestCase, LogInTester):
     """Tests for Delete Book Review Comment"""
     fixtures = [
         'BookClub/tests/fixtures/default_users.json',

@@ -1,4 +1,4 @@
-"""Tests of the Export Calendar view."""
+"""Unit testing of the Export Calendar view."""
 from django.test import TestCase, tag
 from django.urls import reverse
 from django.contrib import messages

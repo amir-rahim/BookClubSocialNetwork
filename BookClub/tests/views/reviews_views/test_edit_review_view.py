@@ -1,4 +1,4 @@
-"""Tests for editing review and rating"""
+"""Unit testing of the editing review and rating view"""
 from django.contrib import messages
 from django.contrib.messages import get_messages
 from django.test import TestCase, tag
@@ -8,7 +8,7 @@ from BookClub.models import User, Book, BookReview
 from BookClub.tests.helpers import LogInTester, reverse_with_next
 
 
-@tag('book_review', 'edit_review', 'review')
+@tag('views', 'edit_review', 'review')
 class EditReviewView(TestCase, LogInTester):
     """Tests for editing review and rating"""
 

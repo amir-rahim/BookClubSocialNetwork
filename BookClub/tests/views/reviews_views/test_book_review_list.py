@@ -1,12 +1,13 @@
+"""Unit testing of the Book Review List view"""
 from django.test import TestCase, tag
 from django.urls import reverse
 
 from BookClub.models import User, Book, BookReview
 
 
-@tag('book_review', 'review_list')
+@tag('views', 'review', 'review_list')
 class BookReviewListView(TestCase):
-
+    """Tests for Book Review List view"""
     fixtures = [
         'BookClub/tests/fixtures/real_books.json',
         'BookClub/tests/fixtures/default_users.json',

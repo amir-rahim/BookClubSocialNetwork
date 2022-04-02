@@ -1,11 +1,13 @@
+"""Unit Testing of the Meeting List View"""
 from django.test import TestCase, tag
 from django.urls import reverse
 
 from BookClub.models import User, Club, ClubMembership, Meeting, Book
 
 
-@tag('meeting', 'meeting_list')
+@tag('views', 'meeting', 'meeting_list')
 class MeetingListTest(TestCase):
+    """Tests for Meeting List View"""
     fixtures = [
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_clubs.json',

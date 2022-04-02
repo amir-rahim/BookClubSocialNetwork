@@ -1,3 +1,4 @@
+"""Unit testing of the Edit Post view"""
 from django.test import TestCase, tag
 from django.urls import reverse
 
@@ -5,7 +6,7 @@ from BookClub.models import User, ForumPost, Club
 from BookClub.tests.helpers import reverse_with_next
 
 
-@tag('forum', 'edit_post')
+@tag('views', 'forum', 'edit_post')
 class EditPostViewTestCase(TestCase):
     """Tests of the Edit Posts view."""
 

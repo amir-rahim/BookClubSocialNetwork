@@ -1,10 +1,12 @@
+"""Unit testing for the Recommender Base view"""
 from django.urls import reverse
 from django.test import TestCase, tag
 from BookClub.models import User, Club
 
 
-@tag('recommendations', 'base')
+@tag('views', 'recommendations', 'base')
 class BaseUserRecommenderViewTestCase(TestCase):
+    """Testing for the Recommender Base view"""
     fixtures = [
         "BookClub/tests/fixtures/default_users.json",
         "BookClub/tests/fixtures/default_clubs.json",

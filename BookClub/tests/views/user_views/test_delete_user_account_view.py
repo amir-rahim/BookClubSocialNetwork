@@ -1,4 +1,4 @@
-"""Test delete user account view."""
+"""Unit testing delete user account view."""
 from django.contrib.messages import get_messages
 from django.test import TestCase, tag
 from django.urls import reverse
@@ -7,9 +7,9 @@ from BookClub.models import User
 from BookClub.tests.helpers import LogInTester
 
 
-@tag('user', 'delete_user_account')
+@tag('views', 'user', 'delete_user_account')
 class DeleteUserAccountView(TestCase, LogInTester):
-    """Test the Delete User Account view."""
+    """Tests for the Delete User Account view."""
 
     fixtures = [
         "BookClub/tests/fixtures/default_users.json"

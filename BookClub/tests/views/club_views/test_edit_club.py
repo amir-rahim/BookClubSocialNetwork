@@ -1,3 +1,4 @@
+"""Unit testing of the Edit Club view"""
 from django.contrib.messages import get_messages
 from django.test import TestCase, tag
 from django.urls import reverse
@@ -6,14 +7,10 @@ from BookClub.models.club import Club
 from BookClub.models.user import User
 from BookClub.tests.helpers import reverse_with_next
 
-"""
-    Testing for edit_club
-    Carried out by Jack and Rav
-"""
 
-
-@tag('club', 'edit_club')
+@tag('views', 'club', 'edit_club')
 class EditClubViewTestCase(TestCase):
+    """Testing the Edit Club view"""
     fixtures = [
         "BookClub/tests/fixtures/default_users.json",
         "BookClub/tests/fixtures/default_clubs.json",

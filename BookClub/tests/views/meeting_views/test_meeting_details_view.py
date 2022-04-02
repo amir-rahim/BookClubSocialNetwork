@@ -1,4 +1,4 @@
-"""Tests for Meeting Details View"""
+"""Unit testing of the Meeting Details View"""
 from django.test import TestCase, tag
 from django.urls import reverse
 

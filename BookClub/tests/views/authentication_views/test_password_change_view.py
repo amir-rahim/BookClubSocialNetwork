@@ -1,4 +1,4 @@
-"""Tests for the password change view."""
+"""Unit testing for the password change view."""
 from django.contrib.auth.hashers import check_password
 from django.test import TestCase, tag
 from django.urls import reverse
@@ -10,7 +10,7 @@ from BookClub.tests.helpers import reverse_with_query, LogInTester
 
 @tag("views", "authentication", "password_change")
 class PasswordViewTest(TestCase, LogInTester):
-    """Unit tests for the password change view."""
+    """Tests for the password change view."""
 
     fixtures = ['BookClub/tests/fixtures/default_users.json']
 

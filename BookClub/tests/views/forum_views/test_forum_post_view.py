@@ -1,14 +1,13 @@
+"""Unit testing of the Forum Post view"""
 from django.test import TestCase, tag
 from django.urls import reverse
-from django.core.exceptions import ObjectDoesNotExist
-from django.db import models
 
-from BookClub.models import User, ForumPost, Club, ClubMembership, Forum
+from BookClub.models import User, ForumPost, Club, Forum
 
 
-@tag('forum', 'forum_post')
+@tag('views', 'forum', 'forum_post')
 class ForumPostViewTestCase(TestCase):
-    """Tests of the Forum view."""
+    """Tests of the Forum Post view."""
 
     fixtures = [
         'BookClub/tests/fixtures/default_users.json',

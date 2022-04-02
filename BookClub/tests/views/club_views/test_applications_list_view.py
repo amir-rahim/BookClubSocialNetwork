@@ -1,11 +1,11 @@
-"""Tests of the applications list view."""
+"""Unit testing of the applications list view."""
 from django.test import TestCase, tag
 from django.urls import reverse
 
 from BookClub.models import User, Club, ClubMembership
 
 
-@tag('club', 'applications_list')
+@tag('views', 'club', 'applications_list')
 class MyClubsMembershipsViewTestCase(TestCase):
     """Tests of the applications list view."""
 

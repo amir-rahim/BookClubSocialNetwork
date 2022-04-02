@@ -1,3 +1,4 @@
+"""Unit testing of the Create Posts views"""
 from django.contrib import messages
 from django.contrib.messages import get_messages
 from django.test import TestCase, tag
@@ -7,7 +8,7 @@ from BookClub.models import User, ForumPost, Club, Forum
 from BookClub.tests.helpers import reverse_with_next
 
 
-@tag('forum', 'create_post')
+@tag('views', 'forum', 'create_post')
 class CreatePostViewTestCase(TestCase):
     """Tests of the Create Posts view."""
 

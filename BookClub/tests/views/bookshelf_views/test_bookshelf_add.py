@@ -1,3 +1,4 @@
+"""Unit testing of the add book to bookshelf view"""
 from django.contrib.messages import get_messages
 from django.test import TestCase, tag
 from django.urls import reverse
@@ -8,6 +9,7 @@ from BookClub.tests.helpers import reverse_with_next
 
 @tag("views", "bookshelf", "add_bookshelf")
 class AddBookShelfViewTestCase(TestCase):
+    """Test add book to bookshelf view"""
     fixtures = [
         'BookClub/tests/fixtures/default_books.json',
         'BookClub/tests/fixtures/default_users.json',
@@ -20,8 +22,6 @@ class AddBookShelfViewTestCase(TestCase):
         self.book = Book.objects.get(pk=1)
         self.url = reverse('add_to_bookshelf', kwargs={"book_id": self.book.id})
         self.data = {'status': 1}
-
-    """Test add books to bookshelf"""
 
     def test_url(self):
         self.assertEquals(self.url, "/bookshelf/1/add/")

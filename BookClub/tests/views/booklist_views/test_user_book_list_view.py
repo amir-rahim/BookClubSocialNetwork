@@ -1,4 +1,4 @@
-"""Tests for Meeting Participants List View"""
+"""Unit testing for User Booklist View"""
 from django.test import TestCase, tag
 from django.urls import reverse
 from django.utils import timezone
@@ -9,6 +9,7 @@ from BookClub.tests.helpers import LogInTester
 
 @tag("booklist", "user_list")
 class UserBookListViewTestCase(TestCase, LogInTester):
+    """User Booklist View testing"""
     fixtures = [
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_books.json',
