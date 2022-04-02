@@ -34,6 +34,14 @@ class LogInView(LoginProhibitedMixin, FormView):
     """Allow the user to log in to the site and sets the club_id session key."""
     form_class = LogInForm
     template_name = 'authentication/login.html'
+    success_url = 'home'
+
+    def get_context_data(self, **kwargs):
+        context = super(LogInView, self).get_context_data(**kwargs)
+        next_page = self.request.GET.get('next')
+        if next_page:
+            context['next'] = next_page
+        return context
 
     def form_valid(self, form):
         username = form.cleaned_data.get('username')
@@ -43,16 +51,19 @@ class LogInView(LoginProhibitedMixin, FormView):
         if user is not None:
             # The user is authenticated, we then log-in the user and redirects it
             login(self.request, user)
-            messages.success(self.request, ('Successfully Logged in!'))
-            redirect_url = settings.REDIRECT_URL_WHEN_LOGGED_IN
-            return redirect(redirect_url)
+            messages.success(self.request, 'Successfully Logged in!')
+            return redirect(self.get_success_url())
         else:
             messages.add_message(self.request, messages.ERROR, "The credentials provided were invalid!")
             return render(self.request, 'authentication/login.html')
 
     def form_invalid(self, form):
         messages.add_message(self.request, messages.ERROR, "The credentials provided were incomplete!")
-        return super().form_invalid(form);
+        return super().form_invalid(form)
+
+    def get_success_url(self):
+        url = self.get_context_data().get('next')
+        return url or reverse(self.success_url)
 
 
 class LogOutView(LoginRequiredMixin, View):
