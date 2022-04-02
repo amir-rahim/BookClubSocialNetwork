@@ -90,7 +90,11 @@
                     </p>
                     <div class="card-header-icon">
                         {% if user == post.creator %}
-                            <a href="{% url 'edit_forum_post' post_id=post.id %}">
+                            {% if club %}
+                                <a href="{% url 'edit_forum_post' club_url_name=club.club_url_name post_id=post.id %}">
+                            {% else %}
+                                <a href="{% url 'edit_forum_post' post_id=post.id %}">
+                            {% endif %}
                                 <button class="button is-success is-rounded" aria-label="Edit Post">
                                     <span>Edit</span>
                                     <span class="icon is-small">

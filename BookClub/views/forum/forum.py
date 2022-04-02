@@ -193,6 +193,17 @@ class EditForumPostView(LoginRequiredMixin, ClubMemberTestMixin, UpdateView):
     def get_success_url(self):
         return reverse('forum_post', kwargs=self.kwargs)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if self.kwargs.get('club_url_name') is not None:
+            club = get_club_from_url_name(self.kwargs.get('club_url_name'))
+            context['club'] = club
+        else: 
+            context['club'] = None
+
+        return context
+
 
 class DeleteForumPostView(LoginRequiredMixin, ClubMemberTestMixin, DeleteView):
     """Allow the user to delete their own posts."""
