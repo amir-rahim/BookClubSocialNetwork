@@ -1,16 +1,19 @@
+"""Unit testing of the Popular Books Recommender Methods"""
 import numpy as np
 from django.test import TestCase, tag
 from RecommenderModule.recommenders.resources.popular_books_recommender_methods import PopularBooksMethods
 from RecommenderModule.recommenders.resources.data_provider import DataProvider
 import math
 
+
 @tag('recommenders')
 class PopularBooksRecommenderMethodsTestCase(TestCase):
-
+    """Popular Books Recommender Methods Tests"""
     def setUp(self):
         data_provider = DataProvider(get_data_from_csv=True)
         self.trainset = data_provider.get_filtered_ratings_trainset()
-        self.popular_books_methods = PopularBooksMethods(print_status=False, trainset=self.trainset, parameters={'ranking_method': 'combination'})
+        self.popular_books_methods = PopularBooksMethods(print_status=False, trainset=self.trainset,
+                                                         parameters={'ranking_method': 'combination'})
         self.book_id = self.trainset.to_raw_iid(1)
 
     def test_get_average_rating(self):
@@ -18,7 +21,7 @@ class PopularBooksRecommenderMethodsTestCase(TestCase):
         sum = 0
         for user_id, rating in self.trainset.ir[1]:
             sum += rating
-        self.assertEqual(average_rating, sum/len(self.trainset.ir[1]))
+        self.assertEqual(average_rating, sum / len(self.trainset.ir[1]))
 
     def test_compute_sorted_average_ratings(self):
         average_ratings_list = self.popular_books_methods.sorted_average_ratings
@@ -37,7 +40,7 @@ class PopularBooksRecommenderMethodsTestCase(TestCase):
         if len(all_ratings_sorted) % 2 == 0:
             index = (len(all_ratings_sorted) // 2) - 1
             calculated_median = (all_ratings_sorted[index] + all_ratings_sorted[index + 1]) / 2
-        else: # odd number of ratings
+        else:  # odd number of ratings
             index = (len(all_ratings_sorted) // 2)
             calculated_median = all_ratings_sorted[index]
         self.assertEqual(median_rating, calculated_median)
@@ -60,7 +63,7 @@ class PopularBooksRecommenderMethodsTestCase(TestCase):
             median_rating = self.popular_books_methods.get_median_rating(book)
             self.assertEqual(score, math.sqrt(average_rating * median_rating))
             if i > 0:
-                self.assertTrue(combination_scores_list[i-1][1] >= score)
+                self.assertTrue(combination_scores_list[i - 1][1] >= score)
             i += 1
 
     def test_get_recommendations_from_average_no_read_books(self):

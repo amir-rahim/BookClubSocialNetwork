@@ -1,3 +1,4 @@
+"""Unit testing for Library"""
 from django.test import TestCase, tag
 from BookClub.models import User, Book, Club, ClubMembership
 from RecommenderModule.recommenders.resources.library import Library
@@ -5,9 +6,10 @@ from RecommenderModule.recommenders.resources.data_provider import DataProvider
 from collections import Counter
 import joblib
 
+
 @tag('recommenders')
 class LibraryTestCase(TestCase):
-
+    """Library Tests as part of the Recommenders"""
     fixtures = [
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_books.json',
@@ -22,8 +24,8 @@ class LibraryTestCase(TestCase):
         self.club = Club.objects.get(pk=1)
         self.library_django = Library()
 
-    """Initialise the variables to use the trainset-based library"""
     def set_up_library_trainset(self):
+        """Initialise the variables to use the trainset-based library"""
         data_provider = DataProvider(get_data_from_csv=True)
         trainset = data_provider.get_filtered_ratings_trainset()
         self.trainset = trainset

@@ -1,12 +1,16 @@
+"""Unit testing of the Item Based Recommender"""
 from django.test import TestCase, tag
+
+from BookClub.models import Club, User, ClubMembership
 from RecommenderModule.recommenders.item_based_recommender import ItemBasedRecommender
 from RecommenderModule.recommenders.resources.data_provider import DataProvider
-from RecommenderModule.recommenders.resources.item_based_collaborative_filtering_methods import ItemBasedCollaborativeFilteringMethods
-from BookClub.models import Club, User, ClubMembership
+from RecommenderModule.recommenders.resources.item_based_collaborative_filtering_methods import \
+    ItemBasedCollaborativeFilteringMethods
+
 
 @tag('recommenders')
 class ItemBasedRecommenderTestCase(TestCase):
-
+    """Item Based Recommender Testing"""
     def setUp(self):
         data_provider = DataProvider(get_data_from_csv=True)
         self.trainset = data_provider.get_filtered_ratings_trainset()

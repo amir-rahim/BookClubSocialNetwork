@@ -1,12 +1,14 @@
+"""Unit testing of the data provider"""
 import pandas as pd
 from django.test import TestCase, tag
 from RecommenderModule.recommenders.resources.data_provider import DataProvider
 from surprise.dataset import DatasetAutoFolds
 from surprise import Trainset
 
+
 @tag('recommenders')
 class DataProviderTestCase(TestCase):
-
+    """Data provider testing"""
     fixtures = [
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_books.json',
