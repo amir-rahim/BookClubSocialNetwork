@@ -10,7 +10,7 @@ from BookClub.models.recommendations import ClubRecommendations
 from BookClub.models.user import User
 
 
-@tag('models', 'reviewsmodel')
+@tag('models', 'review')
 class BookReviewModelTestCase(TestCase):
 
     fixtures=[
@@ -123,6 +123,11 @@ class BookReviewModelTestCase(TestCase):
     def test_get_comments(self):
         self.assertTrue(self.review1.get_comments()!=None)
 
+    def test_get_absolute_url(self):
+        return_url = self.review1.get_absolute_url()
+        correct_url = '/library/books/1/review/1/'
+        self.assertEqual(return_url, correct_url)
+
     def test_get_delete_url(self):
         delete_url = reverse('delete_review',kwargs={'book_id': self.review1.book.pk})
         self.assertEqual(self.review1.get_delete_url(),delete_url)
@@ -139,7 +144,7 @@ class BookReviewModelTestCase(TestCase):
         self.review1.save()
         recommendation_exists = UserRecommendations.objects.filter(user=self.user1).exists()
         self.assertFalse(recommendation_exists)
-        
+
     def test_save_changes_user_modified(self):
         rec = UserRecommendations.objects.create(user=self.user1)
         rec.modified = False
@@ -153,7 +158,7 @@ class BookReviewModelTestCase(TestCase):
         self.assertTrue(recommendation_exists)
         rec.refresh_from_db()
         self.assertTrue(rec.modified)
-        
+
     def test_save_changes_club_modified(self):
         club = Club.objects.get(pk=1)
         rec = ClubRecommendations.objects.create(club=club)

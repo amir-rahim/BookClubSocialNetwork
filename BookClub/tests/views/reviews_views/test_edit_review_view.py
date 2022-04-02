@@ -8,7 +8,7 @@ from BookClub.models import User, Book, BookReview
 from BookClub.tests.helpers import LogInTester, reverse_with_next
 
 
-@tag('book_review', 'edit_review')
+@tag('book_review', 'edit_review', 'review')
 class EditReviewView(TestCase, LogInTester):
     """Tests for editing review and rating"""
 
@@ -63,8 +63,8 @@ class EditReviewView(TestCase, LogInTester):
         messages_list = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.SUCCESS)
-        redirect_url = reverse('book_reviews', kwargs={'book_id': self.book.id})
-        self.assertTemplateUsed(response, 'library/book_reviews.html')
+        redirect_url = reverse('book_review', kwargs={'book_id': self.book.id, 'review_id': self.book_review.pk})
+        self.assertTemplateUsed(response, 'reviews/review_details.html')
         self.assertEqual(self.book_review.creator.id, self.user.id)
         self.assertEqual(self.book_review.book_rating, self.data['book_rating'])
         self.assertEqual(self.book_review.title, self.data['title'])
