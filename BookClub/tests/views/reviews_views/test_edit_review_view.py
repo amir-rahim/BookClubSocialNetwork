@@ -35,7 +35,6 @@ class EditReviewView(TestCase, LogInTester):
         self.assertEqual(self.url, f'/library/books/{self.book.pk}/edit/')
 
     def test_post_edit_review_redirects_when_not_logged_in(self):
-        # print('not logged in')
         redirect_url = reverse_with_next('login', self.url)
         response = self.client.post(self.url, self.data, follow=True)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200,
@@ -43,7 +42,6 @@ class EditReviewView(TestCase, LogInTester):
         self.assertTemplateUsed(response, 'authentication/login.html')
 
     def test_edit_review_redirects_when_different_user(self):
-        # print('not author of review')
         self.client.login(username=self.another_user.username, password="Password123")
         self.assertTrue(self._is_logged_in())
         redirect_url = reverse('book_reviews', kwargs={'book_id': self.book.id})
@@ -58,14 +56,10 @@ class EditReviewView(TestCase, LogInTester):
     '''Tests for user successfully editing the review and rating'''
 
     def test_successful_edit_rating_and_review_when_logged_in_as_user(self):
-        # print('HEREEEEEEEE')
-        # print('before: ' + self.book_review.title)
         self.client.login(username=self.user.username, password="Password123")
         self.assertTrue(self._is_logged_in())
         response = self.client.post(self.url, self.data, follow=True)
         self.book_review.refresh_from_db()
-        # print(response.rendered_content)
-        # print('after: ' + self.book_review.title)
         messages_list = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.SUCCESS)
@@ -101,7 +95,6 @@ class EditReviewView(TestCase, LogInTester):
         response = self.client.post(self.url, self.data, follow=True)
         redirect_url = reverse('book_reviews', kwargs={'book_id': self.book.id})
         messages_list = list(get_messages(response.wsgi_request))
-        # print(messages_list)
         self.assertEqual(len(messages_list), 1)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200,
                              fetch_redirect_response=True)
