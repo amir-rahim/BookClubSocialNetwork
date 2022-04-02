@@ -106,18 +106,9 @@ class EditPostViewTestCase(TestCase):
         self.assertEqual(post.content, "... qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...")
 
     def test_edit_post_when_creator(self):
-        # print('this one')
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.post(self.my_url, self.edit, follow=True)
         post = ForumPost.objects.get(pk=1)
-        self.assertEqual(post.content, "HELLO, HOW DO YOU DO!")
-
-    def test_edit_club_post_when_creator(self):
-        self.client.login(username=self.user.username, password="Password123")
-        # print('trying')
-        response = self.client.post(self.club_url, self.edit, follow=True)
-        # print(response.status_code)
-        post = ForumPost.objects.get(pk=4)
         self.assertEqual(post.content, "HELLO, HOW DO YOU DO!")
 
     def test_post_details_show(self):
@@ -130,4 +121,13 @@ class EditPostViewTestCase(TestCase):
                                       "Lorem Ipsum has been the industrial standard dummy text ever since the "
                                       "1500s, when an unknown printer took a galley of type and scrambled it to make "
                                       "a type specimen book.")
+        self.assertContains(response, "Posted by: johndoe")
+
+    def test_club_post_details_show(self):
+        self.client.login(username=self.user.username, password="Password123")
+        response = self.client.get(self.club_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'forum/edit_forum_post.html')
+        self.assertContains(response, "Latin Quota")
+        self.assertContains(response, "... qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...")
         self.assertContains(response, "Posted by: johndoe")
