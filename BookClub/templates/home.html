@@ -60,7 +60,30 @@
 
     {% include 'partials/navbar.html' %}
 
-    <div class="parallax"></div>
+    <div class="parallax">
+        {% if messages %}
+            <section class="container" style="padding-top: 10vh;" id="notif">
+                {% for message in messages %}
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                        <div class="notification is-success is-light">
+                            <button class="delete" onclick="document.getElementById('notif').style.display='none'"></button>
+                            {{ message }}
+                        </div>
+                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                        <div class="notification is-danger">
+                            <button class="delete" onclick="document.getElementById('notif').style.display='none'"></button>
+                            {{ message }}
+                        </div>
+                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+                        <div class="notification is-info">
+                            <button class="delete" onclick="document.getElementById('notif').style.display='none'"></button>
+                            {{ message }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </section>
+        {% endif %}
+    </div>
 
     <div class="links has-text-centered">
         <a href="#home" class="has-text-centered has-text-black">
