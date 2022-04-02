@@ -6,7 +6,7 @@ from django.test import TestCase, tag
 from BookClub.models import Meeting, Club, User, Book
 
 
-@tag('models', 'meetingmodel')
+@tag('models', 'meeting')
 class MeetingTestCase(TestCase):
     fixtures = [
         'BookClub/tests/fixtures/books.json',

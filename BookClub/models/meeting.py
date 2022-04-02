@@ -60,7 +60,8 @@ class Meeting(models.Model):
         return self.title
 
     def get_delete_str(self):
-        return self.__str__()
+        end_time_str = self.meeting_end_time.strftime("%H:%M") if self.meeting_end_time.date() == self.meeting_time.date() else self.meeting_end_time.strftime("%A %-d %b %Y, %H:%M")
+        return f'a {self.get_type_name()} meeting of "{str(self.club)}" club on {self.meeting_time.strftime("%A %-d %b %Y, %H:%M")} - {end_time_str}'
 
     def get_organiser(self):
         return self.organiser
