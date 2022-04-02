@@ -205,3 +205,16 @@ class BookDetailViewTestCase(TestCase):
         self.assertContains(response, 'Material Gworl3')
         self.assertContains(response, "Material Gworl2")
         self.assertNotContains(response, "Material Gworl1")
+
+    def test_shows_info_relevant_to_authenticated_users(self):
+        self.client.login(username=self.user1.username, password='Password123')
+        response = self.client.get(self.url)
+        context = response.context
+
+        self.assertIn('lists', context.keys())
+        self.assertIn('user', context.keys())
+        self.assertIn('in_bookshelf', context.keys())
+
+        self.assertEqual(len(context['lists']), 0)
+        self.assertEqual(context['user'], self.user1)
+        self.assertFalse(context['in_bookshelf'])

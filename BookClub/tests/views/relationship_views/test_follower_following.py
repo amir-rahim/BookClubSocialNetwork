@@ -52,3 +52,11 @@ class FollowingFolloweeTestCase(TestCase):
         self.assertTemplateUsed(response, 'user/following_followers.html')
         self.assertContains(response, "1 Following")
         self.assertContains(response, self.user2.username)
+
+    def test_view_returns_valid_response_when_user_is_checking_own_followers_and_followees(self):
+        url = '/user/following/'
+        self.client.login(username=self.user1.username, password="Password123")
+        response = self.client.get(url)
+        self.assertTemplateUsed(response, 'user/following_followers.html')
+        self.assertContains(response, "1 Following")
+        self.assertContains(response, self.user2.username)

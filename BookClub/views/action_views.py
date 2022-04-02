@@ -41,7 +41,7 @@ class ActionView(TemplateView):
     def is_actionable(self, current_user, target_user, club):
         """Check if the action is legal."""
 
-        raise NotImplementedError("This method isn't implemented yet.")
+        raise NotImplementedError("This method isn't implemented yet.") # pragma: no cover
 
     def is_not_actionable(self, current_user, target_user, club):
         """Displays a message if the action is illegal."""
@@ -51,7 +51,7 @@ class ActionView(TemplateView):
     def action(self, current_user, target_user, club):
         """Runs the action."""
 
-        raise NotImplementedError("This method isn't implemented yet.")
+        raise NotImplementedError("This method isn't implemented yet.") # pragma: no cover
 
 
 class PromoteMemberView(LoginRequiredMixin, ActionView):
