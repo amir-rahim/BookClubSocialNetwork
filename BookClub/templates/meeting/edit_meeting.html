@@ -47,16 +47,16 @@
                             <form method="post">
                                 {% csrf_token %}
                                 {% include 'partials/bulma_form.html' with form=form %}
-                                <input type="submit" value="Update Meeting" class="button is-link"/>
+                                <input type="submit" value="Update Meeting" class="button is-link is-fullwidth"/>
                             </form>
+                            <br>
+                            <div class="container">
+                                {% include 'partials/delete_button_and_modal.html' with delete_item=meeting delete_modal_id=meeting.pk button_text='Delete meeting' fullwidth=True outlined=True %}
+                            </div>
                         </div>
                         <div class="column is-4">
-                            <div class="box">
-                             {% include 'partials/delete_button_and_modal.html' with delete_item=meeting delete_modal_id=meeting.pk button_text='Delete meeting' fullwidth=True outlined=True %}
-                            </div>
-                            <hr/>
-                            <h3 class="title is-3">Attendees</h3>
-                            <div class="table-container">
+                            <h3 class="title is-4">Attendees</h3>
+                            <div class="table-container" style="height: 70vh; overflow-y: auto;">
                                 <table class="table is-hoverable"
                                        id="table-clubs"
                                        data-toggle="table"
@@ -68,35 +68,39 @@
                                             <th scope="col">Action</th>
                                         </tr>
                                     </thead>
+                                    <div class="">
                                     <tbody>
                                         {% for member in members %}
-                                            {% if member == meeting.organiser %}
-                                            {% else %}
-                                                <td>
-                                                    <figure class="image is-48x48">
-                                                        <img class="is-rounded"
-                                                             src="{{ member.gravatar }}"
-                                                             alt="Placeholder image">
-                                                    </figure>
-                                                </td>
-                                                <td>{{ member.username }}</td>
-                                                <td>
-                                                    <form id="{{ member.username }}"
-                                                          action="{% url 'remove_meeting_member' club.club_url_name meeting.id %}"
-                                                          method="post">
-                                                        {% csrf_token %}
-                                                        <input type="hidden" name="user" value="{{ member.username }}" />
-                                                        <button type='submit' class="button is-danger is-outlined">
-                                                            <span>Kick</span>
-                                                            <span class="icon is-small">
-                                                                <i class="fas fa-times"></i>
-                                                            </span>
-                                                        </button>
-                                                    </form>
-                                                </td>
+                                            {% if not member == meeting.organiser %}
+                                                <tr>
+                                                    <td>
+                                                        <figure class="image is-48x48">
+                                                            <img class="is-rounded"
+                                                                src="{{ member.gravatar }}"
+                                                                alt="Placeholder image">
+                                                        </figure>
+                                                    </td>
+                                                    <td>{{ member.username }}</td>
+                                                    <td>
+                                                        <form id="{{ member.username }}"
+                                                            action="{% url 'remove_meeting_member' club.club_url_name meeting.id %}"
+                                                            method="post">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="user" value="{{ member.username }}" />
+                                                            <button type='submit' class="button is-danger is-outlined">
+                                                                <span>Kick</span>
+                                                                <span class="icon is-small">
+                                                                    <i class="fas fa-times"></i>
+                                                                </span>
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
                                             {% endif %}
-                                        </tbody>
-                                    {% endfor %}
+                                        
+                                        {% endfor %}
+                                    </tbody>
+                                    </div>
                                 </table>
                             </div>
                         </div>

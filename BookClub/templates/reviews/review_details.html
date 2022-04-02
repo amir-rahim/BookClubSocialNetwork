@@ -65,8 +65,8 @@
                     </p>
                     <div class="card-header-icon">
                         <div class="field is-grouped">
-                            <div class="control">
-                                {% if user == review.creator %}
+                            {% if user == review.creator %}
+                                <div class="control">
                                     <a href="{% url 'edit_review' book_id=review.book.id %}">
                                         <button class="button is-success" aria-label="Edit Review">
                                             <span>Edit</span>
@@ -75,9 +75,11 @@
                                             </span>
                                         </button>
                                     </a>
+                                </div>
+                                <div class="control">
                                     {% include 'partials/delete_button_and_modal.html' with delete_item=review delete_modal_id=0 %}
-                                {% endif %}
-                            </div>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </header>
