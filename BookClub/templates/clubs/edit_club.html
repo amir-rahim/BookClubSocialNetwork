@@ -88,43 +88,7 @@
                     Warning: This will delete your club permanently
                 </div>
             </article>
-            <div id="modal-delete-club-confirmation" class="modal">
-                <div class="modal-background"></div>
-                <div class="modal-card">
-                    <header class="modal-card-head">
-                        <p class="modal-card-title">
-                            Delete Club
-                        </p>
-                        <button class="delete" aria-label="close"></button>
-                    </header>
-                    <section class="modal-card-body">
-                        Are you sure you want to permanently delete this club?
-                    </section>
-                    <footer class="modal-card-foot">
-                        <div class="field is-grouped">
-                            <div class="control">
-                                <form method="post" action="{% url 'delete_club' club.club_url_name %}">
-                                    {% csrf_token %}
-                                    <button type="submit" class="button is-danger">Delete Club</button>
-                                </form>
-                            </div>
-                            <div class="control">
-                                <button class="button">Cancel</button>
-                            </div>
-                        </div>
-                    </footer>
-                </div>
-                <button class="modal-close is-large" aria-label="close"></button>
-            </div>
-            <div class="control has-text-centered">
-                <button class="js-modal-trigger button is-danger is-outlined center is-fullwidth"
-                        data-target="modal-delete-club-confirmation">
-                    <span>Delete Club</span>
-                    <span class="icon is-small">
-                        <i class="fas fa-times"></i>
-                    </span>
-                </button>
-            </div>
+            {% include 'partials/delete_button_and_modal.html' with delete_item=club delete_modal_id=club.pk outlined=True fullwidth=True button_text="Delete Club" %}
         </div>
     </div>
 {% endblock %}
