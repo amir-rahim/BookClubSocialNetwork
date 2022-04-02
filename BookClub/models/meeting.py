@@ -2,6 +2,8 @@
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
+from django.core.exceptions import ValidationError
+
 
 from BookClub.models import User, Club, Book
 
@@ -43,18 +45,22 @@ class Meeting(models.Model):
     type = models.CharField(max_length=1, choices=MeetingType.choices, blank=False)
     book = models.ForeignKey(Book, blank=True, null=True, on_delete=models.CASCADE)
 
+    def clean(self):
+        super().clean()
+        if not (timezone.now() <= self.meeting_time <= self.meeting_end_time):
+            raise ValidationError('Invalid start and/or end datetime')
+
     def get_absolute_url(self):
         return reverse('meeting_details', kwargs={'club_url_name': self.club.club_url_name, 'meeting_id': self.pk})
 
     def get_delete_url(self):
-          return reverse('delete_meeting', kwargs={'club_url_name': self.club.club_url_name, 'meeting_id': self.pk})
+        return reverse('delete_meeting', kwargs={'club_url_name': self.club.club_url_name, 'meeting_id': self.pk})
 
     def __str__(self):
         return self.title
 
     def get_delete_str(self):
-          end_time_str = self.meeting_end_time.strftime("%H:%M") if self.meeting_end_time.date() == self.meeting_time.date() else self.meeting_end_time.strftime("%A %-d %b %Y, %H:%M")
-          return f'a {self.get_type_name()} meeting of "{str(self.club)}" club on {self.meeting_time.strftime("%A %-d %b %Y, %H:%M")} - {end_time_str}'
+        return self.__str__
 
     def get_organiser(self):
         return self.organiser
