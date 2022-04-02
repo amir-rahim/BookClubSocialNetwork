@@ -4,12 +4,13 @@ import pytz
 
 import vobject as vobject
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.http import HttpResponse
 from django.views import View
 from django.views.generic import ListView
 from icalendar import Calendar
 from BookClub.helpers import *
-from BookClub.models import Meeting
+from BookClub.models import Meeting, User
 
 
 class AgendaView(LoginRequiredMixin, ListView):
