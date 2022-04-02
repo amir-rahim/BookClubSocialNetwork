@@ -1,3 +1,4 @@
+"""Unit testing for Abstract Search Query"""
 from re import L
 from BookClub.views.async_views.search_query_builder import *
 from BookClub.models import Club, User,Book, BookList
@@ -6,7 +7,7 @@ from django.test import tag, TestCase
 
 @tag('search','search_query_builder')
 class TestSearchQueryAbstract(TestCase):
-    
+    """Abstract Search Query Testing"""
     def setUp(self):
         self.testQuery = SearchQuery(query="",q_objects=Q(), model = None)
         

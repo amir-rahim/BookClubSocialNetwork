@@ -1,17 +1,19 @@
-"""Tests of the Helper funcitons in BookClub application."""
+"""Unit Testing of the Helper functions."""
 from django.test import TestCase, tag
 from django.urls import reverse
 
 from BookClub import helpers
-from BookClub.models import User, Book, Club, ClubMembership, Forum, ForumPost, ForumComment, BookReview, BookReviewComment, Vote
+from BookClub.models import User, Book, Club, ClubMembership, Forum, ForumPost, ForumComment, BookReview, \
+    BookReviewComment, Vote
 from django.contrib.contenttypes.models import ContentType
 
 from BookClub.tests.helpers import LogInTester
 
+
 @tag('helpers')
 class HelperFunctionsTestCase(TestCase, LogInTester):
-
-    fixtures =[
+    """Helper Function Testing"""
+    fixtures = [
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_clubs.json',
         'BookClub/tests/fixtures/default_club_members.json',
@@ -61,7 +63,8 @@ class HelperFunctionsTestCase(TestCase, LogInTester):
         # make all ratable posts
         post = ForumPost.objects.create(forum=forum, title='My cool post', content='EVEN BETTER CONTENT', creator=user)
         comment = ForumComment.objects.create(post=post, content='great post!', creator=user)
-        review = BookReview.objects.create(book=book, book_rating=5, title='It\'s ok', content='nothing incredible', creator=user)
+        review = BookReview.objects.create(book=book, book_rating=5, title='It\'s ok', content='nothing incredible',
+                                           creator=user)
         review_comment = BookReviewComment.objects.create(book_review=review, content='totally agree!', creator=user)
 
         post_vote = Vote.objects.create(
