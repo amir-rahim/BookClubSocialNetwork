@@ -27,7 +27,7 @@
                             <a href="">User</a>
                         </li>
                         <li>
-                            <a href="{% url 'user_dashboard' %}">{{ user.username |truncatechars:20 }}</a>
+                            <a href="{% url 'user_dashboard' %}">{{ username |truncatechars:20 }}</a>
                         </li>
                     </ul>
                 </nav>
@@ -136,8 +136,8 @@
                                     {% if own_profile %}
                                         <a href="{% url 'my_club_memberships' %}">
                                         {% else %}
-                                            <a href="{% url 'user_memberships' username %}">
-                                            {% endif %}
+                                        <a href="{% url 'user_memberships' username %}">
+                                    {% endif %}
                                             <img src="https://images.unsplash.com/photo-1615791287388-6f1bd87ace4e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=876&q=80"
                                                  alt="Image">
                                         </a>
@@ -172,9 +172,9 @@
                                  style="cursor:pointer;">
                             {% else %}
                                 <div class="tile is-parent"
-                                     onclick="window.location='{% url 'booklists_list' user.username %}';"
+                                     onclick="window.location='{% url 'booklists_list' username %}';"
                                      style="cursor:pointer;">
-                                {% endif %}
+                            {% endif %}
                                 <article class="tile is-child box">
                                     <p class="title">
                                         {{ booklist_count }}
@@ -250,7 +250,7 @@
                                                         {% if own_profile %}
                                                             <a href="{% url 'booklists_list' %}">
                                                             {% else %}
-                                                                <a href="{% url 'booklists_list' user.username %}">
+                                                                <a href="{% url 'booklists_list' username %}">
                                                                 {% endif %}
                                                                 <img src="https://images.unsplash.com/photo-1628046903351-992bd4b583e6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
                                                                      alt="Image">
