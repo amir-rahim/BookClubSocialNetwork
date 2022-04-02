@@ -60,7 +60,7 @@ class Meeting(models.Model):
         return self.title
 
     def get_delete_str(self):
-        return self.__str__
+        return self.__str__()
 
     def get_organiser(self):
         return self.organiser
