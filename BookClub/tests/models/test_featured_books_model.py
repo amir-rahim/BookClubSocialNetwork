@@ -1,3 +1,4 @@
+"""Unit testing of the Featured Books Model"""
 from django.test import TestCase, tag
 from django.core.exceptions import ValidationError
 
@@ -5,7 +6,8 @@ from BookClub.models import Club, Book, FeaturedBooks, featured_books
 
 
 @tag('models', 'featured_books')
-class ClubModelTestCase(TestCase):
+class FeaturedBooksModelTestCase(TestCase):
+    """Featured Book Model, Fields, Validation and Methods Testing"""
     fixtures = [
         'BookClub/tests/fixtures/default_clubs.json',
         'BookClub/tests/fixtures/default_books.json',

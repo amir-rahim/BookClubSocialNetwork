@@ -1,3 +1,4 @@
+"""Unit testing of User Created Objects Model"""
 from django.forms import ValidationError
 from django.test import TestCase, tag
 
@@ -5,8 +6,9 @@ from BookClub.models import ForumPost
 from BookClub.models.abstract_user_objects import UserCreatedObject
 
 
-@tag('models', 'usercreated')
+@tag('models', 'user_created')
 class UserCreatedObjectTestCase(TestCase):
+    """User Created Objects Model, Fields, Validation and Methods Testing"""
     fixtures = [
         'BookClub/tests/fixtures/default_user_created_objects.json',
         'BookClub/tests/fixtures/default_users.json'

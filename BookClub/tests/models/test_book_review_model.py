@@ -1,19 +1,15 @@
-import datetime
+"""Unit testing of the Book Review Models"""
 from django.forms import ValidationError
-from BookClub.models import Book, User, BookReview, BookReviewComment, UserRecommendations
-from django.db import IntegrityError, models
-from django.urls import reverse
 from django.test import TestCase, tag
-from BookClub.models.club import Club
-from BookClub.models.recommendations import ClubRecommendations
+from django.urls import reverse
 
-from BookClub.models.user import User
+from BookClub.models import Book, BookReview, BookReviewComment, UserRecommendations, Club, ClubRecommendations, User
 
 
 @tag('models', 'review')
 class BookReviewModelTestCase(TestCase):
-
-    fixtures=[
+    """Book Review Model, Fields, Validation and Methods Testing"""
+    fixtures = [
         'BookClub/tests/fixtures/default_books.json',
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_book_reviews.json',
@@ -52,7 +48,7 @@ class BookReviewModelTestCase(TestCase):
         self.assertInvalid()
 
     def test_rating_valid_choices(self):
-        for i in range(0,10):
+        for i in range(0, 10):
             self.review1.book_rating = i
             self.assertValid()
 
@@ -81,7 +77,7 @@ class BookReviewModelTestCase(TestCase):
     def test_title_can_be_1to30char(self):
         self.review1.title = "1"
         self.assertValid()
-        self.review1.title = "1"*30
+        self.review1.title = "1" * 30
         self.assertValid()
 
     def test_user_cannot_be_blank(self):
@@ -121,7 +117,7 @@ class BookReviewModelTestCase(TestCase):
             self.fail('Review2 should be valid')
 
     def test_get_comments(self):
-        self.assertTrue(self.review1.get_comments()!=None)
+        self.assertTrue(self.review1.get_comments() != None)
 
     def test_get_absolute_url(self):
         return_url = self.review1.get_absolute_url()
@@ -129,13 +125,13 @@ class BookReviewModelTestCase(TestCase):
         self.assertEqual(return_url, correct_url)
 
     def test_get_delete_url(self):
-        delete_url = reverse('delete_review',kwargs={'book_id': self.review1.book.pk})
-        self.assertEqual(self.review1.get_delete_url(),delete_url)
+        delete_url = reverse('delete_review', kwargs={'book_id': self.review1.book.pk})
+        self.assertEqual(self.review1.get_delete_url(), delete_url)
 
     def test_str(self):
-        self.assertEqual(self.review1.str(),"1/10 rating & review by johndoe on \"Classical Mythology\"")
-        self.assertEqual(str(self.review1),"1/10 rating & review by johndoe on \"Classical Mythology\"")
-        self.assertEqual(self.review1.get_delete_str(),"1/10 rating & review by johndoe on \"Classical Mythology\"")
+        self.assertEqual(self.review1.str(), "1/10 rating & review by johndoe on \"Classical Mythology\"")
+        self.assertEqual(str(self.review1), "1/10 rating & review by johndoe on \"Classical Mythology\"")
+        self.assertEqual(self.review1.get_delete_str(), "1/10 rating & review by johndoe on \"Classical Mythology\"")
 
     def test_save_executes_safely_when_user_has_no_modifications(self):
         recommendation_exists = UserRecommendations.objects.filter(user=self.user1).exists()
@@ -174,8 +170,10 @@ class BookReviewModelTestCase(TestCase):
         rec.refresh_from_db()
         self.assertTrue(rec.modified)
 
-@tag('models', 'reviewcomment')
+
+@tag('models', 'review', 'comment')
 class BookReviewCommentTestCase(TestCase):
+    """Book Review Comments Model, Fields, Validation and Methods Testing"""
     fixtures = [
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_books.json',
@@ -204,11 +202,11 @@ class BookReviewCommentTestCase(TestCase):
     def test_book_review_comment_can_be_up_to_240_chars(self):
         self.bookReviewComment.content = "x"
         self.assertValid()
-        self.bookReviewComment.content = "x"*240
+        self.bookReviewComment.content = "x" * 240
         self.assertValid()
 
     def test_book_review_comment_cant_be_more_than_240(self):
-        self.bookReviewComment.content = "x"*9999
+        self.bookReviewComment.content = "x" * 9999
         self.assertInvalid()
 
     def test_votes_can_be_empty(self):
@@ -222,14 +220,17 @@ class BookReviewCommentTestCase(TestCase):
         self.assertInvalid()
 
     def test_str(self):
-        self.assertEqual(self.bookReviewComment.str(),"Comment by johndoe on 1/10 rating & review by johndoe on \"Classical Mythology\"")
-        self.assertEqual(str(self.bookReviewComment),"Comment by johndoe on 1/10 rating & review by johndoe on \"Classical Mythology\"")
-        self.assertEqual(self.bookReviewComment.get_delete_str(),"Comment by johndoe on 1/10 rating & review by johndoe on \"Classical Mythology\"")
+        self.assertEqual(self.bookReviewComment.str(),
+                         "Comment by johndoe on 1/10 rating & review by johndoe on \"Classical Mythology\"")
+        self.assertEqual(str(self.bookReviewComment),
+                         "Comment by johndoe on 1/10 rating & review by johndoe on \"Classical Mythology\"")
+        self.assertEqual(self.bookReviewComment.get_delete_str(),
+                         "Comment by johndoe on 1/10 rating & review by johndoe on \"Classical Mythology\"")
 
     def test_get_delete_url(self):
-        delete_url = reverse('delete_review_comment',kwargs={
+        delete_url = reverse('delete_review_comment', kwargs={
             'book_id': self.bookReview.book.id,
             'review_id': self.bookReview.id,
             'comment_id': self.bookReviewComment.id
-            })
-        self.assertEqual(self.bookReviewComment.get_delete_url(),delete_url)
+        })
+        self.assertEqual(self.bookReviewComment.get_delete_url(), delete_url)

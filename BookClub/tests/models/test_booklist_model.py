@@ -1,3 +1,4 @@
+"""Unit testing of the Booklist Model"""
 from django.forms import ValidationError
 from django.test import TestCase, tag
 
@@ -6,8 +7,9 @@ from BookClub.models.booklist import BookList
 from BookClub.models.user import User
 
 
-@tag('models', 'booklistmodel')
+@tag('models', 'booklist')
 class BookListTestCase(TestCase):
+    """Booklist Model, Fields, Validation and Methods Testing"""
     fixtures = [
         'BookClub/tests/fixtures/default_books.json',
         'BookClub/tests/fixtures/default_users.json',

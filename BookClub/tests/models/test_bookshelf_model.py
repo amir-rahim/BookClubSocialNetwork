@@ -1,10 +1,13 @@
+"""Unit testing of the Bookshelf Model"""
 from django.forms import ValidationError
 from django.test import TestCase, tag
+
 from BookClub.models import Book, User, BookShelf
 
 
 @tag('models', 'bookshelf')
 class BookShelfTestCase(TestCase):
+    """Bookshelf Model, Fields, Validation and Methods Testing"""
     fixtures = [
         'BookClub/tests/fixtures/default_books.json',
         'BookClub/tests/fixtures/default_users.json',

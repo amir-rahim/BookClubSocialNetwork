@@ -1,3 +1,4 @@
+"""Unit testing for Vote Model"""
 from django.contrib.contenttypes.models import ContentType
 from django.db import IntegrityError
 from django.forms import ValidationError
@@ -8,6 +9,7 @@ from BookClub.models import Vote, ForumPost, ForumComment, User
 
 @tag('models', 'vote')
 class VoteModelTestCase(TestCase):
+    """Vote Model, Fields, Validation and Methods Testing"""
     fixtures = [
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_votes.json',

@@ -1,14 +1,13 @@
+"""Unit testing of Recommendation Models"""
 from django.forms import ValidationError
-from BookClub.models import UserRecommendations, ClubRecommendations, BookReview
 from django.test import TestCase, tag
-from BookClub.models.club import Club
+
+from BookClub.models import UserRecommendations, ClubRecommendations, BookReview, Club, User
 
 
-from BookClub.models.user import User
-
-@tag('recommendations','user')
+@tag('models', 'recommendations')
 class AbstractRecommendationTestCase(TestCase):
-
+    """Abstract Recommendations Model, Fields, Validation and Methods Testing"""
     fixtures = ['BookClub/tests/fixtures/default_users.json']
 
     def setUp(self):
@@ -37,9 +36,9 @@ class AbstractRecommendationTestCase(TestCase):
         self.assertEqual(self.recommendation.recommendations, testlist)
 
 
-@tag('recommendations', 'user')
+@tag('models', 'recommendations')
 class UserRecommendationTestCase(TestCase):
-
+    """User Recommendations Model, Fields, Validation and Methods Testing"""
     fixtures = [
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_books.json',
@@ -66,9 +65,9 @@ class UserRecommendationTestCase(TestCase):
         self.assertTrue(self.recommendation.modified)
 
 
-@tag('recommendations', 'club')
+@tag('models', 'recommendations')
 class ClubRecommendationsTestCase(TestCase):
-
+    """Club Recommendations Model, Fields, Validation and Methods Testing"""
     fixtures = ['BookClub/tests/fixtures/default_users.json',
                 'BookClub/tests/fixtures/default_clubs.json']
 

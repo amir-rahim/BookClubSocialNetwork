@@ -1,3 +1,4 @@
+"""Unit testing of Meeting Model"""
 import datetime
 
 from django.core.exceptions import ValidationError
@@ -8,6 +9,7 @@ from BookClub.models import Meeting, Club, User, Book
 
 @tag('models', 'meeting')
 class MeetingTestCase(TestCase):
+    """Meeting Model, Fields, Validation and Methods Testing"""
     fixtures = [
         'BookClub/tests/fixtures/books.json',
         'BookClub/tests/fixtures/default_users.json',

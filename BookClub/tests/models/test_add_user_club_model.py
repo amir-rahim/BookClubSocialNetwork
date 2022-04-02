@@ -1,3 +1,4 @@
+"""Unit testing for Adding User to Club"""
 from django.db import IntegrityError, transaction
 from django.forms import ValidationError
 from django.test import TestCase, tag
@@ -7,6 +8,7 @@ from BookClub.models import Club, User, ClubMembership
 
 @tag('models', 'add_user')
 class AddUserTestCase(TestCase):
+    """Club Methods Testing"""
     fixtures = [
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_clubs.json',
