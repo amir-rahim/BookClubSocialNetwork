@@ -195,11 +195,11 @@ class EditForumPostView(LoginRequiredMixin, ClubMemberTestMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
+        # print('Here')
         if self.kwargs.get('club_url_name') is not None:
             club = get_club_from_url_name(self.kwargs.get('club_url_name'))
             context['club'] = club
-        else: 
+        else:
             context['club'] = None
 
         return context

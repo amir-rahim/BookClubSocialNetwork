@@ -106,9 +106,18 @@ class EditPostViewTestCase(TestCase):
         self.assertEqual(post.content, "... qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...")
 
     def test_edit_post_when_creator(self):
+        # print('this one')
         self.client.login(username=self.user.username, password="Password123")
         response = self.client.post(self.my_url, self.edit, follow=True)
         post = ForumPost.objects.get(pk=1)
+        self.assertEqual(post.content, "HELLO, HOW DO YOU DO!")
+
+    def test_edit_club_post_when_creator(self):
+        self.client.login(username=self.user.username, password="Password123")
+        # print('trying')
+        response = self.client.post(self.club_url, self.edit, follow=True)
+        # print(response.status_code)
+        post = ForumPost.objects.get(pk=4)
         self.assertEqual(post.content, "HELLO, HOW DO YOU DO!")
 
     def test_post_details_show(self):
