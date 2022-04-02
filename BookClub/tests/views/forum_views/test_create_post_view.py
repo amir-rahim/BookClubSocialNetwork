@@ -115,3 +115,12 @@ class CreatePostViewTestCase(TestCase):
         self.assertEqual(str(messages_list[0]), "There was an error making that post, try again!")
         post_count_after = ForumPost.objects.count()
         self.assertEqual(post_count_after, post_count_before)
+
+    def test_create_club_post_for_non_existing_club(self):
+        wrong_club_url = reverse('create_forum_post', kwargs={"club_url_name": 'non_existing_club'})
+        self.client.login(username=self.user.username, password="Password123")
+        post_count_before = ForumPost.objects.count()
+        response = self.client.post(wrong_club_url, self.post, follow=True)
+        post_count_after = ForumPost.objects.count()
+        self.assertEqual(post_count_after, post_count_before)
+        self.assertEqual(response.status_code, 403)
