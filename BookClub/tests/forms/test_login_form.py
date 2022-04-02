@@ -7,7 +7,7 @@ from BookClub.forms import LogInForm
 
 @tag('forms', 'user')
 class LogInFormTestCase(TestCase):
-    """Unit tests of the log in form."""
+    """Log in form tests."""
 
     def setUp(self):
         self.form_input = {'username': 'janedoe', 'password': 'Password123'}

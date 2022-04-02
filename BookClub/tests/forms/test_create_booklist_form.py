@@ -1,3 +1,4 @@
+"""Unit tests for Book List Form"""
 from datetime import datetime
 import pytz
 
@@ -9,7 +10,7 @@ from BookClub.models import BookList, User
 
 @tag('forms', 'booklist')
 class BookListFormTestCase(TestCase):
-    """Unit tests for Book List Form"""
+    """Creating a Book List Form Tests"""
 
     fixtures = [
         "BookClub/tests/fixtures/default_users.json",

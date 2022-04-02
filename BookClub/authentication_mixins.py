@@ -1,16 +1,14 @@
-from django.shortcuts import redirect
-from BookClub.helpers import has_membership, get_club_from_url_name, has_membership_with_access
+"""Authentication Related Mixins"""
+from django.contrib import messages
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.exceptions import ObjectDoesNotExist
-from django.contrib import messages
-from BookClub.models import Club
+from django.shortcuts import redirect
+
+from BookClub.helpers import has_membership, get_club_from_url_name, has_membership_with_access
 
 
 class LoginProhibitedMixin:
-    """
-        If user trying to access this view is authenticated, they are redirected to the 'home' page
-    """
-
+    """If user trying to access this view is authenticated, they are redirected to the 'home' page"""
     def dispatch(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
             return redirect('home')
@@ -18,7 +16,7 @@ class LoginProhibitedMixin:
 
 
 class ClubMemberTestMixin(UserPassesTestMixin):
-
+    """If user trying to access this club, checks if they are a member"""
     def test_func(self):
         try:
             club_url_name = self.kwargs.get('club_url_name')
@@ -30,9 +28,8 @@ class ClubMemberTestMixin(UserPassesTestMixin):
             return False
 
 
-
 class PrivateClubMixin(UserPassesTestMixin):
-
+    """If user trying to access a private club, checks if they have permissions"""
     def test_func(self):
         try:
             url_name = self.kwargs.get('club_url_name')

@@ -1,11 +1,11 @@
+"""Configuration of the admin interface."""
 from django.contrib import admin
 from BookClub.models import *
-from BookClub.models.forum import ForumPost
 
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    """Configuration of the admin interface for users."""
+    """Configuration of the admin interface for Users."""
 
     list_display = [
         'id', 'username', 'email', 'public_bio'
@@ -14,7 +14,7 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(UserToUserRelationship)
 class UserToUserAdmin(admin.ModelAdmin):
-    """Configuration of the admin interface for User to User relationships."""
+    """Configuration of the admin interface for User to User Relationships."""
 
     list_display = [
         'source_user', 'target_user', 'relationship_type'
@@ -23,7 +23,7 @@ class UserToUserAdmin(admin.ModelAdmin):
 
 @admin.register(Club)
 class ClubAdmin(admin.ModelAdmin):
-    """Configuration of the admin interface for clubs."""
+    """Configuration of the admin interface for Clubs."""
 
     list_display = [
         'name', 'description', 'tagline', 'is_private', 'rules', 'created_on'
@@ -32,7 +32,7 @@ class ClubAdmin(admin.ModelAdmin):
 
 @admin.register(ClubMembership)
 class ClubMembershipAdmin(admin.ModelAdmin):
-    """Configuration of the admin interface for club memberships."""
+    """Configuration of the admin interface for Club Memberships."""
 
     list_display = [
         'club', 'user', 'membership', 'joined_on'
@@ -41,7 +41,7 @@ class ClubMembershipAdmin(admin.ModelAdmin):
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
-    """Configuration of the admin interface for Books ."""
+    """Configuration of the admin interface for Books."""
 
     list_display = [
         'id', 'title', 'ISBN', 'author', 'publicationYear', 'publisher'
@@ -50,7 +50,7 @@ class BookAdmin(admin.ModelAdmin):
 
 @admin.register(BookReview)
 class BookReviewAdmin(admin.ModelAdmin):
-    """Configuration of the admin interface for Books Reviews ."""
+    """Configuration of the admin interface for Books Reviews."""
 
     list_display = [
         'book', 'creator', 'book_rating', 'title', 'created_on', 'content', 'rating'
@@ -59,7 +59,7 @@ class BookReviewAdmin(admin.ModelAdmin):
 
 @admin.register(BookReviewComment)
 class BookReviewCommentAdmin(admin.ModelAdmin):
-    """Configuration of the admin interface for Books Review Comments ."""
+    """Configuration of the admin interface for Books Review Comments."""
 
     list_display = [
         'book_review', 'creator', 'created_on', 'content', 'rating'
@@ -68,7 +68,7 @@ class BookReviewCommentAdmin(admin.ModelAdmin):
 
 @admin.register(BookList)
 class BookListAdmin(admin.ModelAdmin):
-    """Configuration of the admin interface for Books Reviews ."""
+    """Configuration of the admin interface for Books Lists."""
 
     list_display = [
         'title', 'creator', 'description', 'created_on'
@@ -77,7 +77,7 @@ class BookListAdmin(admin.ModelAdmin):
 
 @admin.register(Meeting)
 class ClubMeetingAdmin(admin.ModelAdmin):
-    """Configuration of the admin interface for club meetings."""
+    """Configuration of the admin interface for Club Meetings."""
 
     list_display = [
         'organiser', 'club', 'meeting_time', 'created_on', 'location', 'title', 'description', 'type', 'book'
@@ -86,7 +86,8 @@ class ClubMeetingAdmin(admin.ModelAdmin):
 
 @admin.register(Forum)
 class ForumAdmin(admin.ModelAdmin):
-    """Configuration of the admin interface for club meetings."""
+    """Configuration of the admin interface for Forums."""
+
     prepopulated_fields = {"slug": ("title",)}
     list_display = [
         'title', 'associated_with', 'slug'
@@ -96,7 +97,8 @@ class ForumAdmin(admin.ModelAdmin):
 
 @admin.register(ForumPost)
 class ForumPostAdmin(admin.ModelAdmin):
-    """Configuration of the admin interface for club meetings."""
+    """Configuration of the admin interface for Forum Posts."""
+
     list_display = [
         'creator', 'created_on', 'forum', 'title', 'content', 'rating'
     ]
@@ -104,7 +106,7 @@ class ForumPostAdmin(admin.ModelAdmin):
 
 @admin.register(ForumComment)
 class ForumCommentAdmin(admin.ModelAdmin):
-    """Configuration of the admin interface for club meetings."""
+    """Configuration of the admin interface for Forum Comments."""
 
     list_display = [
         'creator', 'created_on', 'content', 'rating'
@@ -113,7 +115,7 @@ class ForumCommentAdmin(admin.ModelAdmin):
 
 @admin.register(Vote)
 class VoteAdmin(admin.ModelAdmin):
-    """Configuration of the admin interface for club meetings."""
+    """Configuration of the admin interface for voting."""
 
     list_display = [
         'creator', 'created_on', 'content_type', 'object_id', 'target'
@@ -121,7 +123,7 @@ class VoteAdmin(admin.ModelAdmin):
 
 @admin.register(BookShelf)
 class BookShelfAdmin(admin.ModelAdmin):
-    """Configuration of the admin interface for Book Shelf."""
+    """Configuration of the admin interface for the Bookshelf."""
 
     list_display = [
         'user', 'book', 'status'
@@ -139,13 +141,16 @@ class FeaturedBooksAdmin(admin.ModelAdmin):
 
 @admin.register(UserRecommendations)
 class UserRecAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for User Recommendations."""
+
     list_display = [
         'user', 'recommendations'
     ]
     
 @admin.register(ClubRecommendations)
 class ClubRecAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for Club Recommendations."""
     
     list_display = [
         'club', 'recommendations'
-                    ]
+    ]

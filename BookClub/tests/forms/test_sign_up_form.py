@@ -8,7 +8,7 @@ from BookClub.models import User
 
 @tag('forms', 'user')
 class SignUpFormTestCase(TestCase):
-    """Unit tests of the sign up form."""
+    """Sign Up form for new users tests"""
 
     def setUp(self):
         self.form_input = {

@@ -1,5 +1,5 @@
+"""Unit tests for Meeting Form"""
 from datetime import date, datetime
-from re import S
 
 from django.test import TestCase, tag
 
@@ -9,7 +9,7 @@ from BookClub.models import User, Club, Meeting, Book
 
 @tag('forms', 'meeting')
 class MeetingFormTestCase(TestCase):
-    """Unit tests for Meeting Form"""
+
 
     fixtures = [
         "BookClub/tests/fixtures/default_users.json",

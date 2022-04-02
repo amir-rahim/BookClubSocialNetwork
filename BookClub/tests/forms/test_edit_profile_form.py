@@ -1,14 +1,14 @@
-"""Tests of the update user details form."""
+"""Unit tests for the Edit user profile form."""
 from django import forms
 from django.test import TestCase, tag
 
-from BookClub.forms.user_forms import EditProfileForm
+from BookClub.forms import EditProfileForm
 from BookClub.models import User
 
 
 @tag('forms', 'user')
 class ProfileFormTestCase(TestCase):
-    """Unit tests of the update user details form."""
+    """Update User Details Form Tests."""
 
     fixtures = ['BookClub/tests/fixtures/default_users.json']
 
