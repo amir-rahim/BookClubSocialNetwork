@@ -35,5 +35,5 @@ class MeetingForm(ModelForm):
             if book is None:
                 self.add_error('book', "Book is required when creating a book meeting")
 
-            if meeting_time > meeting_end_time:
-                self.add_error('meeting_end_time', 'Meeting end time must be after the meeting time.')
+        if meeting_time > meeting_end_time:
+            self.add_error('meeting_end_time', 'Meeting end time must be after the meeting time.')
