@@ -152,10 +152,10 @@ class Command(BaseCommand):
             is_private=privacy,
             description=self.faker.paragraph(
                 nb_sentences=3, variable_nb_sentences=True),
-            tagline=self.faker.paragraph(
-                nb_sentences=1),
-            rules=self.faker.paragraph(
-                nb_sentences=1),
+            tagline=self.faker.text(
+                max_nb_chars=30),
+            rules=self.faker.text(
+                max_nb_chars=30),
         )
 
         club.add_owner(owner)
