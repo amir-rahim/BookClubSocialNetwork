@@ -52,8 +52,8 @@ class Command(BaseCommand):
                     book=books.get(ISBN=record['ISBN']),
                     creator=user,
                     book_rating=record['Book-Rating'],
-                    title=self.faker.sentence(nb_words=3),
-                    content=self.faker.paragraph(nb_sentences=3)
+                    title=self.faker.text(max_nb_chars=30),
+                    content=self.faker.text(max_nb_chars=200)
                 )
                 reviews.append(b)
             except Exception as e:
