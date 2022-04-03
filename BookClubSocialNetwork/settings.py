@@ -30,12 +30,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('DJANGO_SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True # set to False on deployment to display user friendly 404
+DEBUG = True
 
-ALLOWED_HOSTS = []
-# ALLOWED_HOSTS = ['.localhost'] # Uncomment this to see the user-friendly 404, and add current domain name to the list
-                # e.g. 'novella-books.herokuapp.com'
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '.herokuapp.com']
 
 # Application definition
 
