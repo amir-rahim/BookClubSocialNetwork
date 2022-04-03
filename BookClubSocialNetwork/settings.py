@@ -32,9 +32,7 @@ SECRET_KEY = env('DJANGO_SECRET_KEY')
 
 DEBUG = False
 
-ALLOWED_HOSTS = []
-# ALLOWED_HOSTS = ['.localhost'] # Uncomment this to see the user-friendly 404, and add current domain name to the list
-                # e.g. 'novella-books.herokuapp.com'
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '.herokuapp.com']
 
 # Application definition
 
