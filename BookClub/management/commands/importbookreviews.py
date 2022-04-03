@@ -33,7 +33,6 @@ class Command(BaseCommand):
         len(users)
         books = Book.objects.all().only('ISBN')
         users = User.objects.all().only('id')
-        print(books.values_list('ISBN',flat=True))
         rows = data[data['ISBN'].isin(
             books.values_list('ISBN',flat=True))]
         records = rows.to_dict('records')
@@ -60,7 +59,7 @@ class Command(BaseCommand):
                     content=self.faker.paragraph(nb_sentences=3)
                 )
                 reviews.append(b)
-                if len(reviews) % 10000 == 0:
+                if len(reviews) % 100000 == 0:
                     print(str(len(reviews)) + " found so far")
             except Exception as e:
                 book_error += 1
