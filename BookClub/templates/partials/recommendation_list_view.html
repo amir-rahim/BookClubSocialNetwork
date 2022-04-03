@@ -10,7 +10,12 @@
                                 <a href="{% url 'book_view' book.id %}">
                                     <div class="card-image">
                                         <figure class="image is-3by5">
-                                            <img src="//images.weserv.nl/?url={{ book.imageL }}" alt="Image of {{ book.title }}" />
+                                            {% if book.get_l_size > 50 %}
+                                                <img src="//images.weserv.nl/?url={{ book.imageL }}" alt="Book Cover">
+                                            {% else %}
+                                                <img src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+                                                     alt="Book Cover">
+                                            {% endif %}
                                         </figure>
                                     </div>
                                 </a>
