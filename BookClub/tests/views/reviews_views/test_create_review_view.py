@@ -1,15 +1,17 @@
+"""Unit testing of the Create Review view"""
 from datetime import date
 
 from django.test import TestCase, tag
 from django.urls import reverse
 
-from BookClub.forms.review import ReviewForm
+from BookClub.forms import ReviewForm
 from BookClub.models import Book, BookReview, User
 from BookClub.tests.helpers import reverse_with_next
 
 
-@tag('book_review', 'create_review')
+@tag('views', 'review', 'create_review')
 class CreateReviewViewTestcase(TestCase):
+    """Tests for the Create Review view"""
     fixtures = [
         "BookClub/tests/fixtures/default_users.json",
         "BookClub/tests/fixtures/default_books.json",

@@ -1,10 +1,12 @@
+"""Form Processor Functions"""
 from BookClub.forms import CreateForumCommentForm, CreatePostForm
 from BookClub.models import BookList
 
+
 def ForumPostForm(request):
     return {
-        "forum_post_form" : CreatePostForm(),
-        "forum_comment_form" : CreateForumCommentForm(),
+        "forum_post_form": CreatePostForm(),
+        "forum_comment_form": CreateForumCommentForm(),
     }
 
 

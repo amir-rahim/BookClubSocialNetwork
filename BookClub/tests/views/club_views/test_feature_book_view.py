@@ -1,19 +1,17 @@
-"""Test the Create Featured Book view."""
-from django.contrib import messages
+"""Unit testing of the Create Featured Book view."""
 from django.contrib.messages import get_messages
+from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase, tag
 from django.urls import reverse
-from django.core.exceptions import ObjectDoesNotExist
 
 from BookClub.forms import FeatureBookForm
 from BookClub.models import User, Club, ClubMembership, Book, FeaturedBooks
 from BookClub.tests.helpers import reverse_with_next
 
 
-
-@tag('club', 'feature_book', 'create_feature_book')
+@tag('views', 'club', 'feature_book')
 class FeatureBookViewTestCase(TestCase):
-    """Test the Create Featured Book view."""
+    """Testing the Create Featured Book view."""
 
     fixtures = [
         "BookClub/tests/fixtures/default_users.json",
@@ -32,17 +30,21 @@ class FeatureBookViewTestCase(TestCase):
         self.club = Club.objects.get(pk=2)
         self.private_club = Club.objects.get(pk=3)
         self.url = reverse('edit_featured_books', kwargs={'club_url_name': self.club.club_url_name})
-        self.url_private_club = reverse('edit_featured_books', kwargs={'club_url_name': self.private_club.club_url_name})
-        
+        self.url_private_club = reverse('edit_featured_books',
+                                        kwargs={'club_url_name': self.private_club.club_url_name})
+
         ClubMembership.objects.create(user=self.owner, club=self.club, membership=ClubMembership.UserRoles.OWNER)
-        ClubMembership.objects.create(user=self.moderator, club=self.club, membership=ClubMembership.UserRoles.MODERATOR)
+        ClubMembership.objects.create(user=self.moderator, club=self.club,
+                                      membership=ClubMembership.UserRoles.MODERATOR)
         ClubMembership.objects.create(user=self.member, club=self.club, membership=ClubMembership.UserRoles.MEMBER)
-        ClubMembership.objects.create(user=self.applicant, club=self.private_club, membership=ClubMembership.UserRoles.APPLICANT)
-        ClubMembership.objects.create(user=self.owner, club=self.private_club, membership=ClubMembership.UserRoles.OWNER)
+        ClubMembership.objects.create(user=self.applicant, club=self.private_club,
+                                      membership=ClubMembership.UserRoles.APPLICANT)
+        ClubMembership.objects.create(user=self.owner, club=self.private_club,
+                                      membership=ClubMembership.UserRoles.OWNER)
 
         self.data = {
-            "book" : self.book.id,
-            "reason" : 'A really good reason'
+            "book": self.book.id,
+            "reason": 'A really good reason'
         }
 
     def test_feature_book_url(self):
@@ -52,7 +54,8 @@ class FeatureBookViewTestCase(TestCase):
         featured_book_count_before = FeaturedBooks.get_books(self.club).count()
         redirect_url = reverse_with_next('login', self.url)
         response = self.client.post(self.url, self.data, follow=True)
-        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200, fetch_redirect_response=True)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200,
+                             fetch_redirect_response=True)
         self.assertTemplateUsed(response, 'authentication/login.html')
         featured_book_count_after = FeaturedBooks.get_books(self.club).count()
         self.assertEqual(featured_book_count_before, featured_book_count_after)
@@ -61,12 +64,13 @@ class FeatureBookViewTestCase(TestCase):
         featured_book_count_before = FeaturedBooks.get_books(self.club).count()
         redirect_url = reverse_with_next('login', self.url)
         response = self.client.get(self.url, follow=True)
-        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200, fetch_redirect_response=True)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200,
+                             fetch_redirect_response=True)
         self.assertTemplateUsed(response, 'authentication/login.html')
         featured_book_count_after = FeaturedBooks.get_books(self.club).count()
         self.assertEqual(featured_book_count_before, featured_book_count_after)
 
-    '''Tests moderators and owners can see the feature book template'''
+    """Tests moderators and owners can see the feature book template"""
 
     def test_owner_can_see_feature_book_template(self):
         self.client.login(username=self.owner.username, password='Password123')
@@ -76,7 +80,7 @@ class FeatureBookViewTestCase(TestCase):
         form = response.context['form']
         self.assertTrue(isinstance(form, FeatureBookForm))
         self.assertFalse(form.is_bound)
-    
+
     def test_moderator_can_see_feature_book_template(self):
         self.client.login(username=self.moderator.username, password='Password123')
         response = self.client.get(self.url)
@@ -86,7 +90,7 @@ class FeatureBookViewTestCase(TestCase):
         self.assertTrue(isinstance(form, FeatureBookForm))
         self.assertFalse(form.is_bound)
 
-    '''Tests for users which cannot see the feature book form'''
+    """Tests for users which cannot see the feature book form"""
 
     def test_member_cannot_see_feature_book_template(self):
         self.client.login(username=self.member.username, password='Password123')
@@ -104,7 +108,7 @@ class FeatureBookViewTestCase(TestCase):
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]), 'This club is private')
 
-    '''Tests for users creating featured books'''
+    """Tests for users creating featured books"""
 
     def test_owner_can_feature_book(self):
         self.client.login(username=self.owner.username, password='Password123')
@@ -179,7 +183,7 @@ class FeatureBookViewTestCase(TestCase):
 
     def test_form_invalid_for_feature_book(self):
         self.client.login(username=self.owner.username, password='Password123')
-        data = {"reason" : 'A really good reason'}
+        data = {"reason": 'A really good reason'}
         before_count = FeaturedBooks.get_books(self.club).count()
         response = self.client.post(self.url, data, follow=True)
         self.assertEqual(response.status_code, 200)

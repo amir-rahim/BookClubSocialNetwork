@@ -1,4 +1,4 @@
-"""Tests of the FollowUser view."""
+"""Unit Testing of the Follow User view."""
 from django.test import TestCase, tag
 from django.urls import reverse
 
@@ -8,8 +8,7 @@ from BookClub.tests.helpers import LogInTester, reverse_with_next
 
 @tag("views", "relationship_views", "un_follow")
 class FollowUserViewTestCase(TestCase, LogInTester):
-    """Tests of the FollowUser view."""
-
+    """Tests of the Follow User view."""
     fixtures = [
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_relationships.json',

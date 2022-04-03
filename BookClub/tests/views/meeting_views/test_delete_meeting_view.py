@@ -1,4 +1,4 @@
-"""Test delete meeting view."""
+"""Unit testing of the delete meeting view."""
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase, tag
@@ -8,9 +8,9 @@ from BookClub.models import User, Club, ClubMembership, Meeting, Book
 from BookClub.tests.helpers import LogInTester
 
 
-@tag('meeting', 'delete_meeting')
+@tag('views', 'meeting', 'delete_meeting')
 class DeleteMeetingView(TestCase, LogInTester):
-    """Test the Delete Meeting view."""
+    """Tests for the Delete Meeting view."""
 
     fixtures = [
         "BookClub/tests/fixtures/default_users.json",

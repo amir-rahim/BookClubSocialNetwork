@@ -1,15 +1,16 @@
+"""Unit testing for the edit profile view"""
 from django.contrib import messages
 from django.test import TestCase, tag
 from django.urls import reverse
 
-from BookClub.forms.user_forms import EditProfileForm
+from BookClub.forms import EditProfileForm
 from BookClub.models import User
 from BookClub.tests.helpers import reverse_with_query
 
 
-@tag('user', 'edit_profile')
+@tag('views', 'user', 'edit_profile')
 class EditProfileTestCase(TestCase):
-    """ Unit tests for the edit profile view """
+    """Tests for the edit profile view"""
 
     fixtures = [
         'BookClub/tests/fixtures/default_users.json',

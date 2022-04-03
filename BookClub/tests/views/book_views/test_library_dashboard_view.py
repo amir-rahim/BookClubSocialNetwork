@@ -1,3 +1,4 @@
+"""Unit testing of the Library Dashboard view"""
 from django.test import TestCase, tag
 from django.urls import reverse
 

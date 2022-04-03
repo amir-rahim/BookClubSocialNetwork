@@ -83,6 +83,12 @@ class ForumComment(TextComment):
         return self.__str__()
 
     def get_delete_url(self):
+        if self.post.forum.associated_with:
+            return reverse('delete_forum_comment', kwargs={
+                'post_id': self.post.pk,
+                'comment_id': self.pk,
+                'club_url_name': self.post.forum.associated_with.club_url_name
+            })
         return reverse('delete_forum_comment', kwargs={
             'post_id': self.post.pk,
             'comment_id': self.pk

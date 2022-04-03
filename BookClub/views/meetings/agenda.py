@@ -4,12 +4,13 @@ import pytz
 
 import vobject as vobject
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.http import HttpResponse
 from django.views import View
 from django.views.generic import ListView
 from icalendar import Calendar
 from BookClub.helpers import *
-from BookClub.models import Meeting
+from BookClub.models import Meeting, User
 
 
 class AgendaView(LoginRequiredMixin, ListView):
@@ -61,6 +62,7 @@ class ExportCalendarView(View):
             vevent.add('summary').value = meeting.title
             vevent.add('uid').value = str(meeting.id)
             vevent.add('location').value = meeting.location
+            vevent.add('description').value = meeting.description
         icalstream = cal.serialize()
         response = HttpResponse(icalstream, content_type='text/calendar')
         response['Filename'] = 'agenda.ics'  # IE needs this

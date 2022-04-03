@@ -1,3 +1,4 @@
+"""Unit testing for Memberships Model"""
 from django.core.exceptions import ValidationError
 from django.test import TestCase, tag
 
@@ -6,6 +7,7 @@ from BookClub.models import User, Club, ClubMembership
 
 @tag('models', 'memberships')
 class ClubMembershipModelTestCase(TestCase):
+    """Club Memberships Model, Fields, Validation and Methods Testing"""
     fixtures = [
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_clubs.json',

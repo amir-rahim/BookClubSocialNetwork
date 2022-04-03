@@ -1,3 +1,4 @@
+"""Unit testing of Forum Models"""
 from django.forms import ValidationError
 from django.test import TestCase, tag
 
@@ -6,6 +7,7 @@ from BookClub.models import ForumPost, ForumComment, Forum, User, Club
 
 @tag('models', 'forum')
 class ForumTestCase(TestCase):
+    """Forum Model, Fields, Validation and Methods Testing"""
     fixtures = [
         'BookClub/tests/fixtures/default_user_created_objects.json',
         'BookClub/tests/fixtures/default_users.json',
@@ -86,6 +88,7 @@ class ForumTestCase(TestCase):
 
 @tag('models', 'post')
 class ForumPostTestCase(TestCase):
+    """Forum Post Model, Fields, Validation and Methods Testing"""
     fixtures = [
         'BookClub/tests/fixtures/default_user_created_objects.json',
         'BookClub/tests/fixtures/default_users.json'
@@ -164,6 +167,7 @@ class ForumPostTestCase(TestCase):
 
 @tag('models', 'comment')
 class ForumCommentTestCase(TestCase):
+    """Forum Comment Model, Fields, Validation and Methods Testing"""
     fixtures = [
         'BookClub/tests/fixtures/default_user_created_objects.json',
         'BookClub/tests/fixtures/default_users.json'

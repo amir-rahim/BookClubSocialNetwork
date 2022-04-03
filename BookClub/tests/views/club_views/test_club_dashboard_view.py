@@ -1,4 +1,4 @@
-"""Unit tests of the club dashboard view."""
+"""Unit tests of the Club Dashboard view."""
 from django.test import TestCase, tag
 from django.urls import reverse
 from BookClub.helpers import get_club_reputation
@@ -7,10 +7,9 @@ from BookClub.models import Club, User, FeaturedBooks, Book
 from BookClub.tests.helpers import reverse_with_next
 
 
-
-@tag('club', 'club_dashboard')
+@tag('views', 'club')
 class ClubDashboardViewTest(TestCase):
-    """Unit tests of the club page view."""
+    """Testing the Club Dashboard view"""
     fixtures = [
         "BookClub/tests/fixtures/default_users.json",
         "BookClub/tests/fixtures/default_clubs.json",
@@ -27,7 +26,7 @@ class ClubDashboardViewTest(TestCase):
         self.private_club = Club.objects.get(name="Jack Club")
         self.private_url = reverse("available_clubs")
         self.book = Book.objects.get(pk=1)
-        self.featured_books = FeaturedBooks.objects.create(club = self.club, book = self.book, reason = "Great book")
+        self.featured_books = FeaturedBooks.objects.create(club=self.club, book=self.book, reason="Great book")
 
     def test_club_dashboard_url(self):
         self.assertEqual(self.url, f"/club/Johnathan_Club/")

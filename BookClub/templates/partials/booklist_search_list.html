@@ -11,6 +11,7 @@
                     <th scope="col">Contents</th>
                     <th scope="col">Created by</th>
                     <th scope="col">View</th>
+                    <th scope="col">&nbsp</th>
                 </tr>
             </thead>
             <tbody>
@@ -23,8 +24,15 @@
                             <a href="{% url 'user_profile' list.creator.username %}">{{ list.creator.username }}</a> on {{ list.created_on.date }}
                         </td>
                         <td>
-                            <a class="button is-fullwidth is-link" href="{{ list.get_absolute_url }}">View
-                            </button>
+                            <a class="button is-fullwidth is-link" href="{{ list.get_absolute_url }}">View</a>
+                        </td>
+                        <td>
+                            <form method="post" action="{% url 'save_booklist' list.pk %}" class="inline">
+                                {% csrf_token %}
+                                <button type="submit" class="button is-fullwidth is-link">
+                                    Save
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 {% endfor %}

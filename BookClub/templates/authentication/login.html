@@ -28,7 +28,11 @@
                                 {% endif %}
                             {% endfor %}
                         {% endif %}
+                        {% if next %}
+                        <form action="{% url 'login' %}?next={{ next }}" method="post">
+                        {% else %}
                         <form action="{% url 'login' %}" method="post">
+                        {% endif %}
                             {% csrf_token %}
                             <div class="field">
                                 <div class="control" style="padding-bottom: 20px;">

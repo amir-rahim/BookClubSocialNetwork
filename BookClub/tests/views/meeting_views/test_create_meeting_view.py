@@ -1,4 +1,4 @@
-"""Test the Create Meeting view."""
+"""Unit testing of the Create Meeting view."""
 from django.contrib import messages
 from django.contrib.messages import get_messages
 from django.test import TestCase, tag
@@ -9,9 +9,9 @@ from BookClub.models import User, Club, ClubMembership, Meeting, Book
 from BookClub.tests.helpers import reverse_with_next
 
 
-@tag('meeting', 'create_meeting')
+@tag('views', 'meeting', 'create_meeting')
 class CreateMeetingViewTestCase(TestCase):
-    """Test the Create Meeting view."""
+    """Tests for the Create Meeting view."""
 
     fixtures = [
         "BookClub/tests/fixtures/default_users.json",

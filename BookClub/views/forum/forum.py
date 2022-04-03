@@ -26,8 +26,13 @@ class ForumPostView(ClubMemberTestMixin, ListView):
         context = super().get_context_data(**kwargs)
         if self.kwargs.get('club_url_name'):
             try:
-                context['post'] = ForumPost.objects.get(pk=self.kwargs.get('post_id'))
-                context['club'] = Club.objects.get(club_url_name=self.kwargs.get('club_url_name'))
+                post = ForumPost.objects.get(pk=self.kwargs.get('post_id'))
+                club = Club.objects.get(club_url_name=self.kwargs.get('club_url_name'))
+                if post.forum == Forum.objects.get(associated_with=club):
+                    context['post'] = post
+                    context['club'] = club
+                else:
+                    raise Http404("This forum does not contain this post....")
             except ObjectDoesNotExist:
                 raise Http404("Given club or post id not found....")
         else:
@@ -187,6 +192,16 @@ class EditForumPostView(LoginRequiredMixin, ClubMemberTestMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('forum_post', kwargs=self.kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.kwargs.get('club_url_name') is not None:
+            club = get_club_from_url_name(self.kwargs.get('club_url_name'))
+            context['club'] = club
+        else:
+            context['club'] = None
+
+        return context
 
 
 class DeleteForumPostView(LoginRequiredMixin, ClubMemberTestMixin, DeleteView):

@@ -1,18 +1,17 @@
-"""Tests of the Agenda view."""
+"""Unit testing of the Agenda view."""
+import datetime
+import pytz
+
 from django.test import TestCase, tag
 from django.urls import reverse
-from django.contrib import messages
-from django.core.exceptions import ObjectDoesNotExist
+
 from BookClub.models import User, Club, ClubMembership, Book, Meeting
-import datetime, pytz
 from BookClub.tests.helpers import reverse_with_next
 
 
-@tag('agenda')
+@tag('views', 'agenda')
 class AgendaViewTestCase(TestCase):
     """Tests of the Agenda view."""
-
-    """Unit tests of the agenda view."""
     fixtures = [
         "BookClub/tests/fixtures/default_users.json",
         "BookClub/tests/fixtures/default_clubs.json",
@@ -91,7 +90,7 @@ class AgendaViewTestCase(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200, fetch_redirect_response=True)
         self.assertTemplateUsed(response, 'authentication/login.html')
 
-    '''Tests for users to see their agenda'''
+    """Tests for users to see their agenda"""
 
     def test_user_can_see_agenda_for_joined_today(self):
         self.client.login(username=self.user.username, password='Password123')

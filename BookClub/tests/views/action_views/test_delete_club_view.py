@@ -1,3 +1,4 @@
+"""Unit testing of Delete Club view"""
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase, tag
@@ -9,6 +10,7 @@ from BookClub.tests.helpers import LogInTester
 
 @tag("views", "action_views", "delete_club")
 class DeleteClubTest(TestCase, LogInTester):
+    """Delete Club View Testing"""
     fixtures = [
         'BookClub/tests/fixtures/default_clubs.json',
         'BookClub/tests/fixtures/default_users.json']

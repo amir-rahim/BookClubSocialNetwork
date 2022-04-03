@@ -1,13 +1,16 @@
+"""Unit testing for the Async Recommendations view"""
 from django.urls import reverse
 from django.test import TestCase, tag
 from BookClub.models import Book, User, Club, BookReview, UserRecommendations, ClubRecommendations
 
 from RecommenderModule import recommendations_provider
-from RecommenderModule.recommenders.resources.item_based_collaborative_filtering_methods import ItemBasedCollaborativeFilteringMethods
+from RecommenderModule.recommenders.resources.item_based_collaborative_filtering_methods import \
+    ItemBasedCollaborativeFilteringMethods
 
-@tag('async_recommendations')
+
+@tag('views', 'async_recommendations')
 class AsyncRecommendationListViewsTestCase(TestCase):
-
+    """Testing the Async Recommendations view"""
     fixtures = [
         "BookClub/tests/fixtures/default_users.json",
         "BookClub/tests/fixtures/default_clubs.json",
@@ -43,7 +46,8 @@ class AsyncRecommendationListViewsTestCase(TestCase):
         for book in Book.objects.all():
             recommendations.append(book.ISBN)
 
-        user_recommendation = UserRecommendations.objects.create(user=self.user1, recommendations=recommendations, modified=False)
+        user_recommendation = UserRecommendations.objects.create(user=self.user1, recommendations=recommendations,
+                                                                 modified=False)
         user_recommendation.save()
 
         self.client.login(username=self.user1.username, password="Password123")
@@ -57,7 +61,8 @@ class AsyncRecommendationListViewsTestCase(TestCase):
         for book in Book.objects.all():
             recommendations.append(book.ISBN)
 
-        user_recommendation = ClubRecommendations.objects.create(club=self.club, recommendations=recommendations, modified=False)
+        user_recommendation = ClubRecommendations.objects.create(club=self.club, recommendations=recommendations,
+                                                                 modified=False)
         user_recommendation.save()
 
         self.client.login(username=self.user1.username, password="Password123")
@@ -77,7 +82,8 @@ class AsyncRecommendationListViewsTestCase(TestCase):
             i += 1
             if i >= 10:
                 break
-        personalised_recommendations = recommendations_provider.get_user_personalised_recommendations(self.user1.username)
+        personalised_recommendations = recommendations_provider.get_user_personalised_recommendations(
+            self.user1.username)
 
         # The loop below is populating the database with Book objects
         # using the recommended isbn values, so that the view can extra info besides the isbn
@@ -91,11 +97,9 @@ class AsyncRecommendationListViewsTestCase(TestCase):
         response = self.client.get(self.user_url)
         view_recommendations = response.context['recommendations']
 
-
         view_recommendations_isbns = []
         for rec in view_recommendations:
             view_recommendations_isbns.append(rec.ISBN)
-
 
         for book in personalised_recommendations:
             self.assertIn(book, view_recommendations_isbns)
@@ -111,10 +115,10 @@ class AsyncRecommendationListViewsTestCase(TestCase):
             i += 1
             if i >= 10:
                 break
-        personalised_recommendations = recommendations_provider.get_club_personalised_recommendations(self.club.club_url_name)
+        personalised_recommendations = recommendations_provider.get_club_personalised_recommendations(
+            self.club.club_url_name)
         self.assertEqual(len(personalised_recommendations), 10)
         self.assertEqual(type(personalised_recommendations[0]), str)
-
 
         # The loop below is populating the database with Book objects
         # using the recommended isbn values, so that the view can extra info besides the isbn
@@ -128,11 +132,9 @@ class AsyncRecommendationListViewsTestCase(TestCase):
         response = self.client.get(self.club_url)
         view_recommendations = response.context['recommendations']
 
-
         view_recommendations_isbns = []
         for rec in view_recommendations:
             view_recommendations_isbns.append(rec.ISBN)
-
 
         for book in personalised_recommendations:
             self.assertIn(book, view_recommendations_isbns)

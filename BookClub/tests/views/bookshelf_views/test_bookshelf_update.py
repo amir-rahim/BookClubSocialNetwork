@@ -1,3 +1,4 @@
+"""Unit testing of the update book from bookshelf view"""
 from django.contrib.messages import get_messages
 from django.test import TestCase, tag
 from django.urls import reverse

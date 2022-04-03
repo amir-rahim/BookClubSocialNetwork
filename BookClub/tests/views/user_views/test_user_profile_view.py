@@ -1,4 +1,4 @@
-"""Tests of the profile view."""
+"""Unit testing of the profile view."""
 from django.test import TestCase, tag
 from django.urls import reverse
 
@@ -7,7 +7,7 @@ from BookClub.models import User
 
 @tag('user', 'user_profile')
 class UserProfileViewTest(TestCase):
-    """Unit tests of the profile view."""
+    """Tests of the profile view."""
 
     fixtures = [
         'BookClub/tests/fixtures/default_users.json',

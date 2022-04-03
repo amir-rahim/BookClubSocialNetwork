@@ -1,3 +1,4 @@
+"""Unit testing of the Delete Booklist view"""
 from django.contrib import messages
 from django.test import TestCase, tag
 from django.urls import reverse
@@ -8,6 +9,7 @@ from BookClub.tests.helpers import LogInTester, reverse_with_next
 
 @tag("booklist", "delete_list")
 class DeleteBookListView(TestCase, LogInTester):
+    """Delete booklist view testing"""
     fixtures = [
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_books.json',

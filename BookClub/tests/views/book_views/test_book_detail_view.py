@@ -1,3 +1,4 @@
+"""Unit testing of the Book Detail view"""
 import random
 
 from django.test import TestCase, tag
@@ -8,6 +9,7 @@ from BookClub.models import User, Book, BookReview
 
 @tag("views", "books", "book_detail")
 class BookDetailViewTestCase(TestCase):
+    """Book detail view testing"""
     fixtures = [
         'BookClub/tests/fixtures/real_books.json',
         'BookClub/tests/fixtures/default_users.json',

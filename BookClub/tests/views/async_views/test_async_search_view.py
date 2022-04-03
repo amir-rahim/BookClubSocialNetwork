@@ -1,3 +1,4 @@
+"""Unit testing of Async Search"""
 from django.test import RequestFactory, TestCase, tag
 from django.urls import reverse
 from BookClub.models import Book, User, BookList, Club, ClubMembership
@@ -5,15 +6,11 @@ from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
 
 from BookClub.views.async_views.async_search import SearchView
-# testcases
-# test club, user, booklist get_templates
-# test book get_template and book select and book check
-# test pagination
 
 
-@tag('book_search','club_search','user_search','booklist_search', 'async')
+@tag('views', 'async_search')
 class BookSearchTestCase(TestCase):
-
+    """Async Book Search View Testing"""
     fixtures = [
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_books.json',

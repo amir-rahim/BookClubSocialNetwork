@@ -1,17 +1,19 @@
 <section class="section">
     <div class="container">
         <!-- Start Carousel -->
-        <div class="carousel">
-            {% for book in recommendations %}
-                <div class="item-{{ forloop.counter0 }}">
-                    <div class="column is-12">
-                        <div class="card">
-                            <a href="{% url 'book_view' book.id %}">
-                                <div class="card-image">
-                                    <figure class="image is-3by5">
-                                        <img src="//images.weserv.nl/?url={{ book.imageL }}" alt="Image of {{ book.title }}" />
-                                    </figure>
-                                </div>
+        {% if recommendations %}
+            <div class="carousel">
+                {% for book in recommendations %}
+                    <div class="item-{{ forloop.counter0 }}">
+                        <div class="column is-12">
+                            <div class="card">
+                                <a href="{% url 'book_view' book.id %}">
+                                    <div class="card-image">
+                                        <figure class="image is-3by5">
+                                            <img src="//images.weserv.nl/?url={{ book.imageL }}" alt="Image of {{ book.title }}" />
+                                        </figure>
+                                    </div>
+                                </a>
                                 <div class="card-content">{{ book.title }}</div>
                                 <div class="card-footer">
                                     <a class="card-footer-item" href="#">Add to book list</a>
@@ -20,14 +22,11 @@
                         </div>
                         <!-- Slide Content -->
                     </div>
-                {% empty %}
-                
-                        
-                    Error, no recommendations found. Please contact the site adminstrator as there is likely an issue with the site configuration.
-                        
-                    
                 {% endfor %}
             </div>
-            <!-- End Carousel -->
-        </div>
-    </section>
+        {% else %}
+            Error, no recommendations found. Please contact the site adminstrator as there is likely an issue with the site configuration.
+        {% endif %}
+        <!-- End Carousel -->
+    </div>
+</section>

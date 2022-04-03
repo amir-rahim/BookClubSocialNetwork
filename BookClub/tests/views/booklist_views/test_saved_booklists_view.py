@@ -1,4 +1,4 @@
-"""Tests for Meeting Participants List View"""
+"""Unit testing for Saved Booklist List view"""
 from django.test import TestCase, tag
 from django.urls import reverse
 
@@ -8,6 +8,7 @@ from BookClub.tests.helpers import LogInTester, reverse_with_next
 
 @tag("booklist", "save_list")
 class SavedBookListsViewTestCase(TestCase, LogInTester):
+    """Saved Booklist lists view testing"""
     fixtures = [
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_books.json',

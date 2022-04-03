@@ -1,4 +1,4 @@
-"""Tests for the new password form."""
+"""Unit tests for the password change form."""
 from django.test import TestCase, tag
 
 from BookClub.forms.user_forms import ChangePasswordForm
@@ -7,7 +7,7 @@ from BookClub.models import User
 
 @tag('forms', 'user')
 class PasswordFormTestCase(TestCase):
-    """Unit tests for the new password form."""
+    """Changing password form tests"""
 
     fixtures = ['BookClub/tests/fixtures/default_users.json']
 

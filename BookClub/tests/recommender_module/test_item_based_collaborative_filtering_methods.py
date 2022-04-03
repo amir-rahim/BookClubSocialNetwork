@@ -1,12 +1,15 @@
+"""Unit testing of Item Based Recommender Methods"""
 from django.test import TestCase, tag
-from RecommenderModule.recommenders.resources.item_based_collaborative_filtering_methods import ItemBasedCollaborativeFilteringMethods
+from RecommenderModule.recommenders.resources.item_based_collaborative_filtering_methods import \
+    ItemBasedCollaborativeFilteringMethods
 from RecommenderModule.recommenders.resources.data_provider import DataProvider
 from RecommenderModule.recommenders.resources.library import Library
 from BookClub.models import Club, User, ClubMembership
 
+
 @tag('recommenders')
 class ItemBasedRecommenderMethodsTestCase(TestCase):
-
+    """Item Based Recommender Method Tests"""
     def setUp(self):
         data_provider = DataProvider(get_data_from_csv=True)
         self.trainset = data_provider.get_filtered_ratings_trainset()
@@ -16,13 +19,13 @@ class ItemBasedRecommenderMethodsTestCase(TestCase):
 
     def create_club(self):
         club = Club.objects.create(name="Club 1", club_url_name="club_1", description="Test club", is_private=False)
-        user1 = User.objects.create(username=self.user_id, email=f"{self.user_id}@kcl.ac.uk", public_bio=f"Hello, I am user {self.user_id}")
+        user1 = User.objects.create(username=self.user_id, email=f"{self.user_id}@kcl.ac.uk",
+                                    public_bio=f"Hello, I am user {self.user_id}")
         club_membership1 = ClubMembership.objects.create(user=user1, club=club, membership=2)
         user2_id = self.trainset.to_raw_uid(5)
         user2 = User.objects.create(username=user2_id, email=f"{user2_id}@kcl.ac.uk", public_bio=f"Hi, I am {user2_id}")
         club_membership2 = ClubMembership.objects.create(user=user2, club=club, membership=0)
         return club
-
 
     def test_get_inner_ratings_from_raw_ratings(self):
         raw_ratings = self.library.get_all_ratings_by_user(self.user_id)
@@ -59,7 +62,8 @@ class ItemBasedRecommenderMethodsTestCase(TestCase):
         raw_ratings = self.library.get_all_ratings_by_user(self.user_id)
         all_ratings = self.item_based_methods.get_inner_ratings_from_raw_ratings(raw_ratings)
         positive_ratings = self.item_based_methods.get_inner_ratings_from_raw_ratings(raw_ratings, min_rating=6)
-        recommendations = self.item_based_methods.get_recommendations_from_inner_ratings(ratings=positive_ratings, all_books_rated=all_ratings)
+        recommendations = self.item_based_methods.get_recommendations_from_inner_ratings(ratings=positive_ratings,
+                                                                                         all_books_rated=all_ratings)
         self.assertEqual(len(recommendations), 10)
         self.assertEqual(type(recommendations[0]), str)
         for inner_item, rating in all_ratings:
@@ -77,14 +81,17 @@ class ItemBasedRecommenderMethodsTestCase(TestCase):
         raw_ratings = self.library.get_all_ratings_by_user(self.user_id)
         all_ratings = self.item_based_methods.get_inner_ratings_from_raw_ratings(raw_ratings)
         positive_ratings = self.item_based_methods.get_inner_ratings_from_raw_ratings(raw_ratings, min_rating=6)
-        recommendations2 = self.item_based_methods.get_recommendations_from_inner_ratings(ratings=positive_ratings, all_books_rated=all_ratings)
+        recommendations2 = self.item_based_methods.get_recommendations_from_inner_ratings(ratings=positive_ratings,
+                                                                                          all_books_rated=all_ratings)
         self.assertEqual(recommendations1, recommendations2)
 
     def test_get_recommendations_positive_ratings_only_from_club_url_name(self):
         club = self.create_club()
-        recommendations1 = self.item_based_methods.get_recommendations_positive_ratings_only_from_club_url_name(club.club_url_name)
+        recommendations1 = self.item_based_methods.get_recommendations_positive_ratings_only_from_club_url_name(
+            club.club_url_name)
         raw_ratings = self.library.get_all_ratings_by_club(club.club_url_name)
         all_ratings = self.item_based_methods.get_inner_ratings_from_raw_ratings(raw_ratings)
         positive_ratings = self.item_based_methods.get_inner_ratings_from_raw_ratings(raw_ratings, min_rating=6)
-        recommendations2 = self.item_based_methods.get_recommendations_from_inner_ratings(ratings=positive_ratings, all_books_rated=all_ratings)
+        recommendations2 = self.item_based_methods.get_recommendations_from_inner_ratings(ratings=positive_ratings,
+                                                                                          all_books_rated=all_ratings)
         self.assertEqual(recommendations1, recommendations2)

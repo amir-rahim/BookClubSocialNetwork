@@ -1,3 +1,4 @@
+"""Unit testing of Meeting Model"""
 import datetime
 
 from django.core.exceptions import ValidationError
@@ -8,6 +9,7 @@ from BookClub.models import Meeting, Club, User, Book
 
 @tag('models', 'meeting')
 class MeetingTestCase(TestCase):
+    """Meeting Model, Fields, Validation and Methods Testing"""
     fixtures = [
         'BookClub/tests/fixtures/books.json',
         'BookClub/tests/fixtures/default_users.json',
@@ -181,3 +183,19 @@ class MeetingTestCase(TestCase):
 
     def test_get_is_not_past(self):
         self.assertEqual(self.meeting.get_is_not_past(), False)
+
+    def test_get_delete_str_for_meeting_ending_on_the_same_day(self):
+        return_str = self.meeting.get_delete_str()
+        correct_str = 'a Book meeting of "Johnathan Club" club on Tuesday 22 Feb 2022, 19:00 - 20:00'
+        self.assertEqual(return_str, correct_str)
+
+    def test_get_delete_str_for_meeting_ending_on_a_different_day(self):
+        meeting = Meeting.objects.get(pk=8)
+        return_str = meeting.get_delete_str()
+        correct_str = 'a "Other" type meeting of "Johnathan Club" club on Tuesday 22 Feb 2022, 19:00 - Wednesday 23 Feb 2022, 21:00'
+        self.assertEqual(return_str, correct_str)
+
+    def test_get_delete_url(self):
+        return_url = self.meeting.get_delete_url()
+        correct_url = '/club/Johnathan_Club/meetings/1/delete/'
+        self.assertEqual(return_url, correct_url)

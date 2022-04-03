@@ -1,3 +1,4 @@
+"""Unit testing of Rated Content Models"""
 from django.forms import ValidationError
 from django.test import TestCase, tag
 
@@ -6,6 +7,7 @@ from BookClub.models import ForumPost, ForumComment, User
 
 @tag('models', 'textpost')
 class TextPostTestCase(TestCase):
+    """Text Post Model, Fields, Validation and Methods Testing"""
     fixtures = [
         'BookClub/tests/fixtures/default_user_created_objects.json',
         'BookClub/tests/fixtures/default_users.json'
@@ -55,6 +57,7 @@ class TextPostTestCase(TestCase):
 
 @tag('models', 'comment')
 class TextCommentTestCase(TestCase):
+    """Text Comment Model, Fields, Validation and Methods Testing"""
     fixtures = [
         'BookClub/tests/fixtures/default_user_created_objects.json',
         'BookClub/tests/fixtures/default_users.json'

@@ -1,16 +1,14 @@
-"""Test the Remove Featured Book view."""
-from django.contrib import messages
+"""Unit testing of the Remove Featured Book view."""
 from django.contrib.messages import get_messages
-from django.test import TestCase, tag
-from django.urls import NoReverseMatch, reverse
 from django.core.exceptions import ObjectDoesNotExist
+from django.test import TestCase, tag
+from django.urls import reverse
 
-from BookClub.forms import FeatureBookForm
 from BookClub.models import User, Club, ClubMembership, Book, FeaturedBooks
 from BookClub.tests.helpers import reverse_with_next
 
 
-@tag('club', 'feature_book', 'remove_feature_book')
+@tag('views', 'club', 'feature_book')
 class RemoveFeaturedBookViewTestCase(TestCase):
     """Test the Remove Featured Book view."""
 

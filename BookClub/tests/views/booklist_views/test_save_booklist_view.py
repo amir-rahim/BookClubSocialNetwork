@@ -1,3 +1,4 @@
+"""Unit testing of the Save Booklist view"""
 from django.test import TestCase, tag
 from django.urls import reverse
 from django.core.exceptions import ObjectDoesNotExist
@@ -9,6 +10,7 @@ from BookClub.tests.helpers import reverse_with_next
 
 @tag("booklist", "save_list")
 class SaveBookListViewTestcase(TestCase):
+    """Save Booklist view testing"""
     fixtures = [
         "BookClub/tests/fixtures/default_users.json",
         "BookClub/tests/fixtures/booklists.json",

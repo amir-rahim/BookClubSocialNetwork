@@ -1,3 +1,4 @@
+"""Unit testing of delete club view"""
 from django.test import TestCase, tag
 from django.urls import reverse
 
@@ -6,6 +7,7 @@ from BookClub.models import Club, ClubMembership, User
 
 @tag("views", "action_views", "delete_club")
 class DeleteClubTest(TestCase):
+    """Delete Club View Testing"""
     fixtures = [
         'BookClub/tests/fixtures/default_clubs.json',
         'BookClub/tests/fixtures/default_users.json']
@@ -90,5 +92,3 @@ class DeleteClubTest(TestCase):
         self.assertEqual(response.status_code, 302)
         club_exists_after = Club.objects.filter(pk=self.club.id).exists()
         self.assertEqual(club_exists_before, club_exists_after)
-
-    # Possible test: delete another club's club

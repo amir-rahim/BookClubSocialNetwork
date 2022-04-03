@@ -1,4 +1,4 @@
-"""Test approve applicant view."""
+"""Unit testing of Approve Applicant view."""
 from django.contrib import messages
 from django.test import TestCase, tag
 from django.urls import reverse

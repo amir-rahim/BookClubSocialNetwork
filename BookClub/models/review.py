@@ -6,7 +6,7 @@ from BookClub.models.recommendations import ClubRecommendations, UserRecommendat
 from BookClub.models import ClubMembership
 class BookReview(TextPost):
     """Allow the User to Review a Book.
-    
+
     Attributes:
         book: The Book that is being reviewed.
         book_rating: The rating the User has given the Book.
@@ -22,6 +22,9 @@ class BookReview(TextPost):
 
     def get_comments(self):
         return self.bookreviewcomment_set.all()
+
+    def get_absolute_url(self):
+        return reverse('book_review', kwargs={'book_id': self.book.pk, 'review_id': self.pk})
 
     def get_delete_url(self):
         return reverse('delete_review', kwargs={'book_id': self.book.pk})
@@ -47,11 +50,11 @@ class BookReview(TextPost):
         for club in clubRecs:
             club.modified = True
             club.save()
-                
+
 
 class BookReviewComment(TextComment):
     """Allow the User to Comment under a Review.
-    
+
     Attributes:
         book_review: The Review the Comment is under.
     """

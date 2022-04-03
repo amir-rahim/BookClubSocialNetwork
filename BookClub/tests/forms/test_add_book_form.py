@@ -1,17 +1,18 @@
+"""Unit tests for Add Book Form"""
 from django.test import TestCase, tag
 
 from BookClub.forms import AddBookForm
 from BookClub.models import Book, BookList
 
 
-@tag('forms', 'book', 'add_book')
+@tag('forms', 'booklist')
 class AddBookFormTestCase(TestCase):
+    """Adding a Book to a Booklist Form Test"""
     fixtures = [
         "BookClub/tests/fixtures/default_users.json",
         "BookClub/tests/fixtures/default_books.json",
         "BookClub/tests/fixtures/booklists.json",
     ]
-    """Unit tests for Add Book Form"""
 
     def setUp(self):
         self.book = Book.objects.get(pk=2)

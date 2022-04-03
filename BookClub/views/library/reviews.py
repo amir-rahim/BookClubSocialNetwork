@@ -67,7 +67,7 @@ class EditReviewView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     form_class = ReviewForm
     template_name = 'reviews/edit_review.html'
     context_object_name = 'book_review'
-    redirect_location = 'book_reviews'
+    # redirect_location = 'book_reviews'
 
     def test_func(self):
         """Check if the review exists."""
@@ -88,7 +88,7 @@ class EditReviewView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def get_success_url(self):
         """Return redirect URL after successful update."""
         messages.add_message(self.request, messages.SUCCESS, "You have updated the book review!")
-        return reverse(self.redirect_location, kwargs={'book_id': self.kwargs['book_id']})
+        return super().get_success_url()
 
     def get_object(self):
         book = Book.objects.get(pk=self.kwargs['book_id'])

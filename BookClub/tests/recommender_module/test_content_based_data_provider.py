@@ -1,11 +1,13 @@
+"""Unit testing of Content Based Data Provider"""
 from django.test import TestCase, tag
 from RecommenderModule.recommenders.resources.content_based_data_provider import ContentBasedDataProvider
 from RecommenderModule.recommenders.resources.data_provider import DataProvider
 from surprise import Dataset, Reader
 
+
 @tag('recommenders')
 class ContentBasedDataProviderTestCase(TestCase):
-
+    """Content Based Data Provider Testing"""
     fixtures = [
         'BookClub/tests/fixtures/default_content_based_books.json'
     ]
@@ -16,19 +18,24 @@ class ContentBasedDataProviderTestCase(TestCase):
     def set_up_django_content_based_data_provider(self):
         self.content_based_data_provider = ContentBasedDataProvider(get_data_from_csv=False)
 
-
     def test_compute_filtered_book_depository_dataset_csv(self):
         self.set_up_csv_content_based_data_provider()
         filtered_book_depository_dataset = self.content_based_data_provider.filtered_book_depository_dataset
         self.assertEqual(len(filtered_book_depository_dataset), 3909)
-        columns = ['authors', 'bestsellers-rank', 'categories', 'description', 'dimension-x', 'dimension-y', 'dimension-z', 'edition', 'edition-statement', 'for-ages', 'format', 'id', 'illustrations-note', 'image-checksum', 'image-path', 'image-url', 'imprint', 'index-date', 'isbn10', 'isbn13', 'lang', 'publication-date', 'publication-place', 'rating-avg', 'rating-count', 'title', 'url', 'weight']
+        columns = ['authors', 'bestsellers-rank', 'categories', 'description', 'dimension-x', 'dimension-y',
+                   'dimension-z', 'edition', 'edition-statement', 'for-ages', 'format', 'id', 'illustrations-note',
+                   'image-checksum', 'image-path', 'image-url', 'imprint', 'index-date', 'isbn10', 'isbn13', 'lang',
+                   'publication-date', 'publication-place', 'rating-avg', 'rating-count', 'title', 'url', 'weight']
         self.assertEqual(list(filtered_book_depository_dataset.columns), columns)
 
     def test_compute_filtered_book_depository_dataset_django(self):
         self.set_up_django_content_based_data_provider()
         filtered_book_depository_dataset = self.content_based_data_provider.filtered_book_depository_dataset
         self.assertEqual(len(filtered_book_depository_dataset), 3)
-        columns = ['authors', 'bestsellers-rank', 'categories', 'description', 'dimension-x', 'dimension-y', 'dimension-z', 'edition', 'edition-statement', 'for-ages', 'format', 'id', 'illustrations-note', 'image-checksum', 'image-path', 'image-url', 'imprint', 'index-date', 'isbn10', 'isbn13', 'lang', 'publication-date', 'publication-place', 'rating-avg', 'rating-count', 'title', 'url', 'weight']
+        columns = ['authors', 'bestsellers-rank', 'categories', 'description', 'dimension-x', 'dimension-y',
+                   'dimension-z', 'edition', 'edition-statement', 'for-ages', 'format', 'id', 'illustrations-note',
+                   'image-checksum', 'image-path', 'image-url', 'imprint', 'index-date', 'isbn10', 'isbn13', 'lang',
+                   'publication-date', 'publication-place', 'rating-avg', 'rating-count', 'title', 'url', 'weight']
         self.assertEqual(list(filtered_book_depository_dataset.columns), columns)
 
     def test_make_list_of_dict_book_content_csv(self):
@@ -50,7 +57,6 @@ class ContentBasedDataProviderTestCase(TestCase):
             self.assertEqual(type(book_content["book_isbn"]), str)
             self.assertEqual(type(book_content["categories"]), list)
             self.assertEqual(type(book_content["publication_year"]), int)
-
 
     def test_get_list_of_dict_book_content_csv(self):
         self.set_up_csv_content_based_data_provider()

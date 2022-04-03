@@ -1,9 +1,11 @@
+"""Unit testing for Evaluator"""
 from django.test import TestCase, tag
 from RecommenderModule.evaluation.evaluator import Evaluator
 
-@tag('evaluation')
-class EvaluatorTestCase(TestCase):
 
+@tag('recommenders', 'evaluation')
+class EvaluatorTestCase(TestCase):
+    """Evaluator Tests"""
     def setUp(self):
         self.evaluator = Evaluator(print_status=False)
 

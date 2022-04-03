@@ -1,3 +1,4 @@
+"""Unit tests for Club Form"""
 from datetime import date
 
 from django.test import TestCase, tag
@@ -8,7 +9,7 @@ from BookClub.models.club import Club
 
 @tag('forms', 'club')
 class ClubFormTestCase(TestCase):
-    """Unit tests for Club Form"""
+    """Creating a Club Form Tests"""
 
     def setUp(self):
         self.form_input = {

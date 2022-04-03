@@ -1,4 +1,4 @@
-"""Tests for editing review and rating"""
+"""Unit testing of the editing review and rating view"""
 from django.contrib import messages
 from django.contrib.messages import get_messages
 from django.test import TestCase, tag
@@ -8,7 +8,7 @@ from BookClub.models import User, Book, BookReview
 from BookClub.tests.helpers import LogInTester, reverse_with_next
 
 
-@tag('book_review', 'edit_review')
+@tag('views', 'edit_review', 'review')
 class EditReviewView(TestCase, LogInTester):
     """Tests for editing review and rating"""
 
@@ -35,7 +35,6 @@ class EditReviewView(TestCase, LogInTester):
         self.assertEqual(self.url, f'/library/books/{self.book.pk}/edit/')
 
     def test_post_edit_review_redirects_when_not_logged_in(self):
-        # print('not logged in')
         redirect_url = reverse_with_next('login', self.url)
         response = self.client.post(self.url, self.data, follow=True)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200,
@@ -43,7 +42,6 @@ class EditReviewView(TestCase, LogInTester):
         self.assertTemplateUsed(response, 'authentication/login.html')
 
     def test_edit_review_redirects_when_different_user(self):
-        # print('not author of review')
         self.client.login(username=self.another_user.username, password="Password123")
         self.assertTrue(self._is_logged_in())
         redirect_url = reverse('book_reviews', kwargs={'book_id': self.book.id})
@@ -58,19 +56,15 @@ class EditReviewView(TestCase, LogInTester):
     '''Tests for user successfully editing the review and rating'''
 
     def test_successful_edit_rating_and_review_when_logged_in_as_user(self):
-        # print('HEREEEEEEEE')
-        # print('before: ' + self.book_review.title)
         self.client.login(username=self.user.username, password="Password123")
         self.assertTrue(self._is_logged_in())
         response = self.client.post(self.url, self.data, follow=True)
         self.book_review.refresh_from_db()
-        # print(response.rendered_content)
-        # print('after: ' + self.book_review.title)
         messages_list = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.SUCCESS)
-        redirect_url = reverse('book_reviews', kwargs={'book_id': self.book.id})
-        self.assertTemplateUsed(response, 'library/book_reviews.html')
+        redirect_url = reverse('book_review', kwargs={'book_id': self.book.id, 'review_id': self.book_review.pk})
+        self.assertTemplateUsed(response, 'reviews/review_details.html')
         self.assertEqual(self.book_review.creator.id, self.user.id)
         self.assertEqual(self.book_review.book_rating, self.data['book_rating'])
         self.assertEqual(self.book_review.title, self.data['title'])
@@ -101,7 +95,6 @@ class EditReviewView(TestCase, LogInTester):
         response = self.client.post(self.url, self.data, follow=True)
         redirect_url = reverse('book_reviews', kwargs={'book_id': self.book.id})
         messages_list = list(get_messages(response.wsgi_request))
-        # print(messages_list)
         self.assertEqual(len(messages_list), 1)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200,
                              fetch_redirect_response=True)

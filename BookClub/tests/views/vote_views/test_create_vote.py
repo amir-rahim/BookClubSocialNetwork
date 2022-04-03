@@ -1,14 +1,15 @@
-from re import M
-from django.test import TestCase, tag
-from BookClub.models import User, ForumPost, Vote
-from django.urls import reverse
+"""Unit testing of the Create Vote view"""
 from django.contrib.contenttypes.models import ContentType
+from django.test import TestCase, tag
+from django.urls import reverse
+
+from BookClub.models import User, ForumPost, Vote
 
 
 @tag('vote', 'forum', 'post', 'createvote')
 class CreateVoteViewTestCase(TestCase):
+    """Tests of the Create Vote view"""
     fixtures = [
-
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_posts.json',
         'BookClub/tests/fixtures/default_clubs.json',

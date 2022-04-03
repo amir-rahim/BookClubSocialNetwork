@@ -1,4 +1,4 @@
-"""Test kick member view."""
+"""Unit testing of kick member view."""
 from django.contrib import messages
 from django.test import TestCase, tag
 from django.urls import reverse
@@ -9,7 +9,7 @@ from BookClub.tests.helpers import LogInTester
 
 @tag("views", "action_views", "kick_member")
 class KickMemberView(TestCase, LogInTester):
-    """Test kick member view."""
+    """Kick member view testing."""
 
     fixtures = [
         'BookClub/tests/fixtures/default_users.json',

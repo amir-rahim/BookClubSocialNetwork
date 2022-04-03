@@ -1,17 +1,19 @@
+"""Unit testing of the Personal Review List view"""
 from django.test import TestCase, tag
 from django.urls import reverse
 
-from BookClub.models import User, Book, BookReview
+from BookClub.models import User, BookReview
+
 
 @tag('views', 'reviews', 'user_feed')
 class UserFeedReviewListView(TestCase):
-
+    """Tests for the Personal Review List view"""
     fixtures = [
         'BookClub/tests/fixtures/real_books.json',
         'BookClub/tests/fixtures/default_users.json',
         'BookClub/tests/fixtures/default_books.json',
         'BookClub/tests/fixtures/default_book_reviews.json'
-        ]
+    ]
 
     def setUp(self):
         self.user = User.objects.get(pk=1)
@@ -32,7 +34,8 @@ class UserFeedReviewListView(TestCase):
         self.assertEqual(response.status_code, 200)
         reviews = list(response.context['reviews'])
         self.assertEqual(len(reviews), 0)
-        self.assertContains(response, 'There are no book reviews yet, you can find books in the library <a href="/library/books/" class="is-link"><i>here</i></a>.')
+        self.assertContains(response,
+                            'There are no book reviews yet, you can find books in the library <a href="/library/books/" class="is-link"><i>here</i></a>.')
 
     def test_reviews_show(self):
         self.client.login(username=self.user.username, password='Password123')

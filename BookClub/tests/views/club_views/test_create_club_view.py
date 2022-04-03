@@ -1,3 +1,4 @@
+"""Unit testing of the Create Club view"""
 from datetime import date
 
 from django.test import TestCase, tag
@@ -10,8 +11,9 @@ from BookClub.models.user import User
 from BookClub.tests.helpers import reverse_with_next
 
 
-@tag('club', 'create_club')
+@tag('views', 'club', 'create_club')
 class CreateClubViewTestcase(TestCase):
+    """Testing the Create Club view"""
     fixtures = [
         "BookClub/tests/fixtures/default_users.json",
         "BookClub/tests/fixtures/default_clubs.json",

@@ -1,3 +1,4 @@
+"""Unit tests for Feature Book Form"""
 from django.test import TestCase, tag
 
 from BookClub.forms import FeatureBookForm
@@ -6,7 +7,7 @@ from BookClub.models import Club, Book, FeaturedBooks
 
 @tag('forms', 'feature_book')
 class FeatureBookFormTestCase(TestCase):
-    """Unit tests for Feature Book Form"""
+    """Feature Book Form Tests"""
 
     fixtures = [
         'BookClub/tests/fixtures/default_books.json',

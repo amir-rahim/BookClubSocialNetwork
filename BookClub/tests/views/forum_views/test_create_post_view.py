@@ -1,3 +1,4 @@
+"""Unit testing of the Create Posts views"""
 from django.contrib import messages
 from django.contrib.messages import get_messages
 from django.test import TestCase, tag
@@ -7,7 +8,7 @@ from BookClub.models import User, ForumPost, Club, Forum
 from BookClub.tests.helpers import reverse_with_next
 
 
-@tag('forum', 'create_post')
+@tag('views', 'forum', 'create_post')
 class CreatePostViewTestCase(TestCase):
     """Tests of the Create Posts view."""
 
@@ -114,3 +115,12 @@ class CreatePostViewTestCase(TestCase):
         self.assertEqual(str(messages_list[0]), "There was an error making that post, try again!")
         post_count_after = ForumPost.objects.count()
         self.assertEqual(post_count_after, post_count_before)
+
+    def test_create_club_post_for_non_existing_club(self):
+        wrong_club_url = reverse('create_forum_post', kwargs={"club_url_name": 'non_existing_club'})
+        self.client.login(username=self.user.username, password="Password123")
+        post_count_before = ForumPost.objects.count()
+        response = self.client.post(wrong_club_url, self.post, follow=True)
+        post_count_after = ForumPost.objects.count()
+        self.assertEqual(post_count_after, post_count_before)
+        self.assertEqual(response.status_code, 403)

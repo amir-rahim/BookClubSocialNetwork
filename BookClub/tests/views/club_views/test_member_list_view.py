@@ -1,4 +1,4 @@
-"""Tests of the Member List view."""
+"""Unit testing of the Member List view."""
 from django.test import TestCase, tag
 from django.urls import reverse
 from django.contrib import messages
@@ -8,7 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from BookClub.models import User, Club, ClubMembership
 
 
-@tag('club', 'member_list')
+@tag('views', 'club', 'member_list')
 class MemberListTestCase(TestCase):
     """Tests of the Member List view."""
 

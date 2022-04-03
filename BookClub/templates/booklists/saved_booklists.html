@@ -72,7 +72,9 @@
                                         <th scope="col">Book List</th>
                                         <th scope="col">Creator</th>
                                         <th scope="col">Description</th>
-                                        <th scope="col">Action</th>
+                                        {% if own %}
+                                            <th scope="col">Action</th>
+                                        {% endif %}
                                     </tr>
                                 </thead>
                             {% endif %}

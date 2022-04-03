@@ -1,4 +1,4 @@
-from genericpath import getsize
+"""Unit testing of the Books Model"""
 from django.forms import ValidationError
 from django.test import TestCase, tag
 
@@ -7,6 +7,7 @@ from BookClub.models import Book
 
 @tag('models', 'book')
 class BookTestCase(TestCase):
+    """Book Model, Fields, Validation and Methods Testing"""
     fixtures = [
         'BookClub/tests/fixtures/default_books.json'
     ]
@@ -23,7 +24,7 @@ class BookTestCase(TestCase):
     def assertValid(self):
         try:
             self.book.full_clean()
-        except(ValidationError):
+        except ValidationError:
             self.fail('Book should be valid')
 
     def assertInvalid(self):

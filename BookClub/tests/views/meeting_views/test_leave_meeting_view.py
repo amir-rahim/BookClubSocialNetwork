@@ -8,7 +8,7 @@ from BookClub.models import User, Meeting, Club, ClubMembership
 from BookClub.tests.helpers import LogInTester
 
 
-@tag("meeting", "leavemeetingview")
+@tag("views", "meeting", "leave_meeting")
 class LeaveMeetingViewTestCase(TestCase, LogInTester):
     """Tests of the Join Meeting view."""
 

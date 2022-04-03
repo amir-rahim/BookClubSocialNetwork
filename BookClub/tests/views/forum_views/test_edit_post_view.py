@@ -1,3 +1,4 @@
+"""Unit testing of the Edit Post view"""
 from django.test import TestCase, tag
 from django.urls import reverse
 
@@ -5,7 +6,7 @@ from BookClub.models import User, ForumPost, Club
 from BookClub.tests.helpers import reverse_with_next
 
 
-@tag('forum', 'edit_post')
+@tag('views', 'forum', 'edit_post')
 class EditPostViewTestCase(TestCase):
     """Tests of the Edit Posts view."""
 
@@ -121,4 +122,13 @@ class EditPostViewTestCase(TestCase):
                                       "Lorem Ipsum has been the industrial standard dummy text ever since the "
                                       "1500s, when an unknown printer took a galley of type and scrambled it to make "
                                       "a type specimen book.")
+        self.assertContains(response, "Posted by: johndoe")
+
+    def test_club_post_details_show(self):
+        self.client.login(username=self.user.username, password="Password123")
+        response = self.client.get(self.club_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'forum/edit_forum_post.html')
+        self.assertContains(response, "Latin Quota")
+        self.assertContains(response, "... qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...")
         self.assertContains(response, "Posted by: johndoe")

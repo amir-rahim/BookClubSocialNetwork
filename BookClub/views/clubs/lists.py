@@ -1,5 +1,7 @@
 """Views related to club lists."""
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import TemplateView, ListView
 from BookClub.authentication_mixins import PrivateClubMixin
@@ -44,7 +46,7 @@ class ApplicantListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
             user = self.request.user
             current_club = get_club_from_url_name(
                 self.kwargs.get('club_url_name'))
-            if (not has_moderator_rank(user, current_club) and (not has_owner_rank(user, current_club))):
+            if not has_moderator_rank(user, current_club) and (not has_owner_rank(user, current_club)):
                 messages.add_message(
                     self.request, messages.ERROR, 'Only Owners and Moderators can view this.')
                 return False

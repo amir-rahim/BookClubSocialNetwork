@@ -2,13 +2,15 @@
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
+from django.core.exceptions import ValidationError
+
 
 from BookClub.models import User, Club, Book
 
 
 class Meeting(models.Model):
     """Meeting model allowing Users to create events in a Club.
-    
+
     Attributes:
         organiser: The User that created the Meeting.
         club: The Club the Meeting is made in.
@@ -46,8 +48,15 @@ class Meeting(models.Model):
     def get_absolute_url(self):
         return reverse('meeting_details', kwargs={'club_url_name': self.club.club_url_name, 'meeting_id': self.pk})
 
+    def get_delete_url(self):
+        return reverse('delete_meeting', kwargs={'club_url_name': self.club.club_url_name, 'meeting_id': self.pk})
+
     def __str__(self):
         return self.title
+
+    def get_delete_str(self):
+        end_time_str = self.meeting_end_time.strftime("%H:%M") if self.meeting_end_time.date() == self.meeting_time.date() else self.meeting_end_time.strftime("%A %-d %b %Y, %H:%M")
+        return f'a {self.get_type_name()} meeting of "{str(self.club)}" club on {self.meeting_time.strftime("%A %-d %b %Y, %H:%M")} - {end_time_str}'
 
     def get_organiser(self):
         return self.organiser
@@ -81,7 +90,7 @@ class Meeting(models.Model):
             'B': 'Book',
             'C': 'Club',
             'S': 'Social',
-            'O': 'Other'
+            'O': '"Other" type'
         }
         return type_names[self.type]
 
