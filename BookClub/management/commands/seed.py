@@ -56,8 +56,8 @@ class Command(BaseCommand):
 
         if options['load']:
             percent = options.get('load', 1)
-            #call_command("importusers", percent)
-            #call_command("importbooksrandom", percent)
+            call_command("importusers", percent)
+            call_command("importbooksrandom", percent)
             call_command("importbookreviews")
 
         elif options['deploy']:
