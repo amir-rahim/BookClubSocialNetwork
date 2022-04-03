@@ -94,7 +94,11 @@
                         {% include 'partials/delete_button_and_modal.html' with delete_item=post delete_modal_id=post.pk %}
                     </div>
                 </header>
-                <form method="post" action="{% url 'edit_forum_post' post.id %}">
+                {% if club %}
+                    <form method="post" action="{% url 'edit_forum_post' post_id=post.id club_url_name=club.club_url_name %}">
+                {% else %}
+                    <form method="post" action="{% url 'edit_forum_post' post_id=post.id %}">
+                {% endif %}
                     <div class="card-content">
                         <div class="content">
                             <span class="has-text-grey">
