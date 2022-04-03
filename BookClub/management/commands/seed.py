@@ -20,16 +20,15 @@ class Command(BaseCommand):
         self.faker = Faker('en_GB')
 
     def add_arguments(self, parser):
-        parser.add_argument('percent', type=int, nargs='?', default=10)
 
         parser.add_argument('--count', '--c', type=int, default=15)
-        
+
         parser.add_argument('--deploy', action="store_true")
 
         parser.add_argument(
             '--load',
-            action='store_true',
-            help='Load from csv',
+            type=int,
+            default=None
         )
 
         parser.add_argument(
@@ -54,20 +53,21 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print("Seeding...")
-        percent = options.get('percent', 1)
+
         if options['load']:
-            call_command("importusers", percent)
-            call_command("importbooksrandom", percent)
+            percent = options.get('load', 1)
+            #call_command("importusers", percent)
+            #call_command("importbooksrandom", percent)
             call_command("importbookreviews")
-            
+
         elif options['deploy']:
-            #call_command("importuserstargeted")
+            # call_command("importuserstargeted")
             call_command("importbookstargeted")
             call_command("importbookreviewstargeted")
         else:
             for i in range(0, 150):
                 self.generateUser()
-                
+
             call_command("importbooksrandom", "--deploy")
         try:
             self.admin = User.objects.create_superuser(
@@ -78,7 +78,7 @@ class Command(BaseCommand):
             )
         except Exception:
             pass
-        
+
         count = options.get('count', 5)
         for i in range(count):
             print("Club: " + str(i + 1))
@@ -97,50 +97,51 @@ class Command(BaseCommand):
         self.add_reviews()
         self.add_following_to_admin()
         self.follow_from_admin()
-        self.trim_reviews()
-        
+        if options['deploy']:
+            self.trim_reviews()
+
     def trim_reviews(self):
         books_with_excess = Book.objects.alias(
             reviews=Count('bookreview')).filter(reviews__gt=15)
-        
+
         for book in books_with_excess:
             reviews = book.bookreview_set.count()
             while reviews > 15:
                 review = book.bookreview_set.order_by('?')[0]
                 review.delete()
                 reviews = book.bookreview_set.count()
-                
-        
+
     def add_reviews(self):
         count = BookReview.objects.all().count()
-        
+
         if count < 300:
             i = count
             while i < 300:
                 book = Book.objects.order_by('?')[0]
                 if self.add_review_to_book(book):
-                    i +=1
-                
+                    i += 1
+
     def add_review_to_book(self, book):
         u = self.get_random_user()
         try:
-            review = BookReview.objects.create(creator=u, book=book,book_rating=random.randrange(0,10), title=self.faker.text(max_nb_chars=30), content=self.faker.text(max_nb_chars=120))
+            review = BookReview.objects.create(creator=u, book=book, book_rating=random.randrange(
+                0, 10), title=self.faker.text(max_nb_chars=30), content=self.faker.text(max_nb_chars=120))
             for x in range(1, random.randrange(0, 5)):
                 commentUser = User.objects.order_by('?')[0]
                 curComment = BookReviewComment.objects.create(
                     content=self.faker.text(max_nb_chars=240),
                     creator=commentUser,
-                    book_review = review
+                    book_review=review
                 )
                 self.add_votes_public(curComment)
-            
+
             return True
         except:
             return False
 
     def create_club(self):
         owner = User.objects.order_by('?')[0]
-        name = self.faker.unique.sentence(nb_words=1)
+        name = self.faker.unique.word()
         rand = random.randrange(0, 10)
         privacy = False
         if(rand == 1):
@@ -149,9 +150,12 @@ class Command(BaseCommand):
             name=name,
             club_url_name=Club.convertNameToUrl(None, name),
             is_private=privacy,
-            description=self.faker.text(max_nb_chars=200),
-            tagline=self.faker.text(max_nb_chars=30),
-            rules=self.faker.text(max_nb_chars=30),
+            description=self.faker.paragraph(
+                nb_sentences=3, variable_nb_sentences=True),
+            tagline=self.faker.paragraph(
+                nb_sentences=1),
+            rules=self.faker.paragraph(
+                nb_sentences=1),
         )
 
         club.add_owner(owner)
@@ -206,33 +210,34 @@ class Command(BaseCommand):
             meeting_end_time = pytz.utc.localize(meeting_end_time)
             type = random.choices(Meeting.MeetingType.choices)
             book = None
-            if(type[0] == ('B','Book')):
+            if(type[0] == ('B', 'Book')):
                 book = Book.objects.order_by('?')[0]
             m = Meeting.objects.create(meeting_time=meeting_time, meeting_end_time=meeting_end_time,
-                                   organiser=owner, club=club, location=self.faker.text(max_nb_chars=30), title=self.faker.text(max_nb_chars=60), description=self.faker.text(max_nb_chars=200), type=type[0][0], book=book)
+                                       organiser=owner, club=club, location=self.faker.text(max_nb_chars=30), title=self.faker.text(max_nb_chars=60), description=self.faker.text(max_nb_chars=200), type=type[0][0], book=book)
             for i in range(0, 10):
                 user = self.get_random_user_from_club(club)
                 m.join_member(user)
-                
-    def feature_book(self,club):
-        for i in range(0, random.randrange(3,10)):
-            feature = FeaturedBooks.objects.create(club=club, book=Book.objects.order_by('?')[0], reason=self.faker.text(max_nb_chars=50))
-        
+
+    def feature_book(self, club):
+        for i in range(0, random.randrange(3, 10)):
+            feature = FeaturedBooks.objects.create(club=club, book=Book.objects.order_by('?')[
+                                                   0], reason=self.faker.text(max_nb_chars=50))
+
     def add_books_to_shelf(self):
         for i in range(0, 150):
             user = self.get_random_user()
             for x in range(1, 3):
                 book = Book.objects.order_by('?')[0]
                 status = random.choice(BookShelf.ListType.choices)
-                BookShelf.objects.create(user=user, book=book, status=status[0])
-            
+                BookShelf.objects.create(
+                    user=user, book=book, status=status[0])
 
     def get_random_user(self):
         return User.objects.order_by('?')[0]
-    
+
     def get_random_user_from_club(self, club):
         return User.objects.filter(clubmembership__club=club).order_by('?')[0]
-    
+
     def create_global_forum(self):
 
         globalForum = Forum.objects.get_or_create(title="Global Forum")[0]
@@ -253,23 +258,24 @@ class Command(BaseCommand):
                     post=curPost,
                 )
                 self.add_votes_public(curComment)
-                
+
     def add_following(self):
-        for i in range(0,random.randrange(30, 50)):
+        for i in range(0, random.randrange(30, 50)):
             user = self.get_random_user()
-            for x in range(2,4):
+            for x in range(2, 4):
                 other = self.get_random_user()
                 if user != other:
                     UserToUserRelationship.objects.get_or_create(
                         source_user=user, target_user=other, relationship_type=1)
-                    
+
     def add_following_to_admin(self):
         target = User.objects.get(username="Admin")
-        for i in range (0, random.randrange(30, 40)):
+        for i in range(0, random.randrange(30, 40)):
             other = self.get_random_user()
             if target != other:
-                UserToUserRelationship.objects.get_or_create(source_user=other, target_user=target, relationship_type=1)
-                
+                UserToUserRelationship.objects.get_or_create(
+                    source_user=other, target_user=target, relationship_type=1)
+
     def follow_from_admin(self):
         admin = User.objects.get(username="Admin")
         for i in range(0, random.randrange(30, 40)):
@@ -277,21 +283,21 @@ class Command(BaseCommand):
             if target != admin:
                 UserToUserRelationship.objects.get_or_create(
                     source_user=admin, target_user=target, relationship_type=1)
-            
-    
+
     def add_votes_public(self, content):
-        for i in range(0,random.randrange(0, 7)):
+        for i in range(0, random.randrange(0, 7)):
             user = self.get_random_user()
             type = random.getrandbits(1)
             con = ContentType.objects.get_for_model(content.__class__)
             id = content.id
             try:
-                Vote.objects.create(type=type, content_type=con, object_id=id, creator=user)
+                Vote.objects.create(
+                    type=type, content_type=con, object_id=id, creator=user)
             except IntegrityError:
                 continue
-            
+
     def add_votes_private(self, content, club):
-        for i in range(0,random.randrange(0, 7)):
+        for i in range(0, random.randrange(0, 7)):
             user = self.get_random_user_from_club(club)
             type = random.getrandbits(1)
             con = ContentType.objects.get_for_model(content.__class__)
@@ -301,11 +307,12 @@ class Command(BaseCommand):
                     type=type, content_type=con, object_id=id, creator=user)
             except IntegrityError:
                 continue
-            
+
     def create_booklists(self):
-        for i in range(0,random.randrange(10, 40, 1)):
+        for i in range(0, random.randrange(10, 40, 1)):
             user = self.get_random_user()
-            b = BookList.objects.create(creator=user,title=self.faker.text(max_nb_chars=120), description=self.faker.text(max_nb_chars=240))
-            for x in (0,random.randrange(3, 30)):
+            b = BookList.objects.create(creator=user, title=self.faker.text(
+                max_nb_chars=120), description=self.faker.text(max_nb_chars=240))
+            for x in (0, random.randrange(3, 30)):
                 book = Book.objects.order_by('?')[0]
                 b.add_book(book)
