@@ -114,11 +114,11 @@
                                                 {% if request_user.membership == 2 %}
                                                     <div class="control has-text-centered">
                                                         <button class="js-modal-trigger button is-success is-fullwidth"
-                                                                data-target="modal-transfer-ownership-confirmation">
+                                                                data-target="modal-transfer-ownership-confirmation-{{ moderator.username }}">
                                                             <span>Transfer Ownership</span>
                                                         </button>
                                                     </div>
-                                                    <div id="modal-transfer-ownership-confirmation" class="modal">
+                                                    <div id="modal-transfer-ownership-confirmation-{{ moderator.username }}" class="modal">
                                                         <div class="modal-background"></div>
                                                         <div class="modal-card">
                                                             <header class="modal-card-head">
@@ -159,14 +159,14 @@
                                                     </form>
                                                     <div class="control has-text-centered">
                                                         <button class="js-modal-trigger button is-danger is-outlined is-fullwidth"
-                                                                data-target="modal-kick-confirmation">
+                                                                data-target="modal-kick-confirmation-{{ moderator.username }}">
                                                             <span>Kick</span>
                                                             <span class="icon is-small">
                                                                 <i class="fas fa-times"></i>
                                                             </span>
                                                         </button>
                                                     </div>
-                                                    <div id="modal-kick-confirmation" class="modal">
+                                                    <div id="modal-kick-confirmation-{{ moderator.username }}" class="modal">
                                                         <div class="modal-background"></div>
                                                         <div class="modal-card">
                                                             <header class="modal-card-head">
@@ -260,14 +260,14 @@
                                                 {% if request_user.membership == 2 or request_user.membership == 1 %}
                                                     <div class="control has-text-centered">
                                                         <button class="js-modal-trigger button is-danger is-outlined is-fullwidth"
-                                                                data-target="modal-kick-confirmation">
+                                                                data-target="modal-kick-confirmation-{{ member.username }}">
                                                             <span>Kick</span>
                                                             <span class="icon is-small">
                                                                 <i class="fas fa-times"></i>
                                                             </span>
                                                         </button>
                                                     </div>
-                                                    <div id="modal-kick-confirmation" class="modal">
+                                                    <div id="modal-kick-confirmation-{{ member.username }}" class="modal">
                                                         <div class="modal-background"></div>
                                                         <div class="modal-card">
                                                             <header class="modal-card-head">
@@ -284,7 +284,7 @@
                                                                     <div class="control">
                                                                         <form method="post"
                                                                               action="{% url 'kick_member' club_url_name=club.club_url_name %}">
-                                                                            <input type="hidden" name="user" value="{{ moderator.username }}" />
+                                                                            <input type="hidden" name="user" value="{{ member.username }}" />
                                                                             {% csrf_token %}
                                                                             <button type="submit"
                                                                                     class="button is-danger is-fullwidth"

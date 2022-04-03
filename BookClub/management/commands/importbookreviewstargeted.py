@@ -52,6 +52,7 @@ class Command(BaseCommand):
                     book=books.get(ISBN=record['ISBN']),
                     creator=user,
                     book_rating=record['Book-Rating'],
+                    title=self.faker.sentence(nb_words=3),
                     content=self.faker.paragraph(nb_sentences=3)
                 )
                 reviews.append(b)

@@ -63,7 +63,8 @@
                                     <tr>
                                         <th scope="col">User</th>
                                         <th scope="col">Rating</th>
-                                        <th scope="col">Text</th>
+                                        <th scope="col">Title</th>
+                                        <th scope="col">Content</th>
                                         <th scope="col">Reviewed On</th>
                                         <th scope="col"></th>
                                     </tr>
@@ -73,6 +74,7 @@
                                         <tr>
                                             <td>{{ review.creator }}</td>
                                             <td>{{ review.book_rating }}</td>
+                                            <td>{{ review.title |truncatechars:130 }}</td>
                                             <td>{{ review.content |truncatechars:130 }}</td>
                                             <td>{{ review.created_on }}</td>
                                             {% if review.creator == request.creator %}
