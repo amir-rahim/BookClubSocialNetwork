@@ -119,27 +119,42 @@
                             <div class="box">
                                 <b>Average rating: </b>{{ average }} out of 10
                             </div>
-                            {% for review in reviews %}
-                                <div class="box">
-                                    <header>
-                                        <p class="card-header-title is-vcentered">
-                                            <span class="has-text-grey-light">Posted by: {{ review.creator }} - {{ review.created_on | timesince }} ago</span>
-                                        </p>
+                            {% for post in reviews %}
+                                <div class="card">
+                                    <header class="card-header" onclick="window.location='{% url 'book_review' book_id=post.book.id review_id=post.id %}';" style="cursor: pointer;">
+                                        <div class="card-header-title">
+                                            <p class="subtitle">
+                                                <b>{{ post.title }}</b>
+                                            </p>
+                                        </div>
+                                        <div class="card-header-icon">{% include 'partials/voting.html' with content=post %}</div>
                                     </header>
                                     <div class="card-content">
                                         <div class="content">
-                                            <span class="has-text-black"><b>Rating:</b> {{ review.book_rating }}/10</span>
+                                            Book: {{ post.book.title }} - Rating: {{ post.book_rating }}/10
                                             <br />
-                                            <span class="has-text-grey"><b>Review:</b> {{ review.content |truncatechars:240 }}</span>
+                                            <span class="has-text-grey">{{ post.content |truncatechars:240 }}</span>
                                         </div>
                                     </div>
                                     <footer class="card-footer">
-                                        <a class="card-footer-item"
-                                           href="{% url 'book_review' book_id=review.book.id review_id=review.id %}">View</a>
+                                        <p class="card-footer-item">
+                                            <span class="is-small has-text-grey-light">Posted by: <a href="{{ post.creator.get_absolute_url }}">{{ post.creator }}</a></span>
+                                        </p>
+                                        <p class="card-footer-item has-text-grey-light">
+                                            {{ post.created_on | timesince }} ago
+                                        </p>
+                                        <a href="{% url 'book_review' book_id=post.book.id review_id=post.id %}"
+                                           class="card-footer-item">
+                                            {% if post.get_comments.count > 0 %}
+                                                See {{ post.get_comments.count }} comments
+                                            {% else %}
+                                                Be the first to comment!
+                                            {% endif %}
+                                        </a>
                                     </footer>
                                 </div>
                             {% endfor %}
-                            <div class="columns">
+                            <div class="columns" style="padding-top: 25px">
                                 <div class="column is-half">
                                     <form method="get" action="{% url 'create_review' book.id %}">
                                         <button class="button is-info is-fullwidth">Add Review</button>
@@ -150,6 +165,7 @@
                                         <button class="button is-link is-fullwidth">See more</button>
                                     </form>
                                 </div>
+                            </div>
                             {% else %}
                                 <div class="box">
                                     <p class="has-text-centered">
